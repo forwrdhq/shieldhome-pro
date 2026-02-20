@@ -1,0 +1,307 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER / AUTH
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  phone         String?
+  role          UserRole  @default(REP)
+  passwordHash  String
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  assignedLeads Lead[]    @relation("AssignedRep")
+  activities    Activity[]
+  commissions   Commission[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  REP
+  MANAGER
+}
+
+// ============================================
+// LEADS
+// ============================================
+
+model Lead {
+  id              String      @id @default(cuid())
+
+  firstName       String
+  lastName        String
+  email           String
+  phone           String
+  fullName        String
+
+  address         String?
+  city            String?
+  state           String?
+  zipCode         String?
+
+  propertyType    PropertyType?
+  doorsWindows    String?
+  productsInterested String[]
+  homeownership   Homeownership?
+  timeline        Timeline?
+
+  status          LeadStatus     @default(NEW)
+  leadScore       Int            @default(0)
+  priority        Priority       @default(MEDIUM)
+
+  assignedRepId   String?
+  assignedRep     User?          @relation("AssignedRep", fields: [assignedRepId], references: [id])
+
+  source          String?
+  medium          String?
+  campaign        String?
+  adSet           String?
+  adId            String?
+  keyword         String?
+  landingPage     String?
+  referrer        String?
+  utmContent      String?
+  gclid           String?
+  fbclid          String?
+  deviceType      String?
+  browser         String?
+  ipAddress       String?
+
+  submittedAt     DateTime       @default(now())
+  firstContactAt  DateTime?
+  speedToContact  Int?
+
+  appointmentDate DateTime?
+  appointmentSat  Boolean        @default(false)
+
+  saleDate        DateTime?
+  saleAmount      Float?
+  monthlyAmount   Float?
+  contractLength  Int?
+
+  emailsSent      Int            @default(0)
+  smsSent         Int            @default(0)
+  callsMade       Int            @default(0)
+  lastContactDate DateTime?
+
+  nurtureStep     Int            @default(0)
+  nurtureActive   Boolean        @default(true)
+
+  notes           String?
+  dispositionNote String?
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  activities      Activity[]
+  commissions     Commission[]
+  emailLogs       EmailLog[]
+  smsLogs         SmsLog[]
+
+  @@index([status])
+  @@index([source])
+  @@index([assignedRepId])
+  @@index([createdAt])
+  @@index([submittedAt])
+  @@map("leads")
+}
+
+enum PropertyType {
+  HOUSE
+  TOWNHOME
+  CONDO_APARTMENT
+  BUSINESS
+}
+
+enum Homeownership {
+  OWN
+  RENT
+}
+
+enum Timeline {
+  ASAP
+  ONE_TWO_WEEKS
+  ONE_MONTH
+  JUST_RESEARCHING
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  APPOINTMENT_SET
+  APPOINTMENT_SAT
+  QUOTED
+  CLOSED_WON
+  CLOSED_LOST
+  NO_ANSWER
+  NOT_QUALIFIED
+  CANCELLED
+}
+
+enum Priority {
+  HOT
+  HIGH
+  MEDIUM
+  LOW
+}
+
+// ============================================
+// ACTIVITY TRACKING
+// ============================================
+
+model Activity {
+  id          String       @id @default(cuid())
+
+  leadId      String
+  lead        Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  userId      String?
+  user        User?        @relation(fields: [userId], references: [id])
+
+  type        ActivityType
+  description String
+  metadata    Json?
+
+  createdAt   DateTime     @default(now())
+
+  @@index([leadId])
+  @@index([createdAt])
+  @@map("activities")
+}
+
+enum ActivityType {
+  LEAD_CREATED
+  STATUS_CHANGE
+  REP_ASSIGNED
+  EMAIL_SENT
+  SMS_SENT
+  CALL_MADE
+  CALL_RECEIVED
+  APPOINTMENT_SET
+  APPOINTMENT_SAT
+  APPOINTMENT_MISSED
+  NOTE_ADDED
+  SALE_CLOSED
+  SALE_CANCELLED
+  LEAD_SCORED
+  NURTURE_EMAIL
+}
+
+// ============================================
+// COMMISSIONS
+// ============================================
+
+model Commission {
+  id            String          @id @default(cuid())
+
+  leadId        String
+  lead          Lead            @relation(fields: [leadId], references: [id])
+
+  repId         String
+  rep           User            @relation(fields: [repId], references: [id])
+
+  saleAmount    Float
+  grossCommission Float
+  splitPercent  Float           @default(50)
+  ourShare      Float
+  repShare      Float
+  adSpend       Float?
+  netProfit     Float?
+
+  status        CommissionStatus @default(PENDING)
+  paidDate      DateTime?
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([repId])
+  @@index([status])
+  @@map("commissions")
+}
+
+enum CommissionStatus {
+  PENDING
+  APPROVED
+  PAID
+  CLAWBACK
+}
+
+// ============================================
+// EMAIL & SMS LOGS
+// ============================================
+
+model EmailLog {
+  id          String    @id @default(cuid())
+  leadId      String
+  lead        Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  type        String
+  subject     String
+  sendgridId  String?
+  status      String    @default("sent")
+  openedAt    DateTime?
+  clickedAt   DateTime?
+
+  sentAt      DateTime  @default(now())
+
+  @@index([leadId])
+  @@map("email_logs")
+}
+
+model SmsLog {
+  id          String    @id @default(cuid())
+  leadId      String
+  lead        Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  type        String
+  body        String
+  twilioSid   String?
+  status      String    @default("sent")
+
+  sentAt      DateTime  @default(now())
+
+  @@index([leadId])
+  @@map("sms_logs")
+}
+
+// ============================================
+// CAMPAIGN TRACKING
+// ============================================
+
+model Campaign {
+  id           String   @id @default(cuid())
+  name         String
+  source       String
+  medium       String
+  budget       Float?
+  startDate    DateTime?
+  endDate      DateTime?
+  isActive     Boolean  @default(true)
+
+  totalLeads   Int      @default(0)
+  totalSpend   Float    @default(0)
+  totalSales   Int      @default(0)
+  totalRevenue Float    @default(0)
+  cpl          Float?
+  cpa          Float?
+  roas         Float?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("campaigns")
+}

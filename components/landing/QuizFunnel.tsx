@@ -189,7 +189,7 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
   const qualification = getQualificationMessage(quiz)
 
   return (
-    <div id="quiz" className={cn('w-full max-w-xl mx-auto', className)}>
+    <div className={cn('w-full max-w-xl mx-auto', className)}>
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
         {/* Progress Bar */}
         <div className="bg-gray-100 h-2">
@@ -290,7 +290,7 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
           {step === 3 && (
             <div>
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">What are you interested in?</h2>
-              <p className="text-gray-600 mb-6">Select all that apply</p>
+              <p className="text-gray-600 mb-6">Select all that apply, then tap Next</p>
               <div className="flex flex-col gap-3 mb-6">
                 {productOptions.map(opt => {
                   const selected = quiz.productsInterested.includes(opt.value)
@@ -448,7 +448,7 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
                   <div className="flex items-center justify-center gap-2 pt-1">
                     <Users size={14} className="text-gray-400" />
                     <p className="text-xs text-gray-500 font-medium">
-                      <span className="text-[#00C853] font-bold">2,847 homeowners</span> requested a quote this month
+                      Join <span className="text-[#00C853] font-bold">2M+ homeowners</span> already protected by Vivint
                     </p>
                   </div>
                 </div>

@@ -11,7 +11,8 @@ const features = [
   { feature: 'Doorbell Camera w/ 180° View', vivint: true, adt: false, simplisafe: false, ring: true },
   { feature: 'Smart Sentry™ Threat Deterrent', vivint: true, adt: false, simplisafe: false, ring: false },
   { feature: 'Google/Alexa Integration', vivint: true, adt: true, simplisafe: true, ring: true },
-  { feature: 'Monthly Starting Price', vivint: '$1.33/day', adt: '~$1.83/day', simplisafe: '~$0.60/day', ring: '~$0.33/day' },
+  { feature: 'Free Equipment ($0 Down)', vivint: true, adt: false, simplisafe: false, ring: false },
+  { feature: 'Free Doorbell Camera Included', vivint: true, adt: false, simplisafe: false, ring: false },
 ]
 
 function Cell({ value, isVivint = false }: { value: boolean | string; isVivint?: boolean }) {
@@ -84,10 +85,14 @@ export default function ComparisonTable() {
           </table>
         </div>
 
-        <div className="text-center mt-8">
+        <p className="text-center text-xs text-gray-400 mt-4">
+          Feature comparison based on publicly available information as of 2025. Pricing varies by plan and region.
+        </p>
+
+        <div className="text-center mt-6">
           <a href="#quiz">
             <Button variant="primary" size="xl">
-              Get Your Free Vivint Quote →
+              Get My Free Quote →
             </Button>
           </a>
         </div>

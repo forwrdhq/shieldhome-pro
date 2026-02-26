@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { X, Shield, Phone, Gift } from 'lucide-react'
+import { X, Shield, Phone, Clock } from 'lucide-react'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 
 export default function ExitIntentPopup() {
@@ -54,36 +54,40 @@ export default function ExitIntentPopup() {
         {/* Top accent */}
         <div className="bg-[#1A1A2E] px-6 py-5 text-center">
           <div className="inline-flex items-center justify-center w-14 h-14 bg-[#00C853] rounded-full mb-3">
-            <Gift size={28} className="text-white" />
+            <Clock size={28} className="text-white" />
           </div>
           <h3 className="text-xl font-extrabold text-white">
-            Wait — Don&apos;t Miss This!
+            Before You Go — Quick Question
           </h3>
           <p className="text-gray-300 text-sm mt-1">
-            Your exclusive offer is still available
+            Want to see if you qualify for a free security consultation?
           </p>
         </div>
 
         {/* Body */}
         <div className="px-6 py-6 text-center">
+          <p className="text-gray-700 text-sm mb-5 leading-relaxed">
+            Most homeowners are surprised to learn they can get a professionally installed smart security system for <strong>$0 down</strong>. Our 60-second quiz will show you exactly what you qualify for — no commitment required.
+          </p>
+
           <div className="space-y-3 mb-6">
             <div className="flex items-center gap-3 text-left bg-green-50 rounded-lg p-3">
               <div className="w-8 h-8 bg-[#00C853] rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-sm font-bold">✓</span>
+                <span className="text-white text-sm font-bold">1</span>
               </div>
-              <span className="text-sm font-medium text-gray-800">FREE Doorbell Camera ($199 value)</span>
+              <span className="text-sm font-medium text-gray-800">Take the 60-second quiz</span>
             </div>
             <div className="flex items-center gap-3 text-left bg-green-50 rounded-lg p-3">
               <div className="w-8 h-8 bg-[#00C853] rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-sm font-bold">✓</span>
+                <span className="text-white text-sm font-bold">2</span>
               </div>
-              <span className="text-sm font-medium text-gray-800">FREE Professional Installation ($199 value)</span>
+              <span className="text-sm font-medium text-gray-800">See your personalized quote (free, no obligation)</span>
             </div>
             <div className="flex items-center gap-3 text-left bg-green-50 rounded-lg p-3">
               <div className="w-8 h-8 bg-[#00C853] rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-sm font-bold">✓</span>
+                <span className="text-white text-sm font-bold">3</span>
               </div>
-              <span className="text-sm font-medium text-gray-800">$0 Down — No Upfront Equipment Cost</span>
+              <span className="text-sm font-medium text-gray-800">Decide on your own time — no pressure</span>
             </div>
           </div>
 
@@ -105,7 +109,7 @@ export default function ExitIntentPopup() {
 
           <div className="flex items-center justify-center gap-2 mt-4 text-xs text-gray-400">
             <Shield size={12} />
-            <span>No credit card required • Takes 60 seconds</span>
+            <span>No credit card required — takes 60 seconds</span>
           </div>
         </div>
 

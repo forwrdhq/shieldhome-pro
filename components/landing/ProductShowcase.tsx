@@ -45,7 +45,7 @@ const products = [
 
 export default function ProductShowcase() {
   return (
-    <section className="py-16 bg-white">
+    <section id="products" className="py-16 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
@@ -104,7 +104,7 @@ export default function ProductShowcase() {
         <div className="text-center mt-10">
           <a href="#quiz">
             <Button variant="primary" size="xl">
-              Build Your Custom System →
+              Get My Free Quote →
             </Button>
           </a>
         </div>

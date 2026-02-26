@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Star, Phone, Shield, CheckCircle, Play } from 'lucide-react'
+import { Star, Phone, Shield, CheckCircle, Play, ShieldCheck } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 
@@ -13,8 +13,8 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({
-  headline = 'Smart Security. Professionally Installed. Starting Today.',
-  subheadline = '$0 down, free equipment, and a free doorbell camera — all backed by 24/7 professional monitoring from just $1.33/day.',
+  headline = 'Protect Your Family With the #1-Rated Smart Home Security',
+  subheadline = '$0 down, free professional installation, and a free doorbell camera — backed by 24/7 monitoring from just $1.33/day. Most homes are fully protected within 48 hours.',
 }: HeroSectionProps) {
   const [videoPlaying, setVideoPlaying] = useState(false)
 
@@ -42,7 +42,7 @@ export default function HeroSection({
             </h1>
             <p className="text-lg text-gray-300 mb-6 leading-relaxed max-w-lg">{subheadline}</p>
 
-            {/* Star rating - unified to 4.8 */}
+            {/* Star rating */}
             <div className="flex items-center gap-2 mb-8">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((i) => (
@@ -65,7 +65,7 @@ export default function HeroSection({
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#quiz">
                 <Button variant="primary" size="xl" className="w-full sm:w-auto text-lg px-10">
-                  Get Your Free Quote →
+                  Get My Free Quote →
                 </Button>
               </a>
               <a
@@ -75,6 +75,28 @@ export default function HeroSection({
                 <Phone size={20} />
                 <span className="font-semibold">Or call {PHONE_NUMBER}</span>
               </a>
+            </div>
+
+            {/* Mobile stats row — visible only on smaller screens */}
+            <div className="grid grid-cols-3 gap-3 mt-8 lg:hidden">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 text-center">
+                <div className="text-xl font-extrabold text-white">$0</div>
+                <div className="text-xs text-gray-300 mt-0.5">Down Payment</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 text-center">
+                <div className="text-xl font-extrabold text-[#00C853]">FREE</div>
+                <div className="text-xs text-gray-300 mt-0.5">Installation</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 text-center">
+                <div className="text-xl font-extrabold text-white">24/7</div>
+                <div className="text-xs text-gray-300 mt-0.5">Monitoring</div>
+              </div>
+            </div>
+
+            {/* Mobile guarantee badge */}
+            <div className="flex items-center gap-2 mt-5 lg:hidden">
+              <ShieldCheck size={16} className="text-[#00C853] flex-shrink-0" />
+              <span className="text-sm text-gray-300 font-medium">100% satisfaction guarantee — no obligation, cancel anytime</span>
             </div>
           </div>
 

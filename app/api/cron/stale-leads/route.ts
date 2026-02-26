@@ -149,20 +149,22 @@ export async function GET(req: NextRequest) {
     }
 
     // --- Send rep SMS if there are hot leads going stale ---
-    const repPhone = process.env.REP_PHONE_NUMBER
-    if (repPhone && highValueAtRisk.length > 0) {
+    const repPhones = [process.env.REP_PHONE_NUMBER, process.env.REP_PHONE_NUMBER_2].filter(Boolean) as string[]
+    if (repPhones.length > 0 && highValueAtRisk.length > 0) {
       const names = highValueAtRisk.slice(0, 5).map(l =>
         `- ${l.fullName} (${l.priority}, ${l.leadScore}pts) — ${l.phone}`
       ).join('\n')
 
-      await sendSms(formatPhone(repPhone), [
+      const body = [
         `DAILY ALERT: ${highValueAtRisk.length} high-value lead${highValueAtRisk.length === 1 ? '' : 's'} at risk`,
         ``,
         names,
         highValueAtRisk.length > 5 ? `\n...and ${highValueAtRisk.length - 5} more` : '',
         ``,
         `These are HOT/HIGH leads with no recent contact. A call today could save them.`,
-      ].join('\n'))
+      ].join('\n')
+
+      await Promise.allSettled(repPhones.map(p => sendSms(formatPhone(p), body)))
     }
 
     return NextResponse.json({

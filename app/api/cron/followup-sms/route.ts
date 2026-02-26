@@ -225,10 +225,10 @@ export async function GET(req: NextRequest) {
     // Also notify rep about leads that have received 3+ SMS with no response
     const staleSmsLeads = leads.filter(l => l.smsSent === 3 && l.status === 'NEW')
     if (staleSmsLeads.length > 0) {
-      const repPhone = process.env.REP_PHONE_NUMBER
-      if (repPhone) {
+      const repPhones = [process.env.REP_PHONE_NUMBER, process.env.REP_PHONE_NUMBER_2].filter(Boolean) as string[]
+      if (repPhones.length > 0) {
         const names = staleSmsLeads.map(l => `${l.firstName} ${l.lastName} (${l.phone})`).join('\n')
-        await sendSms(formatPhone(repPhone), [
+        const body = [
           `📋 FOLLOW-UP REMINDER`,
           ``,
           `${staleSmsLeads.length} lead(s) have received 3 texts with no response:`,
@@ -236,7 +236,8 @@ export async function GET(req: NextRequest) {
           names,
           ``,
           `A personal call may help. Speed to contact matters!`,
-        ].join('\n'))
+        ].join('\n')
+        await Promise.allSettled(repPhones.map(p => sendSms(formatPhone(p), body)))
       }
     }
 

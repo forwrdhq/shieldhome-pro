@@ -66,8 +66,8 @@ export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
  * SMS alert to the sales rep — includes everything needed to call immediately
  */
 export async function sendRepAlertSms(lead: LeadNotificationData) {
-  const repPhone = process.env.REP_PHONE_NUMBER
-  if (!repPhone) return
+  const repPhones = [process.env.REP_PHONE_NUMBER, process.env.REP_PHONE_NUMBER_2].filter(Boolean) as string[]
+  if (repPhones.length === 0) return
 
   const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'Unknown'
   const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'Unknown'
@@ -105,7 +105,7 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
     urgency,
   ].join('\n')
 
-  await sendSms(formatPhone(repPhone), body)
+  await Promise.allSettled(repPhones.map(p => sendSms(formatPhone(p), body)))
 }
 
 /**

@@ -3,7 +3,6 @@ import { prisma } from '@/lib/db'
 import { leadSchema } from '@/lib/validation'
 import { calculateLeadScore } from '@/lib/lead-scoring'
 import { sendLeadConfirmationSms, sendRepAlertSms, sendWelcomeEmail, sendSlackNotification } from '@/lib/notifications'
-import { prisma as db } from '@/lib/db'
 
 export async function POST(req: NextRequest) {
   try {
@@ -90,6 +89,7 @@ export async function POST(req: NextRequest) {
       phone: lead.phone,
       email: lead.email,
       propertyType: lead.propertyType,
+      homeownership: lead.homeownership,
       timeline: lead.timeline,
       leadScore: lead.leadScore,
       priority: lead.priority,
@@ -97,6 +97,7 @@ export async function POST(req: NextRequest) {
       medium: lead.medium,
       campaign: lead.campaign,
       productsInterested: lead.productsInterested,
+      zipCode: lead.zipCode,
     }
 
     Promise.allSettled([

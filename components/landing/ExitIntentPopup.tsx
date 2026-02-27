@@ -100,7 +100,7 @@ export default function ExitIntentPopup() {
             className="inline-flex items-center gap-2 text-gray-600 hover:text-[#00C853] text-sm transition-colors"
           >
             <Phone size={14} />
-            Or call {PHONE_NUMBER}
+            Or call/text {PHONE_NUMBER}
           </a>
 
           <div className="flex items-center justify-center gap-2 mt-4 text-xs text-gray-400">

@@ -74,7 +74,7 @@ export default function ThankYouPage() {
             className="inline-flex items-center gap-2 bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-3 rounded-xl font-bold text-lg transition-colors"
           >
             <Phone size={20} />
-            Call Us: {PHONE_NUMBER}
+            Call/Text Us: {PHONE_NUMBER}
           </a>
         </div>
       </div>

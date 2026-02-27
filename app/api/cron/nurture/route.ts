@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
       if (!emailInfo) continue
 
       const subject = emailInfo.subject.replace('{firstName}', lead.firstName)
-      const html = `<html><body><p>Hi ${lead.firstName},</p><p>This is nurture email ${nextStep + 1} from ShieldHome Pro.</p><p>Call us: ${PHONE_NUMBER}</p><p><a href="mailto:unsubscribe@shieldhomepro.com">Unsubscribe</a></p></body></html>`
+      const html = `<html><body><p>Hi ${lead.firstName},</p><p>This is nurture email ${nextStep + 1} from ShieldHome Pro.</p><p>Call/text us: ${PHONE_NUMBER}</p><p><a href="mailto:unsubscribe@shieldhomepro.com">Unsubscribe</a></p></body></html>`
 
       const msgId = await sendEmail({ to: lead.email, subject, html })
 

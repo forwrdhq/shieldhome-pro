@@ -63,7 +63,7 @@ export default function CountdownTimer() {
           href={`tel:${PHONE_NUMBER_RAW}`}
           className="flex items-center gap-1 underline hover:no-underline font-bold"
         >
-          <Phone size={14} /> Call Now
+          <Phone size={14} /> Call/Text Now
         </a>
       </div>
       <button

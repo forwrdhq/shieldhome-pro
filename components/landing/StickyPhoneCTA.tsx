@@ -27,7 +27,7 @@ export default function StickyPhoneCTA() {
           className="flex items-center gap-2 bg-[#00C853] text-white px-5 py-3 rounded-full font-bold shadow-2xl hover:bg-[#00A846] transition-colors"
         >
           <Phone size={20} />
-          Call Now
+          Call/Text Now
         </a>
       </div>
     </>

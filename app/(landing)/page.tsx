@@ -35,7 +35,7 @@ export default function HomePage() {
             >
               <Phone size={16} />
               <span className="hidden sm:inline">{PHONE_NUMBER}</span>
-              <span className="sm:hidden">Call Now</span>
+              <span className="sm:hidden">Call/Text Now</span>
             </a>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function HomePage() {
             </a>
             <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-2 text-white hover:text-[#00C853] transition-colors">
               <Phone size={20} />
-              <span>Or call {PHONE_NUMBER}</span>
+              <span>Or call/text {PHONE_NUMBER}</span>
             </a>
           </div>
         </div>

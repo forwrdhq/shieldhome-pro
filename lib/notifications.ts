@@ -22,7 +22,7 @@ interface LeadNotificationData {
 }
 
 export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
-  const body = `Hi ${lead.firstName}! This is ShieldHome Pro, your authorized Vivint dealer. We received your free quote request! A Smart Home Pro will call you shortly at this number. Questions? Call us: ${PHONE_NUMBER}`
+  const body = `Hi ${lead.firstName}! This is ShieldHome Pro, your authorized Vivint dealer. We received your free quote request! A Smart Home Pro will call you shortly at this number. Questions? Call/text us: ${PHONE_NUMBER}`
   const sid = await sendSms(formatPhone(lead.phone), body)
   if (sid) {
     await prisma.smsLog.create({

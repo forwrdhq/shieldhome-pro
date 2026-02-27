@@ -109,6 +109,112 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
 }
 
 /**
+ * Email alert to the sales rep / admin — fallback when SMS is unavailable
+ */
+export async function sendRepAlertEmail(lead: LeadNotificationData) {
+  const adminEmail = process.env.ADMIN_EMAIL
+  if (!adminEmail) return
+
+  const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'Unknown'
+  const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'Unknown'
+  const productsLabel = lead.productsInterested.length > 0
+    ? lead.productsInterested.join(', ')
+    : 'Not specified'
+
+  const priorityColor: Record<string, string> = {
+    HOT: '#dc2626', HIGH: '#ea580c', MEDIUM: '#2563eb', LOW: '#6b7280'
+  }
+  const color = priorityColor[lead.priority] || '#6b7280'
+
+  const hour = new Date().getHours()
+  const urgency = lead.priority === 'HOT'
+    ? 'CALL WITHIN 60 SECONDS'
+    : lead.priority === 'HIGH'
+    ? 'CALL NOW — high-intent lead'
+    : hour >= 8 && hour < 20
+    ? 'Call within 5 minutes for best results'
+    : 'Call first thing tomorrow AM'
+
+  const html = buildEmailTemplate({
+    preheader: `New ${lead.priority} lead: ${lead.fullName} (${lead.leadScore}pts)`,
+    body: `
+      <div style="background: ${color}; color: white; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+        <h2 style="margin: 0; font-size: 22px;">NEW ${lead.priority} LEAD</h2>
+        <p style="margin: 6px 0 0; font-size: 15px; opacity: 0.9;">${urgency}</p>
+      </div>
+
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin: 20px 0;">
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; width: 120px; display: inline-block;">Name</strong>
+            <span style="color: #1A1A2E; font-weight: 600; font-size: 16px;">${lead.fullName}</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; width: 120px; display: inline-block;">Phone</strong>
+            <a href="tel:${lead.phone}" style="color: #2563eb; font-weight: 700; font-size: 16px; text-decoration: none;">${lead.phone}</a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; width: 120px; display: inline-block;">Email</strong>
+            <a href="mailto:${lead.email}" style="color: #2563eb; text-decoration: none;">${lead.email}</a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; width: 120px; display: inline-block;">ZIP Code</strong>
+            <span>${lead.zipCode || 'N/A'}</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; width: 120px; display: inline-block;">Score</strong>
+            <span style="font-weight: 700; color: ${color};">${lead.leadScore}/100 (${lead.priority})</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; width: 120px; display: inline-block;">Property</strong>
+            <span>${propertyLabel} (${lead.homeownership === 'OWN' ? 'Owner' : 'Renter'})</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; width: 120px; display: inline-block;">Timeline</strong>
+            <span>${timelineLabel}</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; width: 120px; display: inline-block;">Wants</strong>
+            <span>${productsLabel}</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0;">
+            <strong style="color: #666; width: 120px; display: inline-block;">Source</strong>
+            <span>${lead.source || 'Direct'}${lead.medium ? ' / ' + lead.medium : ''}</span>
+          </td>
+        </tr>
+      </table>
+
+      <div style="text-align: center; margin: 24px 0;">
+        <a href="tel:${lead.phone}" style="background: #00C853; color: white; padding: 16px 36px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 17px; display: inline-block;">Call ${lead.firstName} Now</a>
+      </div>
+
+      <div style="text-align: center; margin: 12px 0;">
+        <a href="${APP_URL}/leads/${lead.id}" style="color: #2563eb; font-size: 14px;">View in CRM →</a>
+      </div>
+    `,
+  })
+
+  const subject = `🚨 New ${lead.priority} Lead: ${lead.fullName} (${lead.leadScore}pts)`
+  await sendEmail({ to: adminEmail, subject, html })
+}
+
+/**
  * Welcome email — rich, personalized based on quiz answers and priority
  */
 export async function sendWelcomeEmail(lead: LeadNotificationData) {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { leadSchema } from '@/lib/validation'
 import { calculateLeadScore } from '@/lib/lead-scoring'
-import { sendLeadConfirmationSms, sendRepAlertSms, sendWelcomeEmail, sendSlackNotification } from '@/lib/notifications'
+import { sendLeadConfirmationSms, sendRepAlertSms, sendRepAlertEmail, sendWelcomeEmail, sendSlackNotification } from '@/lib/notifications'
 
 export async function POST(req: NextRequest) {
   try {
@@ -103,6 +103,7 @@ export async function POST(req: NextRequest) {
     Promise.allSettled([
       sendLeadConfirmationSms(notifData),
       sendRepAlertSms(notifData),
+      sendRepAlertEmail(notifData),
       sendWelcomeEmail(notifData),
       sendSlackNotification(notifData),
     ]).catch(console.error)

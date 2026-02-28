@@ -13,6 +13,7 @@ html {
   box-sizing: border-box;
 }
 
+/* Animations */
 .animate-in {
   animation: slideIn 0.2s ease-out;
 }
@@ -29,4 +30,38 @@ html {
 @keyframes slideInRight {
   from { opacity: 0; transform: translateX(20px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(0, 200, 83, 0); }
+}
+
+.animate-pulse-green {
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+/* Prevent iOS zoom on input focus */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* CLS prevention: explicit image sizing */
+img {
+  max-width: 100%;
+  height: auto;
 }

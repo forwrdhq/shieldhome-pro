@@ -2,15 +2,15 @@ import { Check, X, Crown } from 'lucide-react'
 import Button from '@/components/ui/Button'
 
 const features = [
-  { feature: 'Professional Installation', vivint: true, adt: true, simplisafe: false, ring: false },
-  { feature: '24/7 Professional Monitoring', vivint: true, adt: true, simplisafe: true, ring: false },
-  { feature: 'Smart Home Integration', vivint: 'Full', adt: 'Full', simplisafe: 'Limited', ring: 'Limited' },
+  { feature: 'Free Expert Setup', vivint: true, adt: true, simplisafe: false, ring: false },
+  { feature: '24/7 Pro Monitoring', vivint: true, adt: true, simplisafe: true, ring: false },
+  { feature: 'Smart Home Controls', vivint: 'Full', adt: 'Full', simplisafe: 'Limited', ring: 'Limited' },
   { feature: 'AI-Powered Cameras', vivint: true, adt: false, simplisafe: false, ring: false },
   { feature: 'Package Detection', vivint: true, adt: false, simplisafe: false, ring: true },
   { feature: 'No DIY Required', vivint: true, adt: true, simplisafe: false, ring: false },
   { feature: 'Doorbell Camera w/ 180° View', vivint: true, adt: false, simplisafe: false, ring: true },
-  { feature: 'Smart Sentry™ Threat Deterrent', vivint: true, adt: false, simplisafe: false, ring: false },
-  { feature: 'Google/Alexa Integration', vivint: true, adt: true, simplisafe: true, ring: true },
+  { feature: 'Smart Sentry™ Threat Blocker', vivint: true, adt: false, simplisafe: false, ring: false },
+  { feature: 'Google/Alexa Built In', vivint: true, adt: true, simplisafe: true, ring: true },
   { feature: 'Monthly Starting Price', vivint: '$1.33/day', adt: '~$1.83/day', simplisafe: '~$0.60/day', ring: '~$0.33/day' },
 ]
 
@@ -37,7 +37,7 @@ export default function ComparisonTable() {
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
             Why Choose Vivint?
           </h2>
-          <p className="text-gray-600 text-lg">See how Vivint stacks up against the competition</p>
+          <p className="text-gray-600 text-lg">See how Vivint stacks up against the rest</p>
         </div>
 
         <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
@@ -50,7 +50,7 @@ export default function ComparisonTable() {
                     <Crown size={16} className="text-yellow-400" />
                     <span>Vivint</span>
                   </div>
-                  <div className="text-xs font-normal text-[#00C853] mt-0.5">Our Recommendation</div>
+                  <div className="text-xs font-normal text-[#00C853] mt-0.5">Our Pick</div>
                 </th>
                 <th className="p-4 text-center text-gray-600 font-semibold bg-gray-50">ADT</th>
                 <th className="p-4 text-center text-gray-600 font-semibold bg-gray-50">SimpliSafe</th>
@@ -86,8 +86,8 @@ export default function ComparisonTable() {
 
         <div className="text-center mt-8">
           <a href="#quiz">
-            <Button variant="primary" size="xl">
-              Get Your Free Vivint Quote →
+            <Button variant="primary" size="xl" className="w-full sm:w-auto">
+              Get Your Free Vivint Quote
             </Button>
           </a>
         </div>

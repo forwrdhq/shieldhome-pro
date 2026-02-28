@@ -8,14 +8,10 @@ import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 const YOUTUBE_ID = 'mgHIEsr_XH0'
 
 interface HeroSectionProps {
-  headline?: string
-  subheadline?: string
+  onQuizOpen: () => void
 }
 
-export default function HeroSection({
-  headline = 'Smart Security. Professionally Installed. Starting Today.',
-  subheadline = '$0 down, free equipment, and a free doorbell camera — all backed by 24/7 professional monitoring from just $1.33/day.',
-}: HeroSectionProps) {
+export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
   const [videoPlaying, setVideoPlaying] = useState(false)
 
   return (
@@ -38,11 +34,13 @@ export default function HeroSection({
             </div>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-[1.15] mb-5">
-              {headline}
+              Homes Without Security Are 3x More Likely to Be Broken Into
             </h1>
-            <p className="text-lg text-gray-300 mb-6 leading-relaxed max-w-lg">{subheadline}</p>
+            <p className="text-lg text-gray-300 mb-6 leading-relaxed max-w-lg">
+              Get Vivint&apos;s #1-rated smart home security — $0 down, free setup, and a free doorbell camera. Most homes are fully protected within 48 hours.
+            </p>
 
-            {/* Star rating - unified to 4.8 */}
+            {/* Star rating */}
             <div className="flex items-center gap-2 mb-8">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((i) => (
@@ -63,17 +61,26 @@ export default function HeroSection({
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#quiz">
-                <Button variant="primary" size="xl" className="w-full sm:w-auto text-lg px-10">
-                  Get Your Free Quote →
-                </Button>
-              </a>
+              <Button
+                variant="primary"
+                size="xl"
+                className="w-full sm:w-auto text-lg px-10"
+                onClick={onQuizOpen}
+              >
+                Get My Free Quote
+              </Button>
               <a
                 href={`tel:${PHONE_NUMBER_RAW}`}
-                className="flex items-center gap-2 text-white hover:text-[#00C853] transition-colors"
+                className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    if ((window as any).fbq) (window as any).fbq('track', 'Contact', { content_name: 'phone_call' })
+                    if ((window as any).dataLayer) (window as any).dataLayer.push({ event: 'phone_click' })
+                  }
+                }}
               >
-                <Phone size={20} />
-                <span className="font-semibold">Or call {PHONE_NUMBER}</span>
+                <Phone size={16} />
+                <span>Or call {PHONE_NUMBER}</span>
               </a>
             </div>
           </div>
@@ -98,11 +105,12 @@ export default function HeroSection({
                       className="absolute inset-0 w-full h-full group cursor-pointer"
                       aria-label="Play video"
                     >
-                      {/* YouTube thumbnail */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`https://img.youtube.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`}
                         alt="Vivint Smart Home Security System"
                         className="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -125,7 +133,7 @@ export default function HeroSection({
                   </div>
                   <div>
                     <div className="text-2xl font-extrabold text-[#00C853]">FREE</div>
-                    <div className="text-xs text-gray-400 mt-0.5">Installation</div>
+                    <div className="text-xs text-gray-400 mt-0.5">Expert Setup</div>
                   </div>
                   <div>
                     <div className="text-2xl font-extrabold text-white">24/7</div>

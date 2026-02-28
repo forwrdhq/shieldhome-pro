@@ -1,38 +1,44 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { ChevronLeft, Home, Building2, Building, Briefcase, Key, ClipboardList, Shield, AlertTriangle, Camera, Zap, Package, Bolt, Calendar, CalendarDays, Search, CheckCircle, Lock, Award, Users } from 'lucide-react'
+import {
+  ChevronLeft, X, Home, Building2, Building, Briefcase,
+  Key, ClipboardList, ShoppingCart, Shield, AlertTriangle,
+  PawPrint, CheckCircle2, Lock, Award, Users,
+  Bolt, Calendar, Search, CheckCircle, DoorOpen, Flame
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 
 const contactSchema = z.object({
-  firstName: z.string().min(1, 'Required'),
-  lastName: z.string().min(1, 'Required'),
-  phone: z.string().min(10, 'Valid phone required'),
+  firstName: z.string().min(1, 'First name is required'),
+  phone: z.string().min(10, 'Valid phone number required'),
   email: z.string().email('Valid email required'),
-  zipCode: z.string().min(5, 'ZIP required'),
+  zipCode: z.string().min(5, 'ZIP code required'),
 })
 type ContactForm = z.infer<typeof contactSchema>
 
 interface QuizState {
   propertyType: string
   homeownership: string
-  productsInterested: string[]
+  securityConcerns: string[]
+  entryPoints: string
   timeline: string
 }
 
 interface QuizFunnelProps {
   className?: string
-  variant?: 'default' | 'compact'
+  isModal?: boolean
+  onClose?: () => void
 }
 
-const STEPS = 5
+const TOTAL_STEPS = 6
 
 function formatPhone(value: string): string {
   const digits = value.replace(/\D/g, '').slice(0, 10)
@@ -44,81 +50,164 @@ function formatPhone(value: string): string {
 
 function getQualificationMessage(quiz: QuizState): { headline: string; subtext: string } {
   const isOwner = quiz.homeownership === 'OWN'
-  const isUrgent = quiz.timeline === 'ASAP' || quiz.timeline === 'ONE_TWO_WEEKS'
+  const isUrgent = quiz.timeline === 'ASAP' || quiz.timeline === 'WITHIN_MONTH'
   const isHouse = quiz.propertyType === 'HOUSE' || quiz.propertyType === 'TOWNHOME'
 
   if (isOwner && isUrgent && isHouse) {
     return {
-      headline: 'You qualify for our best deal.',
-      subtext: 'Homeowners like you are eligible for $0 down, free equipment, and a free doorbell camera with professional installation.',
+      headline: 'Great news — you qualify for our best deal!',
+      subtext: 'Homeowners like you get $0 down, free equipment, and a free doorbell camera with expert setup.',
     }
   }
   if (isOwner && isHouse) {
     return {
       headline: 'Great news — you qualify!',
-      subtext: 'As a homeowner, you\'re eligible for our premium package including free professional installation and a free doorbell camera.',
+      subtext: 'As a homeowner, you get free expert setup and a free doorbell camera with your system.',
     }
   }
   if (isOwner) {
     return {
-      headline: 'You qualify for a custom quote.',
-      subtext: 'We have specialized packages for your property type with free professional installation included.',
+      headline: 'You qualify for a free custom quote!',
+      subtext: 'We have packages built for your property type with free expert setup included.',
     }
   }
   if (quiz.homeownership === 'RENT') {
     return {
       headline: 'We have renter-friendly plans!',
-      subtext: 'Vivint offers flexible renter packages — a Smart Home Pro will walk you through your best options and pricing.',
+      subtext: 'Vivint offers flexible renter packages. A Smart Home Pro will walk you through your best options.',
     }
   }
   return {
-    headline: 'Great news! You qualify.',
-    subtext: 'Enter your info below to get your free personalized security quote.',
+    headline: 'Great news — you qualify!',
+    subtext: 'Enter your info below to get your free custom security quote.',
   }
 }
 
-export default function QuizFunnel({ className, variant = 'default' }: QuizFunnelProps) {
+export function getRiskLevel(entryPoints: string, concerns: string[]): { level: string; score: number; color: string } {
+  let score = 40
+  if (entryPoints === '6-10') score += 15
+  else if (entryPoints === '11-15') score += 25
+  else if (entryPoints === '15+') score += 35
+  if (concerns.includes('BREAKINS')) score += 10
+  if (concerns.includes('ALL')) score += 15
+  if (concerns.length >= 3) score += 10
+  score = Math.min(score, 95)
+
+  if (score >= 70) return { level: 'HIGH', score, color: 'text-red-600' }
+  if (score >= 50) return { level: 'MODERATE', score, color: 'text-yellow-600' }
+  return { level: 'LOW', score, color: 'text-green-600' }
+}
+
+export default function QuizFunnel({ className, isModal = false, onClose }: QuizFunnelProps) {
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [quiz, setQuiz] = useState<QuizState>({
     propertyType: '',
     homeownership: '',
-    productsInterested: [],
+    securityConcerns: [],
+    entryPoints: '',
     timeline: '',
   })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [phoneDisplay, setPhoneDisplay] = useState('')
-  const phoneRef = useRef<HTMLInputElement>(null)
+  const [tcpaConsent, setTcpaConsent] = useState(true)
+  const [showRenterNote, setShowRenterNote] = useState(false)
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
   })
 
-  const progress = ((step - 1) / (STEPS - 1)) * 100
+  const progress = ((step - 1) / (TOTAL_STEPS - 1)) * 100
+
+  // Auto-detect zip code via geolocation
+  useEffect(() => {
+    if (step === 6 && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        try {
+          const { latitude, longitude } = position.coords
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`
+          )
+          const data = await response.json()
+          if (data.postcode) {
+            setValue('zipCode', data.postcode)
+          }
+        } catch {
+          // Silently fail — user can enter manually
+        }
+      }, () => {}, { timeout: 5000 })
+    }
+  }, [step, setValue])
+
+  // Track quiz start on first advance
+  useEffect(() => {
+    if (step === 2 && typeof window !== 'undefined') {
+      if ((window as any).fbq) {
+        (window as any).fbq('track', 'Lead', { content_name: 'quiz_started' })
+      }
+      if ((window as any).dataLayer) {
+        (window as any).dataLayer.push({ event: 'quiz_start', quiz_step: 1 })
+      }
+    }
+  }, [step])
+
+  function trackStep(stepNum: number, answer: string) {
+    if (typeof window !== 'undefined') {
+      if ((window as any).fbq) {
+        (window as any).fbq('trackCustom', 'QuizStep', { step: stepNum, answer })
+      }
+      if ((window as any).dataLayer) {
+        (window as any).dataLayer.push({ event: 'quiz_step', quiz_step: stepNum, answer })
+      }
+    }
+  }
 
   function selectProperty(value: string) {
     setQuiz(q => ({ ...q, propertyType: value }))
+    trackStep(1, value)
     setStep(2)
   }
 
   function selectOwnership(value: string) {
     setQuiz(q => ({ ...q, homeownership: value }))
-    setStep(3)
+    trackStep(2, value)
+    if (value === 'RENT') {
+      setShowRenterNote(true)
+      setTimeout(() => {
+        setShowRenterNote(false)
+        setStep(3)
+      }, 2500)
+    } else {
+      setStep(3)
+    }
   }
 
-  function toggleProduct(value: string) {
-    setQuiz(q => ({
-      ...q,
-      productsInterested: q.productsInterested.includes(value)
-        ? q.productsInterested.filter(p => p !== value)
-        : [...q.productsInterested, value]
-    }))
+  function toggleConcern(value: string) {
+    setQuiz(q => {
+      if (value === 'ALL') {
+        return { ...q, securityConcerns: q.securityConcerns.includes('ALL') ? [] : ['ALL'] }
+      }
+      const filtered = q.securityConcerns.filter(c => c !== 'ALL')
+      return {
+        ...q,
+        securityConcerns: filtered.includes(value)
+          ? filtered.filter(c => c !== value)
+          : [...filtered, value]
+      }
+    })
+  }
+
+  function selectEntryPoints(value: string) {
+    setQuiz(q => ({ ...q, entryPoints: value }))
+    trackStep(4, value)
+    setStep(5)
   }
 
   function selectTimeline(value: string) {
     setQuiz(q => ({ ...q, timeline: value }))
-    setStep(5)
+    trackStep(5, value)
+    setStep(6)
   }
 
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -136,22 +225,48 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...contact, ...quiz, ...tracking }),
+        body: JSON.stringify({
+          ...contact,
+          propertyType: quiz.propertyType,
+          homeownership: quiz.homeownership,
+          productsInterested: quiz.securityConcerns,
+          timeline: quiz.timeline,
+          entryPoints: quiz.entryPoints,
+          tcpaConsent,
+          ...tracking,
+        }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Submission failed')
+      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
-      // Fire tracking events
       if (typeof window !== 'undefined') {
         if ((window as any).fbq) {
-          (window as any).fbq('track', 'Lead', { content_name: 'security_quote', value: 850.00, currency: 'USD' })
+          (window as any).fbq('track', 'CompleteRegistration', {
+            content_name: 'quiz_completed',
+            value: 900,
+            currency: 'USD',
+          })
         }
         if ((window as any).gtag) {
-          (window as any).gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: 'quiz_funnel', value: 850 })
+          (window as any).gtag('event', 'generate_lead', {
+            event_category: 'form_submission',
+            event_label: 'quiz_funnel',
+            value: 900,
+          })
+        }
+        if ((window as any).dataLayer) {
+          (window as any).dataLayer.push({
+            event: 'lead_submitted',
+            lead_value: 900,
+            property_type: quiz.propertyType,
+            ownership: quiz.homeownership,
+            timeline: quiz.timeline,
+            zip_code: contact.zipCode,
+          })
         }
       }
 
-      router.push('/thank-you')
+      router.push(`/thank-you?ep=${quiz.entryPoints}&concerns=${quiz.securityConcerns.join(',')}&timeline=${quiz.timeline}&property=${quiz.propertyType}`)
     } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.')
     } finally {
@@ -169,28 +284,55 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
   const ownershipOptions = [
     { value: 'OWN', label: 'I Own My Home', icon: <Key size={28} /> },
     { value: 'RENT', label: 'I Rent', icon: <ClipboardList size={28} /> },
+    { value: 'BUYING', label: "I'm Buying Soon", icon: <ShoppingCart size={28} /> },
   ]
 
-  const productOptions = [
-    { value: 'Home Security System', label: 'Home Security System', icon: <Shield size={24} /> },
-    { value: 'Safety & Smoke Alarms', label: 'Safety & Smoke Alarms', icon: <AlertTriangle size={24} /> },
-    { value: 'Indoor/Outdoor Cameras', label: 'Indoor/Outdoor Cameras', icon: <Camera size={24} /> },
-    { value: 'Smart Home Automation', label: 'Smart Home Automation', icon: <Zap size={24} /> },
-    { value: 'Package Protection', label: 'Package Protection', icon: <Package size={24} /> },
+  const concernOptions = [
+    { value: 'BREAKINS', label: 'Break-ins / Burglary', icon: <Shield size={24} /> },
+    { value: 'PACKAGES', label: 'Package Theft', icon: <AlertTriangle size={24} /> },
+    { value: 'FIRE', label: 'Fire / Smoke / CO', icon: <Flame size={24} /> },
+    { value: 'KIDS_PETS', label: 'Watching Kids / Pets', icon: <PawPrint size={24} /> },
+    { value: 'ALL', label: 'All of the Above', icon: <CheckCircle2 size={24} /> },
+  ]
+
+  const entryPointOptions = [
+    { value: '1-5', label: '1-5 entry points' },
+    { value: '6-10', label: '6-10 entry points' },
+    { value: '11-15', label: '11-15 entry points' },
+    { value: '15+', label: '15+ entry points' },
   ]
 
   const timelineOptions = [
-    { value: 'ASAP', label: 'As soon as possible', icon: <Bolt size={24} /> },
-    { value: 'ONE_TWO_WEEKS', label: 'Within 1-2 weeks', icon: <Calendar size={24} /> },
-    { value: 'ONE_MONTH', label: 'Within a month', icon: <CalendarDays size={24} /> },
-    { value: 'JUST_RESEARCHING', label: "I'm just researching", icon: <Search size={24} /> },
+    { value: 'ASAP', label: 'ASAP (within a week)', icon: <Bolt size={24} />, hot: true },
+    { value: 'WITHIN_MONTH', label: 'Within the next month', icon: <Calendar size={24} /> },
+    { value: 'JUST_RESEARCHING', label: 'Just researching', icon: <Search size={24} /> },
   ]
 
   const qualification = getQualificationMessage(quiz)
 
-  return (
-    <div id="quiz" className={cn('w-full max-w-xl mx-auto', className)}>
-      <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+  const quizContent = (
+    <div className={cn('w-full', isModal ? 'max-w-lg mx-auto' : 'max-w-xl mx-auto', className)}>
+      <div className={cn(
+        'bg-white overflow-hidden',
+        isModal ? 'rounded-none sm:rounded-2xl' : 'rounded-2xl shadow-2xl border border-gray-100'
+      )}>
+        {/* Header for modal */}
+        {isModal && (
+          <div className="flex items-center justify-between px-6 py-4 bg-[#1A1A2E]">
+            <div className="flex items-center gap-2">
+              <Shield size={20} className="text-[#00C853]" />
+              <span className="text-white font-bold">Free Home Security Assessment</span>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-full hover:bg-white/10 text-white transition-colors"
+              aria-label="Close quiz"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        )}
+
         {/* Progress Bar */}
         <div className="bg-gray-100 h-2">
           <div
@@ -200,64 +342,55 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
         </div>
 
         <div className="p-6 md:p-8">
-          {/* Back button + subtle indicator (no "Step X of Y") */}
-          {step > 1 && (
-            <div className="flex items-center justify-between mb-5">
+          {/* Step indicator + Back button */}
+          <div className="flex items-center justify-between mb-5">
+            {step > 1 ? (
               <button
-                onClick={() => setStep(s => s - 1)}
+                onClick={() => {
+                  if (showRenterNote) return
+                  setStep(s => s - 1)
+                }}
                 className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-                aria-label="Go back to previous question"
+                aria-label="Go back"
               >
                 <ChevronLeft size={18} />
                 <span>Back</span>
               </button>
-              {/* Progress dots */}
-              <div className="flex items-center gap-1.5">
-                {[1,2,3,4,5].map(i => (
+            ) : (
+              <div />
+            )}
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-gray-400 font-medium">Step {step} of {TOTAL_STEPS}</span>
+              <div className="flex items-center gap-1 ml-2">
+                {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
                   <div
                     key={i}
                     className={cn(
-                      'w-2 h-2 rounded-full transition-all',
-                      i < step ? 'bg-[#00C853]' : i === step ? 'bg-[#00C853] w-4' : 'bg-gray-200'
+                      'h-1.5 rounded-full transition-all duration-300',
+                      i < step ? 'bg-[#00C853] w-4' : i === step - 1 ? 'bg-[#00C853] w-6' : 'bg-gray-200 w-4'
                     )}
                   />
                 ))}
               </div>
             </div>
-          )}
-
-          {/* Selected badges */}
-          {step > 1 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {quiz.propertyType && (
-                <span className="text-xs px-2.5 py-1 bg-green-50 text-green-700 rounded-full border border-green-200 font-medium">
-                  {propertyOptions.find(p => p.value === quiz.propertyType)?.label}
-                </span>
-              )}
-              {quiz.homeownership && step > 2 && (
-                <span className="text-xs px-2.5 py-1 bg-green-50 text-green-700 rounded-full border border-green-200 font-medium">
-                  {ownershipOptions.find(o => o.value === quiz.homeownership)?.label}
-                </span>
-              )}
-            </div>
-          )}
+          </div>
 
           {/* Step 1: Property Type */}
           {step === 1 && (
-            <div>
+            <div className="animate-in">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                Let&apos;s customize your security system
+                What type of property do you want to protect?
               </h2>
-              <p className="text-gray-600 mb-6">What type of property do you want to protect?</p>
+              <p className="text-gray-500 mb-6 text-sm">This helps us build the right system for you.</p>
               <div className="grid grid-cols-2 gap-3">
                 {propertyOptions.map(opt => (
                   <button
                     key={opt.value}
                     onClick={() => selectProperty(opt.value)}
-                    className="flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 group"
+                    className="flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 group min-h-[100px]"
                     aria-label={`Select ${opt.label}`}
                   >
-                    <span className="text-gray-600 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
+                    <span className="text-gray-500 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
                     <span className="font-semibold text-gray-800 text-sm">{opt.label}</span>
                   </button>
                 ))}
@@ -267,18 +400,29 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
 
           {/* Step 2: Ownership */}
           {step === 2 && (
-            <div>
+            <div className="animate-in">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Do you own or rent?</h2>
-              <p className="text-gray-600 mb-6">This helps us find the best plan for you</p>
-              <div className="grid grid-cols-2 gap-3">
+              <p className="text-gray-500 mb-6 text-sm">This helps us find the best plan for you.</p>
+
+              {showRenterNote && (
+                <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-sm text-yellow-800">
+                  <strong>Note:</strong> Vivint systems need homeowner approval. If your landlord agrees, we can still help!
+                </div>
+              )}
+
+              <div className="flex flex-col gap-3">
                 {ownershipOptions.map(opt => (
                   <button
                     key={opt.value}
                     onClick={() => selectOwnership(opt.value)}
-                    className="flex flex-col items-center gap-3 p-6 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 group"
+                    disabled={showRenterNote}
+                    className={cn(
+                      'flex items-center gap-4 p-5 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 group text-left',
+                      showRenterNote && 'opacity-50 cursor-not-allowed'
+                    )}
                     aria-label={`Select ${opt.label}`}
                   >
-                    <span className="text-gray-600 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
+                    <span className="text-gray-500 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
                     <span className="font-semibold text-gray-800">{opt.label}</span>
                   </button>
                 ))}
@@ -286,20 +430,20 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
             </div>
           )}
 
-          {/* Step 3: Products */}
+          {/* Step 3: Security Concerns */}
           {step === 3 && (
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">What are you interested in?</h2>
-              <p className="text-gray-600 mb-6">Select all that apply</p>
+            <div className="animate-in">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">What concerns you most?</h2>
+              <p className="text-gray-500 mb-6 text-sm">Select all that apply.</p>
               <div className="flex flex-col gap-3 mb-6">
-                {productOptions.map(opt => {
-                  const selected = quiz.productsInterested.includes(opt.value)
+                {concernOptions.map(opt => {
+                  const selected = quiz.securityConcerns.includes(opt.value)
                   return (
                     <button
                       key={opt.value}
-                      onClick={() => toggleProduct(opt.value)}
+                      onClick={() => toggleConcern(opt.value)}
                       className={cn(
-                        'flex items-center gap-4 p-4 rounded-xl border-2 transition-all duration-200 text-left',
+                        'flex items-center gap-4 p-4 rounded-xl border-2 transition-all duration-200 text-left min-h-[56px]',
                         selected
                           ? 'border-[#00C853] bg-green-50'
                           : 'border-gray-200 hover:border-[#00C853] hover:bg-green-50'
@@ -320,28 +464,37 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
                 variant="primary"
                 size="lg"
                 className="w-full"
-                onClick={() => quiz.productsInterested.length > 0 && setStep(4)}
-                disabled={quiz.productsInterested.length === 0}
+                onClick={() => {
+                  if (quiz.securityConcerns.length > 0) {
+                    trackStep(3, quiz.securityConcerns.join(','))
+                    setStep(4)
+                  }
+                }}
+                disabled={quiz.securityConcerns.length === 0}
               >
-                Next →
+                Next
               </Button>
             </div>
           )}
 
-          {/* Step 4: Timeline */}
+          {/* Step 4: Entry Points */}
           {step === 4 && (
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">How soon do you want it installed?</h2>
-              <p className="text-gray-600 mb-6">This helps us schedule your consultation</p>
+            <div className="animate-in">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                How many entry points does your home have?
+              </h2>
+              <p className="text-gray-500 mb-6 text-sm">Count doors and windows someone could get through. This helps us size your system.</p>
               <div className="flex flex-col gap-3">
-                {timelineOptions.map(opt => (
+                {entryPointOptions.map(opt => (
                   <button
                     key={opt.value}
-                    onClick={() => selectTimeline(opt.value)}
-                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 text-left group"
+                    onClick={() => selectEntryPoints(opt.value)}
+                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 text-left group min-h-[56px]"
                     aria-label={`Select ${opt.label}`}
                   >
-                    <span className="text-gray-600 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
+                    <span className="text-gray-500 group-hover:text-[#00C853] transition-colors">
+                      <DoorOpen size={24} />
+                    </span>
                     <span className="font-semibold text-gray-800">{opt.label}</span>
                   </button>
                 ))}
@@ -349,32 +502,52 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
             </div>
           )}
 
-          {/* Step 5: Contact Form — Personalized */}
+          {/* Step 5: Timeline */}
           {step === 5 && (
-            <div>
+            <div className="animate-in">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">When do you want to get protected?</h2>
+              <p className="text-gray-500 mb-6 text-sm">This helps us schedule your free quote call.</p>
+              <div className="flex flex-col gap-3">
+                {timelineOptions.map(opt => (
+                  <button
+                    key={opt.value}
+                    onClick={() => selectTimeline(opt.value)}
+                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 text-left group min-h-[56px]"
+                    aria-label={`Select ${opt.label}`}
+                  >
+                    <span className="text-gray-500 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
+                    <span className="font-semibold text-gray-800 flex-1">{opt.label}</span>
+                    {opt.hot && (
+                      <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">
+                        Most Popular
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Step 6: Contact Form */}
+          {step === 6 && (
+            <div className="animate-in">
               <div className="text-center mb-6">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-3">
                   <CheckCircle className="text-[#00C853]" size={24} />
                 </div>
                 <h2 className="text-xl md:text-2xl font-bold text-gray-900">{qualification.headline}</h2>
-                <p className="text-gray-600 mt-1 text-sm max-w-md mx-auto">{qualification.subtext}</p>
+                <p className="text-gray-500 mt-1 text-sm max-w-md mx-auto">{qualification.subtext}</p>
               </div>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <Input
-                    label="First Name"
-                    placeholder="John"
-                    error={errors.firstName?.message}
-                    {...register('firstName')}
-                  />
-                  <Input
-                    label="Last Name"
-                    placeholder="Smith"
-                    error={errors.lastName?.message}
-                    {...register('lastName')}
-                  />
-                </div>
+                <Input
+                  label="First Name"
+                  placeholder="John"
+                  error={errors.firstName?.message}
+                  autoComplete="given-name"
+                  {...register('firstName')}
+                />
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                   <input
@@ -382,29 +555,50 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
                     placeholder="(555) 555-5555"
                     value={phoneDisplay}
                     onChange={handlePhoneChange}
+                    autoComplete="tel"
                     className={cn(
                       'w-full px-4 py-3 rounded-lg border text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00C853] focus:border-transparent transition-all',
                       errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-300'
                     )}
+                    style={{ fontSize: '16px' }}
                   />
                   <input type="hidden" {...register('phone')} />
                   {errors.phone && <p className="text-xs text-red-600 mt-1">{errors.phone.message}</p>}
-                  <p className="text-xs text-gray-500 mt-1">We&apos;ll text you a confirmation</p>
                 </div>
+
                 <Input
                   label="Email Address"
                   type="email"
                   placeholder="john@example.com"
                   error={errors.email?.message}
+                  autoComplete="email"
                   {...register('email')}
                 />
+
                 <Input
                   label="ZIP Code"
                   placeholder="90210"
                   maxLength={10}
                   error={errors.zipCode?.message}
+                  autoComplete="postal-code"
+                  inputMode="numeric"
                   {...register('zipCode')}
                 />
+
+                {/* TCPA Consent */}
+                <label className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={tcpaConsent}
+                    onChange={(e) => setTcpaConsent(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 text-[#00C853] rounded border-gray-300 focus:ring-[#00C853]"
+                  />
+                  <span className="text-xs text-gray-500 leading-relaxed">
+                    By clicking &ldquo;Get My Free Quote,&rdquo; I agree to receive calls, texts, and emails
+                    from ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer.
+                    Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.
+                  </span>
+                </label>
 
                 {error && (
                   <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
@@ -419,11 +613,16 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
                   className="w-full text-lg"
                   loading={submitting}
                 >
-                  Get My Free Quote →
+                  Get My Free Quote
                 </Button>
 
-                {/* Enhanced trust seals */}
+                {/* Trust seals */}
                 <div className="pt-2 space-y-3">
+                  <div className="flex items-center justify-center gap-1.5 text-gray-500">
+                    <Lock size={14} className="text-[#00C853]" />
+                    <span className="text-xs font-medium">Your info is 100% secure. We never sell or share your data.</span>
+                  </div>
+
                   <div className="flex items-center justify-center gap-6 text-gray-500">
                     <div className="flex items-center gap-1.5">
                       <Lock size={14} className="text-[#00C853]" />
@@ -439,12 +638,6 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
                     </div>
                   </div>
 
-                  <p className="text-xs text-gray-400 text-center leading-relaxed">
-                    By submitting, you consent to receive calls and texts from an authorized Vivint dealer.
-                    Msg & data rates may apply. Reply STOP to opt out.
-                  </p>
-
-                  {/* Social proof nudge */}
                   <div className="flex items-center justify-center gap-2 pt-1">
                     <Users size={14} className="text-gray-400" />
                     <p className="text-xs text-gray-500 font-medium">
@@ -459,4 +652,17 @@ export default function QuizFunnel({ className, variant = 'default' }: QuizFunne
       </div>
     </div>
   )
+
+  if (isModal) {
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+        <div className="relative w-full h-full sm:h-auto sm:max-h-[90vh] overflow-y-auto">
+          {quizContent}
+        </div>
+      </div>
+    )
+  }
+
+  return quizContent
 }

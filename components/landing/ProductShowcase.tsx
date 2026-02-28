@@ -6,7 +6,7 @@ const products = [
     title: 'Outdoor Camera Pro',
     badge: 'AI-Powered',
     features: [
-      'Smart Sentry\u2122 AI identifies and deters real threats',
+      'Smart Sentry\u2122 AI spots and stops real threats',
       "Doesn't just record crime \u2014 it helps prevent it",
       'Live and recorded video, 3x HD zoom',
     ],
@@ -16,8 +16,8 @@ const products = [
     title: 'Doorbell Camera Pro',
     badge: 'Free Included',
     features: [
-      "180\u00b0 x 180\u00b0 field of view \u2014 industry's widest",
-      'AI Package Protection detects deliveries',
+      "180\u00b0 x 180\u00b0 view \u2014 the widest in the industry",
+      'AI Package Protection spots deliveries',
       '1080p HDR video, two-way talk',
     ],
   },
@@ -36,7 +36,7 @@ const products = [
     title: 'Smart Home Bundle',
     badge: 'Full Automation',
     features: [
-      'Kwikset smart locks, Nest integration',
+      'Kwikset smart locks, Nest connection',
       'Automate lights, locks, thermostat',
       'Control from anywhere via app',
     ],
@@ -52,7 +52,7 @@ export default function ProductShowcase() {
             What&apos;s Included in Your System
           </h2>
           <p className="text-gray-600 text-lg">
-            Professional-grade security technology, all installed for you
+            Pro-grade security tech, all set up for you
           </p>
         </div>
 
@@ -62,7 +62,6 @@ export default function ProductShowcase() {
               key={product.title}
               className="relative bg-[#F8F9FA] rounded-xl border border-gray-100 hover:border-[#00C853] hover:shadow-md transition-all overflow-hidden flex flex-col"
             >
-              {/* Product image */}
               <div className="relative h-48 bg-[#1A1A2E] flex items-center justify-center p-6">
                 <span className="absolute top-3 right-3 text-xs px-2 py-1 bg-[#00C853] text-white rounded-full font-medium z-10">
                   {product.badge}
@@ -72,10 +71,12 @@ export default function ProductShowcase() {
                   src={product.image}
                   alt={product.title}
                   className="max-h-36 max-w-full object-contain drop-shadow-lg"
+                  loading="lazy"
+                  width={200}
+                  height={144}
                 />
               </div>
 
-              {/* Content */}
               <div className="p-5 flex-1 flex flex-col">
                 <h3 className="text-lg font-bold text-[#1A1A2E] mb-3">
                   {product.title}
@@ -94,7 +95,7 @@ export default function ProductShowcase() {
                   ))}
                 </ul>
                 <p className="mt-4 text-xs text-[#00C853] font-semibold">
-                  Included with qualifying system
+                  Included with your system
                 </p>
               </div>
             </div>
@@ -103,8 +104,8 @@ export default function ProductShowcase() {
 
         <div className="text-center mt-10">
           <a href="#quiz">
-            <Button variant="primary" size="xl">
-              Build Your Custom System →
+            <Button variant="primary" size="xl" className="w-full sm:w-auto">
+              Build Your Custom System
             </Button>
           </a>
         </div>

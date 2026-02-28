@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useCallback } from 'react'
 import CountdownTimer from '@/components/landing/CountdownTimer'
 import HeroSection from '@/components/landing/HeroSection'
 import SocialProof from '@/components/landing/SocialProof'
@@ -10,10 +13,19 @@ import TestimonialCarousel from '@/components/landing/TestimonialCarousel'
 import FAQSection from '@/components/landing/FAQSection'
 import StickyPhoneCTA from '@/components/landing/StickyPhoneCTA'
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup'
+import CrimeStats from '@/components/landing/CrimeStats'
+import SocialProofNotifications from '@/components/landing/SocialProofNotifications'
+import StickyQuizCTA from '@/components/landing/StickyQuizCTA'
+import AnimatedCounter from '@/components/landing/AnimatedCounter'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 import { Phone, Shield } from 'lucide-react'
 
 export default function HomePage() {
+  const [quizModalOpen, setQuizModalOpen] = useState(false)
+
+  const openQuiz = useCallback(() => setQuizModalOpen(true), [])
+  const closeQuiz = useCallback(() => setQuizModalOpen(false), [])
+
   return (
     <div className="min-h-screen bg-white">
       {/* Sticky Header */}
@@ -35,16 +47,32 @@ export default function HomePage() {
             >
               <Phone size={16} />
               <span className="hidden sm:inline">{PHONE_NUMBER}</span>
-              <span className="sm:hidden">Call/Text Now</span>
+              <span className="sm:hidden">Call Now</span>
             </a>
           </div>
         </div>
       </header>
 
       <CountdownTimer />
-      <HeroSection />
+      <HeroSection onQuizOpen={openQuiz} />
       <SocialProof />
       <MediaLogos />
+
+      {/* Crime Stats Section */}
+      <CrimeStats onQuizOpen={openQuiz} />
+
+      {/* Animated Counter */}
+      <div className="py-6 bg-white border-b border-gray-100">
+        <AnimatedCounter />
+      </div>
+
+      <HowItWorks />
+      <ProductShowcase />
+
+      {/* Testimonials — moved BEFORE quiz for social proof */}
+      <TestimonialCarousel />
+
+      <ComparisonTable />
 
       {/* Quiz Section */}
       <section id="quiz" className="py-16 bg-[#F8F9FA]">
@@ -59,10 +87,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ComparisonTable />
-      <ProductShowcase />
-      <HowItWorks />
-      <TestimonialCarousel />
       <FAQSection />
 
       {/* Final CTA */}
@@ -73,15 +97,15 @@ export default function HomePage() {
           </h2>
           <p className="text-gray-300 text-lg mb-8">Take 60 seconds to get your free custom quote. No obligation.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#quiz"
-              className="bg-[#00C853] hover:bg-[#00A846] text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors"
+            <button
+              onClick={openQuiz}
+              className="bg-[#00C853] hover:bg-[#00A846] text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors w-full sm:w-auto"
             >
-              Get My Free Quote →
-            </a>
-            <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-2 text-white hover:text-[#00C853] transition-colors">
-              <Phone size={20} />
-              <span>Or call/text {PHONE_NUMBER}</span>
+              Get My Free Quote
+            </button>
+            <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
+              <Phone size={16} />
+              <span>Or call {PHONE_NUMBER}</span>
             </a>
           </div>
         </div>
@@ -106,8 +130,16 @@ export default function HomePage() {
         </div>
       </footer>
 
-      <StickyPhoneCTA />
-      <ExitIntentPopup />
+      {/* Overlays & Sticky Elements */}
+      <StickyPhoneCTA onQuizOpen={openQuiz} />
+      <StickyQuizCTA onQuizOpen={openQuiz} />
+      <SocialProofNotifications />
+      <ExitIntentPopup onQuizOpen={openQuiz} />
+
+      {/* Quiz Modal */}
+      {quizModalOpen && (
+        <QuizFunnel isModal onClose={closeQuiz} />
+      )}
     </div>
   )
 }

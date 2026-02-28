@@ -6,7 +6,9 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '**' }
     ],
   },
-  experimental: {},
+  experimental: {
+    turbopackUseSystemTlsCerts: true,
+  },
 }
 
 export default nextConfig

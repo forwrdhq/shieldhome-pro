@@ -1,16 +1,17 @@
+'use client'
+
+import { useState, useCallback } from 'react'
 import QuizFunnel from '@/components/landing/QuizFunnel'
 import TestimonialCarousel from '@/components/landing/TestimonialCarousel'
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup'
 import { Shield, Phone, Star, Lock } from 'lucide-react'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Free Home Security Quote — Vivint Authorized Dealer',
-  description: 'Get a free home security quote in 60 seconds. Free professional installation + free doorbell camera.',
-}
 
 export default function FacebookPage() {
+  const [quizModalOpen, setQuizModalOpen] = useState(false)
+  const openQuiz = useCallback(() => setQuizModalOpen(true), [])
+  const closeQuiz = useCallback(() => setQuizModalOpen(false), [])
+
   return (
     <div className="min-h-screen bg-[#F8F9FA]">
       {/* Slim header */}
@@ -34,14 +35,14 @@ export default function FacebookPage() {
             FREE HOME SECURITY QUOTE
           </p>
           <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
-            Smart Security. Professionally Installed. Starting Today.
+            Homes Without Security Are 3x More Likely to Be Broken Into
           </h1>
           <div className="flex items-center justify-center gap-4 text-sm text-gray-300 flex-wrap mt-3">
             <span className="flex items-center gap-1">
               <Star size={14} className="text-yellow-400 fill-yellow-400" />
               4.8/5 Rating
             </span>
-            <span>• Free Installation</span>
+            <span>• Free Setup</span>
             <span>• $0 Down</span>
             <span>• 24/7 Monitoring</span>
           </div>
@@ -84,7 +85,11 @@ export default function FacebookPage() {
         <p>© {new Date().getFullYear()} ShieldHome Pro. All rights reserved.</p>
       </footer>
 
-      <ExitIntentPopup />
+      <ExitIntentPopup onQuizOpen={openQuiz} />
+
+      {quizModalOpen && (
+        <QuizFunnel isModal onClose={closeQuiz} />
+      )}
     </div>
   )
 }

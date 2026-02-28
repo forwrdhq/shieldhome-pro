@@ -1,3 +1,7 @@
+'use client'
+
+import { useState, useCallback, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import QuizFunnel from '@/components/landing/QuizFunnel'
 import ComparisonTable from '@/components/landing/ComparisonTable'
 import ProductShowcase from '@/components/landing/ProductShowcase'
@@ -8,28 +12,23 @@ import StickyPhoneCTA from '@/components/landing/StickyPhoneCTA'
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup'
 import { Shield, Phone, CheckCircle } from 'lucide-react'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Professional Home Security Systems — Free Installation | ShieldHome Pro',
-  description: 'Get a free home security quote from a Vivint authorized dealer. Professional installation, 24/7 monitoring, AI-powered cameras. Free doorbell camera included.',
-}
 
 const HEADLINES: Record<string, string> = {
-  'home-security': 'Professional Home Security Systems — Free Installation',
+  'home-security': 'Professional Home Security Systems — Free Setup',
   'vivint': 'Get a Free Quote from a Vivint Authorized Dealer',
-  'security-cameras': 'Smart Security Cameras with 24/7 Professional Monitoring',
-  'home-alarm': 'Advanced Home Alarm Systems — Installed in 24 Hours',
+  'security-cameras': 'Smart Security Cameras with 24/7 Pro Monitoring',
+  'home-alarm': 'Advanced Home Alarm Systems — Set Up in 24 Hours',
   'adt-alternative': 'Looking for an ADT Alternative? Compare Vivint',
 }
 
-interface Props {
-  searchParams: Promise<{ kw?: string }>
-}
+function GoogleContent() {
+  const searchParams = useSearchParams()
+  const kw = searchParams.get('kw') || ''
+  const headline = HEADLINES[kw] || 'Smart Home Security — Expert Setup, $0 Down'
 
-export default async function GooglePage({ searchParams }: Props) {
-  const params = await searchParams
-  const headline = HEADLINES[params.kw || ''] || 'Smart Home Security — Professional Installation, $0 Down'
+  const [quizModalOpen, setQuizModalOpen] = useState(false)
+  const openQuiz = useCallback(() => setQuizModalOpen(true), [])
+  const closeQuiz = useCallback(() => setQuizModalOpen(false), [])
 
   return (
     <div className="min-h-screen bg-white">
@@ -46,7 +45,7 @@ export default async function GooglePage({ searchParams }: Props) {
             <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-2 bg-[#00C853] hover:bg-[#00A846] text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors">
               <Phone size={16} />
               <span className="hidden sm:inline">{PHONE_NUMBER}</span>
-              <span className="sm:hidden">Call/Text Now</span>
+              <span className="sm:hidden">Call Now</span>
             </a>
           </div>
         </div>
@@ -57,7 +56,7 @@ export default async function GooglePage({ searchParams }: Props) {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4">{headline}</h1>
           <div className="flex flex-wrap items-center justify-center gap-6 mt-6 text-sm text-gray-300">
-            {['2M+ Homes Protected', '4.8/5 Rating', 'Free Installation', '24/7 Monitoring'].map(s => (
+            {['2M+ Homes Protected', '4.8/5 Rating', 'Free Setup', '24/7 Monitoring'].map(s => (
               <span key={s} className="flex items-center gap-1.5">
                 <CheckCircle size={16} className="text-[#00C853]" />
                 {s}
@@ -92,12 +91,15 @@ export default async function GooglePage({ searchParams }: Props) {
             Ready to Get Protected?
           </h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="#quiz" className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors">
-              Get My Free Quote →
-            </a>
-            <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-2 text-white hover:text-[#00C853] transition-colors">
-              <Phone size={20} />
-              <span>Or call/text {PHONE_NUMBER}</span>
+            <button
+              onClick={openQuiz}
+              className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors w-full sm:w-auto"
+            >
+              Get My Free Quote
+            </button>
+            <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
+              <Phone size={16} />
+              <span>Or call {PHONE_NUMBER}</span>
             </a>
           </div>
         </div>
@@ -118,8 +120,20 @@ export default async function GooglePage({ searchParams }: Props) {
         </div>
       </footer>
 
-      <StickyPhoneCTA />
-      <ExitIntentPopup />
+      <StickyPhoneCTA onQuizOpen={openQuiz} />
+      <ExitIntentPopup onQuizOpen={openQuiz} />
+
+      {quizModalOpen && (
+        <QuizFunnel isModal onClose={closeQuiz} />
+      )}
     </div>
+  )
+}
+
+export default function GooglePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <GoogleContent />
+    </Suspense>
   )
 }

@@ -7,35 +7,35 @@ import { cn } from '@/lib/utils'
 const faqs = [
   {
     q: 'How much does a Vivint system cost?',
-    a: "Every home is different, which is why we provide free custom quotes. Most homeowners pay $0 upfront for equipment with professional installation included. Monthly monitoring starts at around $1.33/day (roughly $39.99/month). Your Smart Home Pro will design a package based on your home's size, entry points, and the features you want — so you only pay for what you need.",
+    a: "Every home is different, so we give free custom quotes. Most homeowners pay $0 upfront for equipment with free expert setup. Monthly monitoring starts around $1.33/day (about $39.99/month). Your Smart Home Pro will build a package based on your home's size and needs — so you only pay for what you need.",
   },
   {
-    q: 'Is professional installation really free?',
-    a: "Yes — 100% free. Vivint sends a certified Smart Home Pro technician to your home at no charge. They'll install all equipment, run wiring where needed, connect everything to your WiFi, set up your mobile app, and walk you through how to use the entire system. Most installations are completed in 2-4 hours. There are no hidden installation fees.",
+    q: 'Is expert setup really free?',
+    a: "Yes — 100% free. Vivint sends a certified tech to your home at no charge. They'll set up all equipment, connect everything to your WiFi, set up your app, and walk you through how it all works. Most setups take 2-4 hours. No hidden fees.",
   },
   {
-    q: 'Do I need a landline or internet connection?',
-    a: "No landline is needed. Vivint systems use a built-in cellular connection as the primary communication method, so your system stays connected even if your WiFi goes down. WiFi is used for camera streaming and smart home features, but the core security monitoring works over cellular. This is more reliable than traditional landline systems.",
+    q: 'Do I need a landline or internet?',
+    a: "No landline needed. Vivint systems use a built-in cell connection, so your system stays connected even if your WiFi goes down. WiFi is used for camera streaming and smart home features, but the core security works over cellular. This is more reliable than old landline systems.",
   },
   {
     q: "What's the contract length?",
-    a: "Vivint typically offers service agreements ranging from month-to-month to multi-year plans. Longer agreements often come with better equipment pricing and promotions (like the free doorbell camera). Your Smart Home Pro will walk you through all available options and pricing during your free consultation so you can choose what works best for your budget.",
+    a: "Vivint offers plans from month-to-month to multi-year. Longer plans often come with better equipment pricing and promos (like the free doorbell camera). Your Smart Home Pro will walk you through all options so you can pick what works best for your budget.",
   },
   {
-    q: 'Can I keep my existing smart home devices?',
-    a: "In most cases, yes. Vivint integrates with Google Assistant, Amazon Alexa, Philips Hue, Kwikset smart locks, Nest thermostats, and many other popular smart home devices. Your technician can connect compatible devices during installation. If you have an existing security system from another provider, Vivint can often use existing sensor wiring to minimize new hardware.",
+    q: 'Can I keep my smart home devices?',
+    a: "Usually, yes. Vivint works with Google Assistant, Amazon Alexa, Philips Hue, Kwikset locks, Nest thermostats, and many other popular devices. Your tech can connect them during setup. If you have an existing security system, Vivint can often use existing wiring.",
   },
   {
-    q: 'What happens if my system loses power or internet?',
-    a: "Vivint systems have a built-in battery backup that keeps your security system running during power outages — typically for 24+ hours. Since the system uses cellular communication (not just WiFi), monitoring continues even if your internet goes down. You'll receive a notification on your phone if power is lost so you're always aware.",
+    q: 'What if the power goes out?',
+    a: "Vivint systems have battery backup that keeps security running during outages — usually 24+ hours. Since the system uses cell signal (not just WiFi), monitoring continues even if your internet goes down. You'll get a phone alert if power is lost.",
   },
   {
-    q: "What if I move to a new home?",
-    a: "Vivint makes moving easy. Contact their support team and they'll schedule a professional to uninstall your equipment at your current home and reinstall it at your new one. They'll also help you update your monitoring address. Many customers find this is a great time to upgrade or add new equipment as well.",
+    q: 'What if I move?',
+    a: "Vivint makes moving easy. They'll send a pro to take down your equipment and set it up at your new home. Many customers use this as a chance to upgrade or add new equipment too.",
   },
   {
     q: 'Is ShieldHome Pro the same as Vivint?',
-    a: "ShieldHome Pro is an independently operated authorized dealer of Vivint Smart Home products and services. We help homeowners get set up with Vivint's #1-rated smart home security system. Once your system is installed, you're a full Vivint customer with access to their 24/7 monitoring, customer support, app, and all service warranties.",
+    a: "ShieldHome Pro is an authorized dealer of Vivint Smart Home. We help homeowners get set up with Vivint's #1-rated security system. Once your system is set up, you're a full Vivint customer with 24/7 monitoring, support, the app, and all warranties.",
   },
 ]
 
@@ -47,7 +47,7 @@ export default function FAQSection() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
-            Frequently Asked Questions
+            Common Questions
           </h2>
           <p className="text-gray-600">Everything you need to know before getting started</p>
         </div>
@@ -77,7 +77,7 @@ export default function FAQSection() {
                   open === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 )}
               >
-                <div className="px-5 pb-5 text-gray-600 leading-relaxed">
+                <div className="px-5 pb-5 text-gray-600 leading-relaxed text-sm">
                   {faq.a}
                 </div>
               </div>

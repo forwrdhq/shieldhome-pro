@@ -1,43 +1,34 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, Phone } from 'lucide-react'
-import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
+import { X } from 'lucide-react'
 
-const SESSION_DURATION = 30 * 60 * 1000 // 30 minutes in ms
-
-function getSessionEnd(): number {
-  if (typeof window === 'undefined') return Date.now() + SESSION_DURATION
-
-  const stored = sessionStorage.getItem('promoEndTime')
-  if (stored) {
-    const end = parseInt(stored, 10)
-    if (end > Date.now()) return end
-  }
-
-  const end = Date.now() + SESSION_DURATION
-  sessionStorage.setItem('promoEndTime', String(end))
-  return end
+function getMonthEndMs(): number {
+  const now = new Date()
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999)
+  return endOfMonth.getTime()
 }
 
 export default function CountdownTimer() {
   const [dismissed, setDismissed] = useState(false)
-  const [timeLeft, setTimeLeft] = useState({ m: 30, s: 0 })
+  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 })
   const [expired, setExpired] = useState(false)
 
   useEffect(() => {
-    const endTime = getSessionEnd()
+    const endTime = getMonthEndMs()
 
     function calc() {
       const diff = endTime - Date.now()
       if (diff <= 0) {
         setExpired(true)
-        setTimeLeft({ m: 0, s: 0 })
+        setTimeLeft({ d: 0, h: 0, m: 0, s: 0 })
         return
       }
-      const m = Math.floor(diff / 60000)
+      const d = Math.floor(diff / 86400000)
+      const h = Math.floor((diff % 86400000) / 3600000)
+      const m = Math.floor((diff % 3600000) / 60000)
       const s = Math.floor((diff % 60000) / 1000)
-      setTimeLeft({ m, s })
+      setTimeLeft({ d, h, m, s })
     }
 
     calc()
@@ -48,23 +39,20 @@ export default function CountdownTimer() {
   if (dismissed || expired) return null
 
   const pad = (n: number) => String(n).padStart(2, '0')
+  const monthName = new Date().toLocaleString('en-US', { month: 'long' })
 
   return (
     <div className="bg-[#00C853] text-white py-2.5 px-4 relative">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 text-sm font-medium">
-        <span>🎁 <strong>Limited Time:</strong> FREE Doorbell Camera + FREE Professional Installation</span>
+        <span>
+          <strong>{monthName} Special:</strong> FREE Doorbell Camera + FREE Expert Setup
+        </span>
         <span className="flex items-center gap-1">
-          | Offer expires in
+          | Ends in
           <span className="bg-white text-[#00C853] font-bold px-2 py-0.5 rounded ml-1">
-            {pad(timeLeft.m)}:{pad(timeLeft.s)}
+            {pad(timeLeft.d)}d {pad(timeLeft.h)}h {pad(timeLeft.m)}m {pad(timeLeft.s)}s
           </span>
         </span>
-        <a
-          href={`tel:${PHONE_NUMBER_RAW}`}
-          className="flex items-center gap-1 underline hover:no-underline font-bold"
-        >
-          <Phone size={14} /> Call/Text Now
-        </a>
       </div>
       <button
         onClick={() => setDismissed(true)}

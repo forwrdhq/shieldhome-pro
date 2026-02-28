@@ -5,17 +5,17 @@ const steps: { icon: ReactNode; title: string; description: string }[] = [
   {
     icon: <ClipboardList size={28} />,
     title: 'Take the 60-Second Quiz',
-    description: 'Answer a few quick questions about your home so we can customize the perfect security system.',
+    description: 'Answer a few quick questions about your home so we can build the right security system for you.',
   },
   {
     icon: <Phone size={28} />,
-    title: 'Get Your Free Custom Quote',
-    description: 'A Vivint Smart Home Pro will call you with a personalized quote — no pressure, no obligation.',
+    title: 'Get Your Free Quote',
+    description: 'A Vivint Smart Home Pro will call you with a custom quote — no pressure, no obligation.',
   },
   {
     icon: <Wrench size={28} />,
-    title: 'Professional Installation',
-    description: 'Pick a time that works. A Vivint technician installs your system and walks you through everything.',
+    title: 'Free Expert Setup',
+    description: 'Pick a time that works. A Vivint tech sets up your system and walks you through everything.',
   },
 ]
 
@@ -37,7 +37,6 @@ export default function HowItWorks() {
           {steps.map((step, i) => (
             <div key={step.title} className="relative text-center">
               <div className="relative inline-flex flex-col items-center">
-                {/* Step number */}
                 <div className="w-16 h-16 bg-[#00C853] text-white rounded-full flex items-center justify-center mb-2 shadow-lg relative z-10">
                   {step.icon}
                 </div>

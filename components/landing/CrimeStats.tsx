@@ -58,7 +58,7 @@ export default function CrimeStats({ onQuizOpen }: CrimeStatsProps) {
             onClick={onQuizOpen}
             className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors inline-block"
           >
-            See If Your Home Is at Risk
+            Check My Home&apos;s Risk Score
           </button>
         </div>
       </div>

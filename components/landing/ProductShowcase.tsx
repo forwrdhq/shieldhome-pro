@@ -105,7 +105,7 @@ export default function ProductShowcase() {
         <div className="text-center mt-10">
           <a href="#quiz">
             <Button variant="primary" size="xl" className="w-full sm:w-auto">
-              Build Your Custom System
+              See My Custom System
             </Button>
           </a>
         </div>

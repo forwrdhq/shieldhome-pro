@@ -15,8 +15,9 @@ import StickyPhoneCTA from '@/components/landing/StickyPhoneCTA'
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup'
 import CrimeStats from '@/components/landing/CrimeStats'
 import SocialProofNotifications from '@/components/landing/SocialProofNotifications'
-import StickyQuizCTA from '@/components/landing/StickyQuizCTA'
 import AnimatedCounter from '@/components/landing/AnimatedCounter'
+import ValueStack from '@/components/landing/ValueStack'
+import ObjectionCrusher from '@/components/landing/ObjectionCrusher'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 import { Phone, Shield } from 'lucide-react'
 
@@ -69,7 +70,10 @@ export default function HomePage() {
       <HowItWorks />
       <ProductShowcase />
 
-      {/* Testimonials — moved BEFORE quiz for social proof */}
+      {/* Value Stack — Hormozi-style offer presentation */}
+      <ValueStack onQuizOpen={openQuiz} />
+
+      {/* Testimonials */}
       <TestimonialCarousel />
 
       <ComparisonTable />
@@ -79,7 +83,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
-              Get Your Free Custom Quote
+              Get My Free Custom Quote
             </h2>
             <p className="text-gray-600 text-lg">Takes 60 seconds. No pressure, no obligation.</p>
           </div>
@@ -89,13 +93,16 @@ export default function HomePage() {
 
       <FAQSection />
 
+      {/* Objection Crusher — handles last-minute doubts */}
+      <ObjectionCrusher onQuizOpen={openQuiz} />
+
       {/* Final CTA */}
       <section className="bg-[#1A1A2E] py-16 text-center">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
             Your Home Deserves the #1 Smart Security System
           </h2>
-          <p className="text-gray-300 text-lg mb-8">Take 60 seconds to get your free custom quote. No obligation.</p>
+          <p className="text-gray-300 text-lg mb-8">60 seconds. No obligation. See what you qualify for.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={openQuiz}
@@ -132,7 +139,6 @@ export default function HomePage() {
 
       {/* Overlays & Sticky Elements */}
       <StickyPhoneCTA onQuizOpen={openQuiz} />
-      <StickyQuizCTA onQuizOpen={openQuiz} />
       <SocialProofNotifications />
       <ExitIntentPopup onQuizOpen={openQuiz} />
 

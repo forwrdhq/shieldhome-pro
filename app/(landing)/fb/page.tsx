@@ -35,7 +35,7 @@ export default function FacebookPage() {
             FREE HOME SECURITY QUOTE
           </p>
           <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
-            Homes Without Security Are 3x More Likely to Be Broken Into
+            Protect Your Family — Free Smart Home Security Setup
           </h1>
           <div className="flex items-center justify-center gap-4 text-sm text-gray-300 flex-wrap mt-3">
             <span className="flex items-center gap-1">

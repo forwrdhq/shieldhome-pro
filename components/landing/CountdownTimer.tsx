@@ -1,26 +1,33 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, Zap } from 'lucide-react'
 
-function getMonthEndMs(): number {
+function getWeekEndMs(): number {
   const now = new Date()
-  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999)
-  return endOfMonth.getTime()
+  const dayOfWeek = now.getDay() // 0=Sun
+  const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek
+  const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysUntilSunday, 23, 59, 59, 999)
+  return end.getTime()
+}
+
+function getSpotsRemaining(): number {
+  // Deterministic per day — same for all visitors on the same day
+  const today = new Date()
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+  return (seed % 8) + 3 // 3-10
 }
 
 export default function CountdownTimer() {
   const [dismissed, setDismissed] = useState(false)
   const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 })
-  const [expired, setExpired] = useState(false)
 
   useEffect(() => {
-    const endTime = getMonthEndMs()
+    const endTime = getWeekEndMs()
 
     function calc() {
       const diff = endTime - Date.now()
       if (diff <= 0) {
-        setExpired(true)
         setTimeLeft({ d: 0, h: 0, m: 0, s: 0 })
         return
       }
@@ -36,20 +43,22 @@ export default function CountdownTimer() {
     return () => clearInterval(id)
   }, [])
 
-  if (dismissed || expired) return null
+  if (dismissed) return null
 
   const pad = (n: number) => String(n).padStart(2, '0')
-  const monthName = new Date().toLocaleString('en-US', { month: 'long' })
+  const spots = getSpotsRemaining()
 
   return (
     <div className="bg-[#00C853] text-white py-2.5 px-4 relative">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 text-sm font-medium">
-        <span>
-          <strong>{monthName} Special:</strong> FREE Doorbell Camera + FREE Expert Setup
+        <span className="flex items-center gap-1.5">
+          <Zap size={14} className="fill-white" />
+          <strong>This Week Only:</strong> FREE Outdoor Camera + Doorbell Camera
+          <span className="hidden sm:inline">—</span>
+          <span className="font-bold text-white/90">Only {spots} spots left</span>
         </span>
         <span className="flex items-center gap-1">
-          | Ends in
-          <span className="bg-white text-[#00C853] font-bold px-2 py-0.5 rounded ml-1">
+          <span className="bg-white text-[#00C853] font-bold px-2 py-0.5 rounded ml-1 tabular-nums">
             {pad(timeLeft.d)}d {pad(timeLeft.h)}h {pad(timeLeft.m)}m {pad(timeLeft.s)}s
           </span>
         </span>

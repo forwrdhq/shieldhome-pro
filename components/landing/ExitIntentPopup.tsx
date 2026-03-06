@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { X, Shield, AlertTriangle } from 'lucide-react'
+import { X, Shield, Camera } from 'lucide-react'
 
 interface ExitIntentPopupProps {
   onQuizOpen: () => void
@@ -10,6 +10,7 @@ interface ExitIntentPopupProps {
 export default function ExitIntentPopup({ onQuizOpen }: ExitIntentPopupProps) {
   const [show, setShow] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+  const [countdown, setCountdown] = useState(15 * 60) // 15 minutes in seconds
 
   const handleMouseLeave = useCallback((e: MouseEvent) => {
     if (e.clientY <= 5 && !dismissed) {
@@ -53,6 +54,29 @@ export default function ExitIntentPopup({ onQuizOpen }: ExitIntentPopupProps) {
     }
   }, [handleMouseLeave, handleMobileScroll])
 
+  // Countdown timer inside popup
+  useEffect(() => {
+    if (!show) return
+
+    // Check/set session start time for consistent countdown
+    const startKey = 'exitPopupCountdownStart'
+    let startTime = Number(sessionStorage.getItem(startKey))
+    if (!startTime) {
+      startTime = Date.now()
+      sessionStorage.setItem(startKey, String(startTime))
+    }
+
+    function tick() {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000)
+      const remaining = Math.max(0, 15 * 60 - elapsed)
+      setCountdown(remaining)
+    }
+
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [show])
+
   function dismiss() {
     setShow(false)
     setDismissed(true)
@@ -68,6 +92,9 @@ export default function ExitIntentPopup({ onQuizOpen }: ExitIntentPopupProps) {
 
   if (!show) return null
 
+  const mins = Math.floor(countdown / 60)
+  const secs = countdown % 60
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div
@@ -77,15 +104,24 @@ export default function ExitIntentPopup({ onQuizOpen }: ExitIntentPopupProps) {
 
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-in">
         <div className="bg-[#1A1A2E] px-6 py-6 text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-red-500/20 rounded-full mb-3">
-            <AlertTriangle size={28} className="text-red-400" />
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-[#00C853]/20 rounded-full mb-3">
+            <Camera size={28} className="text-[#00C853]" />
           </div>
           <h3 className="text-xl font-extrabold text-white">
-            Before You Go — Is Your Home at Risk?
+            Wait — Get a FREE Outdoor Camera
           </h3>
           <p className="text-gray-300 text-sm mt-2">
-            Take our free 60-second Home Security Assessment and find out.
+            For the next {mins} minutes, we&apos;ll add a bonus Outdoor Camera Pro
+            <span className="text-white font-semibold"> ($349 value)</span> to your package — free.
           </p>
+          {countdown > 0 && (
+            <div className="mt-3 inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full">
+              <span className="text-[#00C853] text-sm font-bold tabular-nums">
+                {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
+              </span>
+              <span className="text-gray-400 text-xs">remaining</span>
+            </div>
+          )}
         </div>
 
         <div className="px-6 py-6 text-center">
@@ -93,14 +129,14 @@ export default function ExitIntentPopup({ onQuizOpen }: ExitIntentPopupProps) {
             onClick={handleQuizClick}
             className="block w-full bg-[#00C853] hover:bg-[#00A846] text-white py-4 rounded-xl font-bold text-lg transition-colors mb-4"
           >
-            Check My Risk Score
+            Claim My Free Camera Upgrade
           </button>
 
           <button
             onClick={dismiss}
-            className="text-gray-400 hover:text-gray-600 text-sm transition-colors underline"
+            className="text-gray-400 hover:text-gray-600 text-sm transition-colors"
           >
-            No thanks, I&apos;ll leave my home unprotected
+            No thanks, maybe later
           </button>
 
           <div className="flex items-center justify-center gap-2 mt-4 text-xs text-gray-400">

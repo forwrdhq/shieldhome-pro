@@ -87,7 +87,7 @@ export default function ComparisonTable() {
         <div className="text-center mt-8">
           <a href="#quiz">
             <Button variant="primary" size="xl" className="w-full sm:w-auto">
-              Get Your Free Vivint Quote
+              Get My Free Vivint Quote
             </Button>
           </a>
         </div>

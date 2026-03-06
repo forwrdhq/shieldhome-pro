@@ -34,10 +34,10 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
             </div>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-[1.15] mb-5">
-              Homes Without Security Are 3x More Likely to Be Broken Into
+              Protect Your Home and Family — $0 Down, Free Setup
             </h1>
             <p className="text-lg text-gray-300 mb-6 leading-relaxed max-w-lg">
-              Get Vivint&apos;s #1-rated smart home security — $0 down, free setup, and a free doorbell camera. Most homes are fully protected within 48 hours.
+              Get Vivint&apos;s #1-rated smart security system with free cameras and free expert installation. Most homes are protected within 24 hours.
             </p>
 
             {/* Star rating */}
@@ -125,7 +125,7 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
                   )}
                 </div>
 
-                {/* Stats row */}
+                {/* Stats row — value anchor */}
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <div className="text-2xl font-extrabold text-white">$0</div>
@@ -133,11 +133,13 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
                   </div>
                   <div>
                     <div className="text-2xl font-extrabold text-[#00C853]">FREE</div>
-                    <div className="text-xs text-gray-400 mt-0.5">Expert Setup</div>
+                    <div className="text-xs text-gray-400 mt-0.5">Cameras</div>
+                    <div className="text-[10px] text-gray-500">($249 value)</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-extrabold text-white">24/7</div>
-                    <div className="text-xs text-gray-400 mt-0.5">Monitoring</div>
+                    <div className="text-2xl font-extrabold text-[#00C853]">FREE</div>
+                    <div className="text-xs text-gray-400 mt-0.5">Expert Setup</div>
+                    <div className="text-[10px] text-gray-500">($199 value)</div>
                   </div>
                 </div>
               </div>

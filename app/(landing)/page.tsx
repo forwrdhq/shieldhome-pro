@@ -112,10 +112,55 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-8 pb-24 md:pb-20">
+      <footer className="bg-gray-900 text-gray-400 py-12 pb-24 md:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-3">
-            <p className="font-semibold text-white">ShieldHome Pro — Authorized Vivint Smart Home Dealer</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center gap-2 mb-3">
+                <Shield className="text-[#00C853]" size={22} />
+                <span className="font-bold text-white text-base">ShieldHome Pro</span>
+              </div>
+              <p className="text-xs leading-relaxed">
+                Authorized Vivint Smart Home Dealer. Free quotes, $0 down, expert setup.
+              </p>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h4 className="text-white text-sm font-semibold mb-3">Resources</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="/blog" className="hover:text-white transition-colors">Blog</a></li>
+                <li><a href="/compare/best-home-security-systems" className="hover:text-white transition-colors">Best Systems 2026</a></li>
+                <li><a href="/home-security" className="hover:text-white transition-colors">Security by State</a></li>
+                <li><a href="/home-security-statistics" className="hover:text-white transition-colors">Security Statistics</a></li>
+              </ul>
+            </div>
+
+            {/* Compare */}
+            <div>
+              <h4 className="text-white text-sm font-semibold mb-3">Compare</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="/compare/vivint-vs-adt" className="hover:text-white transition-colors">Vivint vs ADT</a></li>
+                <li><a href="/compare/vivint-vs-simplisafe" className="hover:text-white transition-colors">Vivint vs SimpliSafe</a></li>
+                <li><a href="/compare/vivint-vs-ring" className="hover:text-white transition-colors">Vivint vs Ring</a></li>
+                <li><a href="/compare" className="hover:text-white transition-colors">All Comparisons</a></li>
+              </ul>
+            </div>
+
+            {/* Tools */}
+            <div>
+              <h4 className="text-white text-sm font-semibold mb-3">Tools</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="/home-security-quiz" className="hover:text-white transition-colors">Security Quiz</a></li>
+                <li><a href="/home-security-cost-calculator" className="hover:text-white transition-colors">Cost Calculator</a></li>
+                <li><a href="/blog/how-much-does-vivint-cost" className="hover:text-white transition-colors">Vivint Pricing Guide</a></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="border-t border-gray-800 pt-6 text-center space-y-3">
             <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
               <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>

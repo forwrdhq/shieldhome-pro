@@ -15,8 +15,12 @@ export default function StickyQuizCTA({ onQuizOpen }: StickyQuizCTAProps) {
     if (dismissed) return
 
     function handleScroll() {
-      // Show after scrolling past hero section (~600px)
-      setVisible(window.scrollY > 600)
+      // Show after scrolling past hero (~600px), hide when near quiz section
+      const scrollY = window.scrollY
+      const pageHeight = document.body.scrollHeight - window.innerHeight
+      const scrollPercent = scrollY / pageHeight
+      // Hide when user is near the quiz section (bottom 30% of page)
+      setVisible(scrollY > 600 && scrollPercent < 0.7)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -26,10 +30,11 @@ export default function StickyQuizCTA({ onQuizOpen }: StickyQuizCTAProps) {
   if (dismissed || !visible) return null
 
   return (
-    <div className="fixed top-16 left-0 right-0 z-40 bg-[#1A1A2E] border-b border-[#00C853]/30 shadow-lg animate-in">
-      <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
+    // Only show on desktop/tablet — mobile has the sticky bottom bar
+    <div className="hidden md:block fixed top-16 left-0 right-0 z-40 bg-[#1A1A2E]/95 backdrop-blur-md border-b border-[#00C853]/20 shadow-lg animate-in">
+      <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          <Shield size={18} className="text-[#00C853] flex-shrink-0" />
+          <Shield size={16} className="text-[#00C853] flex-shrink-0" />
           <span className="text-white text-sm font-medium truncate">
             Free Home Security Assessment — See What You Qualify For
           </span>

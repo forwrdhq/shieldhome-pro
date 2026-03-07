@@ -63,15 +63,15 @@ export default function SocialProofNotifications() {
 
   return (
     <div
-      className={`fixed bottom-20 md:bottom-20 left-4 z-40 max-w-sm transition-all duration-500 ${
+      className={`fixed bottom-[72px] md:bottom-20 left-3 right-3 md:left-4 md:right-auto z-30 md:max-w-sm transition-all duration-500 ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
     >
-      <div className="bg-white rounded-xl shadow-2xl border border-gray-100 p-4 flex items-start gap-3">
-        <div className="w-8 h-8 bg-[#00C853]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-          <Bell size={16} className="text-[#00C853]" />
+      <div className="bg-white rounded-lg md:rounded-xl shadow-lg md:shadow-2xl border border-gray-100 px-3 py-2.5 md:p-4 flex items-center gap-2.5">
+        <div className="w-7 h-7 bg-[#00C853]/10 rounded-full flex items-center justify-center flex-shrink-0">
+          <Bell size={14} className="text-[#00C853]" />
         </div>
-        <p className="text-sm text-gray-700 flex-1 leading-relaxed">
+        <p className="text-xs md:text-sm text-gray-700 flex-1 leading-snug">
           {allMessages[index]}
         </p>
         <button

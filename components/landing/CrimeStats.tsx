@@ -53,7 +53,8 @@ export default function CrimeStats({ onQuizOpen }: CrimeStatsProps) {
           ))}
         </div>
 
-        <div className="text-center">
+        {/* Desktop only — mobile has sticky bar */}
+        <div className="hidden sm:block text-center">
           <button
             onClick={onQuizOpen}
             className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors inline-block"

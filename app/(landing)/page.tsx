@@ -89,19 +89,19 @@ export default function HomePage() {
 
       <FAQSection />
 
-      {/* Final CTA */}
-      <section className="bg-[#1A1A2E] py-16 text-center">
+      {/* Final CTA — desktop only, mobile relies on sticky bar */}
+      <section className="bg-[#1A1A2E] py-12 sm:py-16 text-center">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-3 sm:mb-4">
             Your Home Deserves the #1 Smart Security System
           </h2>
-          <p className="text-gray-300 text-lg mb-8">Take 60 seconds to get your free custom quote. No obligation.</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <p className="text-gray-300 text-base sm:text-lg mb-6 sm:mb-8">Take 60 seconds to get your free custom quote. No obligation.</p>
+          <div className="hidden sm:flex flex-row items-center justify-center gap-4">
             <button
               onClick={openQuiz}
-              className="bg-[#00C853] hover:bg-[#00A846] text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors w-full sm:w-auto"
+              className="bg-[#00C853] hover:bg-[#00A846] text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors"
             >
-              Get My Free Quote
+              See If Your Home Is at Risk
             </button>
             <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
               <Phone size={16} />

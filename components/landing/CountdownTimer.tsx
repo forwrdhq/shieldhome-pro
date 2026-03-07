@@ -42,24 +42,24 @@ export default function CountdownTimer() {
   const monthName = new Date().toLocaleString('en-US', { month: 'long' })
 
   return (
-    <div className="bg-[#00C853] text-white py-2.5 px-4 relative">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 text-sm font-medium">
-        <span>
-          <strong>{monthName} Special:</strong> FREE Doorbell Camera + FREE Expert Setup
+    <div className="bg-[#00C853] text-white py-2 px-4 relative">
+      <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-xs sm:text-sm font-medium pr-6">
+        <span className="truncate">
+          <strong>{monthName} Special:</strong> FREE Doorbell Camera + Setup
         </span>
-        <span className="flex items-center gap-1">
-          | Ends in
-          <span className="bg-white text-[#00C853] font-bold px-2 py-0.5 rounded ml-1">
+        <span className="flex items-center gap-1 flex-shrink-0">
+          <span className="hidden sm:inline">| Ends in</span>
+          <span className="bg-white text-[#00C853] font-bold px-1.5 sm:px-2 py-0.5 rounded text-xs">
             {pad(timeLeft.d)}d {pad(timeLeft.h)}h {pad(timeLeft.m)}m {pad(timeLeft.s)}s
           </span>
         </span>
       </div>
       <button
         onClick={() => setDismissed(true)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-white/20 rounded"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-white/20 rounded"
         aria-label="Dismiss offer banner"
       >
-        <X size={16} />
+        <X size={14} />
       </button>
     </div>
   )

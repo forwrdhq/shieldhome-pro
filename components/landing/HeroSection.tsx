@@ -15,14 +15,14 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
   const [videoPlaying, setVideoPlaying] = useState(false)
 
   return (
-    <section className="relative min-h-[520px] md:min-h-[580px] flex items-center bg-gradient-to-br from-[#1A1A2E] via-[#1a2e1a] to-[#0a1a0a] overflow-hidden">
+    <section className="relative min-h-[420px] sm:min-h-[520px] md:min-h-[580px] flex items-center bg-gradient-to-br from-[#1A1A2E] via-[#1a2e1a] to-[#0a1a0a] overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-64 h-64 rounded-full bg-[#00C853] blur-3xl" />
         <div className="absolute bottom-10 right-10 w-48 h-48 rounded-full bg-[#00BFA5] blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 w-full">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 w-full">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left: Copy */}
           <div>
@@ -60,14 +60,15 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
               </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            {/* Desktop: visible CTA. Mobile: hidden since sticky bar handles it */}
+            <div className="hidden sm:flex flex-row gap-4">
               <Button
                 variant="primary"
                 size="xl"
-                className="w-full sm:w-auto text-lg px-10"
+                className="text-lg px-10"
                 onClick={onQuizOpen}
               >
-                Get My Free Quote
+                See If Your Home Is at Risk
               </Button>
               <a
                 href={`tel:${PHONE_NUMBER_RAW}`}
@@ -83,6 +84,11 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
                 <span>Or call {PHONE_NUMBER}</span>
               </a>
             </div>
+            {/* Mobile: subtle scroll indicator — sticky bar is the CTA */}
+            <p className="sm:hidden text-sm text-gray-400 flex items-center gap-1.5">
+              <span className="inline-block w-4 h-4 border-2 border-gray-400 rounded-full animate-bounce" />
+              Tap below to check your home&apos;s risk score
+            </p>
           </div>
 
           {/* Right: Video + stats */}

@@ -84,9 +84,10 @@ export default function ComparisonTable() {
           </table>
         </div>
 
-        <div className="text-center mt-8">
+        {/* Desktop only — mobile has sticky bar */}
+        <div className="hidden sm:block text-center mt-8">
           <a href="#quiz">
-            <Button variant="primary" size="xl" className="w-full sm:w-auto">
+            <Button variant="primary" size="xl">
               Get Your Free Vivint Quote
             </Button>
           </a>

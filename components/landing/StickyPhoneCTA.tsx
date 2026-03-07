@@ -32,18 +32,18 @@ export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
         </div>
       </div>
 
-      {/* Mobile sticky bottom bar — full-width quiz CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-2xl px-4 py-3 flex gap-2">
+      {/* Mobile sticky bottom bar — single clear CTA */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] px-4 py-3 safe-area-bottom flex gap-2">
         <button
           onClick={onQuizOpen}
-          className="flex-1 bg-[#00C853] hover:bg-[#00A846] text-white py-3 rounded-xl font-bold text-base transition-colors"
+          className="flex-1 bg-[#00C853] hover:bg-[#00A846] active:scale-[0.98] text-white py-3.5 rounded-xl font-bold text-base transition-all animate-pulse-green"
         >
-          Get My Free Quote
+          Check Your Home&apos;s Risk — Free
         </button>
         <a
           href={`tel:${PHONE_NUMBER_RAW}`}
           onClick={trackPhoneClick}
-          className="flex items-center justify-center w-12 bg-[#1A1A2E] text-white rounded-xl"
+          className="flex items-center justify-center w-12 bg-[#1A1A2E] hover:bg-[#2a2a4e] text-white rounded-xl transition-colors"
           aria-label={`Call ${PHONE_NUMBER}`}
         >
           <Phone size={20} />

@@ -10,11 +10,20 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://shieldhome.pro',
     siteName: 'ShieldHome Pro',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'ShieldHome Pro — Free Home Security Quote',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Is Your Home Protected? Free Security Assessment',
     description: 'Find out your home\'s security risk score in 60 seconds. Free quote, $0 down, free setup.',
+    images: ['/opengraph-image'],
   },
   alternates: {
     canonical: 'https://shieldhome.pro',

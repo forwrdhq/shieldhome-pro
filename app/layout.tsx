@@ -3,6 +3,7 @@ import './globals.css'
 import SessionProvider from '@/components/SessionProvider'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://shieldhome.pro'),
   title: 'ShieldHome Pro — Vivint Authorized Dealer',
   description: 'Smart home security systems with free expert setup.',
 }

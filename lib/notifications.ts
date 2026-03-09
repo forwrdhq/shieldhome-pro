@@ -11,6 +11,7 @@ interface LeadNotificationData {
   fullName: string
   phone: string
   email: string
+  zipCode?: string | null
   propertyType?: string | null
   timeline?: string | null
   leadScore: number
@@ -36,14 +37,43 @@ export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
 }
 
 export async function sendRepAlertSms(lead: LeadNotificationData) {
-  const repPhone = process.env.REP_PHONE_NUMBER
-  if (!repPhone) return
+  const repPhones = [
+    process.env.REP_PHONE_NUMBERS,
+    process.env.REP_PHONE_NUMBER,
+  ]
+    .filter(Boolean)
+    .flatMap(v => v!.split(',').map(p => p.trim()))
+    .filter(Boolean)
+
+  if (repPhones.length === 0) return
 
   const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'Unknown'
   const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'Unknown'
 
-  const body = `🔥 NEW LEAD 🔥\nName: ${lead.fullName}\nPhone: ${lead.phone}\nScore: ${lead.leadScore}/100 (${lead.priority})\nProperty: ${propertyLabel}\nTimeline: ${timelineLabel}\nSource: ${lead.source || 'Unknown'}\nCALL NOW — speed to lead is everything!`
-  await sendSms(formatPhone(repPhone), body)
+  const priorityEmoji: Record<string, string> = { HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪' }
+  const products = lead.productsInterested?.length ? lead.productsInterested.join(', ') : 'N/A'
+  const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
+
+  const body = [
+    `${priorityEmoji[lead.priority] || '🔵'} NEW LEAD — ${lead.priority} PRIORITY`,
+    ``,
+    `👤 ${lead.fullName}`,
+    `📞 ${lead.phone}`,
+    `📧 ${lead.email}`,
+    `📍 ZIP: ${lead.zipCode || 'N/A'}`,
+    ``,
+    `🏠 Property: ${propertyLabel}`,
+    `⏰ Timeline: ${timelineLabel}`,
+    `🛡️ Interested in: ${products}`,
+    ``,
+    `📊 Lead Score: ${lead.leadScore}/100`,
+    `📣 Source: ${source}`,
+    ``,
+    `👉 ${APP_URL}/leads/${lead.id}`,
+    `CALL NOW — speed to lead is everything!`,
+  ].join('\n')
+
+  await Promise.allSettled(repPhones.map(phone => sendSms(formatPhone(phone), body)))
 }
 
 export async function sendWelcomeEmail(lead: LeadNotificationData) {

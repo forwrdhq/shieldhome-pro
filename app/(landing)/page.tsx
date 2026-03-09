@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import CountdownTimer from '@/components/landing/CountdownTimer'
 import HeroSection from '@/components/landing/HeroSection'
 import SocialProof from '@/components/landing/SocialProof'
@@ -25,6 +25,12 @@ export default function HomePage() {
 
   const openQuiz = useCallback(() => setQuizModalOpen(true), [])
   const closeQuiz = useCallback(() => setQuizModalOpen(false), [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'ViewContent', { content_name: 'home_security_landing' })
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-white">

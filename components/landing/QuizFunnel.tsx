@@ -144,7 +144,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
   useEffect(() => {
     if (step === 2 && typeof window !== 'undefined') {
       if ((window as any).fbq) {
-        (window as any).fbq('track', 'Lead', { content_name: 'quiz_started' })
+        (window as any).fbq('track', 'InitiateCheckout', { content_name: 'quiz_started' })
       }
       if ((window as any).dataLayer) {
         (window as any).dataLayer.push({ event: 'quiz_start', quiz_step: 1 })
@@ -240,20 +240,6 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
       if (typeof window !== 'undefined') {
-        if ((window as any).fbq) {
-          (window as any).fbq('track', 'CompleteRegistration', {
-            content_name: 'quiz_completed',
-            value: 900,
-            currency: 'USD',
-          })
-        }
-        if ((window as any).gtag) {
-          (window as any).gtag('event', 'generate_lead', {
-            event_category: 'form_submission',
-            event_label: 'quiz_funnel',
-            value: 900,
-          })
-        }
         if ((window as any).dataLayer) {
           (window as any).dataLayer.push({
             event: 'lead_submitted',

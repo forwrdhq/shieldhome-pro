@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     console.error('Lead creation error:', err)
     if (err.name === 'ZodError') {
-      return NextResponse.json({ error: 'Invalid form data', details: err.errors }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid form data', details: err.issues ?? err.errors }, { status: 400 })
     }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

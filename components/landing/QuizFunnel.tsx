@@ -228,7 +228,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
         body: JSON.stringify({
           ...contact,
           propertyType: quiz.propertyType,
-          homeownership: quiz.homeownership,
+          homeownership: quiz.homeownership === 'BUYING' ? 'OWN' : quiz.homeownership,
           productsInterested: quiz.securityConcerns,
           timeline: quiz.timeline,
           entryPoints: quiz.entryPoints,
@@ -290,7 +290,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
 
   const timelineOptions = [
     { value: 'ASAP', label: 'ASAP (within a week)', icon: <Bolt size={24} />, hot: true },
-    { value: 'WITHIN_MONTH', label: 'Within the next month', icon: <Calendar size={24} /> },
+    { value: 'ONE_MONTH', label: 'Within the next month', icon: <Calendar size={24} /> },
     { value: 'JUST_RESEARCHING', label: 'Just researching', icon: <Search size={24} /> },
   ]
 

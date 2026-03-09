@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const leadSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(50),
-  lastName: z.string().min(1, 'Last name is required').max(50),
+  lastName: z.string().max(50).optional().default(''),
   email: z.string().email('Valid email required'),
   phone: z.string().min(10, 'Valid phone number required').max(20),
   zipCode: z.string().min(5, 'ZIP code required').max(10),

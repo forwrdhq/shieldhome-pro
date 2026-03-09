@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
         email: data.email,
         phone: data.phone,
         zipCode: data.zipCode,
-        fullName: `${data.firstName} ${data.lastName}`,
+        fullName: [data.firstName, data.lastName].filter(Boolean).join(' '),
         propertyType: data.propertyType as any,
         homeownership: data.homeownership as any,
         productsInterested: data.productsInterested,

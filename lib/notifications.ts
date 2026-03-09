@@ -36,14 +36,21 @@ export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
 }
 
 export async function sendRepAlertSms(lead: LeadNotificationData) {
-  const repPhone = process.env.REP_PHONE_NUMBER
-  if (!repPhone) return
+  const repPhones = [
+    process.env.REP_PHONE_NUMBERS,
+    process.env.REP_PHONE_NUMBER,
+  ]
+    .filter(Boolean)
+    .flatMap(v => v!.split(',').map(p => p.trim()))
+    .filter(Boolean)
+
+  if (repPhones.length === 0) return
 
   const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'Unknown'
   const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'Unknown'
 
   const body = `🔥 NEW LEAD 🔥\nName: ${lead.fullName}\nPhone: ${lead.phone}\nScore: ${lead.leadScore}/100 (${lead.priority})\nProperty: ${propertyLabel}\nTimeline: ${timelineLabel}\nSource: ${lead.source || 'Unknown'}\nCALL NOW — speed to lead is everything!`
-  await sendSms(formatPhone(repPhone), body)
+  await Promise.allSettled(repPhones.map(phone => sendSms(formatPhone(phone), body)))
 }
 
 export async function sendWelcomeEmail(lead: LeadNotificationData) {

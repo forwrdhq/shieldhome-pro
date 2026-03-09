@@ -143,7 +143,7 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
               </div>
 
               {/* Floating trust badge */}
-              <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl px-4 py-3 flex items-center gap-3">
+              <div className="absolute -bottom-4 left-4 bg-white rounded-xl shadow-xl px-4 py-3 flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <CheckCircle size={20} className="text-[#00C853]" />
                 </div>

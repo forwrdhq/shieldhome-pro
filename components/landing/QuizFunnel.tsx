@@ -144,7 +144,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
   useEffect(() => {
     if (step === 2 && typeof window !== 'undefined') {
       if ((window as any).fbq) {
-        (window as any).fbq('track', 'Lead', { content_name: 'quiz_started' })
+        (window as any).fbq('track', 'InitiateCheckout', { content_name: 'quiz_started' })
       }
       if ((window as any).dataLayer) {
         (window as any).dataLayer.push({ event: 'quiz_start', quiz_step: 1 })
@@ -228,7 +228,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
         body: JSON.stringify({
           ...contact,
           propertyType: quiz.propertyType,
-          homeownership: quiz.homeownership,
+          homeownership: quiz.homeownership === 'BUYING' ? 'OWN' : quiz.homeownership,
           productsInterested: quiz.securityConcerns,
           timeline: quiz.timeline,
           entryPoints: quiz.entryPoints,
@@ -240,20 +240,6 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
       if (typeof window !== 'undefined') {
-        if ((window as any).fbq) {
-          (window as any).fbq('track', 'CompleteRegistration', {
-            content_name: 'quiz_completed',
-            value: 900,
-            currency: 'USD',
-          })
-        }
-        if ((window as any).gtag) {
-          (window as any).gtag('event', 'generate_lead', {
-            event_category: 'form_submission',
-            event_label: 'quiz_funnel',
-            value: 900,
-          })
-        }
         if ((window as any).dataLayer) {
           (window as any).dataLayer.push({
             event: 'lead_submitted',
@@ -304,7 +290,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
 
   const timelineOptions = [
     { value: 'ASAP', label: 'ASAP (within a week)', icon: <Bolt size={24} />, hot: true },
-    { value: 'WITHIN_MONTH', label: 'Within the next month', icon: <Calendar size={24} /> },
+    { value: 'ONE_MONTH', label: 'Within the next month', icon: <Calendar size={24} /> },
     { value: 'JUST_RESEARCHING', label: 'Just researching', icon: <Search size={24} /> },
   ]
 

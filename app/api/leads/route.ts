@@ -89,6 +89,7 @@ export async function POST(req: NextRequest) {
       fullName: lead.fullName,
       phone: lead.phone,
       email: lead.email,
+      zipCode: lead.zipCode,
       propertyType: lead.propertyType,
       timeline: lead.timeline,
       leadScore: lead.leadScore,

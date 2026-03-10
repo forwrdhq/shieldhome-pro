@@ -24,6 +24,29 @@ export async function POST(req: NextRequest) {
         where: { id: existing.id },
         data: { notes: (existing.notes || '') + '\n[Duplicate submission]' }
       })
+      const notifData = {
+        id: existing.id,
+        firstName: existing.firstName,
+        lastName: existing.lastName,
+        fullName: existing.fullName,
+        phone: existing.phone,
+        email: existing.email,
+        zipCode: existing.zipCode,
+        propertyType: existing.propertyType,
+        timeline: existing.timeline,
+        leadScore: existing.leadScore,
+        priority: existing.priority,
+        source: existing.source,
+        medium: existing.medium,
+        campaign: existing.campaign,
+        productsInterested: existing.productsInterested,
+      }
+      await Promise.allSettled([
+        sendLeadConfirmationSms(notifData),
+        sendRepAlertSms(notifData),
+        sendWelcomeEmail(notifData),
+        sendSlackNotification(notifData),
+      ])
       return NextResponse.json({ success: true, leadId: existing.id, message: 'Quote request received' })
     }
 

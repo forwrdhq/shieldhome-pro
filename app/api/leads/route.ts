@@ -100,12 +100,12 @@ export async function POST(req: NextRequest) {
       productsInterested: lead.productsInterested,
     }
 
-    Promise.allSettled([
+    await Promise.allSettled([
       sendLeadConfirmationSms(notifData),
       sendRepAlertSms(notifData),
       sendWelcomeEmail(notifData),
       sendSlackNotification(notifData),
-    ]).catch(console.error)
+    ])
 
     return NextResponse.json({ success: true, leadId: lead.id, message: 'Quote request received' })
   } catch (err: any) {

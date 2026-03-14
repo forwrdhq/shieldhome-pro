@@ -101,6 +101,9 @@ model Lead {
   nurtureStep     Int            @default(0)
   nurtureActive   Boolean        @default(true)
 
+  tcpaConsent     Boolean        @default(false)
+  tcpaConsentAt   DateTime?
+
   notes           String?
   dispositionNote String?
 

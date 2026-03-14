@@ -1,14 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/db'
 import { leadSchema } from '@/lib/validation'
 import { calculateLeadScore } from '@/lib/lead-scoring'
 import { sendLeadConfirmationSms, sendRepAlertSms, sendWelcomeEmail, sendSlackNotification } from '@/lib/notifications'
-import { prisma as db } from '@/lib/db'
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const data = leadSchema.parse(body)
+
+    // Rate limit: max 5 submissions per IP per hour
+    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || undefined
+    if (ipAddress) {
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
+      const recentFromIP = await prisma.lead.count({
+        where: { ipAddress, createdAt: { gte: oneHourAgo } }
+      })
+      if (recentFromIP >= 5) {
+        return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+      }
+    }
 
     // Check for duplicates in last 30 days
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
@@ -36,9 +48,6 @@ export async function POST(req: NextRequest) {
       source: data.source || undefined,
       deviceType: data.deviceType || undefined,
     })
-
-    // Get IP address
-    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0] || req.headers.get('x-real-ip') || undefined
 
     // Create the lead
     const lead = await prisma.lead.create({
@@ -69,6 +78,8 @@ export async function POST(req: NextRequest) {
         deviceType: data.deviceType,
         browser: data.browser,
         ipAddress,
+        tcpaConsent: data.tcpaConsent ?? false,
+        tcpaConsentAt: data.tcpaConsent ? new Date() : null,
       }
     })
 
@@ -118,6 +129,11 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  const session = await getServerSession()
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const { searchParams } = new URL(req.url)
     const status = searchParams.get('status')

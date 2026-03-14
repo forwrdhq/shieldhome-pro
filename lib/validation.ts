@@ -25,6 +25,7 @@ export const leadSchema = z.object({
   referrer: z.string().optional().nullable(),
   deviceType: z.string().optional().nullable(),
   browser: z.string().optional().nullable(),
+  tcpaConsent: z.boolean().optional().default(false),
 })
 
 export type LeadFormData = z.infer<typeof leadSchema>

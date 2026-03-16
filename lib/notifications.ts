@@ -13,6 +13,7 @@ interface LeadNotificationData {
   email: string
   zipCode?: string | null
   propertyType?: string | null
+  homeownership?: string | null
   timeline?: string | null
   leadScore: number
   priority: string
@@ -149,48 +150,107 @@ export async function sendWelcomeEmail(lead: LeadNotificationData) {
   }
 }
 
+const PRODUCT_LABELS: Record<string, string> = {
+  BREAKINS: 'Break-ins/Burglary',
+  PACKAGES: 'Package Theft',
+  FIRE: 'Fire/Smoke/CO',
+  KIDS_PETS: 'Kids & Pets',
+  ALL: 'Full Coverage',
+}
+
+const OWNERSHIP_LABELS: Record<string, string> = {
+  OWN: 'Homeowner',
+  RENT: 'Renter',
+  BUYING: 'Buying Soon',
+}
+
 export async function sendSlackNotification(lead: LeadNotificationData) {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL
   if (!webhookUrl) return
 
-  const priorityEmoji: Record<string, string> = {
-    HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪'
-  }
+  const priorityEmoji: Record<string, string> = { HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪' }
+  const pEmoji = priorityEmoji[lead.priority] || '🔵'
+
+  const propertyLabel = lead.propertyType ? (PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType) : 'N/A'
+  const timelineLabel = lead.timeline ? (TIMELINE_LABELS[lead.timeline] || lead.timeline) : 'N/A'
+  const ownershipLabel = lead.homeownership ? (OWNERSHIP_LABELS[lead.homeownership] || lead.homeownership) : 'N/A'
+  const productsLabel = lead.productsInterested?.length
+    ? lead.productsInterested.map(p => PRODUCT_LABELS[p] || p).join(', ')
+    : 'N/A'
+  const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' › ') || 'Direct'
+
+  // Format phone for tel: link — strip non-digits and add +1 if needed
+  const phoneDigits = lead.phone.replace(/\D/g, '')
+  const phoneE164 = phoneDigits.startsWith('1') ? `+${phoneDigits}` : `+1${phoneDigits}`
+
+  const isHot = lead.priority === 'HOT'
+  const isRenter = lead.homeownership === 'RENT'
+
+  const blocks: any[] = [
+    {
+      type: 'header',
+      text: { type: 'plain_text', text: `${pEmoji} ${lead.priority} LEAD — ${lead.fullName}` }
+    },
+    // Urgency banner for HOT leads
+    ...(isHot ? [{
+      type: 'section',
+      text: { type: 'mrkdwn', text: ':rotating_light: *Call within 5 minutes — speed to lead is everything.*' }
+    }] : []),
+    // Renter advisory
+    ...(isRenter ? [{
+      type: 'section',
+      text: { type: 'mrkdwn', text: ':warning: *Renter* — confirm landlord approval before quoting. Vivint requires homeowner permission.' }
+    }] : []),
+    {
+      type: 'section',
+      text: { type: 'mrkdwn', text: '*Contact Info*' },
+      fields: [
+        { type: 'mrkdwn', text: `*Name:*\n${lead.fullName}` },
+        { type: 'mrkdwn', text: `*ZIP Code:*\n${lead.zipCode || 'N/A'}` },
+        { type: 'mrkdwn', text: `*Phone:*\n<${phoneE164}|${lead.phone}>` },
+        { type: 'mrkdwn', text: `*Email:*\n${lead.email}` },
+      ]
+    },
+    {
+      type: 'section',
+      text: { type: 'mrkdwn', text: '*Lead Details*' },
+      fields: [
+        { type: 'mrkdwn', text: `*Property:*\n${propertyLabel}` },
+        { type: 'mrkdwn', text: `*Ownership:*\n${ownershipLabel}` },
+        { type: 'mrkdwn', text: `*Timeline:*\n${timelineLabel}` },
+        { type: 'mrkdwn', text: `*Concerns:*\n${productsLabel}` },
+      ]
+    },
+    {
+      type: 'section',
+      fields: [
+        { type: 'mrkdwn', text: `*Lead Score:*\n${lead.leadScore}/100` },
+        { type: 'mrkdwn', text: `*Source:*\n${source}` },
+      ]
+    },
+    {
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: { type: 'plain_text', text: '📋 View in CRM' },
+          url: `${APP_URL}/leads/${lead.id}`,
+          style: 'primary',
+        },
+        {
+          type: 'button',
+          text: { type: 'plain_text', text: `📞 Call ${lead.firstName}` },
+          url: phoneE164,
+        },
+      ]
+    }
+  ]
 
   try {
     await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        blocks: [
-          {
-            type: 'header',
-            text: { type: 'plain_text', text: `${priorityEmoji[lead.priority] || '🔵'} New Lead: ${lead.fullName}` }
-          },
-          {
-            type: 'section',
-            fields: [
-              { type: 'mrkdwn', text: `*Phone:*\n${lead.phone}` },
-              { type: 'mrkdwn', text: `*Email:*\n${lead.email}` },
-              { type: 'mrkdwn', text: `*Property:*\n${lead.propertyType || 'N/A'}` },
-              { type: 'mrkdwn', text: `*Timeline:*\n${lead.timeline || 'N/A'}` },
-              { type: 'mrkdwn', text: `*Score:*\n${lead.leadScore}/100` },
-              { type: 'mrkdwn', text: `*Source:*\n${lead.source || 'Direct'}/${lead.medium || 'N/A'}` }
-            ]
-          },
-          {
-            type: 'actions',
-            elements: [
-              {
-                type: 'button',
-                text: { type: 'plain_text', text: 'View in CRM' },
-                url: `${APP_URL}/leads/${lead.id}`,
-                style: 'primary'
-              }
-            ]
-          }
-        ]
-      })
+      body: JSON.stringify({ blocks }),
     })
   } catch (err) {
     console.error('Slack webhook error:', err)

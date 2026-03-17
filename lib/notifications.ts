@@ -206,13 +206,14 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
             ]
           },
           {
+            type: 'context',
+            elements: [
+              { type: 'mrkdwn', text: `⚡ *Speed to lead is everything — call now!*` }
+            ]
+          },
+          {
             type: 'actions',
             elements: [
-              {
-                type: 'button',
-                text: { type: 'plain_text', text: '📞 Call Now' },
-                url: `tel:${lead.phone}`,
-              },
               {
                 type: 'button',
                 text: { type: 'plain_text', text: 'View in CRM' },

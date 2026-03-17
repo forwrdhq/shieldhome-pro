@@ -102,6 +102,8 @@ export async function POST(req: NextRequest) {
       email: lead.email,
       zipCode: lead.zipCode,
       propertyType: lead.propertyType,
+      homeownership: lead.homeownership,
+      doorsWindows: lead.doorsWindows,
       timeline: lead.timeline,
       leadScore: lead.leadScore,
       priority: lead.priority,

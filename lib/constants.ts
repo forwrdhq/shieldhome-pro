@@ -42,10 +42,23 @@ export const PROPERTY_TYPE_LABELS: Record<string, string> = {
 }
 
 export const TIMELINE_LABELS: Record<string, string> = {
-  ASAP: 'As soon as possible',
+  ASAP: 'ASAP (within a week)',
   ONE_TWO_WEEKS: 'Within 1-2 weeks',
   ONE_MONTH: 'Within a month',
   JUST_RESEARCHING: 'Just researching',
+}
+
+export const HOMEOWNERSHIP_LABELS: Record<string, string> = {
+  OWN: 'Homeowner',
+  RENT: 'Renter',
+}
+
+export const CONCERN_LABELS: Record<string, string> = {
+  BREAKINS: 'Break-ins / Burglary',
+  PACKAGE_THEFT: 'Package Theft',
+  FIRE_SMOKE: 'Fire / Smoke / CO',
+  KIDS_PETS: 'Watching Kids / Pets',
+  ALL: 'All of the Above',
 }
 
 export const PIPELINE_COLUMNS = [

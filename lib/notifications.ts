@@ -2,7 +2,7 @@ import { sendSms, formatPhone } from './twilio'
 import { sendEmail } from './sendgrid'
 import { prisma } from './db'
 import { PHONE_NUMBER, APP_URL } from './constants'
-import { PROPERTY_TYPE_LABELS, TIMELINE_LABELS } from './constants'
+import { PROPERTY_TYPE_LABELS, TIMELINE_LABELS, HOMEOWNERSHIP_LABELS, CONCERN_LABELS } from './constants'
 
 interface LeadNotificationData {
   id: string
@@ -13,6 +13,8 @@ interface LeadNotificationData {
   email: string
   zipCode?: string | null
   propertyType?: string | null
+  homeownership?: string | null
+  doorsWindows?: string | null
   timeline?: string | null
   leadScore: number
   priority: string
@@ -157,6 +159,15 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
     HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪'
   }
 
+  const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'N/A'
+  const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'N/A'
+  const ownershipLabel = lead.homeownership ? HOMEOWNERSHIP_LABELS[lead.homeownership] || lead.homeownership : 'N/A'
+  const concerns = lead.productsInterested?.length
+    ? lead.productsInterested.map(c => CONCERN_LABELS[c] || c).join(', ')
+    : 'N/A'
+  const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
+  const emoji = priorityEmoji[lead.priority] || '🔵'
+
   try {
     await fetch(webhookUrl, {
       method: 'POST',
@@ -165,22 +176,43 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
         blocks: [
           {
             type: 'header',
-            text: { type: 'plain_text', text: `${priorityEmoji[lead.priority] || '🔵'} New Lead: ${lead.fullName}` }
+            text: { type: 'plain_text', text: `${emoji} New Lead: ${lead.fullName}`, emoji: true }
           },
           {
             type: 'section',
             fields: [
-              { type: 'mrkdwn', text: `*Phone:*\n${lead.phone}` },
-              { type: 'mrkdwn', text: `*Email:*\n${lead.email}` },
-              { type: 'mrkdwn', text: `*Property:*\n${lead.propertyType || 'N/A'}` },
-              { type: 'mrkdwn', text: `*Timeline:*\n${lead.timeline || 'N/A'}` },
-              { type: 'mrkdwn', text: `*Score:*\n${lead.leadScore}/100` },
-              { type: 'mrkdwn', text: `*Source:*\n${lead.source || 'Direct'}/${lead.medium || 'N/A'}` }
+              { type: 'mrkdwn', text: `*📞 Phone:*\n<tel:${lead.phone}|${lead.phone}>` },
+              { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
+              { type: 'mrkdwn', text: `*📍 ZIP Code:*\n${lead.zipCode || 'N/A'}` },
+              { type: 'mrkdwn', text: `*🏠 Property:*\n${propertyLabel}` },
+            ]
+          },
+          {
+            type: 'section',
+            fields: [
+              { type: 'mrkdwn', text: `*🔑 Ownership:*\n${ownershipLabel}` },
+              { type: 'mrkdwn', text: `*⏰ Timeline:*\n${timelineLabel}` },
+              { type: 'mrkdwn', text: `*🚪 Entry Points:*\n${lead.doorsWindows || 'N/A'}` },
+              { type: 'mrkdwn', text: `*🛡️ Concerns:*\n${concerns}` },
+            ]
+          },
+          { type: 'divider' },
+          {
+            type: 'section',
+            fields: [
+              { type: 'mrkdwn', text: `*📊 Lead Score:*\n${lead.leadScore}/100` },
+              { type: 'mrkdwn', text: `*🔥 Priority:*\n${lead.priority}` },
+              { type: 'mrkdwn', text: `*📣 Source:*\n${source}` },
             ]
           },
           {
             type: 'actions',
             elements: [
+              {
+                type: 'button',
+                text: { type: 'plain_text', text: '📞 Call Now' },
+                url: `tel:${lead.phone}`,
+              },
               {
                 type: 'button',
                 text: { type: 'plain_text', text: 'View in CRM' },

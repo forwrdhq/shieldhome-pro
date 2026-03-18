@@ -36,6 +36,33 @@ export async function POST(req: NextRequest) {
         where: { id: existing.id },
         data: { notes: (existing.notes || '') + '\n[Duplicate submission]' }
       })
+
+      // Still fire notifications for duplicates so reps are alerted
+      const dupNotifData = {
+        id: existing.id,
+        firstName: existing.firstName,
+        lastName: existing.lastName,
+        fullName: existing.fullName,
+        phone: existing.phone,
+        email: existing.email,
+        zipCode: existing.zipCode,
+        propertyType: existing.propertyType,
+        homeownership: existing.homeownership,
+        doorsWindows: existing.doorsWindows,
+        timeline: existing.timeline,
+        leadScore: existing.leadScore,
+        priority: existing.priority,
+        source: existing.source,
+        medium: existing.medium,
+        campaign: existing.campaign,
+        productsInterested: existing.productsInterested,
+      }
+
+      Promise.allSettled([
+        sendSlackNotification(dupNotifData),
+        sendRepAlertSms(dupNotifData),
+      ]).catch(console.error)
+
       return NextResponse.json({ success: true, leadId: existing.id, message: 'Quote request received' })
     }
 
@@ -62,6 +89,7 @@ export async function POST(req: NextRequest) {
         homeownership: data.homeownership as any,
         productsInterested: data.productsInterested,
         timeline: data.timeline as any,
+        doorsWindows: data.entryPoints,
         leadScore: score,
         priority: priority as any,
         source: data.source,

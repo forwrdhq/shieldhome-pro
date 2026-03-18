@@ -11,6 +11,7 @@ export const leadSchema = z.object({
   homeownership: z.enum(['OWN', 'RENT']),
   productsInterested: z.array(z.string()).min(1, 'Select at least one product'),
   timeline: z.enum(['ASAP', 'ONE_TWO_WEEKS', 'ONE_MONTH', 'JUST_RESEARCHING']),
+  entryPoints: z.string().optional().nullable(),
 
   source: z.string().optional().nullable(),
   medium: z.string().optional().nullable(),

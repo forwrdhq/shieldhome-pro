@@ -169,7 +169,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
   const emoji = priorityEmoji[lead.priority] || '🔵'
 
   try {
-    await fetch(webhookUrl, {
+    const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -225,6 +225,10 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
         ]
       })
     })
+    if (!response.ok) {
+      const text = await response.text()
+      console.error(`Slack webhook failed (${response.status}):`, text)
+    }
   } catch (err) {
     console.error('Slack webhook error:', err)
   }

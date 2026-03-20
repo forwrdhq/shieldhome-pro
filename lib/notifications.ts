@@ -153,7 +153,10 @@ export async function sendWelcomeEmail(lead: LeadNotificationData) {
 
 export async function sendSlackNotification(lead: LeadNotificationData) {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL
-  if (!webhookUrl) return
+  if (!webhookUrl) {
+    console.warn('SLACK_WEBHOOK_URL not configured — skipping Slack notification')
+    return
+  }
 
   const priorityEmoji: Record<string, string> = {
     HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪'
@@ -181,7 +184,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
           {
             type: 'section',
             fields: [
-              { type: 'mrkdwn', text: `*📞 Phone:*\n<tel:${lead.phone}|${lead.phone}>` },
+              { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
               { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
               { type: 'mrkdwn', text: `*📍 ZIP Code:*\n${lead.zipCode || 'N/A'}` },
               { type: 'mrkdwn', text: `*🏠 Property:*\n${propertyLabel}` },

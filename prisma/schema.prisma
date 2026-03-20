@@ -108,6 +108,18 @@ model Lead {
   notes           String?
   dispositionNote String?
 
+  // B2B fields
+  leadType           String         @default("RESIDENTIAL")
+  businessName       String?
+  businessType       String?
+  numberOfLocations  String?
+  currentProvider    String?
+  biggestConcern     String?
+  b2bPipelineStage   String?
+  estimatedDealValue Float?
+  qualificationScore Int?
+  assessmentDate     DateTime?
+
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
@@ -121,6 +133,7 @@ model Lead {
   @@index([assignedRepId])
   @@index([createdAt])
   @@index([submittedAt])
+  @@index([leadType])
   @@map("leads")
 }
 

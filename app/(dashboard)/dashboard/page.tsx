@@ -1,9 +1,10 @@
 import { prisma } from '@/lib/db'
 import { formatCurrency, formatSpeedToContact, getSpeedColor } from '@/lib/utils'
-import { LEAD_STATUS_LABELS } from '@/lib/constants'
+import { LEAD_STATUS_LABELS, B2B_STAGE_COLORS, B2B_PIPELINE_STAGE_LIST } from '@/lib/constants'
 import Link from 'next/link'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
+import B2BPipelineFunnel from '@/components/dashboard/B2BPipelineFunnel'
 
 export default async function DashboardPage() {
   const today = new Date()
@@ -14,7 +15,9 @@ export default async function DashboardPage() {
 
   const [
     todayLeads, yesterdayLeads, monthLeads, openLeads,
-    avgSpeed, recentLeads, monthlySales
+    avgSpeed, recentLeads, monthlySales,
+    // B2B stats
+    b2bMonthLeads, b2bPipelineValue, b2bDealsWon, b2bStageCounts
   ] = await Promise.all([
     prisma.lead.count({ where: { createdAt: { gte: today } } }),
     prisma.lead.count({ where: { createdAt: { gte: yesterday, lt: today } } }),
@@ -33,7 +36,22 @@ export default async function DashboardPage() {
     prisma.commission.aggregate({
       where: { createdAt: { gte: monthStart } },
       _sum: { ourShare: true, netProfit: true }
-    })
+    }),
+    // B2B queries
+    prisma.lead.count({ where: { leadType: 'B2B', createdAt: { gte: monthStart } } }),
+    prisma.lead.aggregate({
+      where: { leadType: 'B2B', b2bPipelineStage: { notIn: ['Won', 'Lost', 'Not Qualified'] } },
+      _sum: { estimatedDealValue: true },
+    }),
+    prisma.lead.findMany({
+      where: { leadType: 'B2B', b2bPipelineStage: 'Won', createdAt: { gte: monthStart } },
+      select: { estimatedDealValue: true },
+    }),
+    prisma.lead.groupBy({
+      by: ['b2bPipelineStage'],
+      where: { leadType: 'B2B' },
+      _count: true,
+    }),
   ])
 
   const avgSpeedSecs = Math.round(avgSpeed._avg.speedToContact || 0)
@@ -66,6 +84,41 @@ export default async function DashboardPage() {
             )}
           </Card>
         ))}
+      </div>
+
+      {/* B2B Pipeline Section */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-[#1A1A2E]">B2B Pipeline</h2>
+          <Link href="/b2b-leads" className="text-sm text-[#00C853] hover:underline font-medium">View all →</Link>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          <Card padding="sm">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1">B2B Leads This Month</p>
+            <p className="text-2xl font-bold text-[#1A1A2E]">{b2bMonthLeads}</p>
+          </Card>
+          <Card padding="sm">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1">Pipeline Value</p>
+            <p className="text-2xl font-bold text-[#1A1A2E]">{formatCurrency(b2bPipelineValue._sum.estimatedDealValue || 0)}</p>
+          </Card>
+          <Card padding="sm">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1">Deals Won This Month</p>
+            <p className="text-2xl font-bold text-[#1A1A2E]">{b2bDealsWon.length}</p>
+          </Card>
+          <Card padding="sm">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1">Won Revenue</p>
+            <p className="text-2xl font-bold text-green-600">{formatCurrency(b2bDealsWon.reduce((s, d) => s + (d.estimatedDealValue || 0), 0))}</p>
+          </Card>
+        </div>
+        <Card>
+          <h3 className="text-sm font-bold text-[#1A1A2E] mb-3">Pipeline Funnel</h3>
+          <B2BPipelineFunnel
+            data={B2B_PIPELINE_STAGE_LIST.map(stage => ({
+              stage,
+              count: b2bStageCounts.find(s => s.b2bPipelineStage === stage)?._count || 0,
+            }))}
+          />
+        </Card>
       </div>
 
       {/* Recent Leads */}

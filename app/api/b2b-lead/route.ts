@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { prisma } from '@/lib/db'
 
 const b2bLeadSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(50),
@@ -25,6 +26,32 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const data = b2bLeadSchema.parse(body)
+
+    // Save to database as B2B lead
+    const lead = await prisma.lead.create({
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        fullName: [data.firstName, data.lastName].filter(Boolean).join(' '),
+        leadType: 'B2B',
+        businessName: data.businessName,
+        businessType: data.businessType,
+        numberOfLocations: data.numberOfLocations,
+        biggestConcern: data.biggestConcern,
+        b2bPipelineStage: 'New Lead',
+        source: data.source,
+      },
+    })
+
+    await prisma.activity.create({
+      data: {
+        leadId: lead.id,
+        type: 'LEAD_CREATED',
+        description: `B2B lead created for ${data.businessName} via ${data.source || 'website'}`,
+      },
+    })
 
     const payload = {
       ...data,

@@ -71,3 +71,61 @@ export const PIPELINE_COLUMNS = [
 ]
 
 export const NURTURE_SCHEDULE = [0, 24, 72, 168, 336, 504] // hours after submission
+
+// ============================================
+// B2B Constants
+// ============================================
+
+export const B2B_PIPELINE_STAGES: Record<string, string> = {
+  'New Lead': 'New Lead',
+  'Qualified': 'Qualified',
+  'Assessment Scheduled': 'Assessment Scheduled',
+  'Assessment Complete': 'Assessment Complete',
+  'Proposal Sent': 'Proposal Sent',
+  'Negotiation': 'Negotiation',
+  'Won': 'Won',
+  'Lost': 'Lost',
+  'Not Qualified': 'Not Qualified',
+  'Nurture': 'Nurture',
+}
+
+export const B2B_PIPELINE_STAGE_LIST = Object.keys(B2B_PIPELINE_STAGES)
+
+export const B2B_STAGE_COLORS: Record<string, string> = {
+  'New Lead': 'bg-gray-100 text-gray-700',
+  'Qualified': 'bg-blue-100 text-blue-700',
+  'Assessment Scheduled': 'bg-orange-100 text-orange-700',
+  'Assessment Complete': 'bg-yellow-100 text-yellow-700',
+  'Proposal Sent': 'bg-purple-100 text-purple-700',
+  'Negotiation': 'bg-indigo-100 text-indigo-700',
+  'Won': 'bg-green-100 text-green-700',
+  'Lost': 'bg-red-100 text-red-700',
+  'Not Qualified': 'bg-red-100 text-red-700',
+  'Nurture': 'bg-cyan-100 text-cyan-700',
+}
+
+export const B2B_BUSINESS_TYPES: Record<string, string> = {
+  'Retail': 'Retail',
+  'Office': 'Office',
+  'Warehouse': 'Warehouse',
+  'Restaurant': 'Restaurant',
+  'Healthcare': 'Healthcare',
+  'Education': 'Education',
+  'Manufacturing': 'Manufacturing',
+  'Hospitality': 'Hospitality',
+  'Construction': 'Construction',
+  'Other': 'Other',
+}
+
+export const B2B_BUSINESS_TYPE_COLORS: Record<string, string> = {
+  'Retail': 'bg-blue-100 text-blue-700',
+  'Office': 'bg-gray-100 text-gray-700',
+  'Warehouse': 'bg-amber-100 text-amber-700',
+  'Restaurant': 'bg-orange-100 text-orange-700',
+  'Healthcare': 'bg-red-100 text-red-700',
+  'Education': 'bg-indigo-100 text-indigo-700',
+  'Manufacturing': 'bg-yellow-100 text-yellow-700',
+  'Hospitality': 'bg-purple-100 text-purple-700',
+  'Construction': 'bg-emerald-100 text-emerald-700',
+  'Other': 'bg-gray-100 text-gray-700',
+}

@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db'
 import { leadSchema } from '@/lib/validation'
 import { calculateLeadScore } from '@/lib/lead-scoring'
 import { sendLeadConfirmationSms, sendRepAlertSms, sendWelcomeEmail, sendSlackNotification } from '@/lib/notifications'
+import { syncLeadToGhl } from '@/lib/gohighlevel'
 
 export async function POST(req: NextRequest) {
   try {
@@ -146,6 +147,12 @@ export async function POST(req: NextRequest) {
       sendRepAlertSms(notifData),
       sendWelcomeEmail(notifData),
       sendSlackNotification(notifData),
+      syncLeadToGhl({
+        ...notifData,
+        fullName: lead.fullName,
+        status: lead.status,
+        saleAmount: lead.saleAmount,
+      }),
     ]).catch(console.error)
 
     return NextResponse.json({ success: true, leadId: lead.id, message: 'Quote request received' })

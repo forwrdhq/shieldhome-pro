@@ -2,13 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Users, BarChart2, DollarSign, Settings, Shield, LogOut } from 'lucide-react'
+import { LayoutDashboard, Users, Building2, BarChart2, DollarSign, Settings, Shield, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 
 const nav = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/leads', label: 'Leads', icon: Users },
+  { href: '/b2b-leads', label: 'B2B Leads', icon: Building2, badge: true },
   { href: '/analytics', label: 'Analytics', icon: BarChart2 },
   { href: '/commissions', label: 'Commissions', icon: DollarSign },
   { href: '/settings', label: 'Settings', icon: Settings },
@@ -16,6 +18,14 @@ const nav = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const [b2bNewCount, setB2bNewCount] = useState(0)
+
+  useEffect(() => {
+    fetch('/api/b2b-leads?stage=New+Lead&limit=1')
+      .then(r => r.json())
+      .then(data => setB2bNewCount(data.pagination?.total || 0))
+      .catch(() => {})
+  }, [])
 
   return (
     <aside className="w-64 bg-[#1A1A2E] min-h-screen flex flex-col">
@@ -30,7 +40,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 p-4 space-y-1">
-        {nav.map(({ href, label, icon: Icon }) => {
+        {nav.map(({ href, label, icon: Icon, badge }) => {
           const active = pathname === href || pathname.startsWith(href + '/')
           return (
             <Link
@@ -45,6 +55,11 @@ export default function Sidebar() {
             >
               <Icon size={18} />
               {label}
+              {badge && b2bNewCount > 0 && (
+                <span className="ml-auto text-[10px] bg-orange-500 text-white rounded-full px-1.5 py-0.5 font-bold leading-none">
+                  {b2bNewCount}
+                </span>
+              )}
             </Link>
           )
         })}

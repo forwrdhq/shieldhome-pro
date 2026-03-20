@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/db'
 import { updateLeadSchema } from '@/lib/validation'
+import { syncLeadToGhl, getStageIdByName, updateOpportunityStage, STATUS_TO_GHL_STAGE } from '@/lib/gohighlevel'
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession()
@@ -85,6 +86,37 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     }
 
     const lead = await prisma.lead.update({ where: { id }, data: updateData })
+
+    // Sync status change to GHL (async, non-blocking)
+    if (data.status && data.status !== existing.status && process.env.GHL_API_KEY) {
+      const ghlStageName = STATUS_TO_GHL_STAGE[data.status]
+      if (ghlStageName) {
+        getStageIdByName(ghlStageName).then(stageId => {
+          if (stageId) {
+            // Re-sync the full lead to GHL to update opportunity stage
+            syncLeadToGhl({
+              id: lead.id,
+              firstName: lead.firstName,
+              lastName: lead.lastName,
+              fullName: lead.fullName,
+              email: lead.email,
+              phone: lead.phone,
+              zipCode: lead.zipCode,
+              status: lead.status,
+              leadScore: lead.leadScore,
+              priority: lead.priority,
+              source: lead.source,
+              propertyType: lead.propertyType,
+              homeownership: lead.homeownership,
+              timeline: lead.timeline,
+              productsInterested: lead.productsInterested,
+              saleAmount: lead.saleAmount,
+            })
+          }
+        }).catch(console.error)
+      }
+    }
+
     return NextResponse.json(lead)
   } catch (err: any) {
     console.error('Update lead error:', err)

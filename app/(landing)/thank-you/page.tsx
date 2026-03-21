@@ -15,10 +15,7 @@ function ThankYouContent() {
   const risk = getRiskLevel(entryPoints, concerns)
 
   useEffect(() => {
-    if ((window as any).fbq) {
-      (window as any).fbq('track', 'Lead', { content_name: 'security_quote', value: 900, currency: 'USD' })
-      ;(window as any).fbq('track', 'CompleteRegistration')
-    }
+    // Meta Lead fires in QuizFunnel onSubmit — do NOT fire again here or it doubles
     if ((window as any).gtag) {
       (window as any).gtag('event', 'conversion', { value: 900.0, currency: 'USD' })
       ;(window as any).gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: 'quiz_funnel', value: 900 })

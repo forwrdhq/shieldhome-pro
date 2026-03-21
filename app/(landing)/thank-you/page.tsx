@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { CheckCircle, Phone, MessageSquare, Home, Shield, AlertTriangle, Share2, Clock } from 'lucide-react'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 import { getRiskLevel } from '@/components/landing/QuizFunnel'
@@ -13,6 +13,17 @@ function ThankYouContent() {
   const timeline = searchParams.get('timeline') || ''
 
   const risk = getRiskLevel(entryPoints, concerns)
+
+  useEffect(() => {
+    if ((window as any).fbq) {
+      (window as any).fbq('track', 'Lead', { content_name: 'security_quote', value: 900, currency: 'USD' })
+      ;(window as any).fbq('track', 'CompleteRegistration')
+    }
+    if ((window as any).gtag) {
+      (window as any).gtag('event', 'conversion', { value: 900.0, currency: 'USD' })
+      ;(window as any).gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: 'quiz_funnel', value: 900 })
+    }
+  }, [])
 
   const riskColors: Record<string, { bg: string; border: string; text: string; bar: string }> = {
     HIGH: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', bar: 'bg-red-500' },
@@ -26,21 +37,6 @@ function ThankYouContent() {
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
-      {/* Conversion tracking pixels */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            if (typeof fbq !== 'undefined') {
-              fbq('track', 'Lead', { content_name: 'security_quote', value: 900, currency: 'USD' });
-              fbq('track', 'CompleteRegistration');
-            }
-            if (typeof gtag !== 'undefined') {
-              gtag('event', 'conversion', { value: 900.0, currency: 'USD' });
-              gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: 'quiz_funnel', value: 900 });
-            }
-          `
-        }}
-      />
 
       <div className="max-w-2xl mx-auto px-4 py-12 flex-1">
         {/* Success Header */}

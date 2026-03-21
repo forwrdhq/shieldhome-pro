@@ -58,10 +58,10 @@ export async function POST(req: NextRequest) {
         productsInterested: existing.productsInterested,
       }
 
-      Promise.allSettled([
+      await Promise.allSettled([
         sendSlackNotification(dupNotifData),
         sendRepAlertSms(dupNotifData),
-      ]).catch(console.error)
+      ])
 
       return NextResponse.json({ success: true, leadId: existing.id, message: 'Quote request received' })
     }
@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    // Fire notifications asynchronously (don't block response)
+    // Fire notifications — must be awaited or Vercel kills them before completion
     const notifData = {
       id: lead.id,
       firstName: lead.firstName,
@@ -141,12 +141,12 @@ export async function POST(req: NextRequest) {
       productsInterested: lead.productsInterested,
     }
 
-    Promise.allSettled([
+    await Promise.allSettled([
       sendLeadConfirmationSms(notifData),
       sendRepAlertSms(notifData),
       sendWelcomeEmail(notifData),
       sendSlackNotification(notifData),
-    ]).catch(console.error)
+    ])
 
     return NextResponse.json({ success: true, leadId: lead.id, message: 'Quote request received' })
   } catch (err: any) {

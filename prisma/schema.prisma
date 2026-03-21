@@ -105,6 +105,18 @@ model Lead {
   tcpaConsent     Boolean        @default(false)
   tcpaConsentAt   DateTime?
 
+  // B2B fields
+  leadType             String         @default("RESIDENTIAL")
+  businessName         String?
+  businessType         String?
+  numberOfLocations    String?
+  currentProvider      String?
+  biggestConcern       String?
+  b2bPipelineStage     String?
+  estimatedDealValue   Float?
+  qualificationScore   Int?
+  assessmentDate       DateTime?
+
   notes           String?
   dispositionNote String?
 
@@ -121,6 +133,7 @@ model Lead {
   @@index([assignedRepId])
   @@index([createdAt])
   @@index([submittedAt])
+  @@index([leadType])
   @@map("leads")
 }
 

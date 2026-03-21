@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Users, BarChart2, DollarSign, Settings, Shield, LogOut } from 'lucide-react'
+import { LayoutDashboard, Users, BarChart2, DollarSign, Settings, Shield, LogOut, Building2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from 'next-auth/react'
 
 const nav = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/leads', label: 'Leads', icon: Users },
+  { href: '/b2b-leads', label: 'B2B Leads', icon: Building2 },
   { href: '/analytics', label: 'Analytics', icon: BarChart2 },
   { href: '/commissions', label: 'Commissions', icon: DollarSign },
   { href: '/settings', label: 'Settings', icon: Settings },

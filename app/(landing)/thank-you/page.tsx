@@ -35,7 +35,7 @@ function ThankYouContent() {
               fbq('track', 'CompleteRegistration');
             }
             if (typeof gtag !== 'undefined') {
-              gtag('event', 'conversion', { value: 900.0, currency: 'USD' });
+              gtag('event', 'conversion', { send_to: 'AW-18032237621/PeImCJX0lI0cELW4uJZD', value: 900.0, currency: 'USD' });
               gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: 'quiz_funnel', value: 900 });
             }
           `

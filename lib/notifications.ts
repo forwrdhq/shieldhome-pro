@@ -181,7 +181,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
           {
             type: 'section',
             fields: [
-              { type: 'mrkdwn', text: `*📞 Phone:*\n<tel:${lead.phone}|${lead.phone}>` },
+              { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
               { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
               { type: 'mrkdwn', text: `*📍 ZIP Code:*\n${lead.zipCode || 'N/A'}` },
               { type: 'mrkdwn', text: `*🏠 Property:*\n${propertyLabel}` },

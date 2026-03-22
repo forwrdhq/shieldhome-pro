@@ -23,6 +23,7 @@ interface LeadNotificationData {
   campaign?: string | null
   productsInterested: string[]
   segment?: string | null
+  landingPage?: string | null
   currentProvider?: string | null
   contractMonthsRemaining?: string | null
   currentMonthlyPayment?: string | null
@@ -278,12 +279,15 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
   const emoji = priorityEmoji[lead.priority] || '🔵'
   const isSwitch = lead.segment === 'switch'
   const isUpgrade = lead.segment === 'upgrade'
+  const isGoogleAds = lead.landingPage === '/get-quote'
 
   // Build blocks based on lead type
   const headerText = isSwitch
     ? `${emoji} CONTRACT BUYOUT LEAD: ${lead.fullName}`
     : isUpgrade
     ? `${emoji} UPGRADE LEAD: ${lead.fullName}`
+    : isGoogleAds
+    ? `${emoji} GOOGLE ADS LEAD: ${lead.fullName}`
     : `${emoji} New Lead: ${lead.fullName}`
 
   const blocks: any[] = [
@@ -339,13 +343,20 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
       },
     )
   } else {
-    // Quiz lead: property & concerns info
+    // Quiz / Google Ads lead: property & concerns info
     const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'N/A'
     const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'N/A'
     const ownershipLabel = lead.homeownership ? HOMEOWNERSHIP_LABELS[lead.homeownership] || lead.homeownership : 'N/A'
     const concerns = lead.productsInterested?.length
       ? lead.productsInterested.map(c => CONCERN_LABELS[c] || c).join(', ')
       : 'N/A'
+
+    if (isGoogleAds) {
+      blocks.push({
+        type: 'section',
+        text: { type: 'mrkdwn', text: `🎯 *Google Ads Landing Page* — /get-quote direct lead capture` }
+      })
+    }
 
     blocks.push(
       {
@@ -389,6 +400,8 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
             ? `⚡ *BUYOUT LEAD — pitch the $1,000 contract buyout offer. Call now!*`
             : isUpgrade
             ? `⚡ *UPGRADE LEAD — existing customer, discuss camera & equipment upgrade options!*`
+            : isGoogleAds
+            ? `⚡ *GOOGLE ADS LEAD — high intent, call immediately!*`
             : `⚡ *Speed to lead is everything — call now!*`,
         }
       ]

@@ -41,8 +41,6 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
   const [homeType, setHomeType] = useState('')
   const [homeTypeLabel, setHomeTypeLabel] = useState('')
   const [ownership, setOwnership] = useState<'OWN' | 'RENT' | ''>('')
-  const [renterEmail, setRenterEmail] = useState('')
-  const [renterSubmitted, setRenterSubmitted] = useState(false)
   // Step 3
   const [firstName, setFirstName] = useState('')
   const [phone, setPhone] = useState('')
@@ -51,7 +49,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
   const isStep1Valid = zipCode.length >= 5
-  const isStep2Valid = homeType !== '' && ownership === 'OWN'
+  const isStep2Valid = homeType !== '' && ownership !== ''
   const phoneDigits = phone.replace(/\D/g, '')
   const isStep3Valid =
     firstName.trim().length > 0 &&
@@ -78,30 +76,6 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
     fireTracking(2, { homeType, ownership })
   }
 
-  async function handleRenterSubmit() {
-    if (!renterEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(renterEmail)) return
-    try {
-      const tracking = getTracking()
-      await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: 'Renter',
-          email: renterEmail,
-          phone: '0000000000',
-          zipCode,
-          segment: 'renter-waitlist',
-          homeownership: 'RENT',
-          ...tracking,
-          landingPage: '/get-quote',
-        }),
-      })
-      setRenterSubmitted(true)
-    } catch {
-      // Silently handle — not critical path
-    }
-  }
-
   async function handleSubmit() {
     if (!isStep3Valid || submitting) return
     setSubmitting(true)
@@ -121,7 +95,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
           email,
           zipCode,
           propertyType: homeType,
-          homeownership: 'OWN',
+          homeownership: ownership,
           segment: 'new-customer',
           tcpaConsent,
           ...tracking,
@@ -291,7 +265,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                     className={cn(
                       'py-3 rounded-lg border font-semibold text-sm transition-all',
                       ownership === 'RENT'
-                        ? 'border-orange-400 bg-orange-400/10 text-orange-400'
+                        ? 'border-[#00C853] bg-[#00C853]/10 text-[#00C853]'
                         : 'border-white/10 text-white/60 hover:border-white/20'
                     )}
                   >
@@ -301,40 +275,16 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
               </>
             )}
 
-            {/* Renter soft exit */}
-            {ownership === 'RENT' && !renterSubmitted && (
-              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                <p className="text-white/80 text-sm font-medium mb-1">We currently serve homeowners</p>
-                <p className="text-white/50 text-xs mb-3">Enter your email to be the first to know when renter options launch.</p>
-                <div className="flex gap-2">
-                  <input
-                    type="email"
-                    inputMode="email"
-                    value={renterEmail}
-                    onChange={(e) => setRenterEmail(e.target.value)}
-                    placeholder="you@email.com"
-                    className="flex-1 px-3 py-2.5 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder:text-white/30 outline-none focus:ring-1 focus:ring-[#00C853]"
-                  />
-                  <button
-                    onClick={handleRenterSubmit}
-                    className="px-4 py-2.5 bg-[#00C853] hover:bg-[#00A846] text-white rounded-lg text-sm font-medium transition-colors"
-                  >
-                    Notify Me
-                  </button>
-                </div>
-              </div>
-            )}
-            {ownership === 'RENT' && renterSubmitted && (
-              <div className="bg-[#00C853]/10 rounded-lg p-4 border border-[#00C853]/20 text-center">
-                <CheckCircle size={20} className="text-[#00C853] mx-auto mb-1" />
-                <p className="text-white/80 text-sm font-medium">Thanks! We&apos;ll keep you posted.</p>
-              </div>
-            )}
-
-            {ownership === 'OWN' && (
+            {ownership && (
               <button
                 onClick={goToStep3}
-                className="w-full py-3.5 bg-[#00C853] hover:bg-[#00A846] text-white rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5"
+                disabled={!isStep2Valid}
+                className={cn(
+                  'w-full py-3.5 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5',
+                  isStep2Valid
+                    ? 'bg-[#00C853] hover:bg-[#00A846] text-white'
+                    : 'bg-white/10 text-white/30 cursor-not-allowed'
+                )}
               >
                 Continue <ChevronRight size={16} />
               </button>
@@ -354,7 +304,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 <CheckCircle size={10} /> {homeTypeLabel}
               </span>
               <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-[11px] font-medium px-2 py-0.5 rounded-full">
-                <CheckCircle size={10} /> Homeowner
+                <CheckCircle size={10} /> {ownership === 'OWN' ? 'Homeowner' : 'Renter'}
               </span>
             </div>
 

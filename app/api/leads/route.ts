@@ -145,6 +145,7 @@ export async function POST(req: NextRequest) {
       campaign: lead.campaign,
       productsInterested: lead.productsInterested,
       segment: lead.segment,
+      landingPage: lead.landingPage,
       currentProvider: lead.currentProvider,
       contractMonthsRemaining: lead.contractMonthsRemaining,
       currentMonthlyPayment: lead.currentMonthlyPayment,

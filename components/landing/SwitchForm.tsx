@@ -22,7 +22,6 @@ const PROVIDERS = [
   { value: 'SimpliSafe', label: 'SimpliSafe' },
   { value: 'Ring', label: 'Ring' },
   { value: 'Brinks', label: 'Brinks' },
-  { value: 'Vivint', label: 'Vivint' },
   { value: 'Other', label: 'Other' },
 ]
 
@@ -50,8 +49,6 @@ export default function SwitchForm({ className }: SwitchFormProps) {
   const [provider, setProvider] = useState('')
   const [otherProvider, setOtherProvider] = useState('')
   const [zipCode, setZipCode] = useState('')
-  const [showVivintMessage, setShowVivintMessage] = useState(false)
-
   // Step 2
   const [contractMonths, setContractMonths] = useState('')
   const [monthlyPayment, setMonthlyPayment] = useState('')
@@ -65,7 +62,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
   // Validation
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
-  const isStep1Valid = provider && provider !== 'Vivint' && zipCode.length >= 5
+  const isStep1Valid = provider && zipCode.length >= 5
   const isStep2Valid = contractMonths !== ''
   const phoneDigits = phone.replace(/\D/g, '')
   const isStep3Valid =
@@ -76,7 +73,6 @@ export default function SwitchForm({ className }: SwitchFormProps) {
 
   function handleProviderSelect(value: string) {
     setProvider(value)
-    setShowVivintMessage(value === 'Vivint')
     if (value !== 'Other') setOtherProvider('')
   }
 
@@ -233,22 +229,6 @@ export default function SwitchForm({ className }: SwitchFormProps) {
             ))}
           </div>
 
-          {showVivintMessage && (
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
-              <p className="text-blue-800 font-semibold mb-1">Already with Vivint?</p>
-              <p className="text-blue-700 text-sm mb-3">
-                This page is for customers switching from other providers. If you&apos;re already a Vivint customer and want to upgrade, give us a call.
-              </p>
-              <a
-                href={`tel:${PHONE_NUMBER_RAW}`}
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors"
-              >
-                <Phone size={16} />
-                Call {PHONE_NUMBER}
-              </a>
-            </div>
-          )}
-
           {provider === 'Other' && (
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">Provider name</label>
@@ -262,7 +242,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
             </div>
           )}
 
-          {provider && provider !== 'Vivint' && (
+          {provider && (
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
               <input

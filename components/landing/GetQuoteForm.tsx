@@ -1,0 +1,448 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import {
+  ChevronRight, Lock, ShieldCheck, Home, Building2, Building, Landmark,
+  CheckCircle, Zap,
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { getTracking } from '@/lib/utm'
+
+function formatPhone(value: string): string {
+  const digits = value.replace(/\D/g, '').slice(0, 10)
+  if (digits.length === 0) return ''
+  if (digits.length <= 3) return `(${digits}`
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
+}
+
+const HOME_TYPES = [
+  { value: 'HOUSE', label: 'House', icon: Home },
+  { value: 'TOWNHOME', label: 'Townhome', icon: Building2 },
+  { value: 'CONDO_APARTMENT', label: 'Apartment', icon: Building },
+  { value: 'CONDO_APARTMENT', label: 'Condo', icon: Landmark },
+]
+
+interface GetQuoteFormProps {
+  className?: string
+}
+
+export default function GetQuoteForm({ className }: GetQuoteFormProps) {
+  const router = useRouter()
+  const [step, setStep] = useState(1)
+  const [submitting, setSubmitting] = useState(false)
+  const [showLoading, setShowLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  // Step 1
+  const [zipCode, setZipCode] = useState('')
+  // Step 2
+  const [homeType, setHomeType] = useState('')
+  const [homeTypeLabel, setHomeTypeLabel] = useState('')
+  const [ownership, setOwnership] = useState<'OWN' | 'RENT' | ''>('')
+  const [renterEmail, setRenterEmail] = useState('')
+  const [renterSubmitted, setRenterSubmitted] = useState(false)
+  // Step 3
+  const [firstName, setFirstName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [tcpaConsent, setTcpaConsent] = useState(false)
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  const isStep1Valid = zipCode.length >= 5
+  const isStep2Valid = homeType !== '' && ownership === 'OWN'
+  const phoneDigits = phone.replace(/\D/g, '')
+  const isStep3Valid =
+    firstName.trim().length > 0 &&
+    phoneDigits.length === 10 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+    tcpaConsent
+
+  function fireTracking(stepNum: number, extra?: Record<string, string>) {
+    if (typeof window === 'undefined') return
+    const w = window as any
+    if (w.fbq) w.fbq('trackCustom', 'QuoteStep', { step: stepNum, ...extra })
+    if (w.dataLayer) w.dataLayer.push({ event: 'quote_step', step: stepNum, ...extra })
+  }
+
+  function goToStep2() {
+    if (!isStep1Valid) return
+    setStep(2)
+    fireTracking(1, { zipCode })
+  }
+
+  function goToStep3() {
+    if (!isStep2Valid) return
+    setStep(3)
+    fireTracking(2, { homeType, ownership })
+  }
+
+  async function handleRenterSubmit() {
+    if (!renterEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(renterEmail)) return
+    try {
+      const tracking = getTracking()
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: 'Renter',
+          email: renterEmail,
+          phone: '0000000000',
+          zipCode,
+          segment: 'renter-waitlist',
+          homeownership: 'RENT',
+          ...tracking,
+          landingPage: '/get-quote',
+        }),
+      })
+      setRenterSubmitted(true)
+    } catch {
+      // Silently handle — not critical path
+    }
+  }
+
+  async function handleSubmit() {
+    if (!isStep3Valid || submitting) return
+    setSubmitting(true)
+    setShowLoading(true)
+    setError('')
+
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    try {
+      const tracking = getTracking()
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          phone: phoneDigits,
+          email,
+          zipCode,
+          propertyType: homeType,
+          homeownership: 'OWN',
+          segment: 'new-customer',
+          tcpaConsent,
+          ...tracking,
+          landingPage: '/get-quote',
+        }),
+      })
+
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
+
+      // Fire conversion events
+      const w = window as any
+      if (w.fbq) {
+        w.fbq('track', 'Lead', { content_name: 'get_quote', value: 900, currency: 'USD' })
+        w.fbq('track', 'CompleteRegistration')
+      }
+      if (w.gtag) {
+        w.gtag('event', 'conversion', { send_to: 'AW-CONVERSION_ID/LABEL', value: 900.0, currency: 'USD' })
+      }
+      if (w.dataLayer) {
+        w.dataLayer.push({ event: 'lead_submitted', lead_value: 900, segment: 'new-customer', source: 'google' })
+      }
+
+      router.push('/thank-you')
+    } catch (err: any) {
+      setShowLoading(false)
+      setError(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  // ─── Loading State ───
+  if (showLoading && submitting) {
+    return (
+      <div className={cn('bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-8', className)}>
+        <div className="flex flex-col items-center justify-center py-8">
+          <div className="w-12 h-12 border-[3px] border-white/20 border-t-[#00C853] rounded-full animate-spin mb-4" />
+          <p className="text-lg font-bold text-white mb-1">Finding the best plan for your area...</p>
+          <p className="text-white/50 text-sm">Checking availability in {zipCode}</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={cn('bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden', className)}>
+      {/* Progress bar */}
+      <div className="h-1 bg-white/5">
+        <div
+          className="h-full bg-[#00C853] transition-all duration-500 ease-out"
+          style={{ width: `${(step / 3) * 100}%` }}
+        />
+      </div>
+
+      <div className="p-5 md:p-6">
+        {/* Step indicator */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            {step > 1 && (
+              <button
+                onClick={() => { setStep(step - 1); setOwnership(''); }}
+                className="text-xs text-white/40 hover:text-white/70 transition-colors"
+              >
+                ← Back
+              </button>
+            )}
+          </div>
+          <span className="text-[10px] font-medium text-white/40 uppercase tracking-wider">
+            Step {step} of 3
+          </span>
+        </div>
+
+        {/* ─── Step 1: ZIP Code ─── */}
+        {step === 1 && (
+          <div className="animate-[fadeInUp_0.25s_ease-out]">
+            <h3 className="text-lg font-bold text-white mb-1">
+              Check availability in your area
+            </h3>
+            <p className="text-white/50 text-sm mb-4">Enter your ZIP to see offers near you</p>
+
+            <div className="flex gap-2">
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="postal-code"
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value.replace(/\D/g, '').slice(0, 5))}
+                placeholder="ZIP Code"
+                className="flex-1 px-4 py-3.5 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]"
+                maxLength={5}
+                autoFocus
+              />
+              <button
+                onClick={goToStep2}
+                disabled={!isStep1Valid}
+                className={cn(
+                  'px-5 py-3.5 rounded-lg font-semibold text-sm transition-all flex items-center gap-1 whitespace-nowrap',
+                  isStep1Valid
+                    ? 'bg-[#00C853] hover:bg-[#00A846] text-white'
+                    : 'bg-white/10 text-white/30 cursor-not-allowed'
+                )}
+              >
+                Check Availability <ChevronRight size={16} />
+              </button>
+            </div>
+
+            <p className="text-white/30 text-[11px] mt-3 flex items-center gap-1">
+              <Lock size={10} /> Your info is encrypted and never sold
+            </p>
+          </div>
+        )}
+
+        {/* ─── Step 2: Home Type + Ownership ─── */}
+        {step === 2 && (
+          <div className="animate-[fadeInUp_0.25s_ease-out]">
+            {/* ZIP badge */}
+            <div className="flex items-center gap-2 mb-3">
+              <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-xs font-medium px-2 py-0.5 rounded-full">
+                <CheckCircle size={11} /> {zipCode}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-bold text-white mb-1">
+              What type of home?
+            </h3>
+            <p className="text-white/50 text-sm mb-4">This helps us customize your quote</p>
+
+            <div className="grid grid-cols-4 gap-2 mb-5">
+              {HOME_TYPES.map((ht) => {
+                const Icon = ht.icon
+                return (
+                  <button
+                    key={ht.label}
+                    onClick={() => { setHomeType(ht.value); setHomeTypeLabel(ht.label) }}
+                    className={cn(
+                      'flex flex-col items-center gap-1.5 p-3 rounded-lg border transition-all text-center',
+                      homeType === ht.value && homeTypeLabel === ht.label
+                        ? 'border-[#00C853] bg-[#00C853]/10 text-[#00C853]'
+                        : 'border-white/10 text-white/60 hover:border-white/20 hover:text-white/80'
+                    )}
+                  >
+                    <Icon size={20} />
+                    <span className="text-xs font-medium">{ht.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {homeType && (
+              <>
+                <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-2">Do you own or rent?</p>
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  <button
+                    onClick={() => setOwnership('OWN')}
+                    className={cn(
+                      'py-3 rounded-lg border font-semibold text-sm transition-all',
+                      ownership === 'OWN'
+                        ? 'border-[#00C853] bg-[#00C853]/10 text-[#00C853]'
+                        : 'border-white/10 text-white/60 hover:border-white/20'
+                    )}
+                  >
+                    I Own
+                  </button>
+                  <button
+                    onClick={() => setOwnership('RENT')}
+                    className={cn(
+                      'py-3 rounded-lg border font-semibold text-sm transition-all',
+                      ownership === 'RENT'
+                        ? 'border-orange-400 bg-orange-400/10 text-orange-400'
+                        : 'border-white/10 text-white/60 hover:border-white/20'
+                    )}
+                  >
+                    I Rent
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Renter soft exit */}
+            {ownership === 'RENT' && !renterSubmitted && (
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <p className="text-white/80 text-sm font-medium mb-1">We currently serve homeowners</p>
+                <p className="text-white/50 text-xs mb-3">Enter your email to be the first to know when renter options launch.</p>
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    inputMode="email"
+                    value={renterEmail}
+                    onChange={(e) => setRenterEmail(e.target.value)}
+                    placeholder="you@email.com"
+                    className="flex-1 px-3 py-2.5 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder:text-white/30 outline-none focus:ring-1 focus:ring-[#00C853]"
+                  />
+                  <button
+                    onClick={handleRenterSubmit}
+                    className="px-4 py-2.5 bg-[#00C853] hover:bg-[#00A846] text-white rounded-lg text-sm font-medium transition-colors"
+                  >
+                    Notify Me
+                  </button>
+                </div>
+              </div>
+            )}
+            {ownership === 'RENT' && renterSubmitted && (
+              <div className="bg-[#00C853]/10 rounded-lg p-4 border border-[#00C853]/20 text-center">
+                <CheckCircle size={20} className="text-[#00C853] mx-auto mb-1" />
+                <p className="text-white/80 text-sm font-medium">Thanks! We&apos;ll keep you posted.</p>
+              </div>
+            )}
+
+            {ownership === 'OWN' && (
+              <button
+                onClick={goToStep3}
+                className="w-full py-3.5 bg-[#00C853] hover:bg-[#00A846] text-white rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5"
+              >
+                Continue <ChevronRight size={16} />
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* ─── Step 3: Contact Info ─── */}
+        {step === 3 && (
+          <div className="animate-[fadeInUp_0.25s_ease-out]">
+            {/* Answer badges */}
+            <div className="flex flex-wrap items-center gap-1.5 mb-3">
+              <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-[11px] font-medium px-2 py-0.5 rounded-full">
+                <CheckCircle size={10} /> {zipCode}
+              </span>
+              <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-[11px] font-medium px-2 py-0.5 rounded-full">
+                <CheckCircle size={10} /> {homeTypeLabel}
+              </span>
+              <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-[11px] font-medium px-2 py-0.5 rounded-full">
+                <CheckCircle size={10} /> Homeowner
+              </span>
+            </div>
+
+            <h3 className="text-lg font-bold text-white mb-1">
+              Get your free custom quote
+            </h3>
+            <p className="text-white/50 text-sm mb-4">A Vivint specialist will call with your personalized plan</p>
+
+            <div className="space-y-3 mb-4">
+              <input
+                type="text"
+                autoComplete="given-name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                onBlur={() => setTouched((t) => ({ ...t, firstName: true }))}
+                placeholder="First name"
+                className={cn(
+                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
+                  touched.firstName && !firstName.trim() && 'ring-2 ring-red-400'
+                )}
+              />
+              <input
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                value={phone}
+                onChange={(e) => setPhone(formatPhone(e.target.value))}
+                onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
+                placeholder="Phone number"
+                className={cn(
+                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
+                  touched.phone && phoneDigits.length !== 10 && 'ring-2 ring-red-400'
+                )}
+              />
+              <input
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+                placeholder="Email address"
+                className={cn(
+                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
+                  touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && 'ring-2 ring-red-400'
+                )}
+              />
+            </div>
+
+            <label className="flex items-start gap-2.5 mb-4 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={tcpaConsent}
+                onChange={(e) => setTcpaConsent(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border-white/20 text-[#00C853] focus:ring-[#00C853] bg-white/10"
+              />
+              <span className="text-[11px] text-white/40 leading-relaxed">
+                By submitting, you agree to receive calls/texts from ShieldHome.pro regarding your security quote. Msg &amp; data rates may apply. Reply STOP to cancel.
+              </span>
+            </label>
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 mb-3">
+                <p className="text-red-400 text-sm">{error}</p>
+              </div>
+            )}
+
+            <button
+              onClick={handleSubmit}
+              disabled={!isStep3Valid || submitting}
+              className={cn(
+                'w-full py-4 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2',
+                isStep3Valid && !submitting
+                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-lg shadow-green-900/30'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
+              )}
+            >
+              Get My Free Quote <ChevronRight size={16} />
+            </button>
+
+            <div className="flex items-center justify-center gap-3 mt-3 text-[10px] text-white/30">
+              <span className="flex items-center gap-1"><Lock size={10} /> Encrypted</span>
+              <span className="flex items-center gap-1"><ShieldCheck size={10} /> Never sold</span>
+              <span className="flex items-center gap-1"><Zap size={10} /> Instant quote</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

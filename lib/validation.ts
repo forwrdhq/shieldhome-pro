@@ -5,7 +5,7 @@ export const leadSchema = z.object({
   lastName: z.string().max(50).optional().default(''),
   email: z.string().email('Valid email required'),
   phone: z.string().min(10, 'Valid phone number required').max(20),
-  zipCode: z.string().min(5, 'ZIP code required').max(10),
+  zipCode: z.string().max(10).optional().default(''),
 
   propertyType: z.enum(['HOUSE', 'TOWNHOME', 'CONDO_APARTMENT', 'BUSINESS']).optional().nullable(),
   homeownership: z.enum(['OWN', 'RENT']).optional().nullable(),

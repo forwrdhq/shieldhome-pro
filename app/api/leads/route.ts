@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
         lastName: data.lastName,
         email: data.email,
         phone: data.phone,
-        zipCode: data.zipCode,
+        zipCode: data.zipCode || null,
         fullName: [data.firstName, data.lastName].filter(Boolean).join(' '),
         propertyType: (data.propertyType as any) || null,
         homeownership: (data.homeownership as any) || null,

@@ -15,15 +15,17 @@ function ThankYouContent() {
   const timeline = searchParams.get('timeline') || ''
 
   const isSwitch = segment === 'switch'
-  const risk = isSwitch ? null : getRiskLevel(entryPoints, concerns)
+  const isUpgrade = segment === 'upgrade'
+  const risk = (isSwitch || isUpgrade) ? null : getRiskLevel(entryPoints, concerns)
 
   useEffect(() => {
-    // Meta Lead fires in QuizFunnel/SwitchForm onSubmit — do NOT fire again here or it doubles
+    // Meta Lead fires in QuizFunnel/SwitchForm/UpgradeForm onSubmit — do NOT fire again here or it doubles
     if ((window as any).gtag) {
-      (window as any).gtag('event', 'conversion', { value: 900.0, currency: 'USD' })
-      ;(window as any).gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: isSwitch ? 'switch_form' : 'quiz_funnel', value: 900 })
+      const eventLabel = isSwitch ? 'switch_form' : isUpgrade ? 'upgrade_form' : 'quiz_funnel';
+      (window as any).gtag('event', 'conversion', { value: isUpgrade ? 600.0 : 900.0, currency: 'USD' })
+      ;(window as any).gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: eventLabel, value: isUpgrade ? 600 : 900 })
     }
-  }, [isSwitch])
+  }, [isSwitch, isUpgrade])
 
   const riskColors: Record<string, { bg: string; border: string; text: string; bar: string }> = {
     HIGH: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', bar: 'bg-red-500' },
@@ -45,11 +47,16 @@ function ThankYouContent() {
             <CheckCircle className="text-[#00C853]" size={40} />
           </div>
           <h1 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
-            {isSwitch ? 'Your Contract Buyout Request Is In!' : 'Your Free Quote Request Is In!'}
+            {isSwitch ? 'Your Contract Buyout Request Is In!' : isUpgrade ? 'Your Upgrade Request Is In!' : 'Your Free Quote Request Is In!'}
           </h1>
           {isSwitch && provider && (
             <p className="text-gray-600 text-lg">
               We&apos;re reviewing your {provider} contract details to prepare your buyout offer.
+            </p>
+          )}
+          {isUpgrade && (
+            <p className="text-gray-600 text-lg">
+              An upgrade specialist will review your current system and call you with your options.
             </p>
           )}
         </div>
@@ -105,11 +112,40 @@ function ThankYouContent() {
           </div>
         )}
 
+        {/* Upgrade confirmation card */}
+        {isUpgrade && (
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 mb-8">
+            <div className="flex items-center gap-2 mb-3">
+              <Shield size={20} className="text-[#00C853]" />
+              <h2 className="font-bold text-lg text-gray-900">Upgrade Review In Progress</h2>
+            </div>
+            <p className="text-gray-700 text-sm">
+              An upgrade specialist will review your current Vivint system and call you with the best upgrade options, including the Buy 2 Get 1 Free camera deal and up to $500 in equipment savings.
+            </p>
+          </div>
+        )}
+
         {/* What Happens Next */}
         <h2 className="text-xl font-bold text-[#1A1A2E] mb-4">Here&apos;s what happens next:</h2>
 
         <div className="space-y-4 mb-8">
-          {(isSwitch ? [
+          {(isUpgrade ? [
+            {
+              icon: <Clock className="text-[#00C853]" size={24} />,
+              title: '1. An Upgrade Specialist Will Call Within 10 Minutes',
+              desc: 'They\'ll review your current Vivint equipment and recommend the best upgrades for your home.',
+            },
+            {
+              icon: <MessageSquare className="text-[#00C853]" size={24} />,
+              title: '2. We\'ll Design Your Upgrade',
+              desc: 'Your specialist will apply your savings — Buy 2 cameras get 1 free, plus up to $500 off equipment.',
+            },
+            {
+              icon: <Home className="text-[#00C853]" size={24} />,
+              title: '3. Professional Installation',
+              desc: 'A certified Vivint tech installs your new equipment — most upgrades are done in under an hour.',
+            },
+          ] : isSwitch ? [
             {
               icon: <Clock className="text-[#00C853]" size={24} />,
               title: '1. Expect a Call Within 2 Minutes',

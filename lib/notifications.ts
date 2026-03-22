@@ -30,9 +30,15 @@ interface LeadNotificationData {
 
 export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
   const isSwitch = lead.segment === 'switch'
-  const body = isSwitch
-    ? `Hi ${lead.firstName}! This is ShieldHome Pro. We received your contract buyout request${lead.currentProvider ? ` for your ${lead.currentProvider} system` : ''}. A Smart Home Pro will call you shortly to discuss your buyout options (up to $1,000 covered). Questions? Call/text us: ${PHONE_NUMBER}`
-    : `Hi ${lead.firstName}! This is ShieldHome Pro, your authorized Vivint dealer. We received your free quote request! A Smart Home Pro will call you shortly at this number. Questions? Call/text us: ${PHONE_NUMBER}`
+  const isUpgrade = lead.segment === 'upgrade'
+  let body: string
+  if (isSwitch) {
+    body = `Hi ${lead.firstName}! This is ShieldHome Pro. We received your contract buyout request${lead.currentProvider ? ` for your ${lead.currentProvider} system` : ''}. A Smart Home Pro will call you shortly to discuss your buyout options (up to $1,000 covered). Questions? Call/text us: ${PHONE_NUMBER}`
+  } else if (isUpgrade) {
+    body = `Hi ${lead.firstName}! This is ShieldHome Pro. We received your upgrade request! A Smart Home Pro will call you shortly to discuss your camera and equipment upgrade options. Questions? Call/text us: ${PHONE_NUMBER}`
+  } else {
+    body = `Hi ${lead.firstName}! This is ShieldHome Pro, your authorized Vivint dealer. We received your free quote request! A Smart Home Pro will call you shortly at this number. Questions? Call/text us: ${PHONE_NUMBER}`
+  }
   const sid = await sendSms(formatPhone(lead.phone), body)
   if (sid) {
     await prisma.smsLog.create({
@@ -59,6 +65,7 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
   const priorityEmoji: Record<string, string> = { HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪' }
   const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
   const isSwitch = lead.segment === 'switch'
+  const isUpgrade = lead.segment === 'upgrade'
 
   let body: string
 
@@ -80,6 +87,23 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
       ``,
       `👉 ${APP_URL}/leads/${lead.id}`,
       `CALL NOW — pitch the $1,000 buyout offer!`,
+    ].join('\n')
+  } else if (isUpgrade) {
+    body = [
+      `${priorityEmoji[lead.priority] || '🔵'} UPGRADE LEAD — ${lead.priority} PRIORITY`,
+      ``,
+      `👤 ${lead.fullName}`,
+      `📞 ${lead.phone}`,
+      `📧 ${lead.email}`,
+      ``,
+      `⬆️ Existing Vivint customer — wants equipment upgrade`,
+      `🎯 Offer: Buy 2 cameras get 1 free + up to $500 off`,
+      ``,
+      `📊 Lead Score: ${lead.leadScore}/100`,
+      `📣 Source: ${source}`,
+      ``,
+      `👉 ${APP_URL}/leads/${lead.id}`,
+      `CALL NOW — discuss upgrade options!`,
     ].join('\n')
   } else {
     const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'Unknown'
@@ -111,14 +135,41 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
 
 export async function sendWelcomeEmail(lead: LeadNotificationData) {
   const isSwitch = lead.segment === 'switch'
+  const isUpgrade = lead.segment === 'upgrade'
 
   const subject = isSwitch
     ? 'Your Contract Buyout Request — Here\'s What\'s Next'
+    : isUpgrade
+    ? 'Your Vivint Upgrade Request — Here\'s What\'s Next'
     : 'Your Free Home Security Quote — Here\'s What\'s Next'
 
   let detailsHtml: string
 
-  if (isSwitch) {
+  if (isUpgrade) {
+    detailsHtml = `
+    <h2 style="color: #1a1a2e;">Your Vivint Upgrade Request</h2>
+    <p>Hi ${lead.firstName},</p>
+    <p>Thanks for your interest in upgrading your Vivint system! An upgrade specialist will call you shortly.</p>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #00C853;">
+      <h3 style="margin-top: 0;">Here's what happens next:</h3>
+      <p>📞 An upgrade specialist will call you at <strong>${lead.phone}</strong> to discuss your options.</p>
+      <p>During your consultation, they'll:</p>
+      <ul>
+        <li>Review your current Vivint equipment</li>
+        <li>Recommend the best upgrades for your home</li>
+        <li>Apply your upgrade savings (Buy 2 cameras get 1 free + up to $500 off)</li>
+        <li>Schedule professional installation at your convenience</li>
+      </ul>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+      <h3 style="margin-top: 0;">Your exclusive offers:</h3>
+      <p>📷 <strong>Buy 2 cameras, get 1 free</strong> — Outdoor Camera Pro, Indoor Camera, or Doorbell Camera Pro</p>
+      <p>💰 <strong>Up to $500 off equipment</strong> — cameras, smart locks, sensors, and more</p>
+      <p>🔧 <strong>Free professional installation</strong> — a certified tech handles everything</p>
+    </div>`
+  } else if (isSwitch) {
     detailsHtml = `
     <h2 style="color: #1a1a2e;">Your Contract Buyout Request</h2>
     <p>Hi ${lead.firstName},</p>
@@ -226,22 +277,39 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
   const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
   const emoji = priorityEmoji[lead.priority] || '🔵'
   const isSwitch = lead.segment === 'switch'
+  const isUpgrade = lead.segment === 'upgrade'
 
   // Build blocks based on lead type
+  const headerText = isSwitch
+    ? `${emoji} CONTRACT BUYOUT LEAD: ${lead.fullName}`
+    : isUpgrade
+    ? `${emoji} UPGRADE LEAD: ${lead.fullName}`
+    : `${emoji} New Lead: ${lead.fullName}`
+
   const blocks: any[] = [
     {
       type: 'header',
-      text: {
-        type: 'plain_text',
-        text: isSwitch
-          ? `${emoji} CONTRACT BUYOUT LEAD: ${lead.fullName}`
-          : `${emoji} New Lead: ${lead.fullName}`,
-        emoji: true,
-      }
+      text: { type: 'plain_text', text: headerText, emoji: true }
     },
   ]
 
-  if (isSwitch) {
+  if (isUpgrade) {
+    blocks.push(
+      {
+        type: 'section',
+        text: { type: 'mrkdwn', text: `⬆️ *Existing Vivint customer* — wants equipment upgrade` }
+      },
+      {
+        type: 'section',
+        fields: [
+          { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
+          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
+          { type: 'mrkdwn', text: `*📊 Lead Score:*\n${lead.leadScore}/100` },
+          { type: 'mrkdwn', text: `*🔥 Priority:*\n${lead.priority}` },
+        ]
+      },
+    )
+  } else if (isSwitch) {
     // Switch-specific: provider & contract info
     blocks.push(
       {
@@ -319,6 +387,8 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
           type: 'mrkdwn',
           text: isSwitch
             ? `⚡ *BUYOUT LEAD — pitch the $1,000 contract buyout offer. Call now!*`
+            : isUpgrade
+            ? `⚡ *UPGRADE LEAD — existing customer, discuss camera & equipment upgrade options!*`
             : `⚡ *Speed to lead is everything — call now!*`,
         }
       ]

@@ -3,11 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Shield, Phone, ChevronRight, ChevronLeft, Check, Lock, Award, CheckCircle,
+  ChevronRight, ChevronLeft, Lock, Award, CheckCircle, ShieldCheck, Users,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
-import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 
 function formatPhone(value: string): string {
   const digits = value.replace(/\D/g, '').slice(0, 10)
@@ -52,14 +51,11 @@ export default function SwitchForm({ className }: SwitchFormProps) {
   // Step 2
   const [contractMonths, setContractMonths] = useState('')
   const [monthlyPayment, setMonthlyPayment] = useState('')
-
   // Step 3
   const [firstName, setFirstName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [tcpaConsent, setTcpaConsent] = useState(false)
-
-  // Validation
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
   const isStep1Valid = provider && zipCode.length >= 5
@@ -79,14 +75,9 @@ export default function SwitchForm({ className }: SwitchFormProps) {
   function goToStep2() {
     if (!isStep1Valid) return
     setStep(2)
-    // Fire tracking
     if (typeof window !== 'undefined') {
-      if ((window as any).fbq) {
-        (window as any).fbq('trackCustom', 'SwitchStep', { step: 1, provider })
-      }
-      if ((window as any).dataLayer) {
-        (window as any).dataLayer.push({ event: 'switch_step', step: 1, provider })
-      }
+      if ((window as any).fbq) (window as any).fbq('trackCustom', 'SwitchStep', { step: 1, provider })
+      if ((window as any).dataLayer) (window as any).dataLayer.push({ event: 'switch_step', step: 1, provider })
     }
   }
 
@@ -94,12 +85,8 @@ export default function SwitchForm({ className }: SwitchFormProps) {
     if (!isStep2Valid) return
     setStep(3)
     if (typeof window !== 'undefined') {
-      if ((window as any).fbq) {
-        (window as any).fbq('trackCustom', 'SwitchStep', { step: 2, contractMonths })
-      }
-      if ((window as any).dataLayer) {
-        (window as any).dataLayer.push({ event: 'switch_step', step: 2, contract_months: contractMonths })
-      }
+      if ((window as any).fbq) (window as any).fbq('trackCustom', 'SwitchStep', { step: 2, contractMonths })
+      if ((window as any).dataLayer) (window as any).dataLayer.push({ event: 'switch_step', step: 2, contract_months: contractMonths })
     }
   }
 
@@ -109,7 +96,6 @@ export default function SwitchForm({ className }: SwitchFormProps) {
     setShowLoading(true)
     setError('')
 
-    // Show loading animation for 1.5s before actual submission
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
     try {
@@ -137,19 +123,13 @@ export default function SwitchForm({ className }: SwitchFormProps) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
-      // Fire conversion events
       if (typeof window !== 'undefined') {
         if ((window as any).fbq) {
           (window as any).fbq('track', 'Lead', { content_name: 'contract_buyout', value: 900, currency: 'USD' })
           ;(window as any).fbq('track', 'CompleteRegistration')
         }
         if ((window as any).dataLayer) {
-          (window as any).dataLayer.push({
-            event: 'lead_submitted',
-            lead_value: 900,
-            segment: 'switch',
-            provider: currentProvider,
-          })
+          (window as any).dataLayer.push({ event: 'lead_submitted', lead_value: 900, segment: 'switch', provider: currentProvider })
         }
       }
 
@@ -162,202 +142,211 @@ export default function SwitchForm({ className }: SwitchFormProps) {
     }
   }
 
-  // Loading overlay
+  // ─── Loading ───
   if (showLoading && submitting) {
     return (
-      <div className={cn('bg-white rounded-2xl shadow-2xl border border-gray-100 p-8 md:p-12', className)}>
-        <div className="flex flex-col items-center justify-center py-12">
-          <div className="w-16 h-16 border-4 border-gray-200 border-t-[#00C853] rounded-full animate-spin mb-6" />
-          <p className="text-xl font-bold text-[#1A1A2E] mb-2">Calculating your buyout eligibility...</p>
-          <p className="text-gray-500 text-sm">This takes just a moment</p>
+      <div className={cn('bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12', className)}>
+        <div className="flex flex-col items-center justify-center py-10">
+          <div className="w-14 h-14 border-[3px] border-gray-200 border-t-[#00C853] rounded-full animate-spin mb-5" />
+          <p className="text-lg font-bold text-[#1A1A2E] mb-1">Calculating your buyout eligibility...</p>
+          <p className="text-gray-400 text-sm">Reviewing {provider} contract terms</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className={cn('bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:p-8', className)}>
-      {/* Progress indicator */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          {step > 1 && (
-            <button
-              onClick={() => setStep(step - 1)}
-              className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              <ChevronLeft size={16} />
-              Back
-            </button>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {[1, 2, 3].map((s) => (
-            <div
-              key={s}
-              className={cn(
-                'w-3 h-3 rounded-full transition-colors',
-                s === step ? 'bg-[#00C853]' : s < step ? 'bg-[#00C853]/50' : 'bg-gray-200'
-              )}
-            />
-          ))}
-          <span className="text-xs text-gray-500 ml-1">Step {step} of 3</span>
-        </div>
+    <div className={cn('bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden', className)}>
+      {/* Progress bar — full width across top */}
+      <div className="h-1.5 bg-gray-100">
+        <div
+          className="h-full bg-[#00C853] transition-all duration-500 ease-out"
+          style={{ width: `${(step / 3) * 100}%` }}
+        />
       </div>
 
-      {/* Step 1: Provider */}
-      {step === 1 && (
-        <div className="animate-[fadeInUp_0.3s_ease-out]">
-          <h3 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">
-            Who is your current security provider?
-          </h3>
-          <p className="text-gray-500 text-sm mb-6">Select your provider so we can assess your buyout options</p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-            {PROVIDERS.map((p) => (
+      <div className="p-6 md:p-8">
+        {/* Step indicator + back button */}
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            {step > 1 ? (
               <button
-                key={p.value}
-                onClick={() => handleProviderSelect(p.value)}
-                className={cn(
-                  'p-4 rounded-xl border-2 text-center font-semibold transition-all min-h-[56px]',
-                  provider === p.value
-                    ? 'border-[#00C853] bg-green-50 text-[#00C853]'
-                    : 'border-gray-200 hover:border-gray-300 text-gray-700'
-                )}
+                onClick={() => setStep(step - 1)}
+                className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600 transition-colors"
               >
-                {p.label}
+                <ChevronLeft size={16} />
+                Back
               </button>
-            ))}
-          </div>
-
-          {provider === 'Other' && (
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Provider name</label>
-              <input
-                type="text"
-                value={otherProvider}
-                onChange={(e) => setOtherProvider(e.target.value)}
-                placeholder="Enter your provider name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base"
-              />
-            </div>
-          )}
-
-          {provider && (
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
-              <input
-                type="text"
-                inputMode="numeric"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value.replace(/\D/g, '').slice(0, 5))}
-                placeholder="Enter your ZIP code"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base"
-                maxLength={5}
-              />
-            </div>
-          )}
-
-          <button
-            onClick={goToStep2}
-            disabled={!isStep1Valid}
-            className={cn(
-              'w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2',
-              isStep1Valid
-                ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-lg shadow-green-200'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            ) : (
+              <div />
             )}
-          >
-            Next <ChevronRight size={20} />
-          </button>
+          </div>
+          <span className="text-xs font-medium text-gray-400 tracking-wide uppercase">
+            Step {step} of 3
+          </span>
         </div>
-      )}
 
-      {/* Step 2: Contract Details */}
-      {step === 2 && (
-        <div className="animate-[fadeInUp_0.3s_ease-out]">
-          <h3 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">
-            Tell us about your contract
-          </h3>
-          <p className="text-gray-500 text-sm mb-6">This helps us calculate your buyout amount</p>
+        {/* ─── Step 1: Provider ─── */}
+        {step === 1 && (
+          <div className="animate-[fadeInUp_0.25s_ease-out]">
+            <h3 className="text-lg md:text-xl font-bold text-[#1A1A2E] mb-1">
+              Who is your current security provider?
+            </h3>
+            <p className="text-gray-400 text-sm mb-5">We&apos;ll calculate your buyout amount</p>
 
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              How many months are left on your contract?
-            </label>
-            <select
-              value={contractMonths}
-              onChange={(e) => setContractMonths(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base bg-white appearance-none"
-            >
-              <option value="">Select...</option>
-              {CONTRACT_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <div className="grid grid-cols-3 gap-2.5 mb-5">
+              {PROVIDERS.map((p) => (
+                <button
+                  key={p.value}
+                  onClick={() => handleProviderSelect(p.value)}
+                  className={cn(
+                    'py-3.5 px-3 rounded-lg border text-center font-semibold text-sm transition-all',
+                    provider === p.value
+                      ? 'border-[#00C853] bg-[#00C853]/5 text-[#00C853] shadow-sm shadow-green-100'
+                      : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                  )}
+                >
+                  {p.label}
+                </button>
               ))}
-            </select>
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              What do you pay per month? <span className="text-gray-400 font-normal">(optional)</span>
-            </label>
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
-              <input
-                type="text"
-                inputMode="decimal"
-                value={monthlyPayment}
-                onChange={(e) => setMonthlyPayment(e.target.value.replace(/[^\d.]/g, ''))}
-                placeholder="$45–$65 is typical"
-                className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base"
-              />
             </div>
-          </div>
 
-          <button
-            onClick={goToStep3}
-            disabled={!isStep2Valid}
-            className={cn(
-              'w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2',
-              isStep2Valid
-                ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-lg shadow-green-200'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            {provider === 'Other' && (
+              <div className="mb-5">
+                <input
+                  type="text"
+                  value={otherProvider}
+                  onChange={(e) => setOtherProvider(e.target.value)}
+                  placeholder="Provider name"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm"
+                />
+              </div>
             )}
-          >
-            Next <ChevronRight size={20} />
-          </button>
-        </div>
-      )}
 
-      {/* Step 3: Contact Info */}
-      {step === 3 && (
-        <div className="animate-[fadeInUp_0.3s_ease-out]">
-          <h3 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">
-            See your buyout eligibility
-          </h3>
-          <p className="text-gray-500 text-sm mb-6">We&apos;ll calculate your buyout amount and call you with your options</p>
+            {provider && (
+              <div className="mb-5">
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Your ZIP Code</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value.replace(/\D/g, '').slice(0, 5))}
+                  placeholder="e.g. 84003"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm"
+                  maxLength={5}
+                />
+              </div>
+            )}
 
-          <div className="space-y-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+            <button
+              onClick={goToStep2}
+              disabled={!isStep1Valid}
+              className={cn(
+                'w-full py-3.5 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5',
+                isStep1Valid
+                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-sm'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              )}
+            >
+              Continue <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+
+        {/* ─── Step 2: Contract Details ─── */}
+        {step === 2 && (
+          <div className="animate-[fadeInUp_0.25s_ease-out]">
+            {/* Answer badge */}
+            <div className="flex items-center gap-2 mb-4">
+              <span className="inline-flex items-center gap-1 bg-green-50 text-[#00C853] text-xs font-medium px-2.5 py-1 rounded-full">
+                <CheckCircle size={12} /> {provider}
+              </span>
+            </div>
+
+            <h3 className="text-lg md:text-xl font-bold text-[#1A1A2E] mb-1">
+              Tell us about your contract
+            </h3>
+            <p className="text-gray-400 text-sm mb-5">This helps us estimate your buyout amount</p>
+
+            <div className="mb-5">
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">
+                Months remaining on contract
+              </label>
+              <select
+                value={contractMonths}
+                onChange={(e) => setContractMonths(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm bg-white appearance-none"
+              >
+                <option value="">Select...</option>
+                {CONTRACT_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-5">
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">
+                Current monthly payment <span className="text-gray-300 normal-case">(optional)</span>
+              </label>
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={monthlyPayment}
+                  onChange={(e) => setMonthlyPayment(e.target.value.replace(/[^\d.]/g, ''))}
+                  placeholder="45–65 is typical"
+                  className="w-full pl-7 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={goToStep3}
+              disabled={!isStep2Valid}
+              className={cn(
+                'w-full py-3.5 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5',
+                isStep2Valid
+                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-sm'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              )}
+            >
+              Continue <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+
+        {/* ─── Step 3: Contact Info ─── */}
+        {step === 3 && (
+          <div className="animate-[fadeInUp_0.25s_ease-out]">
+            {/* Answer badges */}
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <span className="inline-flex items-center gap-1 bg-green-50 text-[#00C853] text-xs font-medium px-2.5 py-1 rounded-full">
+                <CheckCircle size={12} /> {provider}
+              </span>
+              <span className="inline-flex items-center gap-1 bg-green-50 text-[#00C853] text-xs font-medium px-2.5 py-1 rounded-full">
+                <CheckCircle size={12} /> {CONTRACT_OPTIONS.find(o => o.value === contractMonths)?.label}
+              </span>
+            </div>
+
+            <h3 className="text-lg md:text-xl font-bold text-[#1A1A2E] mb-1">
+              See your buyout eligibility
+            </h3>
+            <p className="text-gray-400 text-sm mb-5">We&apos;ll call you with your buyout amount — no obligation</p>
+
+            <div className="space-y-3 mb-5">
               <input
                 type="text"
                 autoComplete="given-name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 onBlur={() => setTouched((t) => ({ ...t, firstName: true }))}
-                placeholder="Your first name"
+                placeholder="First name"
                 className={cn(
-                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base',
-                  touched.firstName && !firstName.trim() ? 'border-red-300' : 'border-gray-300'
+                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm',
+                  touched.firstName && !firstName.trim() ? 'border-red-300' : 'border-gray-200'
                 )}
               />
-              {touched.firstName && !firstName.trim() && (
-                <p className="text-red-500 text-xs mt-1">First name is required</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
               <input
                 type="tel"
                 inputMode="tel"
@@ -365,19 +354,12 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                 value={phone}
                 onChange={(e) => setPhone(formatPhone(e.target.value))}
                 onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
-                placeholder="(555) 123-4567"
+                placeholder="Phone number"
                 className={cn(
-                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base',
-                  touched.phone && phoneDigits.length !== 10 ? 'border-red-300' : 'border-gray-300'
+                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm',
+                  touched.phone && phoneDigits.length !== 10 ? 'border-red-300' : 'border-gray-200'
                 )}
               />
-              {touched.phone && phoneDigits.length !== 10 && (
-                <p className="text-red-500 text-xs mt-1">Valid 10-digit phone number required</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 type="email"
                 inputMode="email"
@@ -385,58 +367,54 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onBlur={() => setTouched((t) => ({ ...t, email: true }))}
-                placeholder="you@email.com"
+                placeholder="Email address"
                 className={cn(
-                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base',
-                  touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'border-red-300' : 'border-gray-300'
+                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm',
+                  touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'border-red-300' : 'border-gray-200'
                 )}
               />
-              {touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
-                <p className="text-red-500 text-xs mt-1">Valid email required</p>
-              )}
             </div>
-          </div>
 
-          {/* TCPA Consent */}
-          <label className="flex items-start gap-3 mb-6 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={tcpaConsent}
-              onChange={(e) => setTcpaConsent(e.target.checked)}
-              className="mt-1 w-4 h-4 rounded border-gray-300 text-[#00C853] focus:ring-[#00C853]"
-            />
-            <span className="text-xs text-gray-500 leading-relaxed">
-              By submitting, you agree to receive calls/texts from ShieldHome.pro. Msg &amp; data rates may apply. Reply STOP to cancel.
-            </span>
-          </label>
+            <label className="flex items-start gap-3 mb-5 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={tcpaConsent}
+                onChange={(e) => setTcpaConsent(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#00C853] focus:ring-[#00C853]"
+              />
+              <span className="text-[11px] text-gray-400 leading-relaxed">
+                By submitting, you agree to receive calls/texts from ShieldHome.pro regarding your security assessment. Msg &amp; data rates may apply. Reply STOP to cancel.
+              </span>
+            </label>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
-          )}
-
-          <button
-            onClick={handleSubmit}
-            disabled={!isStep3Valid || submitting}
-            className={cn(
-              'w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2',
-              isStep3Valid && !submitting
-                ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-lg shadow-green-200 animate-[pulse-green_2s_infinite]'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
             )}
-          >
-            Get My Free Switch Assessment <ChevronRight size={20} />
-          </button>
 
-          {/* Trust signals */}
-          <div className="flex items-center justify-center gap-4 mt-4 text-xs text-gray-400">
-            <span className="flex items-center gap-1"><Lock size={12} /> 256-bit SSL</span>
-            <span className="flex items-center gap-1"><Award size={12} /> BBB A+</span>
-            <span className="flex items-center gap-1"><CheckCircle size={12} /> #1 Rated</span>
+            <button
+              onClick={handleSubmit}
+              disabled={!isStep3Valid || submitting}
+              className={cn(
+                'w-full py-4 rounded-lg font-bold transition-all flex items-center justify-center gap-2',
+                isStep3Valid && !submitting
+                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-md shadow-green-200/50'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              )}
+            >
+              Get My Free Buyout Assessment <ChevronRight size={18} />
+            </button>
+
+            {/* Trust row */}
+            <div className="flex items-center justify-center gap-3 mt-4 text-[11px] text-gray-400">
+              <span className="flex items-center gap-1"><Lock size={11} /> Encrypted</span>
+              <span className="flex items-center gap-1"><ShieldCheck size={11} /> BBB A+</span>
+              <span className="flex items-center gap-1"><Users size={11} /> 2,400+ switched</span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

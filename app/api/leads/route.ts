@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    // Fire notifications asynchronously (don't block response)
+    // Fire notifications — must be awaited or Vercel kills them before completion
     const notifData = {
       id: lead.id,
       firstName: lead.firstName,

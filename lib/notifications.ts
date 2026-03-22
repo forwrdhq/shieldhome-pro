@@ -22,10 +22,17 @@ interface LeadNotificationData {
   medium?: string | null
   campaign?: string | null
   productsInterested: string[]
+  segment?: string | null
+  currentProvider?: string | null
+  contractMonthsRemaining?: string | null
+  currentMonthlyPayment?: string | null
 }
 
 export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
-  const body = `Hi ${lead.firstName}! This is ShieldHome Pro, your authorized Vivint dealer. We received your free quote request! A Smart Home Pro will call you shortly at this number. Questions? Call/text us: ${PHONE_NUMBER}`
+  const isSwitch = lead.segment === 'switch'
+  const body = isSwitch
+    ? `Hi ${lead.firstName}! This is ShieldHome Pro. We received your contract buyout request${lead.currentProvider ? ` for your ${lead.currentProvider} system` : ''}. A Smart Home Pro will call you shortly to discuss your buyout options (up to $1,000 covered). Questions? Call/text us: ${PHONE_NUMBER}`
+    : `Hi ${lead.firstName}! This is ShieldHome Pro, your authorized Vivint dealer. We received your free quote request! A Smart Home Pro will call you shortly at this number. Questions? Call/text us: ${PHONE_NUMBER}`
   const sid = await sendSms(formatPhone(lead.phone), body)
   if (sid) {
     await prisma.smsLog.create({
@@ -49,50 +56,98 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
 
   if (repPhones.length === 0) return
 
-  const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'Unknown'
-  const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'Unknown'
-
   const priorityEmoji: Record<string, string> = { HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪' }
-  const products = lead.productsInterested?.length ? lead.productsInterested.join(', ') : 'N/A'
   const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
+  const isSwitch = lead.segment === 'switch'
 
-  const body = [
-    `${priorityEmoji[lead.priority] || '🔵'} NEW LEAD — ${lead.priority} PRIORITY`,
-    ``,
-    `👤 ${lead.fullName}`,
-    `📞 ${lead.phone}`,
-    `📧 ${lead.email}`,
-    `📍 ZIP: ${lead.zipCode || 'N/A'}`,
-    ``,
-    `🏠 Property: ${propertyLabel}`,
-    `⏰ Timeline: ${timelineLabel}`,
-    `🛡️ Interested in: ${products}`,
-    ``,
-    `📊 Lead Score: ${lead.leadScore}/100`,
-    `📣 Source: ${source}`,
-    ``,
-    `👉 ${APP_URL}/leads/${lead.id}`,
-    `CALL NOW — speed to lead is everything!`,
-  ].join('\n')
+  let body: string
+
+  if (isSwitch) {
+    body = [
+      `${priorityEmoji[lead.priority] || '🔵'} CONTRACT BUYOUT LEAD — ${lead.priority} PRIORITY`,
+      ``,
+      `👤 ${lead.fullName}`,
+      `📞 ${lead.phone}`,
+      `📧 ${lead.email}`,
+      `📍 ZIP: ${lead.zipCode || 'N/A'}`,
+      ``,
+      `🔄 Switching from: ${lead.currentProvider || 'Unknown'}`,
+      `📋 Contract left: ${lead.contractMonthsRemaining || 'N/A'}`,
+      `💰 Paying now: ${lead.currentMonthlyPayment ? '$' + lead.currentMonthlyPayment + '/mo' : 'Not provided'}`,
+      ``,
+      `📊 Lead Score: ${lead.leadScore}/100`,
+      `📣 Source: ${source}`,
+      ``,
+      `👉 ${APP_URL}/leads/${lead.id}`,
+      `CALL NOW — pitch the $1,000 buyout offer!`,
+    ].join('\n')
+  } else {
+    const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'Unknown'
+    const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'Unknown'
+    const products = lead.productsInterested?.length ? lead.productsInterested.join(', ') : 'N/A'
+
+    body = [
+      `${priorityEmoji[lead.priority] || '🔵'} NEW LEAD — ${lead.priority} PRIORITY`,
+      ``,
+      `👤 ${lead.fullName}`,
+      `📞 ${lead.phone}`,
+      `📧 ${lead.email}`,
+      `📍 ZIP: ${lead.zipCode || 'N/A'}`,
+      ``,
+      `🏠 Property: ${propertyLabel}`,
+      `⏰ Timeline: ${timelineLabel}`,
+      `🛡️ Interested in: ${products}`,
+      ``,
+      `📊 Lead Score: ${lead.leadScore}/100`,
+      `📣 Source: ${source}`,
+      ``,
+      `👉 ${APP_URL}/leads/${lead.id}`,
+      `CALL NOW — speed to lead is everything!`,
+    ].join('\n')
+  }
 
   await Promise.allSettled(repPhones.map(phone => sendSms(formatPhone(phone), body)))
 }
 
 export async function sendWelcomeEmail(lead: LeadNotificationData) {
-  const productsLabel = lead.productsInterested.join(', ') || 'N/A'
-  const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'N/A'
-  const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'N/A'
+  const isSwitch = lead.segment === 'switch'
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
-<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1a1a2e;">
-  <div style="background: #00C853; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
-    <h1 style="color: white; margin: 0; font-size: 24px;">ShieldHome Pro</h1>
-    <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0;">Authorized Vivint Smart Home Dealer</p>
-  </div>
-  <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px;">
+  const subject = isSwitch
+    ? 'Your Contract Buyout Request — Here\'s What\'s Next'
+    : 'Your Free Home Security Quote — Here\'s What\'s Next'
+
+  let detailsHtml: string
+
+  if (isSwitch) {
+    detailsHtml = `
+    <h2 style="color: #1a1a2e;">Your Contract Buyout Request</h2>
+    <p>Hi ${lead.firstName},</p>
+    <p>Thanks for reaching out about switching your home security! We're reviewing your details and preparing your buyout offer.</p>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #00C853;">
+      <h3 style="margin-top: 0;">Here's what happens next:</h3>
+      <p>📞 A Vivint Smart Home Pro will call you shortly at <strong>${lead.phone}</strong> to discuss your buyout options.</p>
+      <p>During your free consultation, they'll:</p>
+      <ul>
+        <li>Calculate your exact buyout amount (up to $1,000 covered)</li>
+        <li>Design a custom Vivint system for your home</li>
+        <li>Handle all cancellation paperwork with ${lead.currentProvider || 'your current provider'}</li>
+        <li>Schedule your installation — usually under 2 hours</li>
+      </ul>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+      <h3 style="margin-top: 0;">What you told us:</h3>
+      <p>🔄 Current Provider: <strong>${lead.currentProvider || 'N/A'}</strong></p>
+      <p>📋 Contract Remaining: <strong>${lead.contractMonthsRemaining || 'N/A'}</strong></p>
+      ${lead.currentMonthlyPayment ? `<p>💰 Current Monthly: <strong>$${lead.currentMonthlyPayment}/mo</strong></p>` : ''}
+    </div>`
+  } else {
+    const productsLabel = lead.productsInterested.join(', ') || 'N/A'
+    const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'N/A'
+    const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'N/A'
+
+    detailsHtml = `
     <h2 style="color: #1a1a2e;">Your Free Home Security Quote</h2>
     <p>Hi ${lead.firstName},</p>
     <p>Thanks for requesting your free home security quote! You're one step closer to protecting what matters most.</p>
@@ -114,12 +169,25 @@ export async function sendWelcomeEmail(lead: LeadNotificationData) {
       <p>🏠 Property: <strong>${propertyLabel}</strong></p>
       <p>🛡️ Interested in: <strong>${productsLabel}</strong></p>
       <p>⏰ Timeline: <strong>${timelineLabel}</strong></p>
-    </div>
+    </div>`
+  }
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1a1a2e;">
+  <div style="background: #00C853; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+    <h1 style="color: white; margin: 0; font-size: 24px;">ShieldHome Pro</h1>
+    <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0;">Authorized Vivint Smart Home Dealer</p>
+  </div>
+  <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px;">
+    ${detailsHtml}
 
     <p>Can't wait for the call? Reach us anytime at <a href="tel:${PHONE_NUMBER}" style="color: #00C853;">${PHONE_NUMBER}</a></p>
 
     <div style="text-align: center; margin: 30px 0;">
-      <a href="${APP_URL}" style="background: #00C853; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Learn About Vivint Products →</a>
+      <a href="${APP_URL}" style="background: #00C853; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">${isSwitch ? 'Learn About Vivint Systems →' : 'Learn About Vivint Products →'}</a>
     </div>
 
     <p style="color: #666; font-size: 12px;">Talk soon,<br>The ShieldHome Pro Team<br>Authorized Vivint Smart Home Dealer</p>
@@ -128,18 +196,14 @@ export async function sendWelcomeEmail(lead: LeadNotificationData) {
 </body>
 </html>`
 
-  const msgId = await sendEmail({
-    to: lead.email,
-    subject: 'Your Free Home Security Quote — Here\'s What\'s Next',
-    html,
-  })
+  const msgId = await sendEmail({ to: lead.email, subject, html })
 
   if (msgId) {
     await prisma.emailLog.create({
       data: {
         leadId: lead.id,
         type: 'welcome',
-        subject: 'Your Free Home Security Quote — Here\'s What\'s Next',
+        subject,
         sendgridId: msgId,
         status: 'sent',
       }
@@ -159,71 +223,124 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
     HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪'
   }
 
-  const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'N/A'
-  const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'N/A'
-  const ownershipLabel = lead.homeownership ? HOMEOWNERSHIP_LABELS[lead.homeownership] || lead.homeownership : 'N/A'
-  const concerns = lead.productsInterested?.length
-    ? lead.productsInterested.map(c => CONCERN_LABELS[c] || c).join(', ')
-    : 'N/A'
   const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
   const emoji = priorityEmoji[lead.priority] || '🔵'
+  const isSwitch = lead.segment === 'switch'
+
+  // Build blocks based on lead type
+  const blocks: any[] = [
+    {
+      type: 'header',
+      text: {
+        type: 'plain_text',
+        text: isSwitch
+          ? `${emoji} CONTRACT BUYOUT LEAD: ${lead.fullName}`
+          : `${emoji} New Lead: ${lead.fullName}`,
+        emoji: true,
+      }
+    },
+  ]
+
+  if (isSwitch) {
+    // Switch-specific: provider & contract info
+    blocks.push(
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `🔄 *Switching from ${lead.currentProvider || 'Unknown Provider'}* — wants contract buyout`,
+        }
+      },
+      {
+        type: 'section',
+        fields: [
+          { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
+          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
+          { type: 'mrkdwn', text: `*📍 ZIP Code:*\n${lead.zipCode || 'N/A'}` },
+          { type: 'mrkdwn', text: `*🏢 Current Provider:*\n${lead.currentProvider || 'N/A'}` },
+        ]
+      },
+      {
+        type: 'section',
+        fields: [
+          { type: 'mrkdwn', text: `*📋 Contract Remaining:*\n${lead.contractMonthsRemaining || 'N/A'}` },
+          { type: 'mrkdwn', text: `*💰 Current Monthly:*\n${lead.currentMonthlyPayment ? '$' + lead.currentMonthlyPayment + '/mo' : 'Not provided'}` },
+          { type: 'mrkdwn', text: `*📊 Lead Score:*\n${lead.leadScore}/100` },
+          { type: 'mrkdwn', text: `*🔥 Priority:*\n${lead.priority}` },
+        ]
+      },
+    )
+  } else {
+    // Quiz lead: property & concerns info
+    const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'N/A'
+    const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'N/A'
+    const ownershipLabel = lead.homeownership ? HOMEOWNERSHIP_LABELS[lead.homeownership] || lead.homeownership : 'N/A'
+    const concerns = lead.productsInterested?.length
+      ? lead.productsInterested.map(c => CONCERN_LABELS[c] || c).join(', ')
+      : 'N/A'
+
+    blocks.push(
+      {
+        type: 'section',
+        fields: [
+          { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
+          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
+          { type: 'mrkdwn', text: `*📍 ZIP Code:*\n${lead.zipCode || 'N/A'}` },
+          { type: 'mrkdwn', text: `*🏠 Property:*\n${propertyLabel}` },
+        ]
+      },
+      {
+        type: 'section',
+        fields: [
+          { type: 'mrkdwn', text: `*🔑 Ownership:*\n${ownershipLabel}` },
+          { type: 'mrkdwn', text: `*⏰ Timeline:*\n${timelineLabel}` },
+          { type: 'mrkdwn', text: `*🚪 Entry Points:*\n${lead.doorsWindows || 'N/A'}` },
+          { type: 'mrkdwn', text: `*🛡️ Concerns:*\n${concerns}` },
+        ]
+      },
+    )
+  }
+
+  // Common footer blocks
+  blocks.push(
+    { type: 'divider' },
+    {
+      type: 'section',
+      fields: [
+        { type: 'mrkdwn', text: `*📊 Lead Score:*\n${lead.leadScore}/100` },
+        { type: 'mrkdwn', text: `*🔥 Priority:*\n${lead.priority}` },
+        { type: 'mrkdwn', text: `*📣 Source:*\n${source}` },
+      ]
+    },
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: isSwitch
+            ? `⚡ *BUYOUT LEAD — pitch the $1,000 contract buyout offer. Call now!*`
+            : `⚡ *Speed to lead is everything — call now!*`,
+        }
+      ]
+    },
+    {
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: { type: 'plain_text', text: 'View in CRM' },
+          url: `${APP_URL}/leads/${lead.id}`,
+          style: 'primary'
+        }
+      ]
+    }
+  )
 
   try {
     const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        blocks: [
-          {
-            type: 'header',
-            text: { type: 'plain_text', text: `${emoji} New Lead: ${lead.fullName}`, emoji: true }
-          },
-          {
-            type: 'section',
-            fields: [
-              { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
-              { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
-              { type: 'mrkdwn', text: `*📍 ZIP Code:*\n${lead.zipCode || 'N/A'}` },
-              { type: 'mrkdwn', text: `*🏠 Property:*\n${propertyLabel}` },
-            ]
-          },
-          {
-            type: 'section',
-            fields: [
-              { type: 'mrkdwn', text: `*🔑 Ownership:*\n${ownershipLabel}` },
-              { type: 'mrkdwn', text: `*⏰ Timeline:*\n${timelineLabel}` },
-              { type: 'mrkdwn', text: `*🚪 Entry Points:*\n${lead.doorsWindows || 'N/A'}` },
-              { type: 'mrkdwn', text: `*🛡️ Concerns:*\n${concerns}` },
-            ]
-          },
-          { type: 'divider' },
-          {
-            type: 'section',
-            fields: [
-              { type: 'mrkdwn', text: `*📊 Lead Score:*\n${lead.leadScore}/100` },
-              { type: 'mrkdwn', text: `*🔥 Priority:*\n${lead.priority}` },
-              { type: 'mrkdwn', text: `*📣 Source:*\n${source}` },
-            ]
-          },
-          {
-            type: 'context',
-            elements: [
-              { type: 'mrkdwn', text: `⚡ *Speed to lead is everything — call now!*` }
-            ]
-          },
-          {
-            type: 'actions',
-            elements: [
-              {
-                type: 'button',
-                text: { type: 'plain_text', text: 'View in CRM' },
-                url: `${APP_URL}/leads/${lead.id}`,
-                style: 'primary'
-              }
-            ]
-          }
-        ]
-      })
+      body: JSON.stringify({ blocks })
     })
     if (!response.ok) {
       const text = await response.text()

@@ -144,6 +144,10 @@ export async function POST(req: NextRequest) {
       medium: lead.medium,
       campaign: lead.campaign,
       productsInterested: lead.productsInterested,
+      segment: lead.segment,
+      currentProvider: lead.currentProvider,
+      contractMonthsRemaining: lead.contractMonthsRemaining,
+      currentMonthlyPayment: lead.currentMonthlyPayment,
     }
 
     await Promise.allSettled([

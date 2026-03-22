@@ -5,6 +5,7 @@ interface LeadData {
   productsInterested: string[]
   source?: string
   deviceType?: string
+  segment?: string
 }
 
 export function calculateLeadScore(lead: LeadData): { score: number; priority: string } {
@@ -30,6 +31,8 @@ export function calculateLeadScore(lead: LeadData): { score: number; priority: s
   if (lead.source === 'organic') score += 8
 
   if (lead.deviceType === 'desktop') score += 5
+
+  if (lead.segment === 'switch') score += 15
 
   score = Math.min(score, 100)
 

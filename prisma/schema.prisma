@@ -60,6 +60,11 @@ model Lead {
   homeownership   Homeownership?
   timeline        Timeline?
 
+  segment             String?
+  currentProvider     String?
+  contractMonthsRemaining String?
+  currentMonthlyPayment String?
+
   status          LeadStatus     @default(NEW)
   leadScore       Int            @default(0)
   priority        Priority       @default(MEDIUM)
@@ -121,6 +126,7 @@ model Lead {
   @@index([assignedRepId])
   @@index([createdAt])
   @@index([submittedAt])
+  @@index([segment])
   @@map("leads")
 }
 

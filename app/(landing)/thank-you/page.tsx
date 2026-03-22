@@ -8,26 +8,29 @@ import { getRiskLevel } from '@/components/landing/QuizFunnel'
 
 function ThankYouContent() {
   const searchParams = useSearchParams()
+  const segment = searchParams.get('segment')
+  const provider = searchParams.get('provider')
   const entryPoints = searchParams.get('ep') || '1-5'
   const concerns = (searchParams.get('concerns') || '').split(',').filter(Boolean)
   const timeline = searchParams.get('timeline') || ''
 
-  const risk = getRiskLevel(entryPoints, concerns)
+  const isSwitch = segment === 'switch'
+  const risk = isSwitch ? null : getRiskLevel(entryPoints, concerns)
 
   useEffect(() => {
-    // Meta Lead fires in QuizFunnel onSubmit — do NOT fire again here or it doubles
+    // Meta Lead fires in QuizFunnel/SwitchForm onSubmit — do NOT fire again here or it doubles
     if ((window as any).gtag) {
       (window as any).gtag('event', 'conversion', { value: 900.0, currency: 'USD' })
-      ;(window as any).gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: 'quiz_funnel', value: 900 })
+      ;(window as any).gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: isSwitch ? 'switch_form' : 'quiz_funnel', value: 900 })
     }
-  }, [])
+  }, [isSwitch])
 
   const riskColors: Record<string, { bg: string; border: string; text: string; bar: string }> = {
     HIGH: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', bar: 'bg-red-500' },
     MODERATE: { bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', bar: 'bg-yellow-500' },
     LOW: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', bar: 'bg-green-500' },
   }
-  const riskStyle = riskColors[risk.level] || riskColors.MODERATE
+  const riskStyle = risk ? (riskColors[risk.level] || riskColors.MODERATE) : riskColors.MODERATE
 
   const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://shieldhome.pro'
   const shareText = 'I just got a free home security assessment from ShieldHome Pro. Check yours:'
@@ -42,51 +45,87 @@ function ThankYouContent() {
             <CheckCircle className="text-[#00C853]" size={40} />
           </div>
           <h1 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
-            Your Free Quote Request Is In!
+            {isSwitch ? 'Your Contract Buyout Request Is In!' : 'Your Free Quote Request Is In!'}
           </h1>
+          {isSwitch && provider && (
+            <p className="text-gray-600 text-lg">
+              We&apos;re reviewing your {provider} contract details to prepare your buyout offer.
+            </p>
+          )}
         </div>
 
-        {/* Security Risk Score Card */}
-        <div className={`${riskStyle.bg} ${riskStyle.border} border rounded-2xl p-6 mb-8`}>
-          <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle size={20} className={riskStyle.text} />
-            <h2 className="font-bold text-lg text-gray-900">Your Home Security Risk Score</h2>
-          </div>
-
-          <div className="flex items-center gap-4 mb-4">
-            <div className="flex-1">
-              <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
-                <div
-                  className={`${riskStyle.bar} h-4 rounded-full transition-all duration-1000`}
-                  style={{ width: `${risk.score}%` }}
-                />
-              </div>
+        {/* Security Risk Score Card — quiz leads only */}
+        {!isSwitch && risk && (
+          <div className={`${riskStyle.bg} ${riskStyle.border} border rounded-2xl p-6 mb-8`}>
+            <div className="flex items-center gap-2 mb-4">
+              <AlertTriangle size={20} className={riskStyle.text} />
+              <h2 className="font-bold text-lg text-gray-900">Your Home Security Risk Score</h2>
             </div>
-            <div className={`${riskStyle.text} font-extrabold text-2xl`}>{risk.score}</div>
-          </div>
 
-          <p className="text-gray-700 text-sm mb-3">
-            Based on your answers, your home has{' '}
-            <strong>{entryPoints} entry points</strong> and{' '}
-            {concerns.length > 0 ? (
-              <>concerns about <strong>{concerns.length} security risk{concerns.length > 1 ? 's' : ''}</strong></>
-            ) : (
-              'potential security gaps'
-            )}
-            .
-          </p>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex-1">
+                <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
+                  <div
+                    className={`${riskStyle.bar} h-4 rounded-full transition-all duration-1000`}
+                    style={{ width: `${risk.score}%` }}
+                  />
+                </div>
+              </div>
+              <div className={`${riskStyle.text} font-extrabold text-2xl`}>{risk.score}</div>
+            </div>
 
-          <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold ${riskStyle.bg} ${riskStyle.text} border ${riskStyle.border}`}>
-            <Shield size={14} />
-            Risk Level: {risk.level}
+            <p className="text-gray-700 text-sm mb-3">
+              Based on your answers, your home has{' '}
+              <strong>{entryPoints} entry points</strong> and{' '}
+              {concerns.length > 0 ? (
+                <>concerns about <strong>{concerns.length} security risk{concerns.length > 1 ? 's' : ''}</strong></>
+              ) : (
+                'potential security gaps'
+              )}
+              .
+            </p>
+
+            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold ${riskStyle.bg} ${riskStyle.text} border ${riskStyle.border}`}>
+              <Shield size={14} />
+              Risk Level: {risk.level}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Switch confirmation card */}
+        {isSwitch && (
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 mb-8">
+            <div className="flex items-center gap-2 mb-3">
+              <Shield size={20} className="text-[#00C853]" />
+              <h2 className="font-bold text-lg text-gray-900">Buyout Assessment In Progress</h2>
+            </div>
+            <p className="text-gray-700 text-sm">
+              Our team is reviewing your {provider ? `${provider} ` : ''}contract details and calculating your buyout eligibility (up to $1,000). A Smart Home Pro will call you shortly with your options.
+            </p>
+          </div>
+        )}
 
         {/* What Happens Next */}
         <h2 className="text-xl font-bold text-[#1A1A2E] mb-4">Here&apos;s what happens next:</h2>
 
         <div className="space-y-4 mb-8">
-          {[
+          {(isSwitch ? [
+            {
+              icon: <Clock className="text-[#00C853]" size={24} />,
+              title: '1. Expect a Call Within 2 Minutes',
+              desc: `A Vivint Smart Home Pro will call you shortly to discuss your ${provider || 'current provider'} buyout options.`,
+            },
+            {
+              icon: <MessageSquare className="text-[#00C853]" size={24} />,
+              title: '2. We Calculate Your Buyout Amount',
+              desc: "We'll review your contract details and calculate your exact buyout amount — up to $1,000 covered by Vivint.",
+            },
+            {
+              icon: <Home className="text-[#00C853]" size={24} />,
+              title: '3. We Handle the Switch',
+              desc: "We cancel your old service, install your new Vivint system (usually under 2 hours), and cover your cancellation fee. Zero gap in protection.",
+            },
+          ] : [
             {
               icon: <Clock className="text-[#00C853]" size={24} />,
               title: '1. Expect a Call Within 2 Minutes',
@@ -104,7 +143,7 @@ function ThankYouContent() {
                 ? "Since you want to get protected ASAP, we'll aim to have a technician at your home within 24-48 hours."
                 : "We'll schedule a free setup at a time that works for you. Most setups take about 2-3 hours.",
             },
-          ].map(step => (
+          ]).map(step => (
             <div key={step.title} className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm flex items-start gap-4">
               <div className="flex-shrink-0 w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
                 {step.icon}

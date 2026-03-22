@@ -7,11 +7,16 @@ export const leadSchema = z.object({
   phone: z.string().min(10, 'Valid phone number required').max(20),
   zipCode: z.string().min(5, 'ZIP code required').max(10),
 
-  propertyType: z.enum(['HOUSE', 'TOWNHOME', 'CONDO_APARTMENT', 'BUSINESS']),
-  homeownership: z.enum(['OWN', 'RENT']),
-  productsInterested: z.array(z.string()).min(1, 'Select at least one product'),
-  timeline: z.enum(['ASAP', 'ONE_TWO_WEEKS', 'ONE_MONTH', 'JUST_RESEARCHING']),
+  propertyType: z.enum(['HOUSE', 'TOWNHOME', 'CONDO_APARTMENT', 'BUSINESS']).optional().nullable(),
+  homeownership: z.enum(['OWN', 'RENT']).optional().nullable(),
+  productsInterested: z.array(z.string()).optional().default([]),
+  timeline: z.enum(['ASAP', 'ONE_TWO_WEEKS', 'ONE_MONTH', 'JUST_RESEARCHING']).optional().nullable(),
   entryPoints: z.string().optional().nullable(),
+
+  segment: z.string().optional().nullable(),
+  currentProvider: z.string().optional().nullable(),
+  contractMonthsRemaining: z.string().optional().nullable(),
+  currentMonthlyPayment: z.string().optional().nullable(),
 
   source: z.string().optional().nullable(),
   medium: z.string().optional().nullable(),

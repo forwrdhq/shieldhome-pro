@@ -4,7 +4,13 @@ import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const faqs = [
+interface FAQSectionProps {
+  faqs?: { q: string; a: string }[]
+  title?: string
+  subtitle?: string
+}
+
+const defaultFaqs = [
   {
     q: 'How much does a Vivint system cost?',
     a: "Every home is different, so we give free custom quotes. Most homeowners pay $0 upfront for equipment with free expert setup. Monthly monitoring starts around $1.33/day (about $39.99/month). Your Smart Home Pro will build a package based on your home's size and needs — so you only pay for what you need.",
@@ -39,20 +45,21 @@ const faqs = [
   },
 ]
 
-export default function FAQSection() {
+export default function FAQSection({ faqs, title, subtitle }: FAQSectionProps = {}) {
   const [open, setOpen] = useState<number | null>(null)
+  const items = faqs || defaultFaqs
 
   return (
     <section className="py-16 bg-[#F8F9FA]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
-            Common Questions
+            {title || 'Common Questions'}
           </h2>
-          <p className="text-gray-600">Everything you need to know before getting started</p>
+          <p className="text-gray-600">{subtitle || 'Everything you need to know before getting started'}</p>
         </div>
         <div className="space-y-3">
-          {faqs.map((faq, i) => (
+          {items.map((faq, i) => (
             <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <button
                 onClick={() => setOpen(open === i ? null : i)}

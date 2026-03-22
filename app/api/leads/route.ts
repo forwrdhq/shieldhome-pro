@@ -66,14 +66,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, leadId: existing.id, message: 'Quote request received' })
     }
 
-    // Score the lead
+    // Score the lead — provide defaults for switch leads (high-intent buyout leads)
     const { score, priority } = calculateLeadScore({
-      homeownership: data.homeownership,
-      propertyType: data.propertyType,
-      timeline: data.timeline,
-      productsInterested: data.productsInterested,
+      homeownership: data.homeownership || 'OWN',
+      propertyType: data.propertyType || 'HOUSE',
+      timeline: data.timeline || 'ASAP',
+      productsInterested: data.productsInterested?.length ? data.productsInterested : ['FULL_SYSTEM'],
       source: data.source || undefined,
       deviceType: data.deviceType || undefined,
+      segment: data.segment || undefined,
     })
 
     // Create the lead
@@ -85,11 +86,15 @@ export async function POST(req: NextRequest) {
         phone: data.phone,
         zipCode: data.zipCode,
         fullName: [data.firstName, data.lastName].filter(Boolean).join(' '),
-        propertyType: data.propertyType as any,
-        homeownership: data.homeownership as any,
-        productsInterested: data.productsInterested,
-        timeline: data.timeline as any,
+        propertyType: (data.propertyType as any) || null,
+        homeownership: (data.homeownership as any) || null,
+        productsInterested: data.productsInterested || [],
+        timeline: (data.timeline as any) || null,
         doorsWindows: data.entryPoints,
+        segment: data.segment,
+        currentProvider: data.currentProvider,
+        contractMonthsRemaining: data.contractMonthsRemaining,
+        currentMonthlyPayment: data.currentMonthlyPayment,
         leadScore: score,
         priority: priority as any,
         source: data.source,
@@ -116,7 +121,7 @@ export async function POST(req: NextRequest) {
       data: {
         leadId: lead.id,
         type: 'LEAD_CREATED',
-        description: `Lead created via ${data.source || 'direct'} with score ${score}/${priority}`,
+        description: `Lead created via ${data.source || 'direct'} with score ${score}/${priority}${data.segment === 'switch' ? ` [SWITCH from ${data.currentProvider || 'unknown'}]` : ''}`,
       }
     })
 

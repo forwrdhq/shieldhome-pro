@@ -2,7 +2,22 @@
 
 import { Star, CheckCircle, ShieldCheck } from 'lucide-react'
 
-const testimonials = [
+interface TestimonialData {
+  name: string
+  location: string
+  date: string
+  rating: number
+  text: string
+  initials: string
+  color: string
+  source: string
+}
+
+interface TestimonialCarouselProps {
+  testimonials?: TestimonialData[]
+}
+
+const defaultTestimonials: TestimonialData[] = [
   {
     name: 'Sarah M.',
     location: 'Phoenix, AZ',
@@ -65,7 +80,9 @@ const testimonials = [
   },
 ]
 
-export default function TestimonialCarousel() {
+export default function TestimonialCarousel({ testimonials }: TestimonialCarouselProps = {}) {
+  const items = testimonials || defaultTestimonials
+
   return (
     <section className="py-16 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -87,7 +104,7 @@ export default function TestimonialCarousel() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((t) => (
+          {items.map((t) => (
             <div
               key={t.name}
               className="bg-[#F8F9FA] rounded-xl p-6 border border-gray-100 flex flex-col"

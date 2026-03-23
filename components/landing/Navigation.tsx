@@ -52,9 +52,9 @@ export default function Navigation({ onQuizOpen }: NavigationProps) {
         }`}
       >
         <div className="max-w-7xl mx-auto h-full px-6 md:px-12 lg:px-16 flex items-center justify-between">
-          {/* Logo — text wordmark only */}
-          <a href="/" className="font-heading font-bold text-white text-lg tracking-tight">
-            ShieldHome
+          {/* Logo — text wordmark */}
+          <a href="/" className="font-heading font-bold text-white text-xl tracking-tight drop-shadow-sm">
+            Shield<span className="text-emerald-400">Home</span>
           </a>
 
           {/* Nav items */}

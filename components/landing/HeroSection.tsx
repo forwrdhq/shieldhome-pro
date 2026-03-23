@@ -1,14 +1,19 @@
 'use client'
 
-import { Star, Phone } from 'lucide-react'
+import { useState } from 'react'
+import { Star, Phone, Play } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
+
+const YOUTUBE_ID = 'mgHIEsr_XH0'
 
 interface HeroSectionProps {
   onQuizOpen: () => void
 }
 
 export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
+  const [videoPlaying, setVideoPlaying] = useState(false)
+
   return (
     <section className="bg-slate-900 py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
@@ -72,12 +77,43 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
             </div>
           </div>
 
-          {/* Right: Product image area — 2 columns */}
+          {/* Right: Video + stats — 2 columns */}
           <div className="hero-image hidden lg:block lg:col-span-2">
-            <div className="relative bg-slate-800 rounded-xl border border-slate-700 p-8">
-              {/* Product image placeholder — app screenshot or device mockup */}
-              <div className="aspect-[4/3] bg-slate-700/50 rounded-lg flex items-center justify-center mb-6">
-                <span className="text-slate-500 text-sm font-body">Product Image</span>
+            <div className="relative bg-slate-800 rounded-xl border border-slate-700 p-6">
+              {/* YouTube video */}
+              <div className="rounded-lg overflow-hidden aspect-[16/9] mb-6 relative bg-black">
+                {videoPlaying ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0&modestbranding=1`}
+                    title="Vivint Smart Home Security Overview"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                  />
+                ) : (
+                  <button
+                    onClick={() => setVideoPlaying(true)}
+                    className="absolute inset-0 w-full h-full group cursor-pointer"
+                    aria-label="Play video"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`https://img.youtube.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`}
+                      alt="Vivint Smart Home Security System"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="eager"
+                    />
+                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-200" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <div className="w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center shadow-lg group-hover:-translate-y-0.5 transition-transform duration-200">
+                        <Play size={24} className="text-white ml-0.5" />
+                      </div>
+                      <p className="text-sm font-semibold text-white mt-3 drop-shadow-lg">
+                        Watch the Overview
+                      </p>
+                    </div>
+                  </button>
+                )}
               </div>
 
               {/* Stats row */}

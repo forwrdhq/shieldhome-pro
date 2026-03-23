@@ -10,6 +10,14 @@ export const metadata: Metadata = {
       'Professional Vivint smart home security. Free installation, free doorbell camera, $0 down. Get your custom quote in 60 seconds.',
     type: 'website',
     url: 'https://shieldhome.pro/get-quote',
+    images: [
+      {
+        url: 'https://shieldhome.pro/og-get-quote.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'ShieldHome Pro — Free Home Security Quote',
+      },
+    ],
   },
   alternates: {
     canonical: 'https://shieldhome.pro/get-quote',

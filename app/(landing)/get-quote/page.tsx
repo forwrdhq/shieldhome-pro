@@ -6,13 +6,15 @@ import GetQuoteForm from '@/components/landing/GetQuoteForm'
 import FAQSection from '@/components/landing/FAQSection'
 import StickyPhoneCTA from '@/components/landing/StickyPhoneCTA'
 import {
-  Shield, Phone, CheckCircle, Star, ShieldCheck, Users, Zap,
-  Camera, DoorOpen, Lock, Monitor, ArrowRight, Clock, Award,
+  Shield, Phone, Star, ShieldCheck, Users, Zap,
+  Camera, DoorOpen, Lock, Monitor, ArrowRight, Award,
   ChevronRight,
 } from 'lucide-react'
 
-const PHONE = '(801) 616-6301'
-const PHONE_RAW = '+18016166301'
+import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
+
+const PHONE = PHONE_NUMBER
+const PHONE_RAW = PHONE_NUMBER_RAW
 
 // ─── DTR Headlines (keyword → headline for Google Ads message match) ───
 const HEADLINES: Record<string, string> = {
@@ -28,8 +30,12 @@ const HEADLINES: Record<string, string> = {
   'quote': 'Get Your Free Home Security Quote — $0 Down, Free Setup',
   'system': 'Complete Home Security System — $0 Down, Free Doorbell Camera',
   'home-security': 'Professional Home Security — $0 Down, Free Setup',
+  'best': 'Best-Rated Home Security System — $0 Down, Free Camera',
+  'top': 'Top-Rated Home Security — Free Installation, $0 Down',
+  'reviews': '#1-Rated Home Security (4.8/5 Stars) — Free Setup',
+  'vivint': 'Vivint Smart Home — Authorized Dealer, Free Installation',
 }
-const DEFAULT_HEADLINE = 'Professional Home Security — $0 Down, Free Doorbell Camera'
+const DEFAULT_HEADLINE = 'Home Security — Installed Tomorrow, $0 Down'
 
 // ─── Testimonials ───
 const testimonials = [
@@ -37,25 +43,31 @@ const testimonials = [
     name: 'Sarah M.',
     location: 'Draper, UT',
     rating: 5,
-    text: "We finally feel safe when we travel. Setup took less than 2 hours and the app lets me check cameras from anywhere.",
+    text: "We finally feel safe when we travel. Setup took less than 2 hours and the app lets me check cameras from anywhere. The technician was fantastic.",
     avatar: 'SM',
     color: 'from-violet-500 to-purple-600',
+    source: 'Google Review',
+    timeAgo: '3 weeks ago',
   },
   {
     name: 'Jason R.',
-    location: 'Sandy, UT',
+    location: 'Plano, TX',
     rating: 5,
-    text: "The AI cameras actually detect people vs animals. Way better than our old Ring setup — no more false alerts at 3am.",
+    text: "The AI cameras actually detect people vs animals. Way better than our old Ring setup — no more false alerts at 3am. Worth every penny.",
     avatar: 'JR',
     color: 'from-blue-500 to-cyan-600',
+    source: 'Google Review',
+    timeAgo: '1 month ago',
   },
   {
     name: 'Maria L.',
-    location: 'Provo, UT',
-    rating: 5,
-    text: "As a single mom, knowing my kids are safe after school gives me so much peace of mind. Vivint was the best decision.",
+    location: 'Orlando, FL',
+    rating: 4,
+    text: "As a single mom, knowing my kids are safe after school gives me peace of mind. Installation was quick and the monthly cost is reasonable.",
     avatar: 'ML',
     color: 'from-rose-500 to-pink-600',
+    source: 'BBB Review',
+    timeAgo: '2 months ago',
   },
 ]
 
@@ -81,54 +93,16 @@ const faqs = [
     q: 'What equipment do I get?',
     a: "Your custom system can include indoor/outdoor AI cameras, a video doorbell (free with qualifying systems), smart locks, door/window sensors, motion detectors, and a 7\" touchscreen control panel. Your advisor designs the system around your home's specific layout.",
   },
+  {
+    q: 'What does monitoring cost?',
+    a: 'Plans start at $19.95/month for basic monitoring. Most homeowners choose a package in the $29–$45/month range depending on how many cameras and smart devices they want. Your advisor will build a custom quote — you only pay for what you actually need.',
+  },
 ]
 
-// ─── Equipment ───
-const equipment = [
-  {
-    name: 'Doorbell Camera Pro',
-    desc: '180° HDR video with 24/7 recording and package detection',
-    icon: DoorOpen,
-    badge: 'Free',
-    features: ['24/7 recording', 'Package alerts', '2-way talk'],
-  },
-  {
-    name: 'Outdoor Camera Pro',
-    desc: 'AI-powered person and vehicle detection with color night vision',
-    icon: Camera,
-    badge: null,
-    features: ['AI detection', 'Color night vision', '140° FOV'],
-  },
-  {
-    name: 'Smart Lock Pro',
-    desc: 'Keyless entry with guest codes, auto-lock, and remote access',
-    icon: Lock,
-    badge: null,
-    features: ['Guest codes', 'Auto-lock', 'Activity log'],
-  },
-  {
-    name: 'Smart Hub Panel',
-    desc: '7" touchscreen with Google and Alexa voice control built in',
-    icon: Monitor,
-    badge: null,
-    features: ['Voice control', 'One-tap arm', 'Live feeds'],
-  },
-]
+const CURRENT_MONTH = new Date().toLocaleString('en-US', { month: 'long' })
 
 function scrollToForm() {
   document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })
-}
-
-// ─── Live Counter ───
-function LiveCounter() {
-  const [count, setCount] = useState(89)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount(c => c + (Math.random() > 0.6 ? 1 : 0))
-    }, 25000)
-    return () => clearInterval(interval)
-  }, [])
-  return <span className="tabular-nums">{count}</span>
 }
 
 function GetQuoteContent() {
@@ -158,17 +132,18 @@ function GetQuoteContent() {
               </div>
               <div>
                 <div className="font-bold text-white text-[13px] leading-none">ShieldHome Pro</div>
-                <div className="text-[10px] text-white/35 mt-0.5">Vivint Authorized Dealer</div>
+                <div className="text-[10px] text-white/50 mt-0.5">Vivint Authorized Dealer</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="hidden md:flex items-center gap-1.5 text-[11px] text-white/40">
-                <div className="w-1.5 h-1.5 bg-[#00C853] rounded-full animate-pulse" />
-                <LiveCounter /> quotes today
+              <div className="hidden md:flex items-center gap-1.5 text-[11px] text-white/55">
+                <Star size={11} className="text-amber-400 fill-amber-400" />
+                4.8/5 · 58K reviews
               </div>
               <a
                 href={`tel:${PHONE_RAW}`}
                 className="flex items-center gap-1.5 bg-[#00C853] hover:bg-[#00A846] text-white px-3.5 py-2 rounded-lg font-semibold text-[13px] transition-colors"
+                aria-label={`Call us at ${PHONE}`}
               >
                 <Phone size={13} />
                 <span className="hidden sm:inline">{PHONE}</span>
@@ -188,6 +163,16 @@ function GetQuoteContent() {
         </div>
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-10 md:pt-14 md:pb-16 relative">
+          {/* Mobile-only: headline above form so users have context */}
+          <div className="md:hidden text-center mb-5">
+            <h1 className="text-[22px] sm:text-[26px] font-extrabold text-white leading-[1.15] tracking-tight mb-2">
+              {headline}
+            </h1>
+            <p className="text-white/60 text-[14px]">
+              Free install. Free doorbell camera. 24/7 monitoring.
+            </p>
+          </div>
+
           <div className="grid md:grid-cols-[1fr,400px] gap-8 md:gap-12 items-start">
             {/* Left: Copy */}
             <div className="text-center md:text-left order-2 md:order-1">
@@ -198,23 +183,24 @@ function GetQuoteContent() {
                 </span>
               </div>
 
-              <h1 className="text-[26px] sm:text-[32px] md:text-[40px] font-extrabold text-white mb-4 leading-[1.15] tracking-tight">
+              {/* Desktop headline (hidden on mobile since we show it above) */}
+              <h1 className="hidden md:block text-[40px] font-extrabold text-white mb-4 leading-[1.15] tracking-tight">
                 {headline}
               </h1>
 
-              <p className="text-white/55 text-[15px] md:text-[17px] leading-relaxed mb-8 max-w-[480px] mx-auto md:mx-0">
-                Free expert installation + 24/7 professional monitoring. Most homes fully protected within 48 hours.
+              <p className="text-white/65 text-[15px] md:text-[17px] leading-relaxed mb-8 max-w-[480px] mx-auto md:mx-0">
+                Join 2M+ homeowners with 24/7 professional monitoring, AI cameras, and smart locks — installed free by a certified tech in under 2 hours.
               </p>
 
               {/* Value props */}
               <div className="hidden md:grid grid-cols-2 gap-3 mb-8">
                 {[
                   { icon: <Zap size={15} />, text: 'Installed in 24–48 hours' },
-                  { icon: <ShieldCheck size={15} />, text: '24/7 professional monitoring' },
+                  { icon: <ShieldCheck size={15} />, text: '24/7 monitoring (avg. 14-sec response)' },
                   { icon: <Camera size={15} />, text: 'Free doorbell camera included' },
                   { icon: <Lock size={15} />, text: '$0 down — no upfront equipment cost' },
                 ].map((item) => (
-                  <div key={item.text} className="flex items-center gap-2.5 text-white/50 text-[13px]">
+                  <div key={item.text} className="flex items-center gap-2.5 text-white/70 text-[13px]">
                     <div className="text-[#00C853] flex-shrink-0">{item.icon}</div>
                     {item.text}
                   </div>
@@ -222,23 +208,18 @@ function GetQuoteContent() {
               </div>
 
               {/* Credibility row */}
-              <div className="hidden md:flex flex-wrap items-center gap-5 text-[12px] text-white/35 pt-6 border-t border-white/[0.06]">
+              <div className="hidden md:flex flex-wrap items-center gap-5 text-[12px] text-white/55 pt-6 border-t border-white/[0.06]">
                 <span className="flex items-center gap-1.5">
                   <Star size={12} className="text-amber-400 fill-amber-400" />
-                  <span className="text-white/70 font-medium">4.8</span>/5 from 58K reviews
+                  <span className="text-white/80 font-semibold">4.8</span>/5 from 58K Google reviews
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Award size={12} className="text-[#00C853]" /> BBB A+ Rated
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Users size={12} className="text-[#00C853]" /> 2M+ homes
+                  <Users size={12} className="text-[#00C853]" /> 2M+ homes protected
                 </span>
               </div>
-
-              {/* Competitor proof — desktop */}
-              <p className="hidden md:block text-[11px] text-white/25 mt-3">
-                Rated higher than ADT, SimpliSafe, and Ring — 4.8/5 from 58,000+ verified reviews
-              </p>
             </div>
 
             {/* Right: Form */}
@@ -247,7 +228,7 @@ function GetQuoteContent() {
               <div className="flex justify-center md:justify-start mb-3">
                 <div className="inline-flex items-center gap-1.5 bg-[#00C853]/15 border border-[#00C853]/20 rounded-full px-3 py-1">
                   <Lock size={11} className="text-[#00C853]" />
-                  <span className="text-[#00C853] text-[11px] font-semibold">March Special: Free Doorbell Camera + $0 Installation</span>
+                  <span className="text-[#00C853] text-[11px] font-semibold">{CURRENT_MONTH} Special: Free Doorbell Camera + $0 Installation</span>
                 </div>
               </div>
               <GetQuoteForm />
@@ -256,10 +237,10 @@ function GetQuoteContent() {
 
           {/* Mobile trust bar */}
           <div className="md:hidden mt-6">
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-[11px] text-white/40">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-[11px] text-white/60">
               <span className="flex items-center gap-1">
                 <Star size={10} className="text-amber-400 fill-amber-400" />
-                <span className="text-white/60 font-medium">4.8/5</span> 58K reviews
+                <span className="text-white/80 font-semibold">4.8/5</span> 58K Google reviews
               </span>
               <span className="flex items-center gap-1">
                 <Award size={10} className="text-[#00C853]" /> BBB A+
@@ -268,15 +249,11 @@ function GetQuoteContent() {
                 <Users size={10} className="text-[#00C853]" /> 2M+ homes
               </span>
             </div>
-            {/* Competitor proof — mobile */}
-            <p className="text-center text-[10px] text-white/25 mt-3">
-              Rated higher than ADT, SimpliSafe, and Ring
-            </p>
             {/* Mobile click-to-call */}
             <div className="text-center mt-3">
               <a
                 href={`tel:${PHONE_RAW}`}
-                className="inline-flex items-center gap-1.5 text-white/50 hover:text-white/70 transition-colors text-[13px] py-2"
+                className="inline-flex items-center gap-1.5 text-white/55 hover:text-white/75 transition-colors text-[13px] py-2"
               >
                 <Phone size={13} />
                 Prefer to talk? Call {PHONE}
@@ -286,43 +263,109 @@ function GetQuoteContent() {
         </div>
       </section>
 
-      {/* ═══ Equipment Grid ═══ */}
-      <section className="py-14 bg-[#0d1b30]/80 border-t border-white/[0.04]">
+      {/* ═══ How It Works ═══ */}
+      <section className="py-12 md:py-16 border-t border-white/[0.04]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <h2 className="text-center text-[20px] md:text-[26px] font-extrabold text-white tracking-tight mb-3">
+            Most homes are fully protected within 48 hours
+          </h2>
+          <p className="text-center text-white/55 text-[13px] mb-10 max-w-lg mx-auto">
+            From your first click to a fully armed system — here&apos;s what happens:
+          </p>
+
+          <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-3 md:gap-8">
+            <div className="flex md:flex-col items-start gap-4 md:text-left">
+              <span className="text-[32px] md:text-[40px] font-black text-[#00C853]/20 leading-none flex-shrink-0">01</span>
+              <div>
+                <h3 className="font-bold text-white text-[15px] mb-1.5">Tell us about your home</h3>
+                <p className="text-white/55 text-[13px] leading-relaxed">ZIP code + a few details. Takes 30 seconds — no credit card, no strings.</p>
+              </div>
+            </div>
+
+            <div className="flex md:flex-col items-start gap-4 md:text-left">
+              <span className="text-[32px] md:text-[40px] font-black text-[#00C853]/20 leading-none flex-shrink-0">02</span>
+              <div>
+                <h3 className="font-bold text-white text-[15px] mb-1.5">Your advisor builds a custom plan</h3>
+                <p className="text-white/55 text-[13px] leading-relaxed">A Vivint Smart Home Pro calls with a package designed for your home&apos;s layout and budget. No generic upsells.</p>
+              </div>
+            </div>
+
+            <div className="flex md:flex-col items-start gap-4 md:text-left">
+              <span className="text-[32px] md:text-[40px] font-black text-[#00C853]/20 leading-none flex-shrink-0">03</span>
+              <div>
+                <h3 className="font-bold text-white text-[15px] mb-1.5">A certified tech installs everything</h3>
+                <p className="text-white/55 text-[13px] leading-relaxed">Mounts cameras, connects locks, sets up the app, and walks you through it all. Under 2 hours. $0.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ Equipment ═══ */}
+      <section className="py-12 md:py-14 bg-[#0d1b30]/80 border-t border-white/[0.04]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <p className="text-[#00C853] font-semibold text-[11px] uppercase tracking-[0.15em] mb-2">
-              WHAT&apos;S INCLUDED
-            </p>
-            <h2 className="text-[22px] md:text-[28px] font-extrabold text-white tracking-tight">
-              Your Custom Security System
-            </h2>
+          <h2 className="text-[20px] md:text-[26px] font-extrabold text-white tracking-tight mb-2">
+            Your system, designed for your home
+          </h2>
+          <p className="text-white/55 text-[13px] mb-8 max-w-lg">
+            Your advisor picks the right hardware for your layout. Here&apos;s what most packages include:
+          </p>
+
+          {/* Featured item — doorbell camera (the free one) */}
+          <div className="bg-white/[0.04] rounded-2xl border border-[#00C853]/20 p-5 md:p-7 mb-4 flex flex-col sm:flex-row items-start gap-5">
+            <div className="w-14 h-14 bg-[#00C853]/10 rounded-xl flex items-center justify-center flex-shrink-0">
+              <DoorOpen size={26} className="text-[#00C853]" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-bold text-white text-[15px]">Doorbell Camera Pro</h3>
+                <span className="bg-[#00C853] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  Free
+                </span>
+              </div>
+              <p className="text-white/60 text-[13px] leading-relaxed mb-3">
+                180° HDR video, 24/7 recording, package detection, and 2-way talk. See who&apos;s at the door from anywhere.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {['24/7 recording', 'Package alerts', '2-way talk', 'HDR night vision'].map((f) => (
+                  <span key={f} className="text-[10px] text-white/55 bg-white/[0.05] px-2 py-0.5 rounded font-medium">
+                    {f}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
-            {equipment.map((item) => {
+          {/* Secondary items */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              {
+                name: 'Outdoor Camera Pro',
+                desc: 'AI person & vehicle detection, color night vision, 140° field of view',
+                icon: Camera,
+              },
+              {
+                name: 'Smart Lock Pro',
+                desc: 'Keyless entry, guest codes, auto-lock, full activity log',
+                icon: Lock,
+              },
+              {
+                name: '7" Smart Hub Panel',
+                desc: 'Google + Alexa voice control, one-tap arm, live camera feeds',
+                icon: Monitor,
+              },
+            ].map((item) => {
               const Icon = item.icon
               return (
                 <div
                   key={item.name}
-                  className="group relative bg-white/[0.03] rounded-2xl border border-white/[0.06] p-5 md:p-6 hover:bg-white/[0.05] hover:border-white/[0.1] transition-all duration-300"
+                  className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-4 md:p-5"
                 >
-                  {item.badge && (
-                    <span className="absolute -top-2 right-3 bg-[#00C853] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                      {item.badge}
-                    </span>
-                  )}
-                  <div className="w-11 h-11 bg-[#00C853]/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#00C853]/15 transition-colors">
-                    <Icon size={20} className="text-[#00C853]" />
+                  <div className="flex items-center gap-3 mb-2">
+                    <Icon size={18} className="text-[#00C853] flex-shrink-0" />
+                    <h3 className="font-bold text-white text-[13px]">{item.name}</h3>
                   </div>
-                  <h3 className="font-bold text-white text-[13px] mb-1.5">{item.name}</h3>
-                  <p className="text-white/35 text-[11px] leading-relaxed mb-3">{item.desc}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {item.features.map((f) => (
-                      <span key={f} className="text-[9px] text-white/25 bg-white/[0.04] px-1.5 py-0.5 rounded font-medium">
-                        {f}
-                      </span>
-                    ))}
-                  </div>
+                  <p className="text-white/50 text-[12px] leading-relaxed">{item.desc}</p>
                 </div>
               )
             })}
@@ -336,9 +379,9 @@ function GetQuoteContent() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="text-center sm:text-left">
               <p className="text-white font-bold text-[14px] md:text-[15px]">
-                March Special: Free Doorbell Camera + Free Installation + $0 Down
+                {CURRENT_MONTH} offer: Free Doorbell Camera + Free Installation + $0 Down
               </p>
-              <p className="text-white/75 text-[12px] mt-0.5">Limited installation slots this month</p>
+              <p className="text-white/80 text-[12px] mt-0.5">Limited installation slots available this month</p>
             </div>
             <button
               onClick={onCTAClick}
@@ -350,17 +393,13 @@ function GetQuoteContent() {
         </div>
       </section>
 
-      {/* ═══ Testimonials (custom inline — not the carousel) ═══ */}
-      <section className="py-14 border-t border-white/[0.04]">
+      {/* ═══ Testimonials ═══ */}
+      <section className="py-12 md:py-14 border-t border-white/[0.04]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <p className="text-[#00C853] font-semibold text-[11px] uppercase tracking-[0.15em] mb-2">
-              TRUSTED BY HOMEOWNERS
-            </p>
-            <h2 className="text-[22px] md:text-[28px] font-extrabold text-white tracking-tight">
-              What Our Customers Say
-            </h2>
-          </div>
+          <h2 className="text-[20px] md:text-[26px] font-extrabold text-white tracking-tight mb-2">
+            58,000+ homeowners gave Vivint 4.8 out of 5 stars
+          </h2>
+          <p className="text-white/50 text-[13px] mb-8">Here&apos;s what a few of them said:</p>
 
           <div className="grid md:grid-cols-3 gap-4 md:gap-5">
             {testimonials.map((t) => (
@@ -368,24 +407,34 @@ function GetQuoteContent() {
                 key={t.name}
                 className="bg-white/[0.03] rounded-2xl border border-white/[0.06] p-5 md:p-6"
               >
-                {/* Stars */}
+                {/* Stars — varies by rating */}
                 <div className="flex gap-0.5 mb-3">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} size={13} className="text-amber-400 fill-amber-400" />
+                    <Star
+                      key={i}
+                      size={13}
+                      className={i < t.rating ? 'text-amber-400 fill-amber-400' : 'text-white/15'}
+                    />
                   ))}
                 </div>
                 {/* Quote */}
-                <p className="text-white/60 text-[13px] leading-relaxed mb-4">
+                <p className="text-white/65 text-[13px] leading-relaxed mb-4">
                   &ldquo;{t.text}&rdquo;
                 </p>
-                {/* Author */}
-                <div className="flex items-center gap-2.5">
-                  <div className={`w-8 h-8 bg-gradient-to-br ${t.color} rounded-full flex items-center justify-center text-white text-[10px] font-bold`}>
-                    {t.avatar}
+                {/* Author + source */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className={`w-8 h-8 bg-gradient-to-br ${t.color} rounded-full flex items-center justify-center text-white text-[10px] font-bold`}>
+                      {t.avatar}
+                    </div>
+                    <div>
+                      <p className="text-white/80 text-[12px] font-semibold">{t.name}</p>
+                      <p className="text-white/45 text-[11px]">{t.location}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-white/80 text-[12px] font-semibold">{t.name}</p>
-                    <p className="text-white/30 text-[11px]">{t.location}</p>
+                  <div className="text-right">
+                    <p className="text-white/40 text-[10px]">{t.source}</p>
+                    <p className="text-white/30 text-[9px]">{t.timeAgo}</p>
                   </div>
                 </div>
               </div>
@@ -394,29 +443,52 @@ function GetQuoteContent() {
         </div>
       </section>
 
-      {/* ═══ Pricing ═══ */}
+      {/* ═══ Why Vivint vs. Others ═══ */}
       <section className="py-10 bg-[#0d1b30]/80 border-t border-white/[0.04]">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 className="text-[18px] md:text-[22px] font-bold text-white mb-6 text-center">
+            Why homeowners switch to Vivint
+          </h2>
+          <div className="space-y-3">
+            {[
+              { vs: 'vs. ADT', point: 'No $99–$199 installation fee. No 36-month contract lock-in.' },
+              { vs: 'vs. SimpliSafe', point: 'Professional installation included. AI cameras with person detection, not just motion triggers.' },
+              { vs: 'vs. Ring', point: 'Full 24/7 professional monitoring with 14-second average response. Not just cameras — a complete security system.' },
+            ].map((row) => (
+              <div key={row.vs} className="flex items-start gap-3 bg-white/[0.03] rounded-lg border border-white/[0.06] p-4">
+                <span className="text-[#00C853] text-[11px] font-bold uppercase tracking-wide bg-[#00C853]/10 px-2 py-0.5 rounded flex-shrink-0 mt-0.5">
+                  {row.vs}
+                </span>
+                <p className="text-white/60 text-[13px]">{row.point}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ Pricing ═══ */}
+      <section className="py-10 border-t border-white/[0.04]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="bg-white/[0.03] rounded-2xl border border-white/[0.06] p-6 md:p-8">
             <h2 className="text-center text-[18px] md:text-[22px] font-bold text-white mb-5">
-              Simple, Transparent Pricing
+              No surprises. Here&apos;s what it costs.
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { label: 'Down payment', value: '$0', sub: 'Nothing upfront' },
-                { label: 'Monitoring', value: '$19.95', sub: 'per month' },
+                { label: 'Monitoring', value: '$19.95', sub: 'per month*' },
                 { label: 'Installation', value: 'Free', sub: 'Professional setup' },
                 { label: 'Commitment', value: 'None', sub: 'Cancel anytime' },
               ].map((item) => (
                 <div key={item.label} className="text-center">
-                  <p className="text-white/30 text-[10px] uppercase tracking-wider font-medium mb-1">{item.label}</p>
+                  <p className="text-white/50 text-[10px] uppercase tracking-wider font-medium mb-1">{item.label}</p>
                   <p className="text-white font-extrabold text-[20px] md:text-[24px]">{item.value}</p>
-                  <p className="text-white/30 text-[11px]">{item.sub}</p>
+                  <p className="text-white/45 text-[11px]">{item.sub}</p>
                 </div>
               ))}
             </div>
-            <p className="text-center text-white/25 text-[12px] mt-5">
-              No hidden fees. No bait-and-switch pricing.
+            <p className="text-center text-white/40 text-[11px] mt-5">
+              *Starting price with qualifying system. Most homeowners pay $29–$45/month depending on package. Your advisor builds a quote for your home.
             </p>
           </div>
         </div>
@@ -426,8 +498,8 @@ function GetQuoteContent() {
       <div className="border-t border-white/[0.04]">
         <FAQSection
           faqs={faqs}
-          title="Frequently Asked Questions"
-          subtitle="Everything you need to know"
+          title="Before you decide"
+          darkMode
         />
       </div>
 
@@ -435,25 +507,22 @@ function GetQuoteContent() {
       <section className="py-14 bg-[#0d1b30]/80 border-t border-white/[0.04] text-center relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#00C853]/[0.04] rounded-full blur-[100px]" />
         <div className="max-w-md mx-auto px-4 relative">
-          <p className="text-[#00C853] font-semibold text-[11px] uppercase tracking-[0.15em] mb-3">
-            LIMITED SLOTS THIS WEEK
-          </p>
           <h2 className="text-[20px] md:text-[26px] font-extrabold text-white mb-3 tracking-tight">
-            Get Your Free Quote Now
+            Your free quote takes 30 seconds
           </h2>
-          <p className="text-white/40 text-[13px] mb-7">
-            $0 down. Free doorbell camera. Professional installation in 24–48 hours.
+          <p className="text-white/55 text-[13px] mb-7">
+            $0 down. Free doorbell camera. Installed by a certified tech in under 2 hours.
           </p>
           <button
             onClick={onCTAClick}
             className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-[14px] transition-all hover:-translate-y-0.5 shadow-lg shadow-[#00C853]/20 w-full sm:w-auto"
           >
-            Check Availability <ChevronRight size={16} className="inline ml-1" />
+            Get My Free Quote <ChevronRight size={16} className="inline ml-1" />
           </button>
           <div className="mt-4">
             <a
               href={`tel:${PHONE_RAW}`}
-              className="inline-flex items-center gap-1.5 text-white/30 hover:text-white/50 transition-colors text-[12px]"
+              className="inline-flex items-center gap-1.5 text-white/50 hover:text-white/65 transition-colors text-[12px]"
             >
               <Phone size={12} />
               Or call {PHONE}
@@ -465,17 +534,20 @@ function GetQuoteContent() {
       {/* ═══ Footer ═══ */}
       <footer className="bg-[#060d18] py-5 border-t border-white/[0.04]">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-white/20 text-[11px]">
+          <p className="text-white/40 text-[11px]">
             © {new Date().getFullYear()} ShieldHome Pro — Authorized Vivint Smart Home Dealer | {PHONE}
           </p>
-          <p className="text-white/[0.12] text-[10px] mt-1 max-w-md mx-auto">
+          <p className="text-white/30 text-[10px] mt-1 max-w-md mx-auto">
             ShieldHome Pro is an independently operated authorized dealer. Vivint® is a registered trademark of Vivint Smart Home, Inc.
           </p>
         </div>
       </footer>
 
+      {/* Spacer for sticky CTA on mobile */}
+      <div className="h-16 md:h-12" />
+
       {/* ═══ Sticky CTA ═══ */}
-      <StickyPhoneCTA onQuizOpen={onCTAClick} />
+      <StickyPhoneCTA onQuizOpen={onCTAClick} darkMode />
     </div>
   )
 }

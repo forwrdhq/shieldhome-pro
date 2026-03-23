@@ -50,65 +50,57 @@ const localBusinessSchema = {
   sameAs: [],
 }
 
-// FAQ Schema
+// FAQ Schema — synced with on-page FAQ content
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'How much does a Vivint system cost?',
+      name: 'Is installation really free?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Every home is different, so we give free custom quotes. Most homeowners pay $0 upfront for equipment with free expert setup. Monthly monitoring starts around $1.33/day (about $39.99/month). Your Smart Home Pro will build a package based on your home\'s size and needs — so you only pay for what you need.',
+        text: 'Yes. Professional installation by a certified Vivint technician is included at no cost. Most installations are completed in under 2 hours. Your technician handles all wiring, mounting, configuration, and walks you through the app before they leave.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Is expert setup really free?',
+      name: 'Do I need a long-term contract?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes — 100% free. Vivint sends a certified tech to your home at no charge. They\'ll set up all equipment, connect everything to your WiFi, set up your app, and walk you through how it all works. Most setups take 2-4 hours. No hidden fees.',
+        text: 'No. Vivint offers flexible month-to-month monitoring plans. No multi-year commitment required. You can cancel anytime — though with a 4.8/5 rating from 58,000+ reviews, most customers stay for years.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Do I need a landline or internet?',
+      name: 'How fast can I get protected?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No landline needed. Vivint systems use a built-in cell connection, so your system stays connected even if your WiFi goes down. WiFi is used for camera streaming and smart home features, but the core security works over cellular. This is more reliable than old landline systems.',
+        text: 'Most homes are fully installed within 24–48 hours of your consultation. We schedule at your convenience — mornings, evenings, and weekends available.',
       },
     },
     {
       '@type': 'Question',
-      name: "What's the contract length?",
+      name: 'Can I control everything from my phone?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Vivint offers plans from month-to-month to multi-year. Longer plans often come with better equipment pricing and promos (like the free doorbell camera). Your Smart Home Pro will walk you through all options so you can pick what works best for your budget.',
+        text: 'Yes. The Vivint Smart Home app gives you full control of cameras, locks, sensors, thermostat, and garage from anywhere. Live HD camera feeds, instant alerts, and one-tap arming/disarming.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Can I keep my smart home devices?',
+      name: 'What equipment do I get?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Usually, yes. Vivint works with Google Assistant, Amazon Alexa, Philips Hue, Kwikset locks, Nest thermostats, and many other popular devices. Your tech can connect them during setup. If you have an existing security system, Vivint can often use existing wiring.',
+        text: "Your custom system can include indoor/outdoor AI cameras, a video doorbell (free with qualifying systems), smart locks, door/window sensors, motion detectors, and a 7\" touchscreen control panel. Your advisor designs the system around your home's specific layout.",
       },
     },
     {
       '@type': 'Question',
-      name: 'What if the power goes out?',
+      name: 'What does monitoring cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Vivint systems have battery backup that keeps security running during outages — usually 24+ hours. Since the system uses cell signal (not just WiFi), monitoring continues even if your internet goes down. You\'ll get a phone alert if power is lost.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What if I move?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Vivint makes moving easy. They'll send a pro to take down your equipment and set it up at your new home. Many customers use this as a chance to upgrade or add new equipment too.",
+        text: 'Plans start at $19.95/month for basic monitoring. Most homeowners choose a package in the $29–$45/month range depending on how many cameras and smart devices they want. Your advisor will build a custom quote — you only pay for what you actually need.',
       },
     },
     {
@@ -132,19 +124,19 @@ const howToSchema = {
     {
       '@type': 'HowToStep',
       position: 1,
-      name: 'Take the 60-Second Quiz',
-      text: 'Answer a few quick questions about your home and security needs to get a custom recommendation.',
+      name: 'Tell us about your home',
+      text: 'Enter your ZIP code and a few details about your home to get a custom recommendation. Takes about 30 seconds.',
     },
     {
       '@type': 'HowToStep',
       position: 2,
-      name: 'Get Your Free Custom Quote',
+      name: 'Get your custom plan',
       text: 'A Vivint Smart Home Pro will call you with a personalized security package and pricing — no obligation.',
     },
     {
       '@type': 'HowToStep',
       position: 3,
-      name: 'Free Expert Setup in 24-48 Hours',
+      name: 'Free professional installation in 24-48 hours',
       text: 'A certified Vivint technician comes to your home, installs everything, connects your app, and walks you through the system — at no cost.',
     },
   ],

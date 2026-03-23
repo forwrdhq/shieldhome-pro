@@ -8,6 +8,7 @@ interface FAQSectionProps {
   faqs?: { q: string; a: string }[]
   title?: string
   subtitle?: string
+  darkMode?: boolean
 }
 
 const defaultFaqs = [
@@ -45,9 +46,56 @@ const defaultFaqs = [
   },
 ]
 
-export default function FAQSection({ faqs, title, subtitle }: FAQSectionProps = {}) {
+export default function FAQSection({ faqs, title, subtitle, darkMode }: FAQSectionProps = {}) {
   const [open, setOpen] = useState<number | null>(null)
   const items = faqs || defaultFaqs
+
+  if (darkMode) {
+    return (
+      <section className="py-14">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-[22px] md:text-[28px] font-extrabold text-white tracking-tight">
+              {title || 'Common Questions'}
+            </h2>
+          </div>
+          <div className="space-y-2">
+            {items.map((faq, i) => (
+              <div key={i} className="bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden">
+                <button
+                  onClick={() => setOpen(open === i ? null : i)}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-white/[0.02] transition-colors"
+                  aria-expanded={open === i}
+                  aria-controls={`faq-answer-${i}`}
+                >
+                  <span className="font-semibold text-white/80 pr-4 text-[14px]">{faq.q}</span>
+                  <ChevronDown
+                    size={18}
+                    className={cn(
+                      'text-white/30 flex-shrink-0 transition-transform duration-200',
+                      open === i && 'rotate-180'
+                    )}
+                  />
+                </button>
+                <div
+                  id={`faq-answer-${i}`}
+                  role="region"
+                  className={cn(
+                    'overflow-hidden transition-all duration-200',
+                    open === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  )}
+                >
+                  <div className="px-5 pb-5 text-white/55 leading-relaxed text-[13px]">
+                    {faq.a}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-16 bg-[#F8F9FA]">

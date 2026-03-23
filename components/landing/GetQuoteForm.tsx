@@ -158,13 +158,13 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
             {step > 1 && (
               <button
                 onClick={() => { setStep(step - 1); setOwnership(''); }}
-                className="text-xs text-white/40 hover:text-white/70 transition-colors"
+                className="text-xs text-white/55 hover:text-white/75 transition-colors"
               >
                 ← Back
               </button>
             )}
           </div>
-          <span className="text-[10px] font-medium text-white/40 uppercase tracking-wider">
+          <span className="text-[10px] font-medium text-white/50 uppercase tracking-wider">
             Step {step} of 3
           </span>
         </div>
@@ -185,6 +185,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value.replace(/\D/g, '').slice(0, 5))}
                 placeholder="ZIP Code"
+                aria-label="ZIP Code"
                 className="flex-1 px-4 py-3.5 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]"
                 maxLength={5}
                 autoFocus
@@ -203,10 +204,10 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
               </button>
             </div>
 
-            <p className="text-white/30 text-[11px] mt-3 flex items-center gap-1">
+            <p className="text-white/50 text-[11px] mt-3 flex items-center gap-1">
               <Lock size={10} /> Your info is encrypted and never sold
             </p>
-            <p className="text-white/25 text-[11px] mt-1 text-center">
+            <p className="text-white/45 text-[11px] mt-1 text-center">
               Takes 30 seconds · No credit card needed
             </p>
           </div>
@@ -250,7 +251,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
 
             {homeType && (
               <>
-                <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-2">Do you own or rent?</p>
+                <p className="text-white/60 text-xs font-medium uppercase tracking-wider mb-2">Do you own or rent?</p>
                 <div className="grid grid-cols-2 gap-2 mb-4">
                   <button
                     onClick={() => setOwnership('OWN')}
@@ -324,6 +325,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 onChange={(e) => setFirstName(e.target.value)}
                 onBlur={() => setTouched((t) => ({ ...t, firstName: true }))}
                 placeholder="First name"
+                aria-label="First name"
                 className={cn(
                   'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
                   touched.firstName && !firstName.trim() && 'ring-2 ring-red-400'
@@ -337,6 +339,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 onChange={(e) => setPhone(formatPhone(e.target.value))}
                 onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
                 placeholder="Phone number"
+                aria-label="Phone number"
                 className={cn(
                   'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
                   touched.phone && phoneDigits.length !== 10 && 'ring-2 ring-red-400'
@@ -350,6 +353,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 onBlur={() => setTouched((t) => ({ ...t, email: true }))}
                 placeholder="Email address"
+                aria-label="Email address"
                 className={cn(
                   'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
                   touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && 'ring-2 ring-red-400'
@@ -364,7 +368,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 onChange={(e) => setTcpaConsent(e.target.checked)}
                 className="mt-0.5 w-4 h-4 rounded border-white/20 text-[#00C853] focus:ring-[#00C853] bg-white/10"
               />
-              <span className="text-[11px] text-white/40 leading-relaxed">
+              <span className="text-[11px] text-white/50 leading-relaxed">
                 By submitting, you agree to receive calls/texts from ShieldHome.pro regarding your security quote. Msg &amp; data rates may apply. Reply STOP to cancel.
               </span>
             </label>
@@ -388,7 +392,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
               Get My Free Quote <ChevronRight size={16} />
             </button>
 
-            <div className="flex items-center justify-center gap-3 mt-3 text-[10px] text-white/30">
+            <div className="flex items-center justify-center gap-3 mt-3 text-[10px] text-white/45">
               <span className="flex items-center gap-1"><Lock size={10} /> Encrypted</span>
               <span className="flex items-center gap-1"><ShieldCheck size={10} /> Never sold</span>
               <span className="flex items-center gap-1"><Zap size={10} /> Instant quote</span>

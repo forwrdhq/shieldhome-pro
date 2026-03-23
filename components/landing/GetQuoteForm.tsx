@@ -113,7 +113,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
         w.fbq('track', 'CompleteRegistration')
       }
       if (w.gtag) {
-        w.gtag('event', 'conversion', { send_to: 'AW-CONVERSION_ID/LABEL', value: 900.0, currency: 'USD' })
+        w.gtag('event', 'conversion', { send_to: 'AW-18032237621/PeImCJX0lI0cELW4uJZD', value: 900.0, currency: 'USD' })
       }
       if (w.dataLayer) {
         w.dataLayer.push({ event: 'lead_submitted', lead_value: 900, segment: 'new-customer', source: 'google' })

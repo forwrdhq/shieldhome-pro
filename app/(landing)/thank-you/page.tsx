@@ -22,7 +22,7 @@ function ThankYouContent() {
     // Meta Lead fires in QuizFunnel/SwitchForm/UpgradeForm onSubmit — do NOT fire again here or it doubles
     if ((window as any).gtag) {
       const eventLabel = isSwitch ? 'switch_form' : isUpgrade ? 'upgrade_form' : 'quiz_funnel';
-      (window as any).gtag('event', 'conversion', { value: isUpgrade ? 600.0 : 900.0, currency: 'USD' })
+      (window as any).gtag('event', 'conversion', { send_to: 'AW-18032237621/PeImCJX0lI0cELW4uJZD', value: isUpgrade ? 600.0 : 900.0, currency: 'USD' })
       ;(window as any).gtag('event', 'generate_lead', { event_category: 'form_submission', event_label: eventLabel, value: isUpgrade ? 600 : 900 })
     }
   }, [isSwitch, isUpgrade])

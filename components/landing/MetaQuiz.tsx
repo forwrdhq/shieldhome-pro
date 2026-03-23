@@ -238,7 +238,7 @@ export default function MetaQuiz() {
           })
         }
         if ((window as any).gtag) {
-          (window as any).gtag('event', 'conversion', { value: 900.0, currency: 'USD' })
+          (window as any).gtag('event', 'conversion', { send_to: 'AW-18032237621/PeImCJX0lI0cELW4uJZD', value: 900.0, currency: 'USD' })
         }
       }
 

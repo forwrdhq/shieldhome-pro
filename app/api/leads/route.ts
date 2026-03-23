@@ -56,6 +56,11 @@ export async function POST(req: NextRequest) {
         medium: existing.medium,
         campaign: existing.campaign,
         productsInterested: existing.productsInterested,
+        segment: existing.segment,
+        landingPage: existing.landingPage,
+        currentProvider: existing.currentProvider,
+        contractMonthsRemaining: existing.contractMonthsRemaining,
+        currentMonthlyPayment: existing.currentMonthlyPayment,
       }
 
       await Promise.allSettled([
@@ -106,6 +111,7 @@ export async function POST(req: NextRequest) {
         utmContent: data.utmContent,
         gclid: data.gclid,
         fbclid: data.fbclid,
+        kwParam: data.kwParam,
         landingPage: data.landingPage,
         referrer: data.referrer,
         deviceType: data.deviceType,

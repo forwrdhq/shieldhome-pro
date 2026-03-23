@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://shieldhome.pro/get-quote',
   },
+  alternates: {
+    canonical: 'https://shieldhome.pro/get-quote',
+  },
   twitter: {
     card: 'summary_large_image',
     title: 'Free Home Security Quote — $0 Down | ShieldHome',

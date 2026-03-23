@@ -10,6 +10,7 @@ export interface TrackingData {
   utmContent: string | null
   gclid: string | null
   fbclid: string | null
+  kwParam: string | null
   landingPage: string
   referrer: string
   deviceType: 'mobile' | 'desktop' | 'tablet'
@@ -39,7 +40,7 @@ export function captureTrackingData(): TrackingData {
     return {
       source: null, medium: null, campaign: null, adSet: null,
       adId: null, keyword: null, utmContent: null, gclid: null,
-      fbclid: null, landingPage: '/', referrer: '', deviceType: 'desktop', browser: 'Unknown'
+      fbclid: null, kwParam: null, landingPage: '/', referrer: '', deviceType: 'desktop', browser: 'Unknown'
     }
   }
 
@@ -55,6 +56,7 @@ export function captureTrackingData(): TrackingData {
     utmContent: params.get('utm_content'),
     gclid: params.get('gclid'),
     fbclid: params.get('fbclid'),
+    kwParam: params.get('kw'),
     landingPage: window.location.pathname,
     referrer: document.referrer,
     deviceType: detectDeviceType(),

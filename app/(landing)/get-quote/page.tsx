@@ -14,14 +14,20 @@ import {
 const PHONE = '(801) 616-6301'
 const PHONE_RAW = '+18016166301'
 
-// ─── DTR Headlines ───
+// ─── DTR Headlines (keyword → headline for Google Ads message match) ───
 const HEADLINES: Record<string, string> = {
-  'home-security': 'Professional Home Security — $0 Down, Free Setup',
-  'installation': 'Professional Home Security Installation — Free Setup',
-  'smart-home': 'Smart Home Security Systems — $0 Down, Free Camera',
-  'near-me': 'Home Security Installation Near You — $0 Down',
-  'cost': 'Home Security Starting at $0 Down — Get Your Custom Quote',
+  'install': 'Expert Home Security Installation — $0 Down, Free Camera',
+  'installation': 'Expert Home Security Installation — $0 Down, Free Camera',
+  'smart': 'Smart Home Security System — Free Setup, $0 Down',
+  'smart-home': 'Smart Home Security System — Free Setup, $0 Down',
+  'near-me': 'Home Security Installation Near You — Free Setup, $0 Down',
+  'local': 'Home Security Installation in Your Area — Free Setup',
+  'cameras': 'AI Security Cameras + 24/7 Monitoring — Free Installation',
+  'cost': 'Home Security System — See Your Custom Price ($0 Down)',
+  'price': 'Home Security System — See Your Custom Price ($0 Down)',
   'quote': 'Get Your Free Home Security Quote — $0 Down, Free Setup',
+  'system': 'Complete Home Security System — $0 Down, Free Doorbell Camera',
+  'home-security': 'Professional Home Security — $0 Down, Free Setup',
 }
 const DEFAULT_HEADLINE = 'Professional Home Security — $0 Down, Free Doorbell Camera'
 
@@ -206,7 +212,7 @@ function GetQuoteContent() {
                   { icon: <Zap size={15} />, text: 'Installed in 24–48 hours' },
                   { icon: <ShieldCheck size={15} />, text: '24/7 professional monitoring' },
                   { icon: <Camera size={15} />, text: 'Free doorbell camera included' },
-                  { icon: <Lock size={15} />, text: 'No long-term commitment' },
+                  { icon: <Lock size={15} />, text: '$0 down — no upfront equipment cost' },
                 ].map((item) => (
                   <div key={item.text} className="flex items-center gap-2.5 text-white/50 text-[13px]">
                     <div className="text-[#00C853] flex-shrink-0">{item.icon}</div>
@@ -228,10 +234,22 @@ function GetQuoteContent() {
                   <Users size={12} className="text-[#00C853]" /> 2M+ homes
                 </span>
               </div>
+
+              {/* Competitor proof — desktop */}
+              <p className="hidden md:block text-[11px] text-white/25 mt-3">
+                Rated higher than ADT, SimpliSafe, and Ring — 4.8/5 from 58,000+ verified reviews
+              </p>
             </div>
 
             {/* Right: Form */}
             <div className="order-1 md:order-2">
+              {/* Urgency badge */}
+              <div className="flex justify-center md:justify-start mb-3">
+                <div className="inline-flex items-center gap-1.5 bg-[#00C853]/15 border border-[#00C853]/20 rounded-full px-3 py-1">
+                  <Lock size={11} className="text-[#00C853]" />
+                  <span className="text-[#00C853] text-[11px] font-semibold">March Special: Free Doorbell Camera + $0 Installation</span>
+                </div>
+              </div>
               <GetQuoteForm />
             </div>
           </div>
@@ -250,11 +268,17 @@ function GetQuoteContent() {
                 <Users size={10} className="text-[#00C853]" /> 2M+ homes
               </span>
             </div>
+            {/* Competitor proof — mobile */}
+            <p className="text-center text-[10px] text-white/25 mt-3">
+              Rated higher than ADT, SimpliSafe, and Ring
+            </p>
+            {/* Mobile click-to-call */}
             <div className="text-center mt-3">
               <a
                 href={`tel:${PHONE_RAW}`}
-                className="text-white/30 hover:text-white/50 transition-colors text-[11px]"
+                className="inline-flex items-center gap-1.5 text-white/50 hover:text-white/70 transition-colors text-[13px] py-2"
               >
+                <Phone size={13} />
                 Prefer to talk? Call {PHONE}
               </a>
             </div>
@@ -391,6 +415,9 @@ function GetQuoteContent() {
                 </div>
               ))}
             </div>
+            <p className="text-center text-white/25 text-[12px] mt-5">
+              No hidden fees. No bait-and-switch pricing.
+            </p>
           </div>
         </div>
       </section>

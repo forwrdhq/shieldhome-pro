@@ -83,6 +83,7 @@ model Lead {
   utmContent      String?
   gclid           String?
   fbclid          String?
+  kwParam         String?
   deviceType      String?
   browser         String?
   ipAddress       String?

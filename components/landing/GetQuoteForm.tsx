@@ -173,9 +173,9 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
         {step === 1 && (
           <div className="animate-[fadeInUp_0.25s_ease-out]">
             <h3 className="text-lg font-bold text-white mb-1">
-              Check availability in your area
+              Tell us about your home
             </h3>
-            <p className="text-white/50 text-sm mb-4">Enter your ZIP to see offers near you</p>
+            <p className="text-white/50 text-sm mb-4">Enter your ZIP for custom offers in your area</p>
 
             <div className="flex gap-2">
               <input
@@ -199,12 +199,15 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                     : 'bg-white/10 text-white/30 cursor-not-allowed'
                 )}
               >
-                Check Availability <ChevronRight size={16} />
+                Get My Free Quote <ChevronRight size={16} />
               </button>
             </div>
 
             <p className="text-white/30 text-[11px] mt-3 flex items-center gap-1">
               <Lock size={10} /> Your info is encrypted and never sold
+            </p>
+            <p className="text-white/25 text-[11px] mt-1 text-center">
+              Takes 30 seconds · No credit card needed
             </p>
           </div>
         )}

@@ -27,6 +27,7 @@ export const leadSchema = z.object({
   utmContent: z.string().optional().nullable(),
   gclid: z.string().optional().nullable(),
   fbclid: z.string().optional().nullable(),
+  kwParam: z.string().optional().nullable(),
   landingPage: z.string().optional().nullable(),
   referrer: z.string().optional().nullable(),
   deviceType: z.string().optional().nullable(),

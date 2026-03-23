@@ -304,13 +304,13 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
     <div className={cn('w-full', isModal ? 'max-w-lg mx-auto' : 'max-w-xl mx-auto', className)}>
       <div className={cn(
         'bg-white overflow-hidden',
-        isModal ? 'rounded-none sm:rounded-2xl' : 'rounded-2xl shadow-2xl border border-gray-100'
+        isModal ? 'rounded-none sm:rounded-xl' : 'rounded-xl shadow-md border border-slate-200'
       )}>
         {/* Header for modal */}
         {isModal && (
-          <div className="flex items-center justify-between px-6 py-4 bg-[#1A1A2E]">
+          <div className="flex items-center justify-between px-6 py-4 bg-slate-900">
             <div className="flex items-center gap-2">
-              <Shield size={20} className="text-[#00C853]" />
+              <Shield size={20} className="text-emerald-500" />
               <span className="text-white font-bold">Free Home Security Assessment</span>
             </div>
             <button
@@ -324,9 +324,9 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
         )}
 
         {/* Progress Bar */}
-        <div className="bg-gray-100 h-2">
+        <div className="bg-slate-200 h-1">
           <div
-            className="bg-[#00C853] h-2 transition-all duration-500 ease-out"
+            className="bg-emerald-500 h-1 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -357,7 +357,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                     key={i}
                     className={cn(
                       'h-1.5 rounded-full transition-all duration-300',
-                      i < step ? 'bg-[#00C853] w-4' : i === step - 1 ? 'bg-[#00C853] w-6' : 'bg-gray-200 w-4'
+                      i < step ? 'bg-emerald-600 w-4' : i === step - 1 ? 'bg-emerald-600 w-6' : 'bg-gray-200 w-4'
                     )}
                   />
                 ))}
@@ -377,10 +377,10 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                   <button
                     key={opt.value}
                     onClick={() => selectProperty(opt.value)}
-                    className="flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 group min-h-[100px]"
+                    className="flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-gray-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-200 group min-h-[100px]"
                     aria-label={`Select ${opt.label}`}
                   >
-                    <span className="text-gray-500 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
+                    <span className="text-gray-500 group-hover:text-emerald-500 transition-colors">{opt.icon}</span>
                     <span className="font-semibold text-gray-800 text-sm">{opt.label}</span>
                   </button>
                 ))}
@@ -407,12 +407,12 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                     onClick={() => selectOwnership(opt.value)}
                     disabled={showRenterNote}
                     className={cn(
-                      'flex items-center gap-4 p-5 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 group text-left',
+                      'flex items-center gap-4 p-5 rounded-xl border-2 border-gray-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-200 group text-left',
                       showRenterNote && 'opacity-50 cursor-not-allowed'
                     )}
                     aria-label={`Select ${opt.label}`}
                   >
-                    <span className="text-gray-500 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
+                    <span className="text-gray-500 group-hover:text-emerald-500 transition-colors">{opt.icon}</span>
                     <span className="font-semibold text-gray-800">{opt.label}</span>
                   </button>
                 ))}
@@ -435,17 +435,17 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                       className={cn(
                         'flex items-center gap-4 p-4 rounded-xl border-2 transition-all duration-200 text-left min-h-[56px]',
                         selected
-                          ? 'border-[#00C853] bg-green-50'
-                          : 'border-gray-200 hover:border-[#00C853] hover:bg-green-50'
+                          ? 'border-emerald-600 bg-emerald-50'
+                          : 'border-gray-200 hover:border-emerald-600 hover:bg-emerald-50'
                       )}
                       aria-label={`${selected ? 'Deselect' : 'Select'} ${opt.label}`}
                       aria-pressed={selected}
                     >
-                      <span className={cn('transition-colors', selected ? 'text-[#00C853]' : 'text-gray-500')}>
+                      <span className={cn('transition-colors', selected ? 'text-emerald-500' : 'text-gray-500')}>
                         {opt.icon}
                       </span>
                       <span className="font-semibold text-gray-800 flex-1">{opt.label}</span>
-                      {selected && <CheckCircle size={20} className="text-[#00C853]" />}
+                      {selected && <CheckCircle size={20} className="text-emerald-500" />}
                     </button>
                   )
                 })}
@@ -479,10 +479,10 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                   <button
                     key={opt.value}
                     onClick={() => selectEntryPoints(opt.value)}
-                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 text-left group min-h-[56px]"
+                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-200 text-left group min-h-[56px]"
                     aria-label={`Select ${opt.label}`}
                   >
-                    <span className="text-gray-500 group-hover:text-[#00C853] transition-colors">
+                    <span className="text-gray-500 group-hover:text-emerald-500 transition-colors">
                       <DoorOpen size={24} />
                     </span>
                     <span className="font-semibold text-gray-800">{opt.label}</span>
@@ -502,10 +502,10 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                   <button
                     key={opt.value}
                     onClick={() => selectTimeline(opt.value)}
-                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-[#00C853] hover:bg-green-50 transition-all duration-200 text-left group min-h-[56px]"
+                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-200 text-left group min-h-[56px]"
                     aria-label={`Select ${opt.label}`}
                   >
-                    <span className="text-gray-500 group-hover:text-[#00C853] transition-colors">{opt.icon}</span>
+                    <span className="text-gray-500 group-hover:text-emerald-500 transition-colors">{opt.icon}</span>
                     <span className="font-semibold text-gray-800 flex-1">{opt.label}</span>
                     {opt.hot && (
                       <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">
@@ -522,8 +522,8 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
           {step === 6 && (
             <div className="animate-in">
               <div className="text-center mb-6">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-3">
-                  <CheckCircle className="text-[#00C853]" size={24} />
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 rounded-full mb-3">
+                  <CheckCircle className="text-emerald-500" size={24} />
                 </div>
                 <h2 className="text-xl md:text-2xl font-bold text-gray-900">{qualification.headline}</h2>
                 <p className="text-gray-500 mt-1 text-sm max-w-md mx-auto">{qualification.subtext}</p>
@@ -547,7 +547,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                     onChange={handlePhoneChange}
                     autoComplete="tel"
                     className={cn(
-                      'w-full px-4 py-3 rounded-lg border text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00C853] focus:border-transparent transition-all',
+                      'w-full px-4 py-3 rounded-lg border text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all',
                       errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-300'
                     )}
                     style={{ fontSize: '16px' }}
@@ -581,7 +581,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                     type="checkbox"
                     checked={tcpaConsent}
                     onChange={(e) => setTcpaConsent(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 text-[#00C853] rounded border-gray-300 focus:ring-[#00C853]"
+                    className="mt-0.5 h-4 w-4 text-emerald-500 rounded border-gray-300 focus:ring-emerald-500"
                   />
                   <span className="text-xs text-gray-500 leading-relaxed">
                     By clicking &ldquo;Get My Free Quote,&rdquo; I agree to receive calls, texts, and emails
@@ -609,21 +609,21 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                 {/* Trust seals */}
                 <div className="pt-2 space-y-3">
                   <div className="flex items-center justify-center gap-1.5 text-gray-500">
-                    <Lock size={14} className="text-[#00C853]" />
+                    <Lock size={14} className="text-emerald-500" />
                     <span className="text-xs font-medium">Your info is 100% secure. We never sell or share your data.</span>
                   </div>
 
                   <div className="flex items-center justify-center gap-6 text-gray-500">
                     <div className="flex items-center gap-1.5">
-                      <Lock size={14} className="text-[#00C853]" />
+                      <Lock size={14} className="text-emerald-500" />
                       <span className="text-xs font-medium">256-bit SSL</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Shield size={14} className="text-[#00C853]" />
+                      <Shield size={14} className="text-emerald-500" />
                       <span className="text-xs font-medium">BBB A+ Rated</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Award size={14} className="text-[#00C853]" />
+                      <Award size={14} className="text-emerald-500" />
                       <span className="text-xs font-medium">#1 Rated</span>
                     </div>
                   </div>
@@ -631,7 +631,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                   <div className="flex items-center justify-center gap-2 pt-1">
                     <Users size={14} className="text-gray-400" />
                     <p className="text-xs text-gray-500 font-medium">
-                      <span className="text-[#00C853] font-bold">2,847 homeowners</span> requested a quote this month
+                      <span className="text-emerald-500 font-bold">2,847 homeowners</span> requested a quote this month
                     </p>
                   </div>
                 </div>

@@ -147,8 +147,8 @@ export default function SwitchForm({ className }: SwitchFormProps) {
     return (
       <div className={cn('bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12', className)}>
         <div className="flex flex-col items-center justify-center py-10">
-          <div className="w-14 h-14 border-[3px] border-gray-200 border-t-[#00C853] rounded-full animate-spin mb-5" />
-          <p className="text-lg font-bold text-[#1A1A2E] mb-1">Calculating your buyout eligibility...</p>
+          <div className="w-14 h-14 border-[3px] border-gray-200 border-t-emerald-500 rounded-full animate-spin mb-5" />
+          <p className="text-lg font-bold text-slate-900 mb-1">Calculating your buyout eligibility...</p>
           <p className="text-gray-400 text-sm">Reviewing {provider} contract terms</p>
         </div>
       </div>
@@ -160,7 +160,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
       {/* Progress bar — full width across top */}
       <div className="h-1.5 bg-gray-100">
         <div
-          className="h-full bg-[#00C853] transition-all duration-500 ease-out"
+          className="h-full bg-emerald-600 transition-all duration-500 ease-out"
           style={{ width: `${(step / 3) * 100}%` }}
         />
       </div>
@@ -189,7 +189,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
         {/* ─── Step 1: Provider ─── */}
         {step === 1 && (
           <div className="animate-[fadeInUp_0.25s_ease-out]">
-            <h3 className="text-lg md:text-xl font-bold text-[#1A1A2E] mb-1">
+            <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-1">
               Who is your current security provider?
             </h3>
             <p className="text-gray-400 text-sm mb-5">We&apos;ll calculate your buyout amount</p>
@@ -202,7 +202,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                   className={cn(
                     'py-3.5 px-3 rounded-lg border text-center font-semibold text-sm transition-all',
                     provider === p.value
-                      ? 'border-[#00C853] bg-[#00C853]/5 text-[#00C853] shadow-sm shadow-green-100'
+                      ? 'border-emerald-600 bg-emerald-600/5 text-emerald-500 shadow-sm shadow-green-100'
                       : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
                   )}
                 >
@@ -218,7 +218,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                   value={otherProvider}
                   onChange={(e) => setOtherProvider(e.target.value)}
                   placeholder="Provider name"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-sm"
                 />
               </div>
             )}
@@ -232,7 +232,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value.replace(/\D/g, '').slice(0, 5))}
                   placeholder="e.g. 84003"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-sm"
                   maxLength={5}
                 />
               </div>
@@ -244,7 +244,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
               className={cn(
                 'w-full py-3.5 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5',
                 isStep1Valid
-                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-sm'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm'
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed'
               )}
             >
@@ -258,12 +258,12 @@ export default function SwitchForm({ className }: SwitchFormProps) {
           <div className="animate-[fadeInUp_0.25s_ease-out]">
             {/* Answer badge */}
             <div className="flex items-center gap-2 mb-4">
-              <span className="inline-flex items-center gap-1 bg-green-50 text-[#00C853] text-xs font-medium px-2.5 py-1 rounded-full">
+              <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-500 text-xs font-medium px-2.5 py-1 rounded-full">
                 <CheckCircle size={12} /> {provider}
               </span>
             </div>
 
-            <h3 className="text-lg md:text-xl font-bold text-[#1A1A2E] mb-1">
+            <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-1">
               Tell us about your contract
             </h3>
             <p className="text-gray-400 text-sm mb-5">This helps us estimate your buyout amount</p>
@@ -275,7 +275,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
               <select
                 value={contractMonths}
                 onChange={(e) => setContractMonths(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm bg-white appearance-none"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-sm bg-white appearance-none"
               >
                 <option value="">Select...</option>
                 {CONTRACT_OPTIONS.map((opt) => (
@@ -296,7 +296,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                   value={monthlyPayment}
                   onChange={(e) => setMonthlyPayment(e.target.value.replace(/[^\d.]/g, ''))}
                   placeholder="45–65 is typical"
-                  className="w-full pl-7 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm"
+                  className="w-full pl-7 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-sm"
                 />
               </div>
             </div>
@@ -307,7 +307,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
               className={cn(
                 'w-full py-3.5 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5',
                 isStep2Valid
-                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-sm'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm'
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed'
               )}
             >
@@ -321,15 +321,15 @@ export default function SwitchForm({ className }: SwitchFormProps) {
           <div className="animate-[fadeInUp_0.25s_ease-out]">
             {/* Answer badges */}
             <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className="inline-flex items-center gap-1 bg-green-50 text-[#00C853] text-xs font-medium px-2.5 py-1 rounded-full">
+              <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-500 text-xs font-medium px-2.5 py-1 rounded-full">
                 <CheckCircle size={12} /> {provider}
               </span>
-              <span className="inline-flex items-center gap-1 bg-green-50 text-[#00C853] text-xs font-medium px-2.5 py-1 rounded-full">
+              <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-500 text-xs font-medium px-2.5 py-1 rounded-full">
                 <CheckCircle size={12} /> {CONTRACT_OPTIONS.find(o => o.value === contractMonths)?.label}
               </span>
             </div>
 
-            <h3 className="text-lg md:text-xl font-bold text-[#1A1A2E] mb-1">
+            <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-1">
               See your buyout eligibility
             </h3>
             <p className="text-gray-400 text-sm mb-5">We&apos;ll call you with your buyout amount — no obligation</p>
@@ -343,7 +343,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                 onBlur={() => setTouched((t) => ({ ...t, firstName: true }))}
                 placeholder="First name"
                 className={cn(
-                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm',
+                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-sm',
                   touched.firstName && !firstName.trim() ? 'border-red-300' : 'border-gray-200'
                 )}
               />
@@ -356,7 +356,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                 onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
                 placeholder="Phone number"
                 className={cn(
-                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm',
+                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-sm',
                   touched.phone && phoneDigits.length !== 10 ? 'border-red-300' : 'border-gray-200'
                 )}
               />
@@ -369,7 +369,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                 onBlur={() => setTouched((t) => ({ ...t, email: true }))}
                 placeholder="Email address"
                 className={cn(
-                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853]/20 focus:border-[#00C853] outline-none text-sm',
+                  'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-sm',
                   touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'border-red-300' : 'border-gray-200'
                 )}
               />
@@ -380,7 +380,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                 type="checkbox"
                 checked={tcpaConsent}
                 onChange={(e) => setTcpaConsent(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#00C853] focus:ring-[#00C853]"
+                className="mt-0.5 w-4 h-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500"
               />
               <span className="text-[11px] text-gray-400 leading-relaxed">
                 By submitting, you agree to receive calls/texts from ShieldHome.pro regarding your security assessment. Msg &amp; data rates may apply. Reply STOP to cancel.
@@ -399,7 +399,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
               className={cn(
                 'w-full py-4 rounded-lg font-bold transition-all flex items-center justify-center gap-2',
                 isStep3Valid && !submitting
-                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-md shadow-green-200/50'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-green-200/50'
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed'
               )}
             >

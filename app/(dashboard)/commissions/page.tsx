@@ -38,7 +38,7 @@ export default async function CommissionsPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold text-[#1A1A2E] mb-6">Commissions</h1>
+      <h1 className="text-2xl font-bold text-slate-900 mb-6">Commissions</h1>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -50,7 +50,7 @@ export default async function CommissionsPage() {
         ].map(s => (
           <Card key={s.label} padding="sm">
             <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1">{s.label}</p>
-            <p className="text-2xl font-bold text-[#1A1A2E]">{formatCurrency(s.value)}</p>
+            <p className="text-2xl font-bold text-slate-900">{formatCurrency(s.value)}</p>
           </Card>
         ))}
       </div>
@@ -58,7 +58,7 @@ export default async function CommissionsPage() {
       {/* Commission Table */}
       <Card padding="none">
         <div className="p-6 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-[#1A1A2E]">All Commissions</h2>
+          <h2 className="text-lg font-bold text-slate-900">All Commissions</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">

@@ -26,7 +26,7 @@ export default function CompareIndex() {
       <ContentHeader />
 
       <main>
-        <section className="bg-[#1A1A2E] py-16 md:py-20">
+        <section className="bg-slate-900 py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Compare Systems', url: '/compare' }]} />
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mt-6 mb-4">
@@ -45,26 +45,26 @@ export default function CompareIndex() {
                 <Link
                   key={comp.slug}
                   href={`/compare/${comp.slug}`}
-                  className="group block bg-white rounded-xl border border-gray-200 hover:border-[#00C853] hover:shadow-lg transition-all p-6"
+                  className="group block bg-white rounded-xl border border-gray-200 hover:border-emerald-600 hover:shadow-lg transition-all p-6"
                 >
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-[#00C853]/10 flex items-center justify-center">
-                      <Shield size={20} className="text-[#00C853]" />
+                    <div className="w-10 h-10 rounded-full bg-emerald-600/10 flex items-center justify-center">
+                      <Shield size={20} className="text-emerald-500" />
                     </div>
                     <div className="flex items-center gap-2">
                       {comp.competitors.slice(0, 2).map((c, i) => (
                         <span key={c.name}>
                           {i > 0 && <span className="text-gray-400 mx-1 text-xs font-bold">VS</span>}
-                          <span className="font-semibold text-[#1A1A2E] text-sm">{c.name}</span>
+                          <span className="font-semibold text-slate-900 text-sm">{c.name}</span>
                         </span>
                       ))}
                     </div>
                   </div>
-                  <h2 className="text-xl font-bold text-[#1A1A2E] mb-2 group-hover:text-[#00C853] transition-colors">
+                  <h2 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-500 transition-colors">
                     {comp.heroTitle}
                   </h2>
                   <p className="text-gray-600 text-sm mb-4">{comp.heroSubtitle}</p>
-                  <div className="flex items-center gap-2 text-[#00C853] font-semibold text-sm">
+                  <div className="flex items-center gap-2 text-emerald-500 font-semibold text-sm">
                     <span>Read Comparison</span>
                     <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                   </div>

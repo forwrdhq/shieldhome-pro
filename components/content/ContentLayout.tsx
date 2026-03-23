@@ -21,7 +21,7 @@ export default function ContentLayout({
   return (
     <div className="min-h-screen bg-white">
       {/* Breadcrumb bar */}
-      <div className="border-b border-gray-100 bg-[#F8F9FA]">
+      <div className="border-b border-gray-100 bg-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -47,19 +47,19 @@ export default function ContentLayout({
                * @tailwindcss/typography plugin being installed.
                */
               'content-prose',
-              '[&>h1]:text-3xl [&>h1]:sm:text-4xl [&>h1]:font-extrabold [&>h1]:text-[#1A1A2E] [&>h1]:leading-tight [&>h1]:mb-4 [&>h1]:mt-0',
-              '[&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-[#1A1A2E] [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:leading-snug',
-              '[&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-[#1A1A2E] [&>h3]:mt-8 [&>h3]:mb-3',
-              '[&>h4]:text-lg [&>h4]:font-semibold [&>h4]:text-[#1A1A2E] [&>h4]:mt-6 [&>h4]:mb-2',
+              '[&>h1]:text-3xl [&>h1]:sm:text-4xl [&>h1]:font-extrabold [&>h1]:text-slate-900 [&>h1]:leading-tight [&>h1]:mb-4 [&>h1]:mt-0',
+              '[&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:leading-snug',
+              '[&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-slate-900 [&>h3]:mt-8 [&>h3]:mb-3',
+              '[&>h4]:text-lg [&>h4]:font-semibold [&>h4]:text-slate-900 [&>h4]:mt-6 [&>h4]:mb-2',
               '[&>p]:text-gray-700 [&>p]:leading-relaxed [&>p]:mb-5 [&>p]:text-base',
               '[&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-5 [&>ul]:text-gray-700 [&>ul]:leading-relaxed [&>ul_li]:mb-2',
               '[&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:mb-5 [&>ol]:text-gray-700 [&>ol]:leading-relaxed [&>ol_li]:mb-2',
-              '[&>blockquote]:border-l-4 [&>blockquote]:border-[#00C853] [&>blockquote]:pl-4 [&>blockquote]:py-1 [&>blockquote]:my-6 [&>blockquote]:text-gray-600 [&>blockquote]:italic',
-              '[&>a]:text-[#00C853] [&>a]:underline [&>a]:underline-offset-2 [&>a]:hover:text-[#00A846]',
+              '[&>blockquote]:border-l-4 [&>blockquote]:border-emerald-600 [&>blockquote]:pl-4 [&>blockquote]:py-1 [&>blockquote]:my-6 [&>blockquote]:text-gray-600 [&>blockquote]:italic',
+              '[&>a]:text-emerald-500 [&>a]:underline [&>a]:underline-offset-2 [&>a]:hover:text-emerald-700',
               '[&>img]:rounded-xl [&>img]:my-6 [&>img]:shadow-sm',
               '[&>pre]:bg-gray-900 [&>pre]:text-gray-100 [&>pre]:rounded-lg [&>pre]:p-4 [&>pre]:overflow-x-auto [&>pre]:my-6 [&>pre]:text-sm',
-              '[&>code]:bg-gray-100 [&>code]:text-[#1A1A2E] [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded [&>code]:text-sm',
-              '[&>table]:w-full [&>table]:my-6 [&>table]:text-sm [&_th]:bg-[#F8F9FA] [&_th]:text-left [&_th]:p-3 [&_th]:font-semibold [&_th]:text-[#1A1A2E] [&_td]:p-3 [&_td]:border-b [&_td]:border-gray-100',
+              '[&>code]:bg-gray-100 [&>code]:text-slate-900 [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded [&>code]:text-sm',
+              '[&>table]:w-full [&>table]:my-6 [&>table]:text-sm [&_th]:bg-slate-100 [&_th]:text-left [&_th]:p-3 [&_th]:font-semibold [&_th]:text-slate-900 [&_td]:p-3 [&_td]:border-b [&_td]:border-gray-100',
               '[&>hr]:my-8 [&>hr]:border-gray-200'
             )}
           >

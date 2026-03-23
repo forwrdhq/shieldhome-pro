@@ -109,7 +109,7 @@ export default async function CityPage({ params }: Props) {
 
       <main>
         {/* Hero */}
-        <section className="bg-[#1A1A2E] py-12 md:py-16">
+        <section className="bg-slate-900 py-12 md:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <Breadcrumbs
               items={[
@@ -128,7 +128,7 @@ export default async function CityPage({ params }: Props) {
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <Link
                 href="/home-security-quiz"
-                className="inline-flex items-center justify-center bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-3 rounded-lg font-bold transition-colors"
+                className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
               >
                 Get Free Quote for {city.name}
               </Link>
@@ -146,26 +146,26 @@ export default async function CityPage({ params }: Props) {
         {/* Crime Stats for City */}
         <section className="py-12 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-6">{city.name} Crime & Security Overview</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">{city.name} Crime & Security Overview</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#F8F9FA] rounded-xl p-5 text-center">
+              <div className="bg-slate-100 rounded-xl p-5 text-center">
                 <AlertTriangle size={24} className={`mx-auto mb-2 ${crimeLevelColor}`} />
                 <div className={`text-2xl font-bold ${crimeLevelColor}`}>{crimeLevel}</div>
                 <div className="text-xs text-gray-500 mt-1">Overall Crime Level</div>
               </div>
-              <div className="bg-[#F8F9FA] rounded-xl p-5 text-center">
-                <Shield size={24} className="text-[#00C853] mx-auto mb-2" />
-                <div className="text-2xl font-bold text-[#1A1A2E]">{city.crimeRate}</div>
+              <div className="bg-slate-100 rounded-xl p-5 text-center">
+                <Shield size={24} className="text-emerald-500 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-slate-900">{city.crimeRate}</div>
                 <div className="text-xs text-gray-500 mt-1">Crimes per 1,000 Residents</div>
               </div>
-              <div className="bg-[#F8F9FA] rounded-xl p-5 text-center">
-                <Home size={24} className="text-[#00C853] mx-auto mb-2" />
-                <div className="text-2xl font-bold text-[#1A1A2E]">{city.propertyCrimeRate}</div>
+              <div className="bg-slate-100 rounded-xl p-5 text-center">
+                <Home size={24} className="text-emerald-500 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-slate-900">{city.propertyCrimeRate}</div>
                 <div className="text-xs text-gray-500 mt-1">Property Crimes per 1,000</div>
               </div>
-              <div className="bg-[#F8F9FA] rounded-xl p-5 text-center">
-                <MapPin size={24} className="text-[#00C853] mx-auto mb-2" />
-                <div className="text-2xl font-bold text-[#1A1A2E]">{city.population.toLocaleString()}</div>
+              <div className="bg-slate-100 rounded-xl p-5 text-center">
+                <MapPin size={24} className="text-emerald-500 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-slate-900">{city.population.toLocaleString()}</div>
                 <div className="text-xs text-gray-500 mt-1">Population</div>
               </div>
             </div>
@@ -173,9 +173,9 @@ export default async function CityPage({ params }: Props) {
         </section>
 
         {/* What You Get */}
-        <section className="py-12 bg-[#F8F9FA]">
+        <section className="py-12 bg-slate-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-6">What {city.name} Homeowners Get with Vivint</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">What {city.name} Homeowners Get with Vivint</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 { icon: <Camera size={24} />, title: 'AI-Powered Outdoor Cameras', desc: 'Smart Sentry technology detects people, animals, and vehicles. Get real-time alerts on your phone.' },
@@ -186,8 +186,8 @@ export default async function CityPage({ params }: Props) {
                 { icon: <Check size={24} />, title: '$0 Down Financing', desc: 'No upfront equipment costs. Free professional installation. Affordable monthly monitoring plans.' },
               ].map((item) => (
                 <div key={item.title} className="bg-white rounded-xl p-6 border border-gray-200">
-                  <div className="text-[#00C853] mb-3">{item.icon}</div>
-                  <h3 className="font-bold text-[#1A1A2E] mb-2">{item.title}</h3>
+                  <div className="text-emerald-500 mb-3">{item.icon}</div>
+                  <h3 className="font-bold text-slate-900 mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
                 </div>
               ))}
@@ -198,7 +198,7 @@ export default async function CityPage({ params }: Props) {
         {/* City-specific content */}
         <section className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-4">Why {city.name} Residents Choose Vivint Home Security</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Why {city.name} Residents Choose Vivint Home Security</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               {cityDesc.split('\n\n').map((para, i) => (
                 <p key={i}>{para}</p>
@@ -210,9 +210,9 @@ export default async function CityPage({ params }: Props) {
         <CTABanner variant="quiz" title={`Get a Free Security Quote for ${city.name}, ${state.abbreviation}`} />
 
         {/* FAQs */}
-        <section className="py-12 bg-[#F8F9FA]">
+        <section className="py-12 bg-slate-100">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-6 text-center">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
               Home Security FAQ — {city.name}, {state.abbreviation}
             </h2>
             <div className="space-y-3">
@@ -234,7 +234,7 @@ export default async function CityPage({ params }: Props) {
         {/* Other cities in state */}
         <section className="py-12">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-6">Other Cities in {state.name}</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Other Cities in {state.name}</h2>
             <div className="flex flex-wrap gap-3">
               {state.cities
                 .filter((c) => c.slug !== city.slug)
@@ -242,7 +242,7 @@ export default async function CityPage({ params }: Props) {
                   <Link
                     key={c.slug}
                     href={`/home-security/${state.slug}/${c.slug}`}
-                    className="px-4 py-2 bg-gray-100 hover:bg-[#00C853]/10 hover:text-[#00C853] rounded-lg text-sm font-medium text-gray-700 transition-colors"
+                    className="px-4 py-2 bg-gray-100 hover:bg-emerald-600/10 hover:text-emerald-500 rounded-lg text-sm font-medium text-gray-700 transition-colors"
                   >
                     {c.name}
                   </Link>

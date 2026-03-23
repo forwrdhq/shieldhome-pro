@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { Plus, Minus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface FAQSectionProps {
@@ -53,39 +53,37 @@ export default function FAQSection({ faqs, title, subtitle, darkMode }: FAQSecti
   if (darkMode) {
     return (
       <section className="py-14">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16">
           <div className="text-center mb-10">
-            <h2 className="text-[22px] md:text-[28px] font-extrabold text-white tracking-tight">
+            <h2 className="text-h3 text-white">
               {title || 'Common Questions'}
             </h2>
           </div>
-          <div className="space-y-2">
+          <div className="divide-y divide-slate-700/50">
             {items.map((faq, i) => (
-              <div key={i} className="bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden">
+              <div key={i}>
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
-                  className="w-full flex items-center justify-between p-5 text-left hover:bg-white/[0.02] transition-colors"
+                  className="w-full flex items-center justify-between py-5 text-left group"
                   aria-expanded={open === i}
-                  aria-controls={`faq-answer-${i}`}
+                  aria-controls={`faq-dark-${i}`}
                 >
-                  <span className="font-semibold text-white/80 pr-4 text-[14px]">{faq.q}</span>
-                  <ChevronDown
-                    size={18}
-                    className={cn(
-                      'text-white/30 flex-shrink-0 transition-transform duration-200',
-                      open === i && 'rotate-180'
-                    )}
-                  />
+                  <span className="text-body-sm font-heading font-semibold text-slate-300 pr-4 group-hover:text-white transition-colors duration-150">{faq.q}</span>
+                  {open === i
+                    ? <Minus size={18} className="text-slate-400 flex-shrink-0" />
+                    : <Plus size={18} className="text-slate-500 flex-shrink-0" />
+                  }
                 </button>
                 <div
-                  id={`faq-answer-${i}`}
+                  id={`faq-dark-${i}`}
                   role="region"
                   className={cn(
-                    'overflow-hidden transition-all duration-200',
+                    'overflow-hidden transition-all duration-300',
                     open === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   )}
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
                 >
-                  <div className="px-5 pb-5 text-white/55 leading-relaxed text-[13px]">
+                  <div className="pb-5 text-body-sm text-slate-500 leading-relaxed">
                     {faq.a}
                   </div>
                 </div>
@@ -98,41 +96,40 @@ export default function FAQSection({ faqs, title, subtitle, darkMode }: FAQSecti
   }
 
   return (
-    <section className="py-16 bg-[#F8F9FA]">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
+    <section className="py-20 bg-white">
+      <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16">
+        <div className="text-center mb-12" data-animate>
+          <h2 className="text-h2 text-slate-900 mb-3">
             {title || 'Common Questions'}
           </h2>
-          <p className="text-gray-600">{subtitle || 'Everything you need to know before getting started'}</p>
+          <p className="text-body text-slate-500">{subtitle || 'Everything you need to know before getting started'}</p>
         </div>
-        <div className="space-y-3">
+
+        <div className="divide-y divide-slate-100" data-animate>
           {items.map((faq, i) => (
-            <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div key={i}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
-                className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between py-5 text-left group"
                 aria-expanded={open === i}
                 aria-controls={`faq-answer-${i}`}
               >
-                <span className="font-semibold text-gray-900 pr-4">{faq.q}</span>
-                <ChevronDown
-                  size={20}
-                  className={cn(
-                    'text-gray-500 flex-shrink-0 transition-transform duration-200',
-                    open === i && 'rotate-180'
-                  )}
-                />
+                <span className="text-h4 text-slate-900 pr-4">{faq.q}</span>
+                {open === i
+                  ? <Minus size={20} className="text-slate-900 flex-shrink-0" />
+                  : <Plus size={20} className="text-slate-400 flex-shrink-0" />
+                }
               </button>
               <div
                 id={`faq-answer-${i}`}
                 role="region"
                 className={cn(
-                  'overflow-hidden transition-all duration-200',
+                  'overflow-hidden transition-all duration-300',
                   open === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 )}
+                style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
               >
-                <div className="px-5 pb-5 text-gray-600 leading-relaxed text-sm">
+                <div className="pb-6 text-body text-slate-600 leading-relaxed">
                   {faq.a}
                 </div>
               </div>

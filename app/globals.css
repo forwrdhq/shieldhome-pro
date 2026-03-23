@@ -1,9 +1,7 @@
 @import "tailwindcss";
+@import "./tokens.css";
 
-:root {
-  --primary: #00C853;
-  --secondary: #1A1A2E;
-}
+/* === BASE RESETS === */
 
 html {
   scroll-behavior: smooth;
@@ -11,43 +9,6 @@ html {
 
 * {
   box-sizing: border-box;
-}
-
-/* Animations */
-.animate-in {
-  animation: slideIn 0.2s ease-out;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.slide-in-from-right-5 {
-  animation: slideInRight 0.3s ease-out;
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.4s ease-out;
-}
-
-@keyframes pulse-green {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(0, 200, 83, 0); }
-}
-
-.animate-pulse-green {
-  animation: pulse-green 2s ease-in-out infinite;
 }
 
 /* Prevent iOS zoom on input focus */
@@ -64,4 +25,185 @@ textarea {
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* === TYPOGRAPHY UTILITIES === */
+
+.text-display {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.text-h2 {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-h3 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.text-h4 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.text-body-lg {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.text-body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+
+.text-body-sm {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.text-caption {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.text-overline {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Mobile type scale */
+@media (max-width: 767px) {
+  .text-display {
+    font-size: 32px;
+    line-height: 40px;
+  }
+  .text-h2 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+  .text-h3 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+/* === ANIMATIONS === */
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-in {
+    animation: slideIn 0.2s var(--ease-out);
+  }
+
+  .slide-in-from-right-5 {
+    animation: slideInRight 0.3s var(--ease-out);
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.4s var(--ease-out);
+  }
+
+  /* Hero entrance — staggered fadeUp */
+  .hero-badge { animation: fadeUp 600ms var(--ease-out) 100ms both; }
+  .hero-h1 { animation: fadeUp 600ms var(--ease-out) 200ms both; }
+  .hero-sub { animation: fadeUp 600ms var(--ease-out) 300ms both; }
+  .hero-cta { animation: fadeUp 600ms var(--ease-out) 400ms both; }
+  .hero-image { animation: fadeUp 800ms var(--ease-out) 300ms both; }
+
+  /* Scroll-triggered entrance */
+  [data-animate] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  }
+  [data-animate].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === FOCUS STATES (Accessibility) === */
+
+:focus-visible {
+  outline: 2px solid var(--interactive-focus);
+  outline-offset: 2px;
+}
+
+/* === SKIP LINK (Accessibility) === */
+
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.skip-to-content:focus {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  width: auto;
+  height: auto;
+  padding: 12px 24px;
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 9999;
 }

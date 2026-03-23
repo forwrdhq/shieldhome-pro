@@ -28,17 +28,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-4">
-            <Shield className="text-[#00C853]" size={36} />
+            <Shield className="text-emerald-500" size={36} />
             <div>
-              <div className="text-2xl font-bold text-[#1A1A2E]">ShieldHome Pro</div>
+              <div className="text-2xl font-bold text-slate-900">ShieldHome Pro</div>
               <div className="text-sm text-gray-500">CRM Dashboard</div>
             </div>
           </div>
-          <h1 className="text-xl font-bold text-[#1A1A2E]">Sign in to your account</h1>
+          <h1 className="text-xl font-bold text-slate-900">Sign in to your account</h1>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
           <form onSubmit={handleSubmit} className="space-y-4">

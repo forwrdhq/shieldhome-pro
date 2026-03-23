@@ -51,14 +51,14 @@ export default async function DashboardPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold text-[#1A1A2E] mb-6">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-slate-900 mb-6">Dashboard</h1>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         {stats.map(s => (
           <Card key={s.label} padding="sm">
             <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1">{s.label}</p>
-            <p className={`text-2xl font-bold ${s.speedColor || 'text-[#1A1A2E]'}`}>{s.value}</p>
+            <p className={`text-2xl font-bold ${s.speedColor || 'text-slate-900'}`}>{s.value}</p>
             {s.trend !== undefined && (
               <p className={`text-xs mt-1 ${s.trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {s.trend >= 0 ? '+' : ''}{s.trend}% vs yesterday
@@ -71,8 +71,8 @@ export default async function DashboardPage() {
       {/* Recent Leads */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-[#1A1A2E]">Recent Leads</h2>
-          <Link href="/leads" className="text-sm text-[#00C853] hover:underline font-medium">View all →</Link>
+          <h2 className="text-lg font-bold text-slate-900">Recent Leads</h2>
+          <Link href="/leads" className="text-sm text-emerald-500 hover:underline font-medium">View all →</Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -87,7 +87,7 @@ export default async function DashboardPage() {
               {recentLeads.map(lead => (
                 <tr key={lead.id} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-3 px-3">
-                    <Link href={`/leads/${lead.id}`} className="font-medium text-[#1A1A2E] hover:text-[#00C853]">
+                    <Link href={`/leads/${lead.id}`} className="font-medium text-slate-900 hover:text-emerald-500">
                       {lead.fullName}
                     </Link>
                   </td>

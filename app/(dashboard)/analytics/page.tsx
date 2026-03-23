@@ -23,10 +23,10 @@ export default async function AnalyticsPage() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">Analytics</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Analytics</h1>
         <a
           href="/api/analytics/export"
-          className="bg-[#00C853] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#00A846]"
+          className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700"
         >
           Export CSV
         </a>
@@ -37,14 +37,14 @@ export default async function AnalyticsPage() {
         {kpis.map(kpi => (
           <Card key={kpi.label} padding="sm">
             <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1">{kpi.label}</p>
-            <p className="text-2xl font-bold text-[#1A1A2E]">{kpi.value}</p>
+            <p className="text-2xl font-bold text-slate-900">{kpi.value}</p>
           </Card>
         ))}
       </div>
 
       {/* Funnel */}
       <Card className="mb-6">
-        <h2 className="text-lg font-bold text-[#1A1A2E] mb-4">Conversion Funnel</h2>
+        <h2 className="text-lg font-bold text-slate-900 mb-4">Conversion Funnel</h2>
         <div className="space-y-3">
           {[
             { label: 'Lead → Contact', value: data.funnelMetrics.leadToContact },
@@ -60,7 +60,7 @@ export default async function AnalyticsPage() {
               </div>
               <div className="h-2 bg-gray-100 rounded-full">
                 <div
-                  className="h-2 bg-[#00C853] rounded-full"
+                  className="h-2 bg-emerald-600 rounded-full"
                   style={{ width: `${Math.min(f.value, 100)}%` }}
                 />
               </div>
@@ -71,7 +71,7 @@ export default async function AnalyticsPage() {
 
       {/* Source Breakdown */}
       <Card>
-        <h2 className="text-lg font-bold text-[#1A1A2E] mb-4">Source Performance</h2>
+        <h2 className="text-lg font-bold text-slate-900 mb-4">Source Performance</h2>
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-100">

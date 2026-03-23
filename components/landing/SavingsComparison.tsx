@@ -50,10 +50,10 @@ export default function SavingsComparison() {
     <section className="py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <p className="text-[#00C853] font-bold text-sm uppercase tracking-widest mb-2">
+          <p className="text-emerald-500 font-bold text-sm uppercase tracking-widest mb-2">
             SIDE-BY-SIDE COMPARISON
           </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
             Your Current Provider vs. Vivint
           </h2>
           <p className="text-gray-600">See exactly what you&apos;re missing — and what you&apos;ll gain</p>
@@ -68,9 +68,9 @@ export default function SavingsComparison() {
                 <th className="px-6 py-4 bg-red-50/50 text-center w-[36%]">
                   <span className="text-red-400 text-sm font-semibold">Your Current Provider</span>
                 </th>
-                <th className="px-6 py-4 bg-green-50 text-center w-[36%]">
+                <th className="px-6 py-4 bg-emerald-50 text-center w-[36%]">
                   <div className="flex items-center justify-center gap-1.5">
-                    <span className="text-[#00C853] text-sm font-bold">ShieldHome + Vivint</span>
+                    <span className="text-emerald-500 text-sm font-bold">ShieldHome + Vivint</span>
                   </div>
                 </th>
               </tr>
@@ -79,7 +79,7 @@ export default function SavingsComparison() {
               {rows.map((row) => (
                 <tr
                   key={row.feature}
-                  className={row.highlight ? 'bg-green-50/40' : 'hover:bg-gray-50/50'}
+                  className={row.highlight ? 'bg-emerald-50/40' : 'hover:bg-gray-50/50'}
                 >
                   <td className="px-6 py-4 font-semibold text-gray-900 text-sm border-t border-gray-100">
                     {row.feature}
@@ -97,8 +97,8 @@ export default function SavingsComparison() {
                     )}
                   </td>
                   <td className="px-6 py-4 text-center border-t border-gray-100">
-                    <span className={`text-sm ${row.highlight ? 'text-[#00C853] font-bold text-base' : 'text-[#1A1A2E] font-semibold'}`}>
-                      <Check size={15} className="inline mr-1 text-[#00C853]" />
+                    <span className={`text-sm ${row.highlight ? 'text-emerald-500 font-bold text-base' : 'text-slate-900 font-semibold'}`}>
+                      <Check size={15} className="inline mr-1 text-emerald-500" />
                       {row.shieldhome}
                     </span>
                   </td>
@@ -107,12 +107,12 @@ export default function SavingsComparison() {
             </tbody>
           </table>
           {/* Bottom savings banner */}
-          <div className="bg-[#1A1A2E] px-6 py-4 flex items-center justify-between">
+          <div className="bg-slate-900 px-6 py-4 flex items-center justify-between">
             <div className="text-white">
               <p className="font-bold">Average annual savings after switching</p>
               <p className="text-gray-400 text-sm">Based on 2,400+ switches in the last 12 months</p>
             </div>
-            <div className="text-[#00C853] font-extrabold text-2xl">$264/year</div>
+            <div className="text-emerald-500 font-extrabold text-2xl">$264/year</div>
           </div>
         </div>
 
@@ -121,7 +121,7 @@ export default function SavingsComparison() {
           {rows.map((row) => (
             <div
               key={row.feature}
-              className={`rounded-xl border p-4 ${row.highlight ? 'border-[#00C853] bg-green-50/30 shadow-sm' : 'border-gray-200'}`}
+              className={`rounded-xl border p-4 ${row.highlight ? 'border-emerald-600 bg-emerald-50/30 shadow-sm' : 'border-gray-200'}`}
             >
               <p className="font-semibold text-gray-900 text-sm mb-3">{row.feature}</p>
               <div className="grid grid-cols-[1fr,auto,1fr] gap-2 items-center">
@@ -139,8 +139,8 @@ export default function SavingsComparison() {
                 </div>
                 <ArrowRight size={14} className="text-gray-300" />
                 <div>
-                  <p className="text-[10px] text-[#00C853] uppercase font-semibold mb-1">Vivint</p>
-                  <p className={`text-sm ${row.highlight ? 'text-[#00C853] font-bold' : 'text-[#1A1A2E] font-semibold'}`}>
+                  <p className="text-[10px] text-emerald-500 uppercase font-semibold mb-1">Vivint</p>
+                  <p className={`text-sm ${row.highlight ? 'text-emerald-500 font-bold' : 'text-slate-900 font-semibold'}`}>
                     {row.shieldhome}
                   </p>
                 </div>
@@ -149,9 +149,9 @@ export default function SavingsComparison() {
           ))}
 
           {/* Mobile savings banner */}
-          <div className="bg-[#1A1A2E] rounded-xl p-4 text-center">
+          <div className="bg-slate-900 rounded-xl p-4 text-center">
             <p className="text-gray-400 text-xs mb-1">Average annual savings</p>
-            <p className="text-[#00C853] font-extrabold text-2xl">$264/year</p>
+            <p className="text-emerald-500 font-extrabold text-2xl">$264/year</p>
             <p className="text-gray-500 text-xs">Based on 2,400+ switches</p>
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function SavingsComparison() {
         <div className="text-center mt-8">
           <a
             href="#switch-form"
-            className="inline-flex items-center gap-2 bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-green-200 hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-green-200 hover:-translate-y-0.5"
           >
             Check My Buyout Eligibility →
           </a>

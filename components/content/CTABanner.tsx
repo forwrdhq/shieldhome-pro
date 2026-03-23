@@ -11,7 +11,7 @@ interface CTABannerProps {
 export default function CTABanner({ variant, title, subtitle }: CTABannerProps) {
   if (variant === 'quiz') {
     return (
-      <div className="my-8 rounded-2xl bg-gradient-to-r from-[#00C853] to-[#00A846] p-6 sm:p-8 text-white shadow-lg">
+      <div className="my-8 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 p-6 sm:p-8 text-white shadow-lg">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
           <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
             <Shield size={24} />
@@ -27,7 +27,7 @@ export default function CTABanner({ variant, title, subtitle }: CTABannerProps) 
           </div>
           <a
             href="/home-security-quiz"
-            className="inline-flex items-center gap-2 bg-white text-[#00C853] font-bold px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0 text-sm"
+            className="inline-flex items-center gap-2 bg-white text-emerald-500 font-bold px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0 text-sm"
           >
             Start Free Quiz
             <ArrowRight size={16} />
@@ -39,10 +39,10 @@ export default function CTABanner({ variant, title, subtitle }: CTABannerProps) 
 
   if (variant === 'phone') {
     return (
-      <div className="my-8 rounded-2xl bg-[#1A1A2E] p-6 sm:p-8 text-white shadow-lg">
+      <div className="my-8 rounded-2xl bg-slate-900 p-6 sm:p-8 text-white shadow-lg">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#00C853]/20 flex items-center justify-center">
-            <Phone size={24} className="text-[#00C853]" />
+          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-600/20 flex items-center justify-center">
+            <Phone size={24} className="text-emerald-500" />
           </div>
           <div className="flex-1">
             <h3 className="text-xl font-bold mb-1">
@@ -55,7 +55,7 @@ export default function CTABanner({ variant, title, subtitle }: CTABannerProps) 
           </div>
           <a
             href={`tel:${PHONE_NUMBER_RAW}`}
-            className="inline-flex items-center gap-2 bg-[#00C853] text-white font-bold px-6 py-3 rounded-lg hover:bg-[#00A846] transition-colors flex-shrink-0 text-sm"
+            className="inline-flex items-center gap-2 bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors flex-shrink-0 text-sm"
           >
             <Phone size={16} />
             Call {PHONE_NUMBER}
@@ -67,13 +67,13 @@ export default function CTABanner({ variant, title, subtitle }: CTABannerProps) 
 
   // variant === 'comparison'
   return (
-    <div className="my-8 rounded-2xl bg-[#F8F9FA] border border-gray-200 p-6 sm:p-8 shadow-sm">
+    <div className="my-8 rounded-2xl bg-slate-100 border border-gray-200 p-6 sm:p-8 shadow-sm">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#00C853]/10 flex items-center justify-center">
-          <BarChart3 size={24} className="text-[#00C853]" />
+        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-600/10 flex items-center justify-center">
+          <BarChart3 size={24} className="text-emerald-500" />
         </div>
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-[#1A1A2E] mb-1">
+          <h3 className="text-xl font-bold text-slate-900 mb-1">
             {title || 'Compare Top Home Security Systems'}
           </h3>
           <p className="text-gray-600 text-sm leading-relaxed">
@@ -83,7 +83,7 @@ export default function CTABanner({ variant, title, subtitle }: CTABannerProps) 
         </div>
         <a
           href="/compare/best-home-security-systems"
-          className="inline-flex items-center gap-2 bg-[#1A1A2E] text-white font-bold px-6 py-3 rounded-lg hover:bg-[#2a2a4e] transition-colors flex-shrink-0 text-sm"
+          className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold px-6 py-3 rounded-lg hover:bg-[#2a2a4e] transition-colors flex-shrink-0 text-sm"
         >
           Compare Systems
           <ArrowRight size={16} />

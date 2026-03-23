@@ -133,7 +133,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
     return (
       <div className={cn('bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-8', className)}>
         <div className="flex flex-col items-center justify-center py-8">
-          <div className="w-12 h-12 border-[3px] border-white/20 border-t-[#00C853] rounded-full animate-spin mb-4" />
+          <div className="w-12 h-12 border-[3px] border-white/20 border-t-emerald-500 rounded-full animate-spin mb-4" />
           <p className="text-lg font-bold text-white mb-1">Finding the best plan for your area...</p>
           <p className="text-white/50 text-sm">Checking availability in {zipCode}</p>
         </div>
@@ -146,7 +146,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
       {/* Progress bar */}
       <div className="h-1 bg-white/5">
         <div
-          className="h-full bg-[#00C853] transition-all duration-500 ease-out"
+          className="h-full bg-emerald-600 transition-all duration-500 ease-out"
           style={{ width: `${(step / 3) * 100}%` }}
         />
       </div>
@@ -186,7 +186,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 onChange={(e) => setZipCode(e.target.value.replace(/\D/g, '').slice(0, 5))}
                 placeholder="ZIP Code"
                 aria-label="ZIP Code"
-                className="flex-1 px-4 py-3.5 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]"
+                className="flex-1 px-4 py-3.5 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-emerald-500"
                 maxLength={5}
                 autoFocus
               />
@@ -196,7 +196,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 className={cn(
                   'px-5 py-3.5 rounded-lg font-semibold text-sm transition-all flex items-center gap-1 whitespace-nowrap',
                   isStep1Valid
-                    ? 'bg-[#00C853] hover:bg-[#00A846] text-white'
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                     : 'bg-white/10 text-white/30 cursor-not-allowed'
                 )}
               >
@@ -218,7 +218,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
           <div className="animate-[fadeInUp_0.25s_ease-out]">
             {/* ZIP badge */}
             <div className="flex items-center gap-2 mb-3">
-              <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-xs font-medium px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 bg-emerald-600/20 text-emerald-500 text-xs font-medium px-2 py-0.5 rounded-full">
                 <CheckCircle size={11} /> {zipCode}
               </span>
             </div>
@@ -238,7 +238,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                     className={cn(
                       'flex flex-col items-center gap-1.5 p-3 rounded-lg border transition-all text-center',
                       homeType === ht.value && homeTypeLabel === ht.label
-                        ? 'border-[#00C853] bg-[#00C853]/10 text-[#00C853]'
+                        ? 'border-emerald-600 bg-emerald-600/10 text-emerald-500'
                         : 'border-white/10 text-white/60 hover:border-white/20 hover:text-white/80'
                     )}
                   >
@@ -258,7 +258,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                     className={cn(
                       'py-3 rounded-lg border font-semibold text-sm transition-all',
                       ownership === 'OWN'
-                        ? 'border-[#00C853] bg-[#00C853]/10 text-[#00C853]'
+                        ? 'border-emerald-600 bg-emerald-600/10 text-emerald-500'
                         : 'border-white/10 text-white/60 hover:border-white/20'
                     )}
                   >
@@ -269,7 +269,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                     className={cn(
                       'py-3 rounded-lg border font-semibold text-sm transition-all',
                       ownership === 'RENT'
-                        ? 'border-[#00C853] bg-[#00C853]/10 text-[#00C853]'
+                        ? 'border-emerald-600 bg-emerald-600/10 text-emerald-500'
                         : 'border-white/10 text-white/60 hover:border-white/20'
                     )}
                   >
@@ -286,7 +286,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 className={cn(
                   'w-full py-3.5 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5',
                   isStep2Valid
-                    ? 'bg-[#00C853] hover:bg-[#00A846] text-white'
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                     : 'bg-white/10 text-white/30 cursor-not-allowed'
                 )}
               >
@@ -301,13 +301,13 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
           <div className="animate-[fadeInUp_0.25s_ease-out]">
             {/* Answer badges */}
             <div className="flex flex-wrap items-center gap-1.5 mb-3">
-              <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-[11px] font-medium px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 bg-emerald-600/20 text-emerald-500 text-[11px] font-medium px-2 py-0.5 rounded-full">
                 <CheckCircle size={10} /> {zipCode}
               </span>
-              <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-[11px] font-medium px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 bg-emerald-600/20 text-emerald-500 text-[11px] font-medium px-2 py-0.5 rounded-full">
                 <CheckCircle size={10} /> {homeTypeLabel}
               </span>
-              <span className="inline-flex items-center gap-1 bg-[#00C853]/20 text-[#00C853] text-[11px] font-medium px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 bg-emerald-600/20 text-emerald-500 text-[11px] font-medium px-2 py-0.5 rounded-full">
                 <CheckCircle size={10} /> {ownership === 'OWN' ? 'Homeowner' : 'Renter'}
               </span>
             </div>
@@ -327,7 +327,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 placeholder="First name"
                 aria-label="First name"
                 className={cn(
-                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
+                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-emerald-500',
                   touched.firstName && !firstName.trim() && 'ring-2 ring-red-400'
                 )}
               />
@@ -341,7 +341,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 placeholder="Phone number"
                 aria-label="Phone number"
                 className={cn(
-                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
+                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-emerald-500',
                   touched.phone && phoneDigits.length !== 10 && 'ring-2 ring-red-400'
                 )}
               />
@@ -355,7 +355,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 placeholder="Email address"
                 aria-label="Email address"
                 className={cn(
-                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#00C853]',
+                  'w-full px-4 py-3 bg-white rounded-lg text-gray-900 text-sm font-medium placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-emerald-500',
                   touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && 'ring-2 ring-red-400'
                 )}
               />
@@ -366,7 +366,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
                 type="checkbox"
                 checked={tcpaConsent}
                 onChange={(e) => setTcpaConsent(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-white/20 text-[#00C853] focus:ring-[#00C853] bg-white/10"
+                className="mt-0.5 w-4 h-4 rounded border-white/20 text-emerald-500 focus:ring-emerald-500 bg-white/10"
               />
               <span className="text-[11px] text-white/50 leading-relaxed">
                 By submitting, you agree to receive calls/texts from ShieldHome.pro regarding your security quote. Msg &amp; data rates may apply. Reply STOP to cancel.
@@ -385,7 +385,7 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
               className={cn(
                 'w-full py-4 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2',
                 isStep3Valid && !submitting
-                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-lg shadow-green-900/30'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-green-900/30'
                   : 'bg-white/10 text-white/30 cursor-not-allowed'
               )}
             >

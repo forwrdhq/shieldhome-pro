@@ -54,7 +54,7 @@ export default function BlogCard({ post }: BlogCardProps) {
         </span>
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-[#1A1A2E] leading-snug mb-2 group-hover:text-[#00C853] transition-colors line-clamp-2">
+        <h3 className="text-lg font-bold text-slate-900 leading-snug mb-2 group-hover:text-emerald-500 transition-colors line-clamp-2">
           {post.title}
         </h3>
 

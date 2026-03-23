@@ -31,7 +31,7 @@ export default function BlogIndex() {
 
       <main>
         {/* Hero */}
-        <section className="bg-[#1A1A2E] py-16 md:py-20">
+        <section className="bg-slate-900 py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Blog', url: '/blog' }]} />
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mt-6 mb-4">
@@ -49,7 +49,7 @@ export default function BlogIndex() {
             <div className="flex items-center gap-3 py-4 overflow-x-auto no-scrollbar">
               <Link
                 href="/blog"
-                className="px-4 py-2 rounded-full text-sm font-semibold bg-[#1A1A2E] text-white whitespace-nowrap"
+                className="px-4 py-2 rounded-full text-sm font-semibold bg-slate-900 text-white whitespace-nowrap"
               >
                 All Posts
               </Link>
@@ -69,11 +69,11 @@ export default function BlogIndex() {
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Link href={`/blog/${featuredPost.slug}`} className="block group">
-              <div className="bg-gradient-to-br from-[#1A1A2E] to-[#2D2D4E] rounded-2xl p-8 md:p-12 transition-transform group-hover:scale-[1.01]">
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#00C853] text-white uppercase tracking-wider mb-4">
+              <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 md:p-12 transition-transform group-hover:scale-[1.01]">
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-600 text-white uppercase tracking-wider mb-4">
                   Featured
                 </span>
-                <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-3 group-hover:text-[#00C853] transition-colors">
+                <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-3 group-hover:text-emerald-500 transition-colors">
                   {featuredPost.title}
                 </h2>
                 <p className="text-gray-300 text-lg mb-4 max-w-2xl">{featuredPost.excerpt}</p>
@@ -90,9 +90,9 @@ export default function BlogIndex() {
         </section>
 
         {/* All Posts Grid */}
-        <section className="py-12 bg-[#F8F9FA]">
+        <section className="py-12 bg-slate-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-8">Latest Articles</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-8">Latest Articles</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {remainingPosts.map((post) => (
                 <BlogCard key={post.slug} post={post} />

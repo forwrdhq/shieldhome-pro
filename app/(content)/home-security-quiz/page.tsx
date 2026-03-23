@@ -59,11 +59,11 @@ export default function QuizPage() {
 
       <main>
         {/* Hero */}
-        <section className="bg-gradient-to-b from-[#1A1A2E] to-[#2D2D4E] py-12 md:py-16">
+        <section className="bg-gradient-to-b from-slate-900 to-slate-800 py-12 md:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Security Quiz', url: '/home-security-quiz' }]} />
             <div className="mt-8">
-              <div className="inline-flex items-center gap-2 bg-[#00C853]/20 text-[#00C853] px-4 py-2 rounded-full text-sm font-bold mb-6">
+              <div className="inline-flex items-center gap-2 bg-emerald-600/20 text-emerald-500 px-4 py-2 rounded-full text-sm font-bold mb-6">
                 <Clock size={16} />
                 <span>Takes 60 seconds</span>
               </div>
@@ -81,11 +81,11 @@ export default function QuizPage() {
                   <span>4.8/5 from 58,000+ reviews</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Shield size={16} className="text-[#00C853]" />
+                  <Shield size={16} className="text-emerald-500" />
                   <span>#1 Rated Smart Security</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users size={16} className="text-[#00C853]" />
+                  <Users size={16} className="text-emerald-500" />
                   <span>2M+ homes protected</span>
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function QuizPage() {
         </section>
 
         {/* Quiz */}
-        <section className="py-12 bg-[#F8F9FA]">
+        <section className="py-12 bg-slate-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-[1fr_320px] gap-8 items-start">
               <QuizFunnel />
@@ -102,7 +102,7 @@ export default function QuizPage() {
               {/* Sidebar benefits */}
               <div className="hidden lg:block space-y-6">
                 <div className="bg-white rounded-xl p-6 border border-gray-200">
-                  <h3 className="font-bold text-[#1A1A2E] mb-4">What You Get</h3>
+                  <h3 className="font-bold text-slate-900 mb-4">What You Get</h3>
                   <ul className="space-y-3">
                     {[
                       'Personalized security risk score',
@@ -112,7 +112,7 @@ export default function QuizPage() {
                       'No obligation, no pressure',
                     ].map((item) => (
                       <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
-                        <Check size={16} className="text-[#00C853] mt-0.5 flex-shrink-0" />
+                        <Check size={16} className="text-emerald-500 mt-0.5 flex-shrink-0" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -120,7 +120,7 @@ export default function QuizPage() {
                 </div>
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200">
-                  <h3 className="font-bold text-[#1A1A2E] mb-3">Recent Quotes</h3>
+                  <h3 className="font-bold text-slate-900 mb-3">Recent Quotes</h3>
                   <div className="space-y-3 text-sm">
                     {[
                       { name: 'Sarah M.', location: 'Austin, TX', time: '3 min ago' },
@@ -128,11 +128,11 @@ export default function QuizPage() {
                       { name: 'Maria L.', location: 'Orlando, FL', time: '12 min ago' },
                     ].map((person) => (
                       <div key={person.name} className="flex items-center gap-3 text-gray-600">
-                        <div className="w-8 h-8 rounded-full bg-[#00C853]/10 flex items-center justify-center text-xs font-bold text-[#00C853]">
+                        <div className="w-8 h-8 rounded-full bg-emerald-600/10 flex items-center justify-center text-xs font-bold text-emerald-500">
                           {person.name.split(' ').map((n) => n[0]).join('')}
                         </div>
                         <div>
-                          <span className="font-medium text-[#1A1A2E]">{person.name}</span>
+                          <span className="font-medium text-slate-900">{person.name}</span>
                           <span className="text-gray-400"> — {person.location}</span>
                           <div className="text-xs text-gray-400">{person.time}</div>
                         </div>
@@ -142,7 +142,7 @@ export default function QuizPage() {
                 </div>
 
                 <div className="text-center">
-                  <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center justify-center gap-2 text-gray-500 hover:text-[#1A1A2E] transition-colors text-sm">
+                  <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center justify-center gap-2 text-gray-500 hover:text-slate-900 transition-colors text-sm">
                     <Phone size={16} />
                     <span>Prefer to call? {PHONE_NUMBER}</span>
                   </a>
@@ -155,7 +155,7 @@ export default function QuizPage() {
         {/* SEO Content */}
         <section className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-4">How Our Home Security Quiz Works</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">How Our Home Security Quiz Works</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
                 Our free home security assessment takes just 60 seconds and helps you understand exactly what level of protection your home needs. Based on your property type, number of entry points, security concerns, and timeline, we calculate a personalized risk score and match you with the ideal Vivint Smart Home system.

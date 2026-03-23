@@ -54,7 +54,7 @@ const stats = {
 function StatCard({ stat, label, source }: { stat: string; label: string; source: string }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
-      <div className="text-3xl font-extrabold text-[#00C853] mb-2">{stat}</div>
+      <div className="text-3xl font-extrabold text-emerald-500 mb-2">{stat}</div>
       <p className="text-gray-700 font-medium mb-2">{label}</p>
       <p className="text-xs text-gray-400">Source: {source}</p>
     </div>
@@ -82,11 +82,11 @@ export default function StatisticsPage() {
 
       <main>
         {/* Hero */}
-        <section className="bg-[#1A1A2E] py-16 md:py-20">
+        <section className="bg-slate-900 py-16 md:py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Home Security Statistics', url: '/home-security-statistics' }]} />
             <div className="mt-6">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#00C853]/20 text-[#00C853] uppercase tracking-wider mb-4">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-600/20 text-emerald-500 uppercase tracking-wider mb-4">
                 Updated March 2026
               </span>
               <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4">
@@ -100,7 +100,7 @@ export default function StatisticsPage() {
         </section>
 
         {/* Key Takeaways */}
-        <section className="py-10 bg-[#00C853]">
+        <section className="py-10 bg-emerald-600">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-white mb-4">Key Takeaways</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -126,7 +126,7 @@ export default function StatisticsPage() {
               <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
                 <AlertTriangle size={20} className="text-red-600" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1A1A2E]">Burglary Statistics</h2>
+              <h2 className="text-2xl font-bold text-slate-900">Burglary Statistics</h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {stats.burglary.map((s) => (
@@ -137,13 +137,13 @@ export default function StatisticsPage() {
         </section>
 
         {/* Deterrence Statistics */}
-        <section className="py-12 bg-[#F8F9FA]" id="security-system-effectiveness">
+        <section className="py-12 bg-slate-100" id="security-system-effectiveness">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                <Shield size={20} className="text-[#00C853]" />
+                <Shield size={20} className="text-emerald-500" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1A1A2E]">Security System Effectiveness</h2>
+              <h2 className="text-2xl font-bold text-slate-900">Security System Effectiveness</h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {stats.deterrence.map((s) => (
@@ -162,7 +162,7 @@ export default function StatisticsPage() {
               <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
                 <Home size={20} className="text-yellow-600" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1A1A2E]">Package Theft Statistics</h2>
+              <h2 className="text-2xl font-bold text-slate-900">Package Theft Statistics</h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {stats.packageTheft.map((s) => (
@@ -173,13 +173,13 @@ export default function StatisticsPage() {
         </section>
 
         {/* Smart Home Security */}
-        <section className="py-12 bg-[#F8F9FA]" id="smart-home-security">
+        <section className="py-12 bg-slate-100" id="smart-home-security">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
                 <BarChart3 size={20} className="text-blue-600" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1A1A2E]">Smart Home Security Market</h2>
+              <h2 className="text-2xl font-bold text-slate-900">Smart Home Security Market</h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {stats.smartHome.map((s) => (
@@ -192,7 +192,7 @@ export default function StatisticsPage() {
         {/* Methodology */}
         <section className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-4">Sources & Methodology</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Sources & Methodology</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
                 All statistics on this page are sourced from reputable government agencies, academic research institutions, and established industry organizations. Primary sources include the FBI Uniform Crime Reporting (UCR) program, the Bureau of Justice Statistics, the University of North Carolina at Charlotte Department of Criminal Justice and Criminology, and Rutgers University School of Criminal Justice.

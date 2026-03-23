@@ -258,8 +258,8 @@ export default function MetaQuiz() {
       <div className="max-w-lg mx-auto px-4">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
           <div className="flex flex-col items-center justify-center py-12">
-            <div className="w-16 h-16 border-4 border-gray-200 border-t-[#00C853] rounded-full animate-spin mb-6" />
-            <p className="text-xl font-bold text-[#1A1A2E] mb-2">Analyzing your home security profile...</p>
+            <div className="w-16 h-16 border-4 border-gray-200 border-t-emerald-500 rounded-full animate-spin mb-6" />
+            <p className="text-xl font-bold text-slate-900 mb-2">Analyzing your home security profile...</p>
             <p className="text-gray-500 text-sm">Building your personalized recommendation</p>
           </div>
         </div>
@@ -274,24 +274,24 @@ export default function MetaQuiz() {
         {/* Recommendation Card */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8 mb-8">
           <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-              <CheckCircle className="text-[#00C853]" size={32} />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-4">
+              <CheckCircle className="text-emerald-500" size={32} />
             </div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[#1A1A2E] mb-2">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">
               Your Recommended Vivint System
             </h2>
             <p className="text-gray-500">Based on your answers, here&apos;s your personalized security plan</p>
           </div>
 
-          <div className="bg-[#1A1A2E] rounded-xl p-6 text-white mb-6">
-            <p className="text-[#00C853] font-bold text-sm uppercase tracking-widest mb-1">Recommended For You</p>
+          <div className="bg-slate-900 rounded-xl p-6 text-white mb-6">
+            <p className="text-emerald-500 font-bold text-sm uppercase tracking-widest mb-1">Recommended For You</p>
             <h3 className="text-xl font-bold mb-4">The Total Shield Package</h3>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-[#00C853] flex-shrink-0" /> Vivint Doorbell Camera Pro</li>
-              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-[#00C853] flex-shrink-0" /> 2x Outdoor Camera Pro (AI detection)</li>
-              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-[#00C853] flex-shrink-0" /> Smart Hub (7&quot; touchscreen)</li>
-              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-[#00C853] flex-shrink-0" /> Smart Lock (keyless entry)</li>
-              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-[#00C853] flex-shrink-0" /> Door/window sensors for all entry points</li>
+              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-emerald-500 flex-shrink-0" /> Vivint Doorbell Camera Pro</li>
+              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-emerald-500 flex-shrink-0" /> 2x Outdoor Camera Pro (AI detection)</li>
+              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-emerald-500 flex-shrink-0" /> Smart Hub (7&quot; touchscreen)</li>
+              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-emerald-500 flex-shrink-0" /> Smart Lock (keyless entry)</li>
+              <li className="flex items-center gap-2"><CheckCircle size={16} className="text-emerald-500 flex-shrink-0" /> Door/window sensors for all entry points</li>
             </ul>
             <div className="mt-4 pt-4 border-t border-white/20">
               <p className="text-2xl font-extrabold">Starting at $33/month</p>
@@ -300,20 +300,20 @@ export default function MetaQuiz() {
           </div>
 
           <div className="flex flex-wrap gap-3 text-sm text-gray-600 justify-center mb-6">
-            <span className="flex items-center gap-1"><CheckCircle size={14} className="text-[#00C853]" /> Free installation</span>
-            <span className="flex items-center gap-1"><CheckCircle size={14} className="text-[#00C853]" /> Free doorbell camera</span>
-            <span className="flex items-center gap-1"><CheckCircle size={14} className="text-[#00C853]" /> 24/7 monitoring</span>
+            <span className="flex items-center gap-1"><CheckCircle size={14} className="text-emerald-500" /> Free installation</span>
+            <span className="flex items-center gap-1"><CheckCircle size={14} className="text-emerald-500" /> Free doorbell camera</span>
+            <span className="flex items-center gap-1"><CheckCircle size={14} className="text-emerald-500" /> 24/7 monitoring</span>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-            <p className="text-[#1A1A2E] font-bold mb-1">A ShieldHome advisor will call you within 10 minutes</p>
+          <div className="bg-emerald-50 border border-green-200 rounded-xl p-4 text-center">
+            <p className="text-slate-900 font-bold mb-1">A ShieldHome advisor will call you within 10 minutes</p>
             <p className="text-gray-600 text-sm">to discuss your personalized plan and current promotions</p>
           </div>
         </div>
 
         {/* Value Stack */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8 mb-8">
-          <h3 className="text-xl font-bold text-[#1A1A2E] mb-1 text-center">Your Quiz Completion Bonuses</h3>
+          <h3 className="text-xl font-bold text-slate-900 mb-1 text-center">Your Quiz Completion Bonuses</h3>
           <p className="text-gray-500 text-sm text-center mb-6">Exclusive offers for completing your security assessment</p>
 
           <div className="space-y-3">
@@ -323,10 +323,10 @@ export default function MetaQuiz() {
               { title: 'The First 90 Days Free', desc: '3 months of monitoring on us', value: '$150' },
               { title: 'Free Professional Installation', desc: 'Certified technician handles everything', value: '$499' },
             ].map((bonus) => (
-              <div key={bonus.title} className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
-                <CheckCircle size={20} className="text-[#00C853] flex-shrink-0 mt-0.5" />
+              <div key={bonus.title} className="flex items-start gap-3 p-3 bg-emerald-50 rounded-lg">
+                <CheckCircle size={20} className="text-emerald-500 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="font-semibold text-[#1A1A2E] text-sm">{bonus.title}</p>
+                  <p className="font-semibold text-slate-900 text-sm">{bonus.title}</p>
                   <p className="text-gray-600 text-xs">{bonus.desc}</p>
                 </div>
                 <span className="text-gray-400 text-xs line-through">{bonus.value}</span>
@@ -336,16 +336,16 @@ export default function MetaQuiz() {
 
           <div className="mt-4 pt-4 border-t border-gray-100 text-center">
             <p className="text-gray-500 text-sm">Total Package Value: <span className="line-through">$2,847</span></p>
-            <p className="text-[#00C853] font-bold text-lg">Included with your personalized quote</p>
+            <p className="text-emerald-500 font-bold text-lg">Included with your personalized quote</p>
           </div>
         </div>
 
         {/* Testimonials */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8 mb-8">
-          <h3 className="text-xl font-bold text-[#1A1A2E] mb-6 text-center">What Others Are Saying</h3>
+          <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">What Others Are Saying</h3>
           <div className="space-y-4">
             {quizTestimonials.map((t) => (
-              <div key={t.name} className="bg-[#F8F9FA] rounded-xl p-5">
+              <div key={t.name} className="bg-slate-100 rounded-xl p-5">
                 <div className="flex mb-2">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
@@ -361,13 +361,13 @@ export default function MetaQuiz() {
         {/* Trust Footer */}
         <div className="text-center space-y-3">
           <div className="flex items-center justify-center gap-2">
-            <Shield className="text-[#00C853]" size={20} />
-            <span className="font-semibold text-[#1A1A2E]">Vivint Authorized Dealer</span>
+            <Shield className="text-emerald-500" size={20} />
+            <span className="font-semibold text-slate-900">Vivint Authorized Dealer</span>
           </div>
           <p className="text-gray-500 text-sm">Your advisor will call within 10 minutes</p>
           <a
             href={`tel:${PHONE_NUMBER_RAW}`}
-            className="inline-flex items-center gap-2 bg-[#00C853] hover:bg-[#00A846] text-white px-6 py-3 rounded-xl font-bold transition-colors"
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold transition-colors"
           >
             <Phone size={18} />
             Call Now: {PHONE_NUMBER}
@@ -384,15 +384,15 @@ export default function MetaQuiz() {
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8">
           {renterSubmitted ? (
             <div className="text-center py-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-                <CheckCircle className="text-[#00C853]" size={32} />
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-4">
+                <CheckCircle className="text-emerald-500" size={32} />
               </div>
-              <h3 className="text-xl font-bold text-[#1A1A2E] mb-2">Thanks! We&apos;ll keep you posted.</h3>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Thanks! We&apos;ll keep you posted.</h3>
               <p className="text-gray-500 text-sm">We&apos;ll email you as soon as renter options are available.</p>
             </div>
           ) : (
             <>
-              <h3 className="text-xl font-bold text-[#1A1A2E] mb-2">We currently serve homeowners</h3>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">We currently serve homeowners</h3>
               <p className="text-gray-600 text-sm mb-6">
                 But that may change soon! Enter your email to be the first to know when renter options launch.
               </p>
@@ -402,7 +402,7 @@ export default function MetaQuiz() {
                 value={renterEmail}
                 onChange={(e) => setRenterEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base mb-4"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition-all text-base mb-4"
               />
               <button
                 onClick={submitRenterEmail}
@@ -410,7 +410,7 @@ export default function MetaQuiz() {
                 className={cn(
                   'w-full py-3 rounded-xl font-bold transition-all',
                   renterEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(renterEmail)
-                    ? 'bg-[#00C853] hover:bg-[#00A846] text-white'
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 )}
               >
@@ -441,7 +441,7 @@ export default function MetaQuiz() {
           </div>
           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#00C853] rounded-full transition-all duration-500 ease-out"
+              className="h-full bg-emerald-600 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -450,7 +450,7 @@ export default function MetaQuiz() {
         {/* Step 1: Concern */}
         {step === 1 && (
           <div className="animate-[fadeInUp_0.3s_ease-out]">
-            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">What matters most to you?</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">What matters most to you?</h2>
             <p className="text-gray-500 text-sm mb-6">Select your biggest security concern</p>
             <div className="grid grid-cols-2 gap-3">
               {[
@@ -465,7 +465,7 @@ export default function MetaQuiz() {
                   className={cn(
                     'flex flex-col items-center justify-center gap-2 p-5 rounded-xl border-2 transition-all min-h-[120px]',
                     answers.concern === opt.value
-                      ? 'border-[#00C853] bg-green-50 text-[#00C853]'
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-500'
                       : 'border-gray-200 hover:border-gray-300 text-gray-600 hover:bg-gray-50'
                   )}
                 >
@@ -480,7 +480,7 @@ export default function MetaQuiz() {
         {/* Step 2: Own / Rent */}
         {step === 2 && (
           <div className="animate-[fadeInUp_0.3s_ease-out]">
-            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">Do you own or rent your home?</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">Do you own or rent your home?</h2>
             <p className="text-gray-500 text-sm mb-6">This helps us find the right options for you</p>
             <div className="space-y-3">
               {[
@@ -493,12 +493,12 @@ export default function MetaQuiz() {
                   className={cn(
                     'w-full flex items-center gap-4 p-5 rounded-xl border-2 transition-all text-left',
                     answers.ownership === opt.value
-                      ? 'border-[#00C853] bg-green-50'
+                      ? 'border-emerald-600 bg-emerald-50'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   )}
                 >
                   <div className="text-gray-500">{opt.icon}</div>
-                  <span className="font-semibold text-[#1A1A2E]">{opt.label}</span>
+                  <span className="font-semibold text-slate-900">{opt.label}</span>
                 </button>
               ))}
             </div>
@@ -508,7 +508,7 @@ export default function MetaQuiz() {
         {/* Step 3: Home Type */}
         {step === 3 && (
           <div className="animate-[fadeInUp_0.3s_ease-out]">
-            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">What type of home do you live in?</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">What type of home do you live in?</h2>
             <p className="text-gray-500 text-sm mb-6">This helps us size your system correctly</p>
             <div className="grid grid-cols-2 gap-3">
               {[
@@ -523,7 +523,7 @@ export default function MetaQuiz() {
                   className={cn(
                     'flex flex-col items-center justify-center gap-2 p-5 rounded-xl border-2 transition-all min-h-[120px]',
                     answers.homeType === opt.value
-                      ? 'border-[#00C853] bg-green-50 text-[#00C853]'
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-500'
                       : 'border-gray-200 hover:border-gray-300 text-gray-600 hover:bg-gray-50'
                   )}
                 >
@@ -538,7 +538,7 @@ export default function MetaQuiz() {
         {/* Step 4: Entry Points */}
         {step === 4 && (
           <div className="animate-[fadeInUp_0.3s_ease-out]">
-            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">How many entry points does your home have?</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">How many entry points does your home have?</h2>
             <p className="text-gray-500 text-sm mb-6">Doors, windows, and garage entries</p>
             <div className="space-y-3">
               {[
@@ -553,7 +553,7 @@ export default function MetaQuiz() {
                   className={cn(
                     'w-full p-4 rounded-xl border-2 font-semibold transition-all text-center',
                     answers.entryPoints === opt.value
-                      ? 'border-[#00C853] bg-green-50 text-[#00C853]'
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-500'
                       : 'border-gray-200 hover:border-gray-300 text-gray-700 hover:bg-gray-50'
                   )}
                 >
@@ -567,7 +567,7 @@ export default function MetaQuiz() {
         {/* Step 5: Timeline */}
         {step === 5 && (
           <div className="animate-[fadeInUp_0.3s_ease-out]">
-            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">How soon do you want protection?</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">How soon do you want protection?</h2>
             <p className="text-gray-500 text-sm mb-6">We&apos;ll match you with the right timing</p>
             <div className="space-y-3">
               {[
@@ -582,13 +582,13 @@ export default function MetaQuiz() {
                   className={cn(
                     'w-full p-4 rounded-xl border-2 font-semibold transition-all text-center relative',
                     answers.timeline === opt.value
-                      ? 'border-[#00C853] bg-green-50 text-[#00C853]'
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-500'
                       : 'border-gray-200 hover:border-gray-300 text-gray-700 hover:bg-gray-50'
                   )}
                 >
                   {opt.label}
                   {opt.badge && (
-                    <span className="absolute -top-2 right-3 bg-[#00C853] text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span className="absolute -top-2 right-3 bg-emerald-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                       {opt.badge}
                     </span>
                   )}
@@ -601,11 +601,11 @@ export default function MetaQuiz() {
         {/* Step 6: Contact Form */}
         {step === 6 && (
           <div className="animate-[fadeInUp_0.3s_ease-out]">
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
-              <p className="text-[#1A1A2E] font-semibold text-sm">{getQualificationHeadline()}</p>
+            <div className="bg-emerald-50 border border-green-200 rounded-xl p-4 mb-6">
+              <p className="text-slate-900 font-semibold text-sm">{getQualificationHeadline()}</p>
             </div>
 
-            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A2E] mb-1">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">
               Where should we send your personalized security plan?
             </h2>
             <p className="text-gray-500 text-sm mb-6">We&apos;ll call you with your custom recommendation</p>
@@ -620,7 +620,7 @@ export default function MetaQuiz() {
                   onBlur={() => setTouched(t => ({ ...t, firstName: true }))}
                   placeholder="First Name"
                   className={cn(
-                    'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base',
+                    'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition-all text-base',
                     touched.firstName && !contact.firstName.trim() ? 'border-red-300' : 'border-gray-300'
                   )}
                 />
@@ -635,7 +635,7 @@ export default function MetaQuiz() {
                   onBlur={() => setTouched(t => ({ ...t, phone: true }))}
                   placeholder="Phone Number"
                   className={cn(
-                    'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base',
+                    'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition-all text-base',
                     touched.phone && phoneDigits.length !== 10 ? 'border-red-300' : 'border-gray-300'
                   )}
                 />
@@ -650,7 +650,7 @@ export default function MetaQuiz() {
                   onBlur={() => setTouched(t => ({ ...t, email: true }))}
                   placeholder="Email Address"
                   className={cn(
-                    'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base',
+                    'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition-all text-base',
                     touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email) ? 'border-red-300' : 'border-gray-300'
                   )}
                 />
@@ -666,7 +666,7 @@ export default function MetaQuiz() {
                   placeholder="ZIP Code"
                   maxLength={5}
                   className={cn(
-                    'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#00C853] focus:border-[#00C853] outline-none transition-all text-base',
+                    'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition-all text-base',
                     touched.zipCode && contact.zipCode.length < 5 ? 'border-red-300' : 'border-gray-300'
                   )}
                 />
@@ -678,7 +678,7 @@ export default function MetaQuiz() {
                 type="checkbox"
                 checked={tcpaConsent}
                 onChange={(e) => setTcpaConsent(e.target.checked)}
-                className="mt-1 w-4 h-4 rounded border-gray-300 text-[#00C853] focus:ring-[#00C853]"
+                className="mt-1 w-4 h-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500"
               />
               <span className="text-xs text-gray-500 leading-relaxed">
                 By submitting, you agree to receive calls/texts from ShieldHome.pro. Msg &amp; data rates may apply. Reply STOP to cancel.
@@ -697,7 +697,7 @@ export default function MetaQuiz() {
               className={cn(
                 'w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2',
                 isFormValid && !submitting
-                  ? 'bg-[#00C853] hover:bg-[#00A846] text-white shadow-lg shadow-green-200 animate-[pulse-green_2s_infinite]'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-green-200 animate-[pulse-green_2s_infinite]'
                   : 'bg-gray-200 text-gray-400 cursor-not-allowed'
               )}
             >

@@ -21,7 +21,7 @@ export default function StatsCards({ stats }: StatsCardsProps) {
       {stats.map(stat => (
         <Card key={stat.title} padding="sm">
           <p className="text-xs text-gray-500 mb-1 font-medium uppercase tracking-wide">{stat.title}</p>
-          <p className="text-2xl font-bold text-[#1A1A2E]">
+          <p className="text-2xl font-bold text-slate-900">
             {stat.prefix}{typeof stat.value === 'number' && stat.prefix === '$'
               ? formatCurrency(stat.value).replace('$', '')
               : stat.value}

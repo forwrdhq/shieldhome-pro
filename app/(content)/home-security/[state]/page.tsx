@@ -61,7 +61,7 @@ export default async function StatePage({ params }: Props) {
       <ContentHeader />
 
       <main>
-        <section className="bg-[#1A1A2E] py-12 md:py-16">
+        <section className="bg-slate-900 py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Breadcrumbs
               items={[
@@ -85,12 +85,12 @@ export default async function StatePage({ params }: Props) {
                 <div className="text-gray-400 text-xs">Avg Crime Rate/1K</div>
               </div>
               <div className="bg-white/10 rounded-xl p-4 text-center">
-                <Users size={20} className="text-[#00C853] mx-auto mb-1" />
+                <Users size={20} className="text-emerald-500 mx-auto mb-1" />
                 <div className="text-white font-bold text-lg">{(totalPop / 1000000).toFixed(1)}M+</div>
                 <div className="text-gray-400 text-xs">Population Covered</div>
               </div>
               <div className="bg-white/10 rounded-xl p-4 text-center">
-                <MapPin size={20} className="text-[#00C853] mx-auto mb-1" />
+                <MapPin size={20} className="text-emerald-500 mx-auto mb-1" />
                 <div className="text-white font-bold text-lg">{state.cities.length}</div>
                 <div className="text-gray-400 text-xs">Cities Served</div>
               </div>
@@ -101,22 +101,22 @@ export default async function StatePage({ params }: Props) {
         {/* City Grid */}
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-6">Cities in {state.name}</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Cities in {state.name}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {state.cities.map((city) => (
                 <Link
                   key={city.slug}
                   href={`/home-security/${state.slug}/${city.slug}`}
-                  className="group block bg-white rounded-xl border border-gray-200 hover:border-[#00C853] hover:shadow-lg transition-all p-5"
+                  className="group block bg-white rounded-xl border border-gray-200 hover:border-emerald-600 hover:shadow-lg transition-all p-5"
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-bold text-[#1A1A2E] group-hover:text-[#00C853] transition-colors text-lg">
+                      <h3 className="font-bold text-slate-900 group-hover:text-emerald-500 transition-colors text-lg">
                         {city.name}
                       </h3>
                       <p className="text-sm text-gray-500 mt-1">Pop. {city.population.toLocaleString()}</p>
                     </div>
-                    <ChevronRight size={18} className="text-gray-400 group-hover:text-[#00C853] mt-1 transition-colors" />
+                    <ChevronRight size={18} className="text-gray-400 group-hover:text-emerald-500 mt-1 transition-colors" />
                   </div>
                   <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100">
                     <div className="text-xs">
@@ -127,7 +127,7 @@ export default async function StatePage({ params }: Props) {
                     </div>
                     <div className="text-xs">
                       <span className="text-gray-500">Median Home: </span>
-                      <span className="font-semibold text-[#1A1A2E]">${(city.medianHomeValue / 1000).toFixed(0)}K</span>
+                      <span className="font-semibold text-slate-900">${(city.medianHomeValue / 1000).toFixed(0)}K</span>
                     </div>
                   </div>
                 </Link>
@@ -137,9 +137,9 @@ export default async function StatePage({ params }: Props) {
         </section>
 
         {/* SEO Content */}
-        <section className="py-12 bg-[#F8F9FA]">
+        <section className="py-12 bg-slate-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-4">Home Security in {state.name}: What You Need to Know</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Home Security in {state.name}: What You Need to Know</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
                 {state.name} homeowners face unique security challenges. With an average crime rate of {avgCrimeRate} incidents per 1,000 residents across major cities, having a reliable home security system is more important than ever. {highestCrime.name} has the highest crime rate in the state at {highestCrime.crimeRate} per 1,000 residents.

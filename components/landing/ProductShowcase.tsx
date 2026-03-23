@@ -45,13 +45,13 @@ const products = [
 
 export default function ProductShowcase() {
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
+    <section id="products" className="py-20 bg-slate-900">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16">
+        <div className="text-center mb-12" data-animate>
+          <h2 className="text-h2 text-white mb-3">
             What&apos;s Included in Your System
           </h2>
-          <p className="text-gray-600 text-lg">
+          <p className="text-body-lg text-slate-400">
             Pro-grade security tech, all set up for you
           </p>
         </div>
@@ -60,17 +60,18 @@ export default function ProductShowcase() {
           {products.map((product) => (
             <div
               key={product.title}
-              className="relative bg-[#F8F9FA] rounded-xl border border-gray-100 hover:border-[#00C853] hover:shadow-md transition-all overflow-hidden flex flex-col"
+              className="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden flex flex-col transition-all duration-200 hover:-translate-y-0.5 hover:shadow-hover"
+              data-animate
             >
-              <div className="relative h-48 bg-[#1A1A2E] flex items-center justify-center p-6">
-                <span className="absolute top-3 right-3 text-xs px-2 py-1 bg-[#00C853] text-white rounded-full font-medium z-10">
+              <div className="relative h-48 bg-slate-700/30 flex items-center justify-center p-6">
+                <span className="absolute top-3 right-3 text-[11px] px-2.5 py-1 bg-emerald-900 text-emerald-300 rounded-full font-medium z-10">
                   {product.badge}
                 </span>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="max-h-36 max-w-full object-contain drop-shadow-lg"
+                  className="max-h-36 max-w-full object-contain"
                   loading="lazy"
                   width={200}
                   height={144}
@@ -78,23 +79,18 @@ export default function ProductShowcase() {
               </div>
 
               <div className="p-5 flex-1 flex flex-col">
-                <h3 className="text-lg font-bold text-[#1A1A2E] mb-3">
+                <h3 className="text-h4 text-white mb-3">
                   {product.title}
                 </h3>
                 <ul className="space-y-2 flex-1">
                   {product.features.map((f, i) => (
-                    <li
-                      key={i}
-                      className="text-sm text-gray-600 flex items-start gap-2"
-                    >
-                      <span className="text-[#00C853] font-bold mt-0.5 flex-shrink-0">
-                        ✓
-                      </span>
+                    <li key={i} className="text-body-sm text-slate-400 flex items-start gap-2">
+                      <span className="text-emerald-500 font-bold mt-0.5 flex-shrink-0">&#10003;</span>
                       {f}
                     </li>
                   ))}
                 </ul>
-                <p className="mt-4 text-xs text-[#00C853] font-semibold">
+                <p className="mt-4 text-caption text-emerald-400 font-semibold">
                   Included with your system
                 </p>
               </div>
@@ -102,7 +98,7 @@ export default function ProductShowcase() {
           ))}
         </div>
 
-        <div className="text-center mt-10">
+        <div className="text-center mt-12" data-animate>
           <a href="#quiz">
             <Button variant="primary" size="xl" className="w-full sm:w-auto">
               Build Your Custom System

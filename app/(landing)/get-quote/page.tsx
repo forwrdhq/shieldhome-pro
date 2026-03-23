@@ -127,7 +127,7 @@ function GetQuoteContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-[#00C853] rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
                 <Shield className="text-white" size={18} />
               </div>
               <div>
@@ -142,7 +142,7 @@ function GetQuoteContent() {
               </div>
               <a
                 href={`tel:${PHONE_RAW}`}
-                className="flex items-center gap-1.5 bg-[#00C853] hover:bg-[#00A846] text-white px-3.5 py-2 rounded-lg font-semibold text-[13px] transition-colors"
+                className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg font-semibold text-[13px] transition-colors"
                 aria-label={`Call us at ${PHONE}`}
               >
                 <Phone size={13} />
@@ -158,7 +158,7 @@ function GetQuoteContent() {
       <section id="quote-form" className="relative overflow-hidden">
         {/* Ambient background */}
         <div className="absolute inset-0">
-          <div className="absolute top-[-200px] right-[-100px] w-[600px] h-[600px] bg-[#00C853]/[0.04] rounded-full blur-[120px]" />
+          <div className="absolute top-[-200px] right-[-100px] w-[600px] h-[600px] bg-emerald-600/[0.04] rounded-full blur-[120px]" />
           <div className="absolute bottom-[-100px] left-[-200px] w-[500px] h-[500px] bg-blue-500/[0.03] rounded-full blur-[100px]" />
         </div>
 
@@ -176,9 +176,9 @@ function GetQuoteContent() {
           <div className="grid md:grid-cols-[1fr,400px] gap-8 md:gap-12 items-start">
             {/* Left: Copy */}
             <div className="text-center md:text-left order-2 md:order-1">
-              <div className="inline-flex items-center gap-2 bg-[#00C853]/10 border border-[#00C853]/20 rounded-full px-3 py-1 mb-5">
-                <div className="w-1.5 h-1.5 bg-[#00C853] rounded-full" />
-                <span className="text-[#00C853] text-[11px] font-semibold uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 bg-emerald-600/10 border border-emerald-600/20 rounded-full px-3 py-1 mb-5">
+                <div className="w-1.5 h-1.5 bg-emerald-600 rounded-full" />
+                <span className="text-emerald-500 text-[11px] font-semibold uppercase tracking-wider">
                   Vivint Authorized Dealer
                 </span>
               </div>
@@ -201,7 +201,7 @@ function GetQuoteContent() {
                   { icon: <Lock size={15} />, text: '$0 down — no upfront equipment cost' },
                 ].map((item) => (
                   <div key={item.text} className="flex items-center gap-2.5 text-white/70 text-[13px]">
-                    <div className="text-[#00C853] flex-shrink-0">{item.icon}</div>
+                    <div className="text-emerald-500 flex-shrink-0">{item.icon}</div>
                     {item.text}
                   </div>
                 ))}
@@ -214,10 +214,10 @@ function GetQuoteContent() {
                   <span className="text-white/80 font-semibold">4.8</span>/5 from 58K Google reviews
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Award size={12} className="text-[#00C853]" /> BBB A+ Rated
+                  <Award size={12} className="text-emerald-500" /> BBB A+ Rated
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Users size={12} className="text-[#00C853]" /> 2M+ homes protected
+                  <Users size={12} className="text-emerald-500" /> 2M+ homes protected
                 </span>
               </div>
             </div>
@@ -226,9 +226,9 @@ function GetQuoteContent() {
             <div className="order-1 md:order-2">
               {/* Urgency badge */}
               <div className="flex justify-center md:justify-start mb-3">
-                <div className="inline-flex items-center gap-1.5 bg-[#00C853]/15 border border-[#00C853]/20 rounded-full px-3 py-1">
-                  <Lock size={11} className="text-[#00C853]" />
-                  <span className="text-[#00C853] text-[11px] font-semibold">{CURRENT_MONTH} Special: Free Doorbell Camera + $0 Installation</span>
+                <div className="inline-flex items-center gap-1.5 bg-emerald-600/15 border border-emerald-600/20 rounded-full px-3 py-1">
+                  <Lock size={11} className="text-emerald-500" />
+                  <span className="text-emerald-500 text-[11px] font-semibold">{CURRENT_MONTH} Special: Free Doorbell Camera + $0 Installation</span>
                 </div>
               </div>
               <GetQuoteForm />
@@ -243,10 +243,10 @@ function GetQuoteContent() {
                 <span className="text-white/80 font-semibold">4.8/5</span> 58K Google reviews
               </span>
               <span className="flex items-center gap-1">
-                <Award size={10} className="text-[#00C853]" /> BBB A+
+                <Award size={10} className="text-emerald-500" /> BBB A+
               </span>
               <span className="flex items-center gap-1">
-                <Users size={10} className="text-[#00C853]" /> 2M+ homes
+                <Users size={10} className="text-emerald-500" /> 2M+ homes
               </span>
             </div>
             {/* Mobile click-to-call */}
@@ -275,7 +275,7 @@ function GetQuoteContent() {
 
           <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-3 md:gap-8">
             <div className="flex md:flex-col items-start gap-4 md:text-left">
-              <span className="text-[32px] md:text-[40px] font-black text-[#00C853]/20 leading-none flex-shrink-0">01</span>
+              <span className="text-[32px] md:text-[40px] font-black text-emerald-500/20 leading-none flex-shrink-0">01</span>
               <div>
                 <h3 className="font-bold text-white text-[15px] mb-1.5">Tell us about your home</h3>
                 <p className="text-white/55 text-[13px] leading-relaxed">ZIP code + a few details. Takes 30 seconds — no credit card, no strings.</p>
@@ -283,7 +283,7 @@ function GetQuoteContent() {
             </div>
 
             <div className="flex md:flex-col items-start gap-4 md:text-left">
-              <span className="text-[32px] md:text-[40px] font-black text-[#00C853]/20 leading-none flex-shrink-0">02</span>
+              <span className="text-[32px] md:text-[40px] font-black text-emerald-500/20 leading-none flex-shrink-0">02</span>
               <div>
                 <h3 className="font-bold text-white text-[15px] mb-1.5">Your advisor builds a custom plan</h3>
                 <p className="text-white/55 text-[13px] leading-relaxed">A Vivint Smart Home Pro calls with a package designed for your home&apos;s layout and budget. No generic upsells.</p>
@@ -291,7 +291,7 @@ function GetQuoteContent() {
             </div>
 
             <div className="flex md:flex-col items-start gap-4 md:text-left">
-              <span className="text-[32px] md:text-[40px] font-black text-[#00C853]/20 leading-none flex-shrink-0">03</span>
+              <span className="text-[32px] md:text-[40px] font-black text-emerald-500/20 leading-none flex-shrink-0">03</span>
               <div>
                 <h3 className="font-bold text-white text-[15px] mb-1.5">A certified tech installs everything</h3>
                 <p className="text-white/55 text-[13px] leading-relaxed">Mounts cameras, connects locks, sets up the app, and walks you through it all. Under 2 hours. $0.</p>
@@ -312,14 +312,14 @@ function GetQuoteContent() {
           </p>
 
           {/* Featured item — doorbell camera (the free one) */}
-          <div className="bg-white/[0.04] rounded-2xl border border-[#00C853]/20 p-5 md:p-7 mb-4 flex flex-col sm:flex-row items-start gap-5">
-            <div className="w-14 h-14 bg-[#00C853]/10 rounded-xl flex items-center justify-center flex-shrink-0">
-              <DoorOpen size={26} className="text-[#00C853]" />
+          <div className="bg-white/[0.04] rounded-2xl border border-emerald-600/20 p-5 md:p-7 mb-4 flex flex-col sm:flex-row items-start gap-5">
+            <div className="w-14 h-14 bg-emerald-600/10 rounded-xl flex items-center justify-center flex-shrink-0">
+              <DoorOpen size={26} className="text-emerald-500" />
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="font-bold text-white text-[15px]">Doorbell Camera Pro</h3>
-                <span className="bg-[#00C853] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                <span className="bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
                   Free
                 </span>
               </div>
@@ -362,7 +362,7 @@ function GetQuoteContent() {
                   className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-4 md:p-5"
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <Icon size={18} className="text-[#00C853] flex-shrink-0" />
+                    <Icon size={18} className="text-emerald-500 flex-shrink-0" />
                     <h3 className="font-bold text-white text-[13px]">{item.name}</h3>
                   </div>
                   <p className="text-white/50 text-[12px] leading-relaxed">{item.desc}</p>
@@ -375,7 +375,7 @@ function GetQuoteContent() {
 
       {/* ═══ Offer Banner ═══ */}
       <section className="relative overflow-hidden">
-        <div className="bg-gradient-to-r from-[#00C853] to-[#00A846] py-5 md:py-6">
+        <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 py-5 md:py-6">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="text-center sm:text-left">
               <p className="text-white font-bold text-[14px] md:text-[15px]">
@@ -456,7 +456,7 @@ function GetQuoteContent() {
               { vs: 'vs. Ring', point: 'Full 24/7 professional monitoring with 14-second average response. Not just cameras — a complete security system.' },
             ].map((row) => (
               <div key={row.vs} className="flex items-start gap-3 bg-white/[0.03] rounded-lg border border-white/[0.06] p-4">
-                <span className="text-[#00C853] text-[11px] font-bold uppercase tracking-wide bg-[#00C853]/10 px-2 py-0.5 rounded flex-shrink-0 mt-0.5">
+                <span className="text-emerald-500 text-[11px] font-bold uppercase tracking-wide bg-emerald-600/10 px-2 py-0.5 rounded flex-shrink-0 mt-0.5">
                   {row.vs}
                 </span>
                 <p className="text-white/60 text-[13px]">{row.point}</p>
@@ -505,7 +505,7 @@ function GetQuoteContent() {
 
       {/* ═══ Final CTA ═══ */}
       <section className="py-14 bg-[#0d1b30]/80 border-t border-white/[0.04] text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#00C853]/[0.04] rounded-full blur-[100px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-emerald-600/[0.04] rounded-full blur-[100px]" />
         <div className="max-w-md mx-auto px-4 relative">
           <h2 className="text-[20px] md:text-[26px] font-extrabold text-white mb-3 tracking-tight">
             Your free quote takes 30 seconds
@@ -515,7 +515,7 @@ function GetQuoteContent() {
           </p>
           <button
             onClick={onCTAClick}
-            className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-[14px] transition-all hover:-translate-y-0.5 shadow-lg shadow-[#00C853]/20 w-full sm:w-auto"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-[14px] transition-all hover:-translate-y-0.5 shadow-lg shadow-emerald-600/20 w-full sm:w-auto"
           >
             Get My Free Quote <ChevronRight size={16} className="inline ml-1" />
           </button>

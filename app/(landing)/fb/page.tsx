@@ -3,9 +3,9 @@
 import { useState, useCallback } from 'react'
 import QuizFunnel from '@/components/landing/QuizFunnel'
 import TestimonialCarousel from '@/components/landing/TestimonialCarousel'
-import ExitIntentPopup from '@/components/landing/ExitIntentPopup'
-import { Shield, Phone, Star, Lock } from 'lucide-react'
-import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
+import Navigation from '@/components/landing/Navigation'
+import Footer from '@/components/landing/Footer'
+import { Star, Lock } from 'lucide-react'
 
 export default function FacebookPage() {
   const [quizModalOpen, setQuizModalOpen] = useState(false)
@@ -13,28 +13,17 @@ export default function FacebookPage() {
   const closeQuiz = useCallback(() => setQuizModalOpen(false), [])
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA]">
-      {/* Slim header */}
-      <header className="bg-white border-b border-gray-100 py-3 px-4">
-        <div className="max-w-xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Shield className="text-[#00C853]" size={24} />
-            <span className="font-bold text-[#1A1A2E]">ShieldHome Pro</span>
-          </div>
-          <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-1.5 text-[#00C853] font-semibold text-sm">
-            <Phone size={16} />
-            {PHONE_NUMBER}
-          </a>
-        </div>
-      </header>
+    <div className="min-h-screen bg-slate-50">
+      {/* Navigation */}
+      <Navigation onQuizOpen={openQuiz} />
 
       {/* Hero */}
-      <section className="bg-[#1A1A2E] py-8 text-center">
+      <section className="bg-slate-900 py-8 text-center">
         <div className="max-w-xl mx-auto px-4">
-          <p className="text-[#00C853] text-xs font-bold tracking-widest uppercase mb-2">
+          <p className="text-emerald-500 text-xs font-bold tracking-widest uppercase mb-2">
             FREE HOME SECURITY QUOTE
           </p>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
             Homes Without Security Are 3x More Likely to Be Broken Into
           </h1>
           <div className="flex items-center justify-center gap-4 text-sm text-gray-300 flex-wrap mt-3">
@@ -59,7 +48,7 @@ export default function FacebookPage() {
       {/* Trust */}
       <section className="py-4 px-4">
         <div className="max-w-xl mx-auto flex items-center justify-center gap-2 text-sm text-gray-600">
-          <Lock size={16} className="text-[#00C853]" />
+          <Lock size={16} className="text-emerald-500" />
           <span>256-bit encryption. Your data is secure and will never be sold.</span>
         </div>
       </section>
@@ -72,20 +61,7 @@ export default function FacebookPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-500 py-6 text-center text-xs px-4">
-        <p className="mb-2">ShieldHome Pro — Authorized Vivint Smart Home Dealer</p>
-        <p className="mb-2">
-          <a href="/privacy" className="hover:text-gray-300">Privacy Policy</a>
-          {' | '}
-          <a href="/terms" className="hover:text-gray-300">Terms of Service</a>
-        </p>
-        <p className="text-xs max-w-md mx-auto mb-2">
-          ShieldHome Pro is an independently operated authorized dealer of Vivint Smart Home products and services.
-        </p>
-        <p>© {new Date().getFullYear()} ShieldHome Pro. All rights reserved.</p>
-      </footer>
-
-      <ExitIntentPopup onQuizOpen={openQuiz} />
+      <Footer />
 
       {quizModalOpen && (
         <QuizFunnel isModal onClose={closeQuiz} />

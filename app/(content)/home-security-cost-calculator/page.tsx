@@ -81,9 +81,9 @@ export default function CostCalculatorPage() {
 
       <main>
         {/* Hero */}
-        <section className="bg-gradient-to-b from-[#1A1A2E] to-[#2D2D4E] py-12 md:py-16">
+        <section className="bg-gradient-to-b from-slate-900 to-slate-800 py-12 md:py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 bg-[#00C853]/20 text-[#00C853] px-4 py-2 rounded-full text-sm font-bold mb-6">
+            <div className="inline-flex items-center gap-2 bg-emerald-600/20 text-emerald-500 px-4 py-2 rounded-full text-sm font-bold mb-6">
               <DollarSign size={16} />
               <span>Free Calculator</span>
             </div>
@@ -97,13 +97,13 @@ export default function CostCalculatorPage() {
         </section>
 
         {/* Calculator */}
-        <section className="py-12 bg-[#F8F9FA]">
+        <section className="py-12 bg-slate-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
               <div className="p-6 md:p-8 space-y-8">
                 {/* Home Size */}
                 <div>
-                  <label className="block font-bold text-[#1A1A2E] mb-3">How big is your home?</label>
+                  <label className="block font-bold text-slate-900 mb-3">How big is your home?</label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {[
                       { value: 'small', label: 'Small', desc: 'Under 1,500 sq ft' },
@@ -117,11 +117,11 @@ export default function CostCalculatorPage() {
                         className={cn(
                           'p-4 rounded-xl border-2 text-center transition-all',
                           calc.homeSize === opt.value
-                            ? 'border-[#00C853] bg-green-50'
-                            : 'border-gray-200 hover:border-[#00C853]'
+                            ? 'border-emerald-600 bg-green-50'
+                            : 'border-gray-200 hover:border-emerald-600'
                         )}
                       >
-                        <Home size={24} className={cn('mx-auto mb-2', calc.homeSize === opt.value ? 'text-[#00C853]' : 'text-gray-400')} />
+                        <Home size={24} className={cn('mx-auto mb-2', calc.homeSize === opt.value ? 'text-emerald-500' : 'text-gray-400')} />
                         <div className="font-semibold text-sm">{opt.label}</div>
                         <div className="text-xs text-gray-500">{opt.desc}</div>
                       </button>
@@ -131,7 +131,7 @@ export default function CostCalculatorPage() {
 
                 {/* Entry Points */}
                 <div>
-                  <label className="block font-bold text-[#1A1A2E] mb-3">How many doors & windows?</label>
+                  <label className="block font-bold text-slate-900 mb-3">How many doors & windows?</label>
                   <div className="grid grid-cols-4 gap-3">
                     {['1-5', '6-10', '11-15', '15+'].map((value) => (
                       <button
@@ -140,8 +140,8 @@ export default function CostCalculatorPage() {
                         className={cn(
                           'p-3 rounded-xl border-2 text-center text-sm font-semibold transition-all',
                           calc.entryPoints === value
-                            ? 'border-[#00C853] bg-green-50 text-[#00C853]'
-                            : 'border-gray-200 hover:border-[#00C853] text-gray-700'
+                            ? 'border-emerald-600 bg-green-50 text-emerald-500'
+                            : 'border-gray-200 hover:border-emerald-600 text-gray-700'
                         )}
                       >
                         {value}
@@ -152,7 +152,7 @@ export default function CostCalculatorPage() {
 
                 {/* Cameras */}
                 <div>
-                  <label className="block font-bold text-[#1A1A2E] mb-3">How many outdoor cameras?</label>
+                  <label className="block font-bold text-slate-900 mb-3">How many outdoor cameras?</label>
                   <div className="grid grid-cols-4 gap-3">
                     {[
                       { value: '1', label: '1 camera' },
@@ -166,8 +166,8 @@ export default function CostCalculatorPage() {
                         className={cn(
                           'p-3 rounded-xl border-2 text-center text-sm font-semibold transition-all',
                           calc.cameras === opt.value
-                            ? 'border-[#00C853] bg-green-50 text-[#00C853]'
-                            : 'border-gray-200 hover:border-[#00C853] text-gray-700'
+                            ? 'border-emerald-600 bg-green-50 text-emerald-500'
+                            : 'border-gray-200 hover:border-emerald-600 text-gray-700'
                         )}
                       >
                         <Camera size={18} className="mx-auto mb-1" />
@@ -179,7 +179,7 @@ export default function CostCalculatorPage() {
 
                 {/* Add-ons */}
                 <div>
-                  <label className="block font-bold text-[#1A1A2E] mb-3">Add-ons</label>
+                  <label className="block font-bold text-slate-900 mb-3">Add-ons</label>
                   <div className="space-y-3">
                     {[
                       { key: 'wantsDoorbell' as const, icon: <Bell size={20} />, label: 'Doorbell Camera Pro', price: 'FREE (limited time)' },
@@ -192,16 +192,16 @@ export default function CostCalculatorPage() {
                         className={cn(
                           'w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left',
                           calc[addon.key]
-                            ? 'border-[#00C853] bg-green-50'
-                            : 'border-gray-200 hover:border-[#00C853]'
+                            ? 'border-emerald-600 bg-green-50'
+                            : 'border-gray-200 hover:border-emerald-600'
                         )}
                       >
-                        <span className={calc[addon.key] ? 'text-[#00C853]' : 'text-gray-400'}>{addon.icon}</span>
+                        <span className={calc[addon.key] ? 'text-emerald-500' : 'text-gray-400'}>{addon.icon}</span>
                         <div className="flex-1">
-                          <div className="font-semibold text-sm text-[#1A1A2E]">{addon.label}</div>
+                          <div className="font-semibold text-sm text-slate-900">{addon.label}</div>
                           <div className="text-xs text-gray-500">{addon.price}</div>
                         </div>
-                        {calc[addon.key] && <Check size={20} className="text-[#00C853]" />}
+                        {calc[addon.key] && <Check size={20} className="text-emerald-500" />}
                       </button>
                     ))}
                   </div>
@@ -209,7 +209,7 @@ export default function CostCalculatorPage() {
 
                 {/* Monitoring Level */}
                 <div>
-                  <label className="block font-bold text-[#1A1A2E] mb-3">Monitoring Plan</label>
+                  <label className="block font-bold text-slate-900 mb-3">Monitoring Plan</label>
                   <div className="grid md:grid-cols-3 gap-3">
                     {[
                       { value: 'standard', label: 'Smart Security', desc: '24/7 monitoring, smart hub, sensors', extra: '' },
@@ -222,13 +222,13 @@ export default function CostCalculatorPage() {
                         className={cn(
                           'p-4 rounded-xl border-2 text-left transition-all',
                           calc.monitoringLevel === opt.value
-                            ? 'border-[#00C853] bg-green-50'
-                            : 'border-gray-200 hover:border-[#00C853]'
+                            ? 'border-emerald-600 bg-green-50'
+                            : 'border-gray-200 hover:border-emerald-600'
                         )}
                       >
-                        <div className="font-semibold text-sm text-[#1A1A2E]">{opt.label}</div>
+                        <div className="font-semibold text-sm text-slate-900">{opt.label}</div>
                         <div className="text-xs text-gray-500 mt-1">{opt.desc}</div>
-                        {opt.extra && <div className="text-xs font-bold text-[#00C853] mt-1">{opt.extra}</div>}
+                        {opt.extra && <div className="text-xs font-bold text-emerald-500 mt-1">{opt.extra}</div>}
                       </button>
                     ))}
                   </div>
@@ -241,7 +241,7 @@ export default function CostCalculatorPage() {
                   className={cn(
                     'w-full py-4 rounded-xl font-bold text-lg transition-colors',
                     calc.homeSize
-                      ? 'bg-[#00C853] hover:bg-[#00A846] text-white'
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   )}
                 >
@@ -251,35 +251,35 @@ export default function CostCalculatorPage() {
 
               {/* Results */}
               {showResults && calc.homeSize && (
-                <div className="border-t-2 border-[#00C853] bg-gradient-to-b from-green-50 to-white p-6 md:p-8">
-                  <h2 className="text-2xl font-bold text-[#1A1A2E] mb-6 text-center">Your Estimated Cost</h2>
+                <div className="border-t-2 border-emerald-600 bg-gradient-to-b from-green-50 to-white p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">Your Estimated Cost</h2>
 
                   <div className="grid sm:grid-cols-3 gap-4 mb-8">
                     <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
                       <div className="text-sm text-gray-500 mb-1">Upfront Cost</div>
-                      <div className="text-3xl font-extrabold text-[#00C853]">$0</div>
+                      <div className="text-3xl font-extrabold text-emerald-500">$0</div>
                       <div className="text-xs text-gray-400 mt-1">$0 down with Vivint financing</div>
                     </div>
-                    <div className="bg-white rounded-xl border-2 border-[#00C853] p-5 text-center">
+                    <div className="bg-white rounded-xl border-2 border-emerald-600 p-5 text-center">
                       <div className="text-sm text-gray-500 mb-1">Monthly Estimate</div>
-                      <div className="text-3xl font-extrabold text-[#1A1A2E]">${estimate.monthlyEstimate.toFixed(2)}</div>
+                      <div className="text-3xl font-extrabold text-slate-900">${estimate.monthlyEstimate.toFixed(2)}</div>
                       <div className="text-xs text-gray-400 mt-1">${(estimate.monthlyEstimate / 30).toFixed(2)}/day</div>
                     </div>
                     <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
                       <div className="text-sm text-gray-500 mb-1">Equipment Value</div>
-                      <div className="text-3xl font-extrabold text-[#1A1A2E]">${estimate.equipmentValue.toLocaleString()}</div>
-                      <div className="text-xs text-[#00C853] font-bold mt-1">FREE with $0 down</div>
+                      <div className="text-3xl font-extrabold text-slate-900">${estimate.equipmentValue.toLocaleString()}</div>
+                      <div className="text-xs text-emerald-500 font-bold mt-1">FREE with $0 down</div>
                     </div>
                   </div>
 
-                  <div className="bg-[#1A1A2E] rounded-xl p-6 text-center">
+                  <div className="bg-slate-900 rounded-xl p-6 text-center">
                     <p className="text-gray-300 text-sm mb-4">
                       This is an estimate. Get your exact personalized quote with our free 60-second quiz.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                       <Link
                         href="/home-security-quiz"
-                        className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-3 rounded-lg font-bold transition-colors"
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
                       >
                         Get My Exact Quote — Free
                       </Link>
@@ -298,7 +298,7 @@ export default function CostCalculatorPage() {
         {/* SEO Content */}
         <section className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-4">How Much Does Home Security Really Cost?</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">How Much Does Home Security Really Cost?</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
                 The cost of a home security system depends on several factors: your home&apos;s size, number of entry points, how many cameras you need, and which smart home features you want. Most homeowners pay between $29.99 and $59.99 per month for professional monitoring, with equipment costs starting at $0 down through Vivint&apos;s financing options.

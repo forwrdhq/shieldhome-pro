@@ -9,7 +9,7 @@ export default function RelatedPosts({ posts }: RelatedPostsProps) {
 
   return (
     <section className="mt-12 pt-10 border-t border-gray-200">
-      <h2 className="text-2xl font-bold text-[#1A1A2E] mb-6">
+      <h2 className="text-2xl font-bold text-slate-900 mb-6">
         You Might Also Like
       </h2>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

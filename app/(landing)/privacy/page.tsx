@@ -14,11 +14,11 @@ export default function PrivacyPage() {
   const contactEmail = 'privacy@shieldhomepro.com'
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
-      <header className="bg-[#1A1A2E] py-4 px-6">
+    <div className="min-h-screen bg-slate-100 flex flex-col">
+      <header className="bg-slate-900 py-4 px-6">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Shield size={20} className="text-[#00C853]" />
+            <Shield size={20} className="text-emerald-500" />
             <span className="text-white font-bold text-lg">{COMPANY_NAME}</span>
           </Link>
           <Link href="/" className="text-gray-400 text-sm hover:text-white transition-colors">
@@ -29,15 +29,15 @@ export default function PrivacyPage() {
 
       <main className="flex-1 max-w-3xl mx-auto px-4 py-12 w-full">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
-          <h1 className="text-3xl font-bold text-[#1A1A2E] mb-2">Privacy Policy</h1>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Privacy Policy</h1>
           <p className="text-gray-400 text-sm mb-8">Last updated: {lastUpdated}</p>
 
           <div className="prose prose-gray max-w-none space-y-8 text-gray-700 leading-relaxed">
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">1. About This Policy</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">1. About This Policy</h2>
               <p>
-                ShieldHome Pro ("we," "us," or "our") is an authorized independent dealer of Vivint Smart Home products and services. This Privacy Policy describes how we collect, use, disclose, and protect your personal information when you visit our website at <a href={APP_URL} className="text-[#00C853] underline">{APP_URL}</a> or submit a quote request through our lead capture forms.
+                ShieldHome Pro ("we," "us," or "our") is an authorized independent dealer of Vivint Smart Home products and services. This Privacy Policy describes how we collect, use, disclose, and protect your personal information when you visit our website at <a href={APP_URL} className="text-emerald-500 underline">{APP_URL}</a> or submit a quote request through our lead capture forms.
               </p>
               <p>
                 By using our website or submitting your information, you agree to the practices described in this Privacy Policy. If you do not agree, please do not use our site or submit your information.
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">2. Information We Collect</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">2. Information We Collect</h2>
               <p>We collect information you voluntarily provide when you request a quote, including:</p>
               <ul className="list-disc pl-6 space-y-1">
                 <li><strong>Contact information:</strong> First name, last name, email address, phone number, ZIP code</li>
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">3. How We Use Your Information</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">3. How We Use Your Information</h2>
               <p>We use the information we collect to:</p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>Contact you via phone, SMS text message, and email to follow up on your quote request</li>
@@ -75,12 +75,12 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">4. TCPA Consent and Communications</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">4. TCPA Consent and Communications</h2>
               <p>
                 By submitting your phone number and checking the consent box on our quote form, you expressly consent to receive autodialed or prerecorded calls and SMS text messages from ShieldHome Pro and/or Vivint Smart Home at the phone number you provided. This consent is not a condition of any purchase.
               </p>
               <p>
-                <strong>Message and data rates may apply.</strong> Message frequency varies. You may opt out of SMS messages at any time by replying STOP. For help, reply HELP or contact us at <a href={`tel:${PHONE_NUMBER}`} className="text-[#00C853]">{PHONE_NUMBER}</a>.
+                <strong>Message and data rates may apply.</strong> Message frequency varies. You may opt out of SMS messages at any time by replying STOP. For help, reply HELP or contact us at <a href={`tel:${PHONE_NUMBER}`} className="text-emerald-500">{PHONE_NUMBER}</a>.
               </p>
               <p>
                 We record the date, time, and IP address associated with your consent as part of our compliance records.
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">5. How We Share Your Information</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">5. How We Share Your Information</h2>
               <p>We may share your information with:</p>
               <ul className="list-disc pl-6 space-y-1">
                 <li><strong>Vivint Smart Home:</strong> As an authorized dealer, we share lead information with Vivint and their representatives to fulfill your quote request</li>
@@ -102,7 +102,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">6. Cookies and Tracking Technologies</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">6. Cookies and Tracking Technologies</h2>
               <p>
                 Our website uses cookies and similar tracking technologies including:
               </p>
@@ -118,14 +118,14 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">7. Data Retention</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">7. Data Retention</h2>
               <p>
                 We retain your personal information for as long as necessary to fulfill the purposes described in this policy, including to communicate with you about your quote, track sales activity, and comply with legal obligations. Lead records are typically retained for a minimum of 3 years for compliance purposes.
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">8. Your Rights</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">8. Your Rights</h2>
               <p>Depending on your location, you may have the right to:</p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>Request access to the personal information we hold about you</li>
@@ -135,47 +135,47 @@ export default function PrivacyPage() {
                 <li>Opt out of the sale of personal information (we do not sell your data)</li>
               </ul>
               <p className="mt-3">
-                To exercise any of these rights, contact us at <a href={`mailto:${contactEmail}`} className="text-[#00C853] underline">{contactEmail}</a> or <a href={`tel:${PHONE_NUMBER}`} className="text-[#00C853]">{PHONE_NUMBER}</a>.
+                To exercise any of these rights, contact us at <a href={`mailto:${contactEmail}`} className="text-emerald-500 underline">{contactEmail}</a> or <a href={`tel:${PHONE_NUMBER}`} className="text-emerald-500">{PHONE_NUMBER}</a>.
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">9. California Residents (CCPA)</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">9. California Residents (CCPA)</h2>
               <p>
-                California residents have additional rights under the California Consumer Privacy Act (CCPA). You have the right to know what personal information we collect, the right to delete it, and the right to opt out of the sale of personal information. We do not sell personal information. To submit a CCPA request, contact us at <a href={`mailto:${contactEmail}`} className="text-[#00C853] underline">{contactEmail}</a>.
+                California residents have additional rights under the California Consumer Privacy Act (CCPA). You have the right to know what personal information we collect, the right to delete it, and the right to opt out of the sale of personal information. We do not sell personal information. To submit a CCPA request, contact us at <a href={`mailto:${contactEmail}`} className="text-emerald-500 underline">{contactEmail}</a>.
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">10. Security</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">10. Security</h2>
               <p>
                 We use reasonable administrative, technical, and physical safeguards to protect your personal information, including encrypted data transmission (HTTPS/TLS) and access controls on our internal systems. However, no internet transmission is completely secure, and we cannot guarantee absolute security.
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">11. Children's Privacy</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">11. Children's Privacy</h2>
               <p>
                 Our website is not directed to children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected such information, please contact us immediately.
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">12. Changes to This Policy</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">12. Changes to This Policy</h2>
               <p>
                 We may update this Privacy Policy from time to time. The updated version will be posted on this page with a revised "Last updated" date. Continued use of our site after changes constitutes acceptance of the updated policy.
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-[#1A1A2E] mb-3">13. Contact Us</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">13. Contact Us</h2>
               <p>If you have questions about this Privacy Policy or how we handle your information:</p>
               <div className="bg-gray-50 rounded-xl p-6 mt-3 space-y-2">
                 <p><strong>{COMPANY_NAME}</strong></p>
                 <p>Authorized Vivint Smart Home Dealer</p>
-                <p>Email: <a href={`mailto:${contactEmail}`} className="text-[#00C853] underline">{contactEmail}</a></p>
-                <p>Phone: <a href={`tel:${PHONE_NUMBER}`} className="text-[#00C853]">{PHONE_NUMBER}</a></p>
-                <p>Website: <a href={APP_URL} className="text-[#00C853] underline">{APP_URL}</a></p>
+                <p>Email: <a href={`mailto:${contactEmail}`} className="text-emerald-500 underline">{contactEmail}</a></p>
+                <p>Phone: <a href={`tel:${PHONE_NUMBER}`} className="text-emerald-500">{PHONE_NUMBER}</a></p>
+                <p>Website: <a href={APP_URL} className="text-emerald-500 underline">{APP_URL}</a></p>
               </div>
             </section>
 

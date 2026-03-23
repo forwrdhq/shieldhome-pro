@@ -52,13 +52,13 @@ function renderContent(content: string) {
 
     if (line.startsWith('### ')) {
       elements.push(
-        <h3 key={i} id={line.slice(4).toLowerCase().replace(/[^a-z0-9]+/g, '-')} className="text-xl font-bold text-[#1A1A2E] mt-8 mb-3">
+        <h3 key={i} id={line.slice(4).toLowerCase().replace(/[^a-z0-9]+/g, '-')} className="text-xl font-bold text-slate-900 mt-8 mb-3">
           {line.slice(4)}
         </h3>
       )
     } else if (line.startsWith('## ')) {
       elements.push(
-        <h2 key={i} id={line.slice(3).toLowerCase().replace(/[^a-z0-9]+/g, '-')} className="text-2xl font-bold text-[#1A1A2E] mt-10 mb-4">
+        <h2 key={i} id={line.slice(3).toLowerCase().replace(/[^a-z0-9]+/g, '-')} className="text-2xl font-bold text-slate-900 mt-10 mb-4">
           {line.slice(3)}
         </h2>
       )
@@ -106,7 +106,7 @@ function renderContent(content: string) {
         <p key={i} className="text-gray-700 leading-relaxed my-4">
           {parts.map((part, j) => {
             if (part.startsWith('**') && part.endsWith('**')) {
-              return <strong key={j} className="font-semibold text-[#1A1A2E]">{part.slice(2, -2)}</strong>
+              return <strong key={j} className="font-semibold text-slate-900">{part.slice(2, -2)}</strong>
             }
             return part
           })}
@@ -170,7 +170,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       <main>
         {/* Article Header */}
-        <section className="bg-[#1A1A2E] py-12 md:py-16">
+        <section className="bg-slate-900 py-12 md:py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <Breadcrumbs
               items={[
@@ -180,7 +180,7 @@ export default async function BlogPostPage({ params }: Props) {
               ]}
             />
             <div className="mt-6">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#00C853]/20 text-[#00C853] uppercase tracking-wider mb-4 capitalize">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-600/20 text-emerald-500 uppercase tracking-wider mb-4 capitalize">
                 {post.category}
               </span>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
@@ -189,8 +189,8 @@ export default async function BlogPostPage({ params }: Props) {
               <p className="text-gray-300 text-lg mb-6">{post.excerpt}</p>
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-[#00C853]/20 flex items-center justify-center">
-                    <Shield size={14} className="text-[#00C853]" />
+                  <div className="w-8 h-8 rounded-full bg-emerald-600/20 flex items-center justify-center">
+                    <Shield size={14} className="text-emerald-500" />
                   </div>
                   <span>{post.author}</span>
                 </div>
@@ -225,13 +225,13 @@ export default async function BlogPostPage({ params }: Props) {
               <aside className="hidden lg:block">
                 <div className="sticky top-24 space-y-6">
                   {/* Quick Quote CTA */}
-                  <div className="bg-gradient-to-b from-[#1A1A2E] to-[#2D2D4E] rounded-xl p-6 text-center">
-                    <Shield className="text-[#00C853] mx-auto mb-3" size={32} />
+                  <div className="bg-gradient-to-b from-slate-900 to-slate-800 rounded-xl p-6 text-center">
+                    <Shield className="text-emerald-500 mx-auto mb-3" size={32} />
                     <h3 className="text-white font-bold text-lg mb-2">Get a Free Quote</h3>
                     <p className="text-gray-300 text-sm mb-4">60-second quiz. No obligation.</p>
                     <Link
                       href="/home-security-quiz"
-                      className="block bg-[#00C853] hover:bg-[#00A846] text-white px-6 py-3 rounded-lg font-bold text-sm transition-colors"
+                      className="block bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-bold text-sm transition-colors"
                     >
                       Start Free Quiz
                     </Link>
@@ -245,14 +245,14 @@ export default async function BlogPostPage({ params }: Props) {
 
                   {/* Table of Contents */}
                   {headings.length > 0 && (
-                    <div className="bg-[#F8F9FA] rounded-xl p-6">
-                      <h3 className="font-bold text-[#1A1A2E] mb-3 text-sm uppercase tracking-wider">In This Article</h3>
+                    <div className="bg-slate-100 rounded-xl p-6">
+                      <h3 className="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wider">In This Article</h3>
                       <nav className="space-y-2">
                         {headings.map((heading: string, idx: number) => (
                           <a
                             key={idx}
                             href={`#${heading.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-                            className="block text-sm text-gray-600 hover:text-[#00C853] transition-colors py-1 border-l-2 border-gray-200 hover:border-[#00C853] pl-3"
+                            className="block text-sm text-gray-600 hover:text-emerald-500 transition-colors py-1 border-l-2 border-gray-200 hover:border-emerald-600 pl-3"
                           >
                             {heading}
                           </a>
@@ -275,7 +275,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
-          <section className="py-12 bg-[#F8F9FA]">
+          <section className="py-12 bg-slate-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <RelatedPosts posts={relatedPosts} />
             </div>

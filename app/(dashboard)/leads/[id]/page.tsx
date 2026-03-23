@@ -33,7 +33,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-[#1A1A2E]">{lead.fullName}</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{lead.fullName}</h1>
           <div className="flex items-center gap-3 mt-2">
             <span className={`text-sm px-3 py-1 rounded-full font-semibold ${statusClass}`}>
               {LEAD_STATUS_LABELS[lead.status]}
@@ -45,7 +45,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
           </div>
         </div>
         <div className="flex gap-3">
-          <a href={`tel:${lead.phone}`} className="flex items-center gap-2 bg-[#00C853] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#00A846]">
+          <a href={`tel:${lead.phone}`} className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">
             <Phone size={16} /> Call
           </a>
           <a href={`mailto:${lead.email}`} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
@@ -58,7 +58,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
         {/* Activity Timeline */}
         <div className="lg:col-span-2">
           <Card>
-            <h2 className="text-lg font-bold text-[#1A1A2E] mb-4">Activity Timeline</h2>
+            <h2 className="text-lg font-bold text-slate-900 mb-4">Activity Timeline</h2>
             <ActivityTimeline activities={lead.activities.map(a => ({
               ...a,
               createdAt: a.createdAt.toISOString()
@@ -69,19 +69,19 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
         {/* Right Column */}
         <div className="space-y-4">
           <Card>
-            <h3 className="font-bold text-[#1A1A2E] mb-3 text-sm uppercase tracking-wide">Contact Info</h3>
+            <h3 className="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wide">Contact Info</h3>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2 text-gray-700">
-                <Phone size={14} className="text-[#00C853]" />
-                <a href={`tel:${lead.phone}`} className="hover:text-[#00C853]">{formatPhone(lead.phone)}</a>
+                <Phone size={14} className="text-emerald-500" />
+                <a href={`tel:${lead.phone}`} className="hover:text-emerald-500">{formatPhone(lead.phone)}</a>
               </div>
               <div className="flex items-center gap-2 text-gray-700">
-                <Mail size={14} className="text-[#00C853]" />
-                <a href={`mailto:${lead.email}`} className="hover:text-[#00C853] truncate">{lead.email}</a>
+                <Mail size={14} className="text-emerald-500" />
+                <a href={`mailto:${lead.email}`} className="hover:text-emerald-500 truncate">{lead.email}</a>
               </div>
               {lead.zipCode && (
                 <div className="flex items-center gap-2 text-gray-700">
-                  <MapPin size={14} className="text-[#00C853]" />
+                  <MapPin size={14} className="text-emerald-500" />
                   <span>ZIP: {lead.zipCode}</span>
                 </div>
               )}
@@ -89,7 +89,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
           </Card>
 
           <Card>
-            <h3 className="font-bold text-[#1A1A2E] mb-3 text-sm uppercase tracking-wide">Quiz Answers</h3>
+            <h3 className="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wide">Quiz Answers</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-500">Property:</span>
@@ -115,7 +115,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
           </Card>
 
           <Card>
-            <h3 className="font-bold text-[#1A1A2E] mb-3 text-sm uppercase tracking-wide">Attribution</h3>
+            <h3 className="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wide">Attribution</h3>
             <div className="space-y-2 text-sm">
               {[
                 ['Source', lead.source],
@@ -134,7 +134,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
           </Card>
 
           <Card>
-            <h3 className="font-bold text-[#1A1A2E] mb-3 text-sm uppercase tracking-wide">Metrics</h3>
+            <h3 className="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wide">Metrics</h3>
             <div className="space-y-2 text-sm">
               {[
                 ['Lead Score', `${lead.leadScore}/100`],
@@ -152,7 +152,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
 
           {lead.notes && (
             <Card>
-              <h3 className="font-bold text-[#1A1A2E] mb-2 text-sm uppercase tracking-wide">Notes</h3>
+              <h3 className="font-bold text-slate-900 mb-2 text-sm uppercase tracking-wide">Notes</h3>
               <p className="text-sm text-gray-700 whitespace-pre-wrap">{lead.notes}</p>
             </Card>
           )}

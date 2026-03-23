@@ -41,19 +41,19 @@ export default function ComparisonHero({
   competitors,
 }: ComparisonHeroProps) {
   return (
-    <section className="relative bg-[#1A1A2E] overflow-hidden">
+    <section className="relative bg-slate-900 overflow-hidden">
       {/* Background accents */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-1/4 w-72 h-72 rounded-full bg-[#00C853] opacity-5 blur-3xl" />
-        <div className="absolute bottom-10 right-1/4 w-56 h-56 rounded-full bg-[#00C853] opacity-5 blur-3xl" />
+        <div className="absolute top-10 left-1/4 w-72 h-72 rounded-full bg-emerald-600 opacity-5 blur-3xl" />
+        <div className="absolute bottom-10 right-1/4 w-56 h-56 rounded-full bg-emerald-600 opacity-5 blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
         {/* Badge */}
         <div className="flex justify-center mb-6">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full">
-            <Shield size={14} className="text-[#00C853]" />
-            <span className="text-[#00C853] text-xs font-bold tracking-widest uppercase">
+            <Shield size={14} className="text-emerald-500" />
+            <span className="text-emerald-500 text-xs font-bold tracking-widest uppercase">
               Expert Comparison
             </span>
           </div>
@@ -89,7 +89,7 @@ export default function ComparisonHero({
 
                 {/* VS divider (not after last) */}
                 {index < competitors.length - 1 && (
-                  <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#00C853] flex items-center justify-center shadow-lg shadow-[#00C853]/20">
+                  <div className="flex-shrink-0 w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/20">
                     <span className="text-white font-extrabold text-xs">VS</span>
                   </div>
                 )}

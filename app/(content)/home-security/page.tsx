@@ -26,7 +26,7 @@ export default function HomeSecurityIndex() {
       <ContentHeader />
 
       <main>
-        <section className="bg-[#1A1A2E] py-16 md:py-20">
+        <section className="bg-slate-900 py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Home Security by Location', url: '/home-security' }]} />
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mt-6 mb-4">
@@ -40,24 +40,24 @@ export default function HomeSecurityIndex() {
 
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-8">Browse by State</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-8">Browse by State</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {states.map((state) => (
                 <Link
                   key={state.slug}
                   href={`/home-security/${state.slug}`}
-                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 hover:border-[#00C853] hover:shadow-md transition-all"
+                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 hover:border-emerald-600 hover:shadow-md transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <MapPin size={18} className="text-[#00C853]" />
+                    <MapPin size={18} className="text-emerald-500" />
                     <div>
-                      <div className="font-semibold text-[#1A1A2E] group-hover:text-[#00C853] transition-colors">
+                      <div className="font-semibold text-slate-900 group-hover:text-emerald-500 transition-colors">
                         {state.name}
                       </div>
                       <div className="text-xs text-gray-500">{state.cities.length} cities</div>
                     </div>
                   </div>
-                  <ChevronRight size={16} className="text-gray-400 group-hover:text-[#00C853] group-hover:translate-x-1 transition-all" />
+                  <ChevronRight size={16} className="text-gray-400 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
                 </Link>
               ))}
             </div>
@@ -65,9 +65,9 @@ export default function HomeSecurityIndex() {
         </section>
 
         {/* SEO Content */}
-        <section className="py-12 bg-[#F8F9FA]">
+        <section className="py-12 bg-slate-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-4">Professional Home Security Installation Nationwide</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Professional Home Security Installation Nationwide</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
                 ShieldHome Pro connects homeowners with Vivint Smart Home, the #1-rated home security provider in America. Whether you live in a major metropolitan area or a quiet suburban neighborhood, professional home security installation is available in your area with free expert setup.

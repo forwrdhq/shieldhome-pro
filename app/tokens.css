@@ -1,0 +1,213 @@
+/* ============================================================
+   ShieldHome Pro — Design Token System
+   Three-tier architecture: Primitive → Semantic → Component
+   ============================================================ */
+
+/* === FONT FACES === */
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('/fonts/PlusJakartaSans-Latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/SourceSans3-Latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* === TIER 1: PRIMITIVE TOKENS === */
+
+@theme {
+  /* --- Color: Slate scale --- */
+  --color-slate-50: #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: #94A3B8;
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1E293B;
+  --color-slate-900: #0F172A;
+  --color-slate-950: #020617;
+
+  /* --- Color: Emerald scale --- */
+  --color-emerald-50: #ECFDF5;
+  --color-emerald-100: #D1FAE5;
+  --color-emerald-200: #A7F3D0;
+  --color-emerald-300: #6EE7B7;
+  --color-emerald-400: #34D399;
+  --color-emerald-500: #10B981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065F46;
+  --color-emerald-900: #064E3B;
+
+  /* --- Color: Brass/Warm accent --- */
+  --color-brass-100: #F5E6D3;
+  --color-brass-200: #E8CBA7;
+  --color-brass-300: #D4A574;
+  --color-brass-400: #C49157;
+  --color-brass-500: #B07D3A;
+  --color-brass-600: #8E6530;
+
+  /* --- Color: Semantic status --- */
+  --color-amber-500: #F59E0B;
+  --color-red-500: #EF4444;
+  --color-red-600: #DC2626;
+
+  /* --- Typography --- */
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+
+  /* --- Spacing (8pt grid) --- */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+
+  /* --- Radii --- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.10);
+
+  /* --- Motion --- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+}
+
+/* === TIER 2: SEMANTIC TOKENS === */
+
+:root {
+  /* --- Surfaces --- */
+  --surface-primary: var(--color-slate-50);
+  --surface-secondary: var(--color-slate-100);
+  --surface-elevated: #FFFFFF;
+  --surface-dark: var(--color-slate-900);
+  --surface-dark-card: var(--color-slate-800);
+  --surface-darkest: var(--color-slate-950);
+
+  /* --- Text --- */
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-700);
+  --text-tertiary: var(--color-slate-500);
+  --text-on-dark: #FFFFFF;
+  --text-on-dark-secondary: var(--color-slate-400);
+  --text-on-dark-tertiary: var(--color-slate-500);
+
+  /* --- Brand --- */
+  --brand-accent: var(--color-emerald-500);
+  --brand-cta: var(--color-emerald-600);
+  --brand-cta-hover: var(--color-emerald-700);
+  --brand-premium: var(--color-brass-300);
+  --brand-premium-hover: var(--color-brass-400);
+
+  /* --- Interactive --- */
+  --interactive-link: var(--color-emerald-600);
+  --interactive-link-dark: var(--color-emerald-400);
+  --interactive-focus: var(--color-emerald-500);
+
+  /* --- Status --- */
+  --status-secure: var(--color-emerald-400);
+  --status-warning: var(--color-amber-500);
+  --status-error: var(--color-red-500);
+
+  /* --- Borders --- */
+  --border-default: var(--color-slate-200);
+  --border-subtle: var(--color-slate-100);
+  --border-on-dark: var(--color-slate-700);
+  --border-interactive: var(--color-slate-300);
+  --border-focus: var(--color-emerald-500);
+}
+
+/* === TIER 3: COMPONENT TOKENS === */
+
+:root {
+  /* --- Buttons --- */
+  --btn-primary-bg: var(--brand-cta);
+  --btn-primary-bg-hover: var(--brand-cta-hover);
+  --btn-primary-text: #FFFFFF;
+  --btn-primary-height: 48px;
+  --btn-primary-height-lg: 56px;
+  --btn-primary-padding-x: var(--spacing-8);
+  --btn-primary-padding-y: var(--spacing-4);
+  --btn-primary-radius: var(--radius-md);
+  --btn-primary-font-size: 15px;
+  --btn-primary-font-weight: 600;
+
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border-color: var(--border-interactive);
+  --btn-secondary-text: var(--text-primary);
+  --btn-secondary-text-dark: var(--text-on-dark);
+
+  --btn-brass-border-color: var(--brand-premium);
+  --btn-brass-text: var(--brand-premium);
+
+  /* --- Cards --- */
+  --card-bg: var(--surface-elevated);
+  --card-bg-dark: var(--surface-dark-card);
+  --card-border-color: var(--border-default);
+  --card-radius: var(--radius-lg);
+  --card-padding: var(--spacing-6);
+  --card-shadow: var(--shadow-xs);
+  --card-shadow-hover: var(--shadow-hover);
+
+  /* --- Navigation --- */
+  --nav-height: 72px;
+  --nav-height-scrolled: 56px;
+  --nav-bg: rgba(15, 23, 42, 0.85);
+  --nav-backdrop: blur(12px) saturate(180%);
+  --utility-bar-height: 40px;
+  --utility-bar-bg: var(--color-slate-950);
+
+  /* --- Quiz --- */
+  --quiz-container-max-width: 560px;
+  --quiz-card-radius: var(--radius-lg);
+  --quiz-progress-bg: var(--color-slate-200);
+  --quiz-progress-fill: var(--brand-accent);
+  --quiz-option-border: var(--border-interactive);
+  --quiz-option-border-selected: var(--brand-cta);
+  --quiz-option-bg-selected: var(--color-emerald-50);
+
+  /* --- Sections --- */
+  --section-padding-y: var(--spacing-20);
+  --section-padding-y-mobile: var(--spacing-12);
+  --section-gap: var(--spacing-12);
+  --hero-margin-bottom: var(--spacing-24);
+  --container-max-width: 1280px;
+  --container-padding-x: var(--spacing-6);
+  --container-padding-x-md: var(--spacing-12);
+  --container-padding-x-lg: var(--spacing-16);
+}

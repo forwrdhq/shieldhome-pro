@@ -38,15 +38,15 @@ function ThankYouContent() {
   const shareText = 'I just got a free home security assessment from ShieldHome Pro. Check yours:'
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
+    <div className="min-h-screen bg-slate-100 flex flex-col">
 
       <div className="max-w-2xl mx-auto px-4 py-12 flex-1">
         {/* Success Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
-            <CheckCircle className="text-[#00C853]" size={40} />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-full mb-6">
+            <CheckCircle className="text-emerald-500" size={40} />
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
             {isSwitch ? 'Your Contract Buyout Request Is In!' : isUpgrade ? 'Your Upgrade Request Is In!' : 'Your Free Quote Request Is In!'}
           </h1>
           {isSwitch && provider && (
@@ -78,7 +78,7 @@ function ThankYouContent() {
                   />
                 </div>
               </div>
-              <div className={`${riskStyle.text} font-extrabold text-2xl`}>{risk.score}</div>
+              <div className={`${riskStyle.text} font-bold text-2xl`}>{risk.score}</div>
             </div>
 
             <p className="text-gray-700 text-sm mb-3">
@@ -103,7 +103,7 @@ function ThankYouContent() {
         {isSwitch && (
           <div className="bg-green-50 border border-green-200 rounded-2xl p-6 mb-8">
             <div className="flex items-center gap-2 mb-3">
-              <Shield size={20} className="text-[#00C853]" />
+              <Shield size={20} className="text-emerald-500" />
               <h2 className="font-bold text-lg text-gray-900">Buyout Assessment In Progress</h2>
             </div>
             <p className="text-gray-700 text-sm">
@@ -116,7 +116,7 @@ function ThankYouContent() {
         {isUpgrade && (
           <div className="bg-green-50 border border-green-200 rounded-2xl p-6 mb-8">
             <div className="flex items-center gap-2 mb-3">
-              <Shield size={20} className="text-[#00C853]" />
+              <Shield size={20} className="text-emerald-500" />
               <h2 className="font-bold text-lg text-gray-900">Upgrade Review In Progress</h2>
             </div>
             <p className="text-gray-700 text-sm">
@@ -126,54 +126,54 @@ function ThankYouContent() {
         )}
 
         {/* What Happens Next */}
-        <h2 className="text-xl font-bold text-[#1A1A2E] mb-4">Here&apos;s what happens next:</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-4">Here&apos;s what happens next:</h2>
 
         <div className="space-y-4 mb-8">
           {(isUpgrade ? [
             {
-              icon: <Clock className="text-[#00C853]" size={24} />,
+              icon: <Clock className="text-emerald-500" size={24} />,
               title: '1. An Upgrade Specialist Will Call Within 10 Minutes',
               desc: 'They\'ll review your current Vivint equipment and recommend the best upgrades for your home.',
             },
             {
-              icon: <MessageSquare className="text-[#00C853]" size={24} />,
+              icon: <MessageSquare className="text-emerald-500" size={24} />,
               title: '2. We\'ll Design Your Upgrade',
               desc: 'Your specialist will apply your savings — Buy 2 cameras get 1 free, plus up to $500 off equipment.',
             },
             {
-              icon: <Home className="text-[#00C853]" size={24} />,
+              icon: <Home className="text-emerald-500" size={24} />,
               title: '3. Professional Installation',
               desc: 'A certified Vivint tech installs your new equipment — most upgrades are done in under an hour.',
             },
           ] : isSwitch ? [
             {
-              icon: <Clock className="text-[#00C853]" size={24} />,
+              icon: <Clock className="text-emerald-500" size={24} />,
               title: '1. Expect a Call Within 2 Minutes',
               desc: `A Vivint Smart Home Pro will call you shortly to discuss your ${provider || 'current provider'} buyout options.`,
             },
             {
-              icon: <MessageSquare className="text-[#00C853]" size={24} />,
+              icon: <MessageSquare className="text-emerald-500" size={24} />,
               title: '2. We Calculate Your Buyout Amount',
               desc: "We'll review your contract details and calculate your exact buyout amount — up to $1,000 covered by Vivint.",
             },
             {
-              icon: <Home className="text-[#00C853]" size={24} />,
+              icon: <Home className="text-emerald-500" size={24} />,
               title: '3. We Handle the Switch',
               desc: "We cancel your old service, install your new Vivint system (usually under 2 hours), and cover your cancellation fee. Zero gap in protection.",
             },
           ] : [
             {
-              icon: <Clock className="text-[#00C853]" size={24} />,
+              icon: <Clock className="text-emerald-500" size={24} />,
               title: '1. Expect a Call Within 2 Minutes',
               desc: 'A Vivint Smart Home Pro will call you shortly to go over your custom security plan.',
             },
             {
-              icon: <MessageSquare className="text-[#00C853]" size={24} />,
+              icon: <MessageSquare className="text-emerald-500" size={24} />,
               title: '2. Check Your Phone',
               desc: "You'll also get a confirmation text in the next 60 seconds.",
             },
             {
-              icon: <Home className="text-[#00C853]" size={24} />,
+              icon: <Home className="text-emerald-500" size={24} />,
               title: '3. Quick Setup at Your Home',
               desc: timeline === 'ASAP'
                 ? "Since you want to get protected ASAP, we'll aim to have a technician at your home within 24-48 hours."
@@ -185,7 +185,7 @@ function ThankYouContent() {
                 {step.icon}
               </div>
               <div>
-                <h3 className="font-bold text-[#1A1A2E] mb-1">{step.title}</h3>
+                <h3 className="font-bold text-slate-900 mb-1">{step.title}</h3>
                 <p className="text-gray-600 text-sm">{step.desc}</p>
               </div>
             </div>
@@ -193,8 +193,8 @@ function ThankYouContent() {
         </div>
 
         {/* Referral Card */}
-        <div className="bg-[#1A1A2E] rounded-2xl p-6 mb-8 text-center">
-          <Share2 size={24} className="text-[#00C853] mx-auto mb-3" />
+        <div className="bg-slate-900 rounded-2xl p-6 mb-8 text-center">
+          <Share2 size={24} className="text-emerald-500 mx-auto mb-3" />
           <h3 className="text-white font-bold text-lg mb-2">Know someone who needs home security?</h3>
           <p className="text-gray-400 text-sm mb-4">Share your link and they&apos;ll get a free security assessment too.</p>
           <div className="flex gap-2 max-w-sm mx-auto">
@@ -208,7 +208,7 @@ function ThankYouContent() {
               onClick={() => {
                 navigator.clipboard?.writeText(`${shareText} ${shareUrl}`)
               }}
-              className="bg-[#00C853] hover:bg-[#00A846] text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap"
             >
               Copy Link
             </button>
@@ -220,7 +220,7 @@ function ThankYouContent() {
           <p className="text-gray-600 mb-4">Questions? We&apos;re here to help.</p>
           <a
             href={`tel:${PHONE_NUMBER_RAW}`}
-            className="inline-flex items-center gap-2 bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-3 rounded-xl font-bold text-lg transition-colors"
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-bold text-lg transition-colors"
           >
             <Phone size={20} />
             Call/Text Us: {PHONE_NUMBER}
@@ -239,12 +239,12 @@ function ThankYouContent() {
 export default function ThankYouPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center">
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
-            <CheckCircle className="text-[#00C853]" size={40} />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-full mb-6">
+            <CheckCircle className="text-emerald-500" size={40} />
           </div>
-          <h1 className="text-2xl font-bold text-[#1A1A2E]">Loading your results...</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Loading your results...</h1>
         </div>
       </div>
     }>

@@ -8,16 +8,16 @@ export default function MediaLogos() {
   ]
 
   return (
-    <section className="py-8 bg-white border-b border-gray-100">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">
+    <section className="py-6 bg-white border-b border-slate-100">
+      <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-16">
+        <p className="text-overline text-center text-slate-400 mb-4">
           As Featured In
         </p>
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
           {outlets.map((o) => (
             <div
               key={o.name}
-              className="text-gray-300 font-extrabold text-xl md:text-2xl tracking-tight select-none"
+              className="text-slate-300 font-heading font-bold text-xl md:text-2xl tracking-tight select-none opacity-40 hover:opacity-70 transition-opacity duration-150"
               title={o.name}
               aria-label={`Featured in ${o.name}`}
             >

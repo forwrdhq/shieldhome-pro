@@ -81,8 +81,8 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
                     'block py-1.5 text-sm leading-snug border-l-2 -ml-[2px] transition-colors duration-150',
                     indent,
                     isActive
-                      ? 'border-[#00C853] text-[#00C853] font-medium'
-                      : 'border-transparent text-gray-500 hover:text-[#1A1A2E] hover:border-gray-400'
+                      ? 'border-emerald-600 text-emerald-500 font-medium'
+                      : 'border-transparent text-gray-500 hover:text-slate-900 hover:border-gray-400'
                   )}
                 >
                   {heading.text}

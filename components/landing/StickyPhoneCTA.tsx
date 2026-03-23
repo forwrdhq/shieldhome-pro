@@ -8,7 +8,7 @@ interface StickyPhoneCTAProps {
   darkMode?: boolean
 }
 
-export default function StickyPhoneCTA({ onQuizOpen, darkMode }: StickyPhoneCTAProps) {
+export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
   function trackPhoneClick() {
     if (typeof window !== 'undefined') {
       if ((window as any).fbq) (window as any).fbq('track', 'Contact', { content_name: 'phone_call' })
@@ -19,35 +19,35 @@ export default function StickyPhoneCTA({ onQuizOpen, darkMode }: StickyPhoneCTAP
   return (
     <>
       {/* Desktop sticky bottom bar */}
-      <div className={`hidden md:block fixed bottom-0 left-0 right-0 z-40 border-t py-3 shadow-2xl ${darkMode ? 'bg-[#0a1628]/95 backdrop-blur-md border-white/[0.06]' : 'bg-[#1A1A2E] border-gray-700'}`}>
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-center gap-6">
-          <p className={`text-sm ${darkMode ? 'text-white/60' : 'text-white'}`}>Questions? Our Smart Home Pros are standing by.</p>
+      <div className="hidden md:block fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-700 py-3 shadow-lg">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-center gap-6">
+          <p className="text-sm font-body text-slate-400">Questions? Our Smart Home Pros are standing by.</p>
           <a
             href={`tel:${PHONE_NUMBER_RAW}`}
             onClick={trackPhoneClick}
-            className="flex items-center gap-2 bg-[#00C853] hover:bg-[#00A846] text-white px-6 py-2 rounded-lg font-bold transition-colors"
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-heading font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5"
           >
-            <Phone size={18} />
+            <Phone size={16} />
             {PHONE_NUMBER}
           </a>
         </div>
       </div>
 
-      {/* Mobile sticky bottom bar — full-width quiz CTA */}
-      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-40 border-t shadow-2xl px-4 py-3 flex gap-2 ${darkMode ? 'bg-[#0a1628]/95 backdrop-blur-md border-white/[0.06]' : 'bg-white border-gray-200'}`}>
+      {/* Mobile sticky bottom bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-700 px-4 py-3 flex gap-2 h-14">
         <button
           onClick={onQuizOpen}
-          className="flex-1 bg-[#00C853] hover:bg-[#00A846] text-white py-3 rounded-xl font-bold text-base transition-colors"
+          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-heading font-semibold text-sm transition-colors duration-200"
         >
           Get My Free Quote
         </button>
         <a
           href={`tel:${PHONE_NUMBER_RAW}`}
           onClick={trackPhoneClick}
-          className={`flex items-center justify-center w-12 text-white rounded-xl ${darkMode ? 'bg-white/10' : 'bg-[#1A1A2E]'}`}
+          className="flex items-center justify-center w-12 bg-slate-800 text-white rounded-lg"
           aria-label={`Call ${PHONE_NUMBER}`}
         >
-          <Phone size={20} />
+          <Phone size={18} />
         </a>
       </div>
     </>

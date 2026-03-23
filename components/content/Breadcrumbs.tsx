@@ -47,7 +47,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
                   <a
                     href={item.url}
                     className={cn(
-                      'text-gray-500 hover:text-[#00C853] transition-colors',
+                      'text-gray-500 hover:text-emerald-500 transition-colors',
                       index === 0 && 'flex items-center gap-1'
                     )}
                   >

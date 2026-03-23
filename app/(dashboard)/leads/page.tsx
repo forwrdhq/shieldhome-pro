@@ -29,17 +29,17 @@ export default async function LeadsPage({
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">Lead Pipeline</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Lead Pipeline</h1>
         <div className="flex items-center gap-2">
           <Link
             href="/leads?view=pipeline"
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${view === 'pipeline' ? 'bg-[#1A1A2E] text-white' : 'bg-white text-gray-600 border'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${view === 'pipeline' ? 'bg-slate-900 text-white' : 'bg-white text-gray-600 border'}`}
           >
             Pipeline
           </Link>
           <Link
             href="/leads?view=table"
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${view === 'table' ? 'bg-[#1A1A2E] text-white' : 'bg-white text-gray-600 border'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${view === 'table' ? 'bg-slate-900 text-white' : 'bg-white text-gray-600 border'}`}
           >
             Table
           </Link>
@@ -81,7 +81,7 @@ export default async function LeadsPage({
               {leads.map(lead => (
                 <tr key={lead.id} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-3 px-4">
-                    <Link href={`/leads/${lead.id}`} className="font-medium text-[#1A1A2E] hover:text-[#00C853]">{lead.fullName}</Link>
+                    <Link href={`/leads/${lead.id}`} className="font-medium text-slate-900 hover:text-emerald-500">{lead.fullName}</Link>
                   </td>
                   <td className="py-3 px-4 text-gray-600">{lead.phone}</td>
                   <td className="py-3 px-4 text-gray-600 text-xs">{lead.email}</td>

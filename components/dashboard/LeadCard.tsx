@@ -40,7 +40,7 @@ export default function LeadCard({ lead, compact }: LeadCardProps) {
           <div>
             <p className="font-bold text-gray-900 text-sm">{lead.fullName}</p>
             {!compact && (
-              <a href={`tel:${lead.phone}`} className="text-xs text-gray-500 flex items-center gap-1 hover:text-[#00C853]" onClick={e => e.stopPropagation()}>
+              <a href={`tel:${lead.phone}`} className="text-xs text-gray-500 flex items-center gap-1 hover:text-emerald-500" onClick={e => e.stopPropagation()}>
                 <Phone size={10} /> {formatPhone(lead.phone)}
               </a>
             )}

@@ -3,12 +3,13 @@
 import { Suspense, useEffect, useCallback, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import SwitchForm from '@/components/landing/SwitchForm'
+import Navigation from '@/components/landing/Navigation'
+import Footer from '@/components/landing/Footer'
 import SavingsComparison from '@/components/landing/SavingsComparison'
 import HowItWorks from '@/components/landing/HowItWorks'
 import TestimonialCarousel from '@/components/landing/TestimonialCarousel'
 import FAQSection from '@/components/landing/FAQSection'
 import StickyPhoneCTA from '@/components/landing/StickyPhoneCTA'
-import ExitIntentPopup from '@/components/landing/ExitIntentPopup'
 import {
   Shield, Phone, CheckCircle, ClipboardList, Wrench, Camera, Smartphone,
   Lock, DoorOpen, Star, Users, Clock, ArrowRight, Zap, Award, ShieldCheck,
@@ -170,40 +171,13 @@ function SwitchContent() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* ═══ Sticky Header ═══ */}
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14">
-            <div className="flex items-center gap-2">
-              <Shield className="text-[#00C853]" size={24} />
-              <div>
-                <div className="font-bold text-[#1A1A2E] text-base leading-none">ShieldHome Pro</div>
-                <div className="text-[10px] text-gray-500">Authorized Vivint Smart Home Dealer</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-1.5 text-xs text-gray-500">
-                <div className="w-2 h-2 bg-[#00C853] rounded-full animate-pulse" />
-                <LiveCounter /> people checking eligibility today
-              </div>
-              <a
-                href={`tel:${PHONE_NUMBER_RAW}`}
-                className="flex items-center gap-2 bg-[#00C853] hover:bg-[#00A846] text-white px-3 py-2 rounded-lg font-semibold text-sm transition-colors"
-              >
-                <Phone size={14} />
-                <span className="hidden sm:inline">{PHONE_NUMBER}</span>
-                <span className="sm:hidden">Call</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-slate-50">
+      <Navigation />
 
       {/* ═══ Hero ═══ */}
-      <section className="bg-gradient-to-b from-[#1A1A2E] to-[#0f1520] py-12 md:py-16 relative overflow-hidden">
+      <section className="bg-gradient-to-b from-slate-900 to-slate-950 py-12 md:py-16 relative overflow-hidden">
         {/* Background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#00C853]/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-600/5 rounded-full blur-3xl" />
 
         <div className="max-w-4xl mx-auto px-4 text-center relative">
           {/* Urgency banner */}
@@ -214,10 +188,10 @@ function SwitchContent() {
             </span>
           </div>
 
-          <p className="text-[#00C853] font-bold text-sm uppercase tracking-widest mb-3">
+          <p className="text-emerald-500 font-bold text-sm uppercase tracking-widest mb-3">
             STUCK IN A SECURITY CONTRACT?
           </p>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-5 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-5 leading-tight">
             {headline}
           </h1>
           <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto mb-8">
@@ -226,7 +200,7 @@ function SwitchContent() {
 
           <button
             onClick={onCTAClick}
-            className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-green-900/30 hover:shadow-xl hover:shadow-green-900/40 hover:-translate-y-0.5 mb-8"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-green-900/30 hover:shadow-xl hover:shadow-green-900/40 hover:-translate-y-0.5 mb-8"
           >
             Check My Buyout Eligibility →
           </button>
@@ -240,7 +214,7 @@ function SwitchContent() {
               { icon: <Clock size={15} />, text: 'Installed in Under 2 Hours' },
             ].map((b) => (
               <span key={b.text} className="flex items-center gap-1.5">
-                <span className="text-[#00C853]">{b.icon}</span>
+                <span className="text-emerald-500">{b.icon}</span>
                 {b.text}
               </span>
             ))}
@@ -253,15 +227,15 @@ function SwitchContent() {
               <span className="text-white font-semibold">4.8/5</span> from 58,000+ reviews
             </span>
             <span className="flex items-center gap-1.5">
-              <ShieldCheck size={14} className="text-[#00C853]" />
+              <ShieldCheck size={14} className="text-emerald-500" />
               BBB A+ Rated
             </span>
             <span className="flex items-center gap-1.5">
-              <Users size={14} className="text-[#00C853]" />
+              <Users size={14} className="text-emerald-500" />
               2M+ homes protected
             </span>
             <span className="flex items-center gap-1.5">
-              <Award size={14} className="text-[#00C853]" />
+              <Award size={14} className="text-emerald-500" />
               #1 Home Security — SafeHome.org
             </span>
           </div>
@@ -269,7 +243,7 @@ function SwitchContent() {
       </section>
 
       {/* ═══ Social proof strip ═══ */}
-      <div className="bg-[#00C853] py-3">
+      <div className="bg-emerald-600 py-3">
         <div className="max-w-4xl mx-auto px-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-white font-medium">
           <span>2,400+ homeowners switched this year</span>
           <span className="hidden sm:inline">•</span>
@@ -280,10 +254,10 @@ function SwitchContent() {
       </div>
 
       {/* ═══ Switch Form ═══ */}
-      <section id="switch-form" className="py-14 bg-[#F8F9FA]">
+      <section id="switch-form" className="py-14 bg-slate-100">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[#1A1A2E] mb-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
               Check Your Buyout Eligibility
             </h2>
             <p className="text-gray-600">Takes 60 seconds. No credit check. No obligation.</p>
@@ -298,7 +272,7 @@ function SwitchContent() {
               <span className="flex items-center gap-1"><ShieldCheck size={12} /> Your info is never sold</span>
             </div>
             <p className="text-xs text-gray-400 flex items-center gap-1.5">
-              <div className="w-2 h-2 bg-[#00C853] rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-emerald-600 rounded-full animate-pulse" />
               <LiveCounter /> people checked eligibility today
             </p>
           </div>
@@ -320,14 +294,14 @@ function SwitchContent() {
       <TestimonialCarousel testimonials={switchTestimonials} />
 
       {/* ═══ Mid-page CTA ═══ */}
-      <section className="py-10 bg-[#F8F9FA]">
+      <section className="py-10 bg-slate-100">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <p className="text-[#1A1A2E] font-bold text-lg mb-4">
+          <p className="text-slate-900 font-bold text-lg mb-4">
             Ready to stop overpaying for outdated security?
           </p>
           <button
             onClick={onCTAClick}
-            className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-green-200 hover:-translate-y-0.5"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-green-200 hover:-translate-y-0.5"
           >
             Check My Buyout Eligibility →
           </button>
@@ -338,10 +312,10 @@ function SwitchContent() {
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <p className="text-[#00C853] font-bold text-sm uppercase tracking-widest mb-2">
+            <p className="text-emerald-500 font-bold text-sm uppercase tracking-widest mb-2">
               WHAT YOU&apos;RE SWITCHING TO
             </p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A2E] mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
               The Latest Vivint Smart Home Technology
             </h2>
             <p className="text-gray-600">Every system includes professional installation and 24/7 monitoring</p>
@@ -350,17 +324,17 @@ function SwitchContent() {
             {equipment.map((item) => (
               <div
                 key={item.name}
-                className="bg-[#F8F9FA] rounded-xl border border-gray-200 p-5 text-center relative group hover:border-[#00C853]/30 hover:shadow-md transition-all"
+                className="bg-slate-100 rounded-xl border border-gray-200 p-5 text-center relative group hover:border-emerald-500/30 hover:shadow-md transition-all"
               >
                 {item.badge && (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#00C853] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">
                     {item.badge}
                   </span>
                 )}
-                <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center mx-auto mb-3 text-[#1A1A2E] shadow-sm">
+                <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center mx-auto mb-3 text-slate-900 shadow-sm">
                   {item.icon}
                 </div>
-                <h3 className="font-bold text-[#1A1A2E] mb-2 text-sm">{item.name}</h3>
+                <h3 className="font-bold text-slate-900 mb-2 text-sm">{item.name}</h3>
                 <p className="text-gray-500 text-xs leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -369,20 +343,20 @@ function SwitchContent() {
       </section>
 
       {/* ═══ Risk Reversal / Guarantee ═══ */}
-      <section className="py-12 bg-[#F8F9FA]">
+      <section className="py-12 bg-slate-100">
         <div className="max-w-3xl mx-auto px-4">
           <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 text-center">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-green-100 rounded-full mb-4">
-              <ShieldCheck className="text-[#00C853]" size={28} />
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-emerald-100 rounded-full mb-4">
+              <ShieldCheck className="text-emerald-500" size={28} />
             </div>
-            <h3 className="text-xl font-bold text-[#1A1A2E] mb-2">The ShieldHome Switch Guarantee</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">The ShieldHome Switch Guarantee</h3>
             <p className="text-gray-600 max-w-xl mx-auto mb-4">
               If we can&apos;t beat your current provider on price, features, <em>and</em> service quality — we&apos;ll tell you. No pressure, no obligation, no hard sell. Over 98% of homeowners who get a quote decide to switch.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-500">
-              <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-[#00C853]" /> Free consultation</span>
-              <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-[#00C853]" /> No obligation</span>
-              <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-[#00C853]" /> Satisfaction guaranteed</span>
+              <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-emerald-500" /> Free consultation</span>
+              <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-emerald-500" /> No obligation</span>
+              <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-emerald-500" /> Satisfaction guaranteed</span>
             </div>
           </div>
         </div>
@@ -396,13 +370,13 @@ function SwitchContent() {
       />
 
       {/* ═══ Final CTA ═══ */}
-      <section className="bg-gradient-to-b from-[#1A1A2E] to-[#0f1520] py-14 text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-[#00C853]/5 rounded-full blur-3xl" />
+      <section className="bg-gradient-to-b from-slate-900 to-slate-950 py-14 text-center relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-emerald-600/5 rounded-full blur-3xl" />
         <div className="max-w-2xl mx-auto px-4 relative">
-          <p className="text-[#00C853] font-bold text-sm uppercase tracking-widest mb-3">
+          <p className="text-emerald-500 font-bold text-sm uppercase tracking-widest mb-3">
             LIMITED BUYOUT SLOTS AVAILABLE
           </p>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
             Stop Paying for a System That Doesn&apos;t Protect You
           </h2>
           <p className="text-gray-400 mb-8 max-w-lg mx-auto">
@@ -411,7 +385,7 @@ function SwitchContent() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={onCTAClick}
-              className="bg-[#00C853] hover:bg-[#00A846] text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-green-900/30 hover:-translate-y-0.5 w-full sm:w-auto"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-green-900/30 hover:-translate-y-0.5 w-full sm:w-auto"
             >
               Check My Buyout Eligibility →
             </button>
@@ -429,25 +403,10 @@ function SwitchContent() {
         </div>
       </section>
 
-      {/* ═══ Footer ═══ */}
-      <footer className="bg-gray-900 text-gray-400 py-8 pb-24 md:pb-20">
-        <div className="max-w-7xl mx-auto px-4 text-center space-y-3">
-          <p className="font-semibold text-white">ShieldHome Pro — Authorized Vivint Smart Home Dealer</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
-            <a href="/privacy" className="hover:text-white">Privacy Policy</a>
-            <a href="/terms" className="hover:text-white">Terms of Service</a>
-          </div>
-          <p className="text-xs max-w-2xl mx-auto">
-            ShieldHome Pro is an independently operated authorized dealer of Vivint Smart Home products and services.
-            Vivint® is a registered trademark of Vivint Smart Home, Inc. Buyout amount up to $1,000 subject to eligibility.
-          </p>
-          <p className="text-xs">© {new Date().getFullYear()} ShieldHome Pro. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
 
       {/* ═══ Sticky CTAs ═══ */}
       <StickyPhoneCTA onQuizOpen={onCTAClick} />
-      <ExitIntentPopup onQuizOpen={onCTAClick} />
     </div>
   )
 }

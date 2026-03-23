@@ -11,10 +11,10 @@ function UnsubscribeContent() {
   const status = searchParams.get('status')
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
-      <header className="bg-[#1A1A2E] py-4 px-6">
+    <div className="min-h-screen bg-slate-100 flex flex-col">
+      <header className="bg-slate-900 py-4 px-6">
         <div className="max-w-2xl mx-auto flex items-center gap-2">
-          <Shield size={20} className="text-[#00C853]" />
+          <Shield size={20} className="text-emerald-500" />
           <span className="text-white font-bold text-lg">ShieldHome Pro</span>
         </div>
       </header>
@@ -24,9 +24,9 @@ function UnsubscribeContent() {
           {status === 'success' ? (
             <>
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
-                <CheckCircle className="text-[#00C853]" size={32} />
+                <CheckCircle className="text-emerald-500" size={32} />
               </div>
-              <h1 className="text-2xl font-bold text-[#1A1A2E] mb-3">You&apos;ve been unsubscribed</h1>
+              <h1 className="text-2xl font-bold text-slate-900 mb-3">You&apos;ve been unsubscribed</h1>
               <p className="text-gray-500 mb-6 leading-relaxed">
                 You&apos;ve been removed from our email list and will no longer receive automated messages from ShieldHome Pro.
               </p>
@@ -39,7 +39,7 @@ function UnsubscribeContent() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-6">
                 <XCircle className="text-red-500" size={32} />
               </div>
-              <h1 className="text-2xl font-bold text-[#1A1A2E] mb-3">Something went wrong</h1>
+              <h1 className="text-2xl font-bold text-slate-900 mb-3">Something went wrong</h1>
               <p className="text-gray-500 mb-6 leading-relaxed">
                 We weren&apos;t able to process your unsubscribe request. Please contact us directly and we&apos;ll take care of it right away.
               </p>
@@ -49,7 +49,7 @@ function UnsubscribeContent() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-6">
                 <Shield className="text-gray-400" size={32} />
               </div>
-              <h1 className="text-2xl font-bold text-[#1A1A2E] mb-3">Unsubscribe</h1>
+              <h1 className="text-2xl font-bold text-slate-900 mb-3">Unsubscribe</h1>
               <p className="text-gray-500 mb-6 leading-relaxed">
                 To unsubscribe from ShieldHome Pro emails, please use the unsubscribe link in one of our emails, or contact us directly.
               </p>
@@ -59,7 +59,7 @@ function UnsubscribeContent() {
           <div className="space-y-3">
             <a
               href={`tel:${PHONE_NUMBER}`}
-              className="block w-full py-3 px-6 bg-[#1A1A2E] text-white rounded-xl font-semibold hover:bg-[#2a2a3e] transition-colors"
+              className="block w-full py-3 px-6 bg-slate-900 text-white rounded-xl font-semibold hover:bg-[#2a2a3e] transition-colors"
             >
               Contact Us: {PHONE_NUMBER}
             </a>
@@ -83,7 +83,7 @@ function UnsubscribeContent() {
 
 export default function UnsubscribePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center"><p className="text-gray-500">Loading...</p></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-slate-100 flex items-center justify-center"><p className="text-gray-500">Loading...</p></div>}>
       <UnsubscribeContent />
     </Suspense>
   )

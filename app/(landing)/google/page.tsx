@@ -1,108 +1,77 @@
-'use client'
+import dynamic from 'next/dynamic'
+import TrustBar from './components/TrustBar'
+import HeroSection from './components/HeroSection'
 
-import { useState, useCallback, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import QuizFunnel from '@/components/landing/QuizFunnel'
-import ComparisonTable from '@/components/landing/ComparisonTable'
-import ProductShowcase from '@/components/landing/ProductShowcase'
-import HowItWorks from '@/components/landing/HowItWorks'
-import TestimonialCarousel from '@/components/landing/TestimonialCarousel'
-import FAQSection from '@/components/landing/FAQSection'
-import StickyPhoneCTA from '@/components/landing/StickyPhoneCTA'
-import Navigation from '@/components/landing/Navigation'
-import Footer from '@/components/landing/Footer'
-import { CheckCircle, Phone } from 'lucide-react'
-import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
+// Below-fold: lazy loaded for performance
+const ValueStack = dynamic(() => import('./components/ValueStack'))
+const TrustSection = dynamic(() => import('./components/TrustSection'))
+const ComparisonSection = dynamic(() => import('./components/ComparisonSection'))
+const GoogleFAQ = dynamic(() => import('./components/GoogleFAQ'))
+const BuyoutSection = dynamic(() => import('./components/BuyoutSection'))
+const UrgencySection = dynamic(() => import('./components/UrgencySection'))
+const GoogleStickyBar = dynamic(() => import('./components/GoogleStickyBar'))
+const ExitIntentPopup = dynamic(() => import('./components/ExitIntentPopup'))
 
-const HEADLINES: Record<string, string> = {
-  'home-security': 'Professional Home Security Systems — Free Setup',
-  'vivint': 'Get a Free Quote from a Vivint Authorized Dealer',
+// ---- Headline Map ----
+
+const headlineMap: Record<string, string> = {
+  'home-security-system': 'Professional Home Security — Installed Tomorrow, $0 Down',
+  'home-security-installation': 'Professional Home Security — Installed Tomorrow, $0 Down',
+  'home-security': 'Professional Home Security — Installed Tomorrow, $0 Down',
+  'vivint-dealer': 'Vivint Authorized Dealer — Free Installation + $0 Down',
+  'vivint-near-me': 'Vivint Authorized Dealer — Free Installation + $0 Down',
+  'vivint': 'Vivint Authorized Dealer — Free Installation + $0 Down',
+  'best-home-security': 'The #1 Rated Smart Home Security System — Installed Tomorrow',
+  'home-security-near-me': 'Top-Rated Home Security — Free Installation + $0 Down',
+  'adt-alternative': 'Switch to Smarter Security — We Pay Up to $1,000 to Buy Out Your Contract',
+  'switch-security': 'Switch to Smarter Security — We Pay Up to $1,000 to Buy Out Your Contract',
   'security-cameras': 'Smart Security Cameras with 24/7 Pro Monitoring',
-  'home-alarm': 'Advanced Home Alarm Systems — Set Up in 24 Hours',
-  'adt-alternative': 'Looking for an ADT Alternative? Compare Vivint',
+  'home-alarm': 'Smart Home Alarm Systems — Installed in 24 Hours',
+  'security-system': 'Complete Security System — $0 Down, Free Installation',
 }
 
-function GoogleContent() {
-  const searchParams = useSearchParams()
-  const kw = searchParams.get('kw') || ''
-  const headline = HEADLINES[kw] || 'Smart Home Security — Expert Setup, $0 Down'
+const defaultHeadline = 'Professional Home Security — Installed Tomorrow, $0 Down'
 
-  const [quizModalOpen, setQuizModalOpen] = useState(false)
-  const openQuiz = useCallback(() => setQuizModalOpen(true), [])
-  const closeQuiz = useCallback(() => setQuizModalOpen(false), [])
+const BUYOUT_KEYWORDS = ['adt-alternative', 'switch-security', 'switch', 'buyout', 'adt', 'simplisafe-switch', 'ring-switch']
+
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function GooglePage({ searchParams }: PageProps) {
+  const params = await searchParams
+  const kw = typeof params.kw === 'string' ? params.kw : ''
+  const city = typeof params.city === 'string' ? params.city : ''
+
+  // Resolve headline
+  let headline = headlineMap[kw] || defaultHeadline
+  if (city) {
+    headline = `${city}'s Top-Rated Home Security — Free Installation + $0 Down`
+  }
+
+  // Determine if buyout visitor
+  const isBuyoutVisitor = BUYOUT_KEYWORDS.some((bk) => kw.toLowerCase().includes(bk))
+
+  // Pre-headline
+  const preHeadline = city
+    ? `${city}'s #1 Rated Smart Home Security Dealer`
+    : "Utah's #1 Rated Smart Home Security Dealer"
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Navigation onQuizOpen={openQuiz} />
-
-      {/* Hero */}
-      <section className="bg-slate-900 py-12">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">{headline}</h1>
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-6 text-sm text-slate-400">
-            {['2M+ Homes Protected', '4.8/5 Rating', 'Free Setup', '24/7 Monitoring'].map(s => (
-              <span key={s} className="flex items-center gap-1.5">
-                <CheckCircle size={16} className="text-emerald-500" />
-                {s}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Quiz */}
-      <section id="quiz" className="py-16 bg-slate-100">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-          <div className="text-center mb-10">
-            <h2 className="text-h2 text-slate-900 mb-2">
-              Get Your Free Custom Quote
-            </h2>
-            <p className="text-body text-slate-500">Takes 60 seconds. No pressure, no obligation.</p>
-          </div>
-          <QuizFunnel />
-        </div>
-      </section>
-
-      <ComparisonTable />
-      <ProductShowcase />
-      <HowItWorks />
-      <TestimonialCarousel />
-      <FAQSection />
-
-      <section className="bg-slate-900 py-12 text-center">
-        <div className="max-w-2xl mx-auto px-4">
-          <h2 className="text-h2 text-white mb-4">
-            Ready to Get Protected?
-          </h2>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={openQuiz}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-heading font-semibold text-lg transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto"
-            >
-              Get My Free Quote
-            </button>
-            <a href={`tel:${PHONE_NUMBER_RAW}`} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors duration-150 text-sm">
-              <Phone size={16} />
-              <span>Or call {PHONE_NUMBER}</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-
-      <StickyPhoneCTA onQuizOpen={openQuiz} />
-      {quizModalOpen && (
-        <QuizFunnel isModal onClose={closeQuiz} />
-      )}
+    <div className="min-h-screen bg-white" id="hero-form">
+      <TrustBar />
+      <HeroSection
+        headline={headline}
+        preHeadline={preHeadline}
+      />
+      <ValueStack isBuyoutVisitor={isBuyoutVisitor} />
+      <TrustSection />
+      {isBuyoutVisitor && <BuyoutSection />}
+      <ComparisonSection />
+      <GoogleFAQ />
+      <UrgencySection />
+      <GoogleStickyBar />
+      <ExitIntentPopup />
     </div>
-  )
-}
-
-export default function GooglePage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
-      <GoogleContent />
-    </Suspense>
   )
 }

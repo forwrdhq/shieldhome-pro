@@ -45,7 +45,7 @@ model Lead {
 
   firstName       String
   lastName        String
-  email           String
+  email           String?
   phone           String
   fullName        String
 

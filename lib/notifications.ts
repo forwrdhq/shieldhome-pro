@@ -10,7 +10,7 @@ interface LeadNotificationData {
   lastName: string
   fullName: string
   phone: string
-  email: string
+  email?: string | null
   zipCode?: string | null
   propertyType?: string | null
   homeownership?: string | null
@@ -76,7 +76,7 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
       ``,
       `👤 ${lead.fullName}`,
       `📞 ${lead.phone}`,
-      `📧 ${lead.email}`,
+      `📧 ${lead.email || 'Not provided'}`,
       `📍 ZIP: ${lead.zipCode || 'N/A'}`,
       ``,
       `🔄 Switching from: ${lead.currentProvider || 'Unknown'}`,
@@ -95,7 +95,7 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
       ``,
       `👤 ${lead.fullName}`,
       `📞 ${lead.phone}`,
-      `📧 ${lead.email}`,
+      `📧 ${lead.email || 'Not provided'}`,
       ``,
       `⬆️ Existing Vivint customer — wants equipment upgrade`,
       `🎯 Offer: Buy 2 cameras get 1 free + up to $500 off`,
@@ -116,7 +116,7 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
       ``,
       `👤 ${lead.fullName}`,
       `📞 ${lead.phone}`,
-      `📧 ${lead.email}`,
+      `📧 ${lead.email || 'Not provided'}`,
       `📍 ZIP: ${lead.zipCode || 'N/A'}`,
       ``,
       `🏠 Property: ${propertyLabel}`,
@@ -248,6 +248,7 @@ export async function sendWelcomeEmail(lead: LeadNotificationData) {
 </body>
 </html>`
 
+  if (!lead.email) return
   const msgId = await sendEmail({ to: lead.email, subject, html })
 
   if (msgId) {
@@ -307,7 +308,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
         type: 'section',
         fields: [
           { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
-          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
+          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email || 'Not provided'}` },
           { type: 'mrkdwn', text: `*📊 Lead Score:*\n${lead.leadScore}/100` },
           { type: 'mrkdwn', text: `*🔥 Priority:*\n${lead.priority}` },
         ]
@@ -327,7 +328,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
         type: 'section',
         fields: [
           { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
-          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
+          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email || 'Not provided'}` },
           { type: 'mrkdwn', text: `*📍 ZIP Code:*\n${lead.zipCode || 'N/A'}` },
           { type: 'mrkdwn', text: `*🏢 Current Provider:*\n${lead.currentProvider || 'N/A'}` },
         ]
@@ -363,7 +364,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
         type: 'section',
         fields: [
           { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
-          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email}` },
+          { type: 'mrkdwn', text: `*📧 Email:*\n${lead.email || 'Not provided'}` },
           { type: 'mrkdwn', text: `*📍 ZIP Code:*\n${lead.zipCode || 'N/A'}` },
           { type: 'mrkdwn', text: `*🏠 Property:*\n${propertyLabel}` },
         ]

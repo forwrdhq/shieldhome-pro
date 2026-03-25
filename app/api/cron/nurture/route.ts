@@ -226,6 +226,7 @@ export async function GET(req: NextRequest) {
       const hoursSinceSubmit = (Date.now() - lead.submittedAt.getTime()) / 3600000
       if (hoursSinceSubmit < hoursRequired) continue
 
+      if (!lead.email) continue
       const unsubUrl = `${APP_URL}/unsubscribe?email=${encodeURIComponent(lead.email)}&id=${lead.id}`
       const emailInfo = buildNurtureEmail(nextStep, lead.firstName, unsubUrl)
 

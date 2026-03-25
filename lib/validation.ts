@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const leadSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(50),
   lastName: z.string().max(50).optional().default(''),
-  email: z.string().email('Valid email required'),
+  email: z.string().email('Valid email required').optional().nullable(),
   phone: z.string().min(10, 'Valid phone number required').max(20),
   zipCode: z.string().max(10).optional().default(''),
 
@@ -52,3 +52,49 @@ export const dispositionSchema = z.object({
   status: z.string().min(1, 'Status required'),
   dispositionNote: z.string().optional().nullable(),
 })
+
+// ============================================
+// GOOGLE ADS LANDING PAGE — MULTI-STEP SCHEMAS
+// ============================================
+
+const trackingFields = {
+  source: z.string().optional().nullable(),
+  medium: z.string().optional().nullable(),
+  campaign: z.string().optional().nullable(),
+  gclid: z.string().optional().nullable(),
+  fbclid: z.string().optional().nullable(),
+  kwParam: z.string().optional().nullable(),
+  utmContent: z.string().optional().nullable(),
+  keyword: z.string().optional().nullable(),
+  landingPage: z.string().optional().nullable(),
+  referrer: z.string().optional().nullable(),
+  deviceType: z.string().optional().nullable(),
+  browser: z.string().optional().nullable(),
+}
+
+export const googleStep1Schema = z.object({
+  firstName: z.string().min(1, 'Name is required').max(50),
+  phone: z.string().min(10, 'Valid phone number required').max(20),
+  zipCode: z.string().regex(/^\d{5}$/, 'Valid 5-digit ZIP required'),
+  ...trackingFields,
+})
+
+export type GoogleStep1Data = z.infer<typeof googleStep1Schema>
+
+export const googleStep2Schema = z.object({
+  leadId: z.string().min(1),
+  hasSystem: z.boolean(),
+  currentProvider: z.string().optional().nullable(),
+  homeownership: z.enum(['OWN', 'RENT']),
+})
+
+export type GoogleStep2Data = z.infer<typeof googleStep2Schema>
+
+export const googleStep3Schema = z.object({
+  leadId: z.string().min(1),
+  email: z.string().email('Valid email required'),
+  timeline: z.enum(['ASAP', 'WITHIN_30_DAYS', 'RESEARCHING']),
+  tcpaConsent: z.literal(true, { error: 'Consent is required to continue' }),
+})
+
+export type GoogleStep3Data = z.infer<typeof googleStep3Schema>

@@ -49,7 +49,7 @@ export function pushEnhancedConversions(formData: {
   })
 }
 
-export function trackPhoneClick(location: 'hero' | 'sticky' | 'final_cta' | 'trust_bar') {
+export function trackPhoneClick(location: 'hero' | 'sticky' | 'final_cta' | 'trust_bar' | 'promo_banner') {
   pushDataLayer('phone_click', { location })
   window.fbq?.('track', 'Contact', { content_name: 'phone_call', location })
 }

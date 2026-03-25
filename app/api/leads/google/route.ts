@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
         firstName,
         lastName,
         fullName: data.firstName.trim(),
-        email: null,
+        email: '',
         phone: data.phone,
         zipCode: data.zipCode,
         source: data.source || 'google',
@@ -187,7 +187,7 @@ export async function PATCH(req: NextRequest) {
       await prisma.lead.update({
         where: { id: data.leadId },
         data: {
-          email: data.email,
+          email: data.email || '',
           timeline: (timelineMap[data.timeline] || 'ASAP') as any,
           tcpaConsent: data.tcpaConsent,
           tcpaConsentAt: new Date(),

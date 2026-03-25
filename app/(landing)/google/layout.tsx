@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Professional Home Security — Free Installation, $0 Down | ShieldHome Pro',
-  description: 'Get a free home security assessment from a Vivint authorized dealer. Same-day installation, $0 down, 60-day money-back guarantee. Call (877) 555-0199.',
+  description: 'Get a free home security quote from a top Vivint authorized partner. Same-day installation, $0 down, 60-day money-back guarantee. Exclusive deals nationwide.',
   robots: 'noindex, nofollow',
   openGraph: {
     title: 'Professional Home Security — Free Installation, $0 Down',
@@ -11,19 +11,24 @@ export const metadata: Metadata = {
     url: 'https://shieldhomepro.com/google',
     siteName: 'ShieldHome Pro',
   },
+  twitter: {
+    title: 'Professional Home Security — Free Installation, $0 Down | ShieldHome Pro',
+    description: 'Exclusive Vivint deals with free professional installation nationwide. $0 down, 60-day money-back guarantee.',
+  },
   alternates: {
-    canonical: 'https://shieldhomepro.com/google',
+    canonical: 'https://shieldhome.pro/google',
   },
 }
 
-const localBusinessSchema = {
+const organizationSchema = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
+  '@type': 'ProfessionalService',
   name: 'ShieldHome Pro',
-  description: 'Authorized Vivint Smart Home Dealer — free home security assessments and professional installation.',
-  telephone: '+18775550199',
-  url: 'https://shieldhomepro.com',
+  description: 'Top-performing Vivint authorized partner — exclusive package deals, free professional installation, and bonus equipment nationwide.',
+  telephone: '+18016166301',
+  url: 'https://shieldhome.pro',
   priceRange: '$0 - $200/mo',
+  areaServed: { '@type': 'Country', name: 'US' },
   address: { '@type': 'PostalAddress', addressCountry: 'US' },
   aggregateRating: {
     '@type': 'AggregateRating',
@@ -39,7 +44,7 @@ export default function GoogleLayout({ children }: { children: React.ReactNode }
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
       {children}
     </>

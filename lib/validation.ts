@@ -92,7 +92,7 @@ export type GoogleStep2Data = z.infer<typeof googleStep2Schema>
 
 export const googleStep3Schema = z.object({
   leadId: z.string().min(1),
-  email: z.string().email('Valid email required'),
+  email: z.string().email('Valid email required').optional().nullable(),
   timeline: z.enum(['ASAP', 'WITHIN_30_DAYS', 'RESEARCHING']),
   tcpaConsent: z.literal(true, { error: 'Consent is required to continue' }),
 })

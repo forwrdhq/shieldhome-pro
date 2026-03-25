@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 import GoogleLeadForm from './GoogleLeadForm'
 
@@ -7,48 +8,53 @@ interface HeroSectionProps {
   subheadline?: string
 }
 
-/* Custom check SVG — consistent 1.5px stroke, squared caps, matches heading weight */
-function CheckMark() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0 mt-px">
-      <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter" />
-    </svg>
-  )
-}
-
 export default function HeroSection({
   headline,
-  preHeadline = "Utah's #1 Rated Smart Home Security Dealer",
-  subheadline = 'Custom-designed Vivint smart home systems with free professional installation. See your personalized quote in 30 seconds.',
+  preHeadline = "Exclusive Deals From a Top Vivint Authorized Partner",
+  subheadline = "Vivint's AI-powered cameras don't just record — they deter intruders with spotlights, sirens, and live 2-way audio. As a top Vivint partner, we get you exclusive deals on the most advanced system available. Free professional installation nationwide.",
 }: HeroSectionProps) {
   return (
-    <section className="bg-slate-900 pt-12 pb-4 md:pt-20 md:pb-20 relative overflow-hidden">
-      {/* Subtle gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 pointer-events-none" />
+    <section className="relative overflow-hidden bg-slate-900">
+      {/* ── Desktop: Product image — full right side, no obstruction ── */}
+      <div className="hidden md:block absolute top-0 right-0 bottom-0 w-[50%] pointer-events-none">
+        <Image
+          src="/images/google/vivint-products-hero.jpg"
+          alt=""
+          fill
+          priority
+          className="object-contain object-right"
+          sizes="50vw"
+        />
+        <div className="absolute inset-y-0 left-0 w-[30%] bg-gradient-to-r from-slate-900 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-slate-900/60 to-transparent" />
+      </div>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-8 relative">
-        {/* Mobile Layout: stacked */}
-        <div className="md:hidden">
+      {/* ══════════════════════════════════════════
+          MOBILE — world-class, tight, conversion-first
+          ══════════════════════════════════════════ */}
+      <div className="md:hidden relative">
+        {/* Content area */}
+        <div className="pt-11 pb-3 px-5">
           {/* Logo */}
-          <div className="mb-1.5">
-            <span className="text-white font-heading font-bold text-base tracking-[-0.01em]">
+          <div className="mb-3">
+            <span className="text-white font-heading font-bold text-[15px] tracking-[-0.01em]">
               Shield<span className="text-emerald-400">Home</span>
             </span>
           </div>
 
           {/* Pre-headline */}
-          <p className="text-emerald-400 text-[10px] font-heading font-semibold uppercase tracking-[0.12em] mb-0.5">
+          <p className="text-[9px] font-heading font-semibold uppercase tracking-[0.18em] mb-2" style={{ color: 'var(--color-brass-300)' }}>
             {preHeadline}
           </p>
 
-          {/* Headline */}
-          <h1 className="text-white font-heading font-bold text-[20px] leading-[25px] tracking-[-0.02em] mb-1">
+          {/* Headline — large, confident */}
+          <h1 className="text-white font-heading font-bold text-[24px] leading-[1.15] tracking-[-0.025em] mb-2">
             {headline}
           </h1>
 
           {/* Subheadline */}
-          <p className="text-slate-400 text-xs leading-snug mb-2.5">
-            See your personalized quote in 30 seconds.
+          <p className="text-slate-400 text-[13px] leading-[1.5] mb-4 font-body max-w-[300px]">
+            Cameras that fight back — with spotlights, sirens, and live audio. Exclusive deals + free installation nationwide.
           </p>
 
           {/* Form */}
@@ -58,72 +64,78 @@ export default function HeroSection({
           <div className="text-center mt-2">
             <a
               href={`tel:${PHONE_NUMBER_RAW}`}
-              className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-300 text-xs font-body transition-colors duration-300"
+              className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-300 text-[11px] font-body transition-colors duration-300"
             >
               Or call {PHONE_NUMBER}
             </a>
           </div>
         </div>
 
-        {/* Desktop Layout: split */}
-        <div className="hidden md:grid md:grid-cols-12 md:gap-12 md:items-start">
-          {/* Left side */}
-          <div className="col-span-7 pt-2">
+        {/* Product image — full bleed, seamless transition */}
+        <div className="relative mt-3">
+          <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-slate-900 to-transparent z-10 pointer-events-none" />
+          <Image
+            src="/images/google/vivint-products-hero.jpg"
+            alt="Vivint smart home security products — cameras, doorbell, smart lock, thermostat, and hub"
+            width={800}
+            height={500}
+            className="w-full h-auto"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          DESKTOP — text+form left, product image right
+          ══════════════════════════════════════════ */}
+      <div className="hidden md:block relative">
+        <div className="max-w-6xl mx-auto px-8 pt-16 pb-20">
+          <div className="max-w-[480px]">
             {/* Logo */}
-            <div className="mb-8">
+            <div className="mb-6">
               <span className="text-white font-heading font-bold text-xl tracking-[-0.01em]">
                 Shield<span className="text-emerald-400">Home</span>
               </span>
             </div>
 
             {/* Pre-headline */}
-            <p className="text-emerald-400 text-[11px] font-heading font-semibold uppercase tracking-[0.14em] mb-4">
+            <p
+              className="text-[11px] font-heading font-semibold uppercase tracking-[0.16em] mb-4"
+              style={{ color: 'var(--color-brass-300)' }}
+            >
               {preHeadline}
             </p>
 
-            {/* Headline — art-directed type */}
-            <h1 className="text-white font-heading font-bold text-[42px] leading-[1.1] tracking-[-0.025em] mb-5 max-w-[540px]">
+            {/* Headline */}
+            <h1 className="text-white font-heading font-bold text-[40px] leading-[1.1] tracking-[-0.03em] mb-4">
               {headline}
             </h1>
 
             {/* Subheadline */}
-            <p className="text-slate-400 text-[17px] leading-[1.6] mb-10 max-w-md font-body">
+            <p className="text-slate-400 text-[15px] leading-[1.6] mb-6 font-body">
               {subheadline}
             </p>
 
-            {/* Bullet points — no icons, use custom check + refined type */}
-            <div className="space-y-3.5 mb-10">
-              {[
-                'Same-day or next-day professional installation',
-                '$0 down — financing available at 0% APR',
-                '60-day money-back guarantee',
-              ].map((item) => (
-                <div key={item} className="flex items-start gap-3 text-emerald-400">
-                  <CheckMark />
-                  <span className="text-slate-300 text-[14px] font-body leading-snug">{item}</span>
-                </div>
-              ))}
+            {/* Trust strip */}
+            <div className="flex items-center gap-3 text-[11px] text-slate-500 font-body tracking-[0.04em] uppercase mb-6">
+              <span className="flex items-center gap-1">
+                <span className="text-amber-400 text-sm">&#9733;</span>
+                58,000+ reviews
+              </span>
+              <span className="text-slate-700">|</span>
+              <span>BBB A+</span>
+              <span className="text-slate-700">|</span>
+              <span>2M+ Homes</span>
             </div>
 
-            {/* Trust badges — understated, typographic */}
-            <div className="flex items-center gap-3 text-[11px] text-slate-500 font-body tracking-wide uppercase">
-              <span>Vivint Authorized Dealer</span>
-              <span className="text-slate-700">—</span>
-              <span>BBB A+ Rated</span>
-              <span className="text-slate-700">—</span>
-              <span>4.8/5 from 58,000+ reviews</span>
-            </div>
-          </div>
-
-          {/* Right side — Form Card */}
-          <div className="col-span-5">
+            {/* Form */}
             <div className="mb-4">
-              <h2 className="text-white font-heading font-semibold text-[17px] text-center tracking-[-0.01em]">
-                Get Your Free Security Assessment
-              </h2>
+              <GoogleLeadForm />
             </div>
-            <GoogleLeadForm />
-            <div className="text-center mt-4">
+
+            <div className="text-center">
               <a
                 href={`tel:${PHONE_NUMBER_RAW}`}
                 className="text-slate-500 hover:text-slate-300 text-[13px] font-body transition-colors duration-300"

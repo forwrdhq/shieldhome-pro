@@ -138,7 +138,7 @@ export default function ExitIntentPopup() {
               Offer expires {getEndOfWeek()}
             </p>
             <p className="text-center text-[11px] text-slate-400 mt-1.5 font-body tracking-wide">
-              No obligation. We&apos;ll call to confirm your bonus.
+              No obligation. We&apos;ll call to confirm your free quote.
             </p>
           </>
         )}

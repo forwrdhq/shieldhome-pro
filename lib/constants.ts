@@ -2,7 +2,7 @@ export const PHONE_NUMBER = process.env.NEXT_PUBLIC_PHONE_NUMBER || '(877) 555-0
 export const PHONE_NUMBER_RAW = process.env.NEXT_PUBLIC_PHONE_NUMBER_RAW || '+18775550199'
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://shieldhomepro.com'
 export const COMPANY_NAME = 'ShieldHome Pro'
-export const COMPANY_TAGLINE = 'Authorized Vivint Smart Home Dealer'
+export const COMPANY_TAGLINE = 'Authorized Vivint Smart Home Partner'
 export const FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || 'quotes@shieldhomepro.com'
 export const FROM_NAME = process.env.SENDGRID_FROM_NAME || 'ShieldHome Pro'
 

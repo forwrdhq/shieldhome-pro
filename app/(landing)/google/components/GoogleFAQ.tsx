@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Minus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { pushDataLayer } from '@/lib/google-tracking'
 
@@ -28,9 +27,28 @@ const faqs = [
   },
   {
     q: 'Who is ShieldHome? Is this legit?',
-    a: "ShieldHome.pro is an authorized Vivint dealer. Vivint protects 2M+ homes and has 25+ years in business. Your equipment, monitoring, and support all come from Vivint — we're your local partner with exclusive deals.",
+    a: "ShieldHome is one of Vivint's top-performing authorized partners nationwide. Because of our volume and direct relationship with Vivint, we negotiate exclusive promotions, bonus equipment, and package deals that aren't available on Vivint.com or through most other dealers. Once your system is installed, you're a full Vivint customer with 24/7 monitoring, the app, and all warranties — we just get you a better deal getting there.",
   },
 ]
+
+/* Custom plus/minus SVG — matching stroke weight to body type */
+function ToggleIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      className={cn(
+        'flex-shrink-0 transition-transform duration-300',
+        open && 'rotate-45'
+      )}
+      style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+    >
+      <path d="M10 4V16M4 10H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
 
 export default function GoogleFAQ() {
   const [open, setOpen] = useState<number | null>(null)
@@ -44,33 +62,43 @@ export default function GoogleFAQ() {
   }
 
   return (
-    <section className="py-14 md:py-20 bg-white">
-      <div className="max-w-3xl mx-auto px-4 md:px-8">
-        <h2 className="text-h2 text-slate-900 text-center mb-10">
-          Common Questions
-        </h2>
-        <div className="divide-y divide-slate-100">
+    <section className="py-14 md:py-32 bg-white">
+      <div className="max-w-3xl mx-auto px-5 md:px-8">
+        <div className="text-center mb-8 md:mb-14">
+          <p className="text-[10px] md:text-[11px] font-heading font-semibold uppercase tracking-[0.16em] mb-2 md:mb-4" style={{ color: 'var(--color-brass-400)' }}>
+            Questions & Answers
+          </p>
+          <h2 className="font-heading font-bold text-[22px] md:text-[38px] tracking-[-0.03em] text-slate-900">
+            Common Questions
+          </h2>
+        </div>
+
+        <div className="space-y-0">
           {faqs.map((faq, i) => (
-            <div key={i}>
+            <div key={i} className="border-b border-slate-100 last:border-b-0">
               <button
                 onClick={() => handleToggle(i)}
-                className="w-full flex items-center justify-between py-5 text-left group"
+                className="w-full flex items-center justify-between py-6 text-left group"
                 aria-expanded={open === i}
               >
-                <span className="text-h4 text-slate-900 pr-4">{faq.q}</span>
-                {open === i
-                  ? <Minus size={20} className="text-slate-900 flex-shrink-0" />
-                  : <Plus size={20} className="text-slate-400 flex-shrink-0" />
-                }
+                <span className="font-heading font-semibold text-[15px] md:text-[17px] tracking-[-0.01em] text-slate-900 pr-4 group-hover:text-slate-700 transition-colors duration-300">
+                  {faq.q}
+                </span>
+                <span className={cn(
+                  'transition-colors duration-300',
+                  open === i ? 'text-slate-900' : 'text-slate-300 group-hover:text-slate-500'
+                )}>
+                  <ToggleIcon open={open === i} />
+                </span>
               </button>
               <div
                 className={cn(
-                  'overflow-hidden transition-all duration-300',
+                  'overflow-hidden transition-all duration-400',
                   open === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 )}
                 style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
               >
-                <div className="pb-6 text-body text-slate-600 leading-relaxed">
+                <div className="pb-7 text-[15px] font-body text-slate-500 leading-[1.7] max-w-[90%]">
                   {faq.a}
                 </div>
               </div>

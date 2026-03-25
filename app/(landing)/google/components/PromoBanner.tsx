@@ -58,7 +58,7 @@ export default function PromoBanner() {
 
   return (
     <div
-      className="w-full relative z-40 pt-9"
+      className="w-full relative z-40 pt-12"
       style={{ backgroundColor: 'rgba(253, 255, 231, 0.95)' }}
     >
       {/* ── Desktop ── */}

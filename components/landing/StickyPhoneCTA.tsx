@@ -1,7 +1,7 @@
 'use client'
 
-import { Phone } from 'lucide-react'
-import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
+import { useState, useEffect } from 'react'
+import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
 interface StickyPhoneCTAProps {
   onQuizOpen: () => void
@@ -9,6 +9,16 @@ interface StickyPhoneCTAProps {
 }
 
 export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    function handleScroll() {
+      setVisible(window.scrollY > 600)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   function trackPhoneClick() {
     if (typeof window !== 'undefined') {
       if ((window as any).fbq) (window as any).fbq('track', 'Contact', { content_name: 'phone_call' })
@@ -18,37 +28,47 @@ export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
 
   return (
     <>
-      {/* Desktop sticky bottom bar */}
-      <div className="hidden md:block fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-700 py-3 shadow-lg">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-center gap-6">
-          <p className="text-sm font-body text-slate-400">Questions? Our Smart Home Pros are standing by.</p>
+      {/* Desktop sticky bar */}
+      <div
+        className="hidden md:block fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm border-t border-slate-200 py-3 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        style={{ transform: visible ? 'translateY(0)' : 'translateY(100%)' }}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-center gap-4">
+          <p className="text-[13px] font-body text-slate-500">Questions? Our Smart Home Pros are standing by.</p>
           <a
             href={`tel:${PHONE_NUMBER_RAW}`}
             onClick={trackPhoneClick}
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-heading font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px"
           >
-            <Phone size={16} />
-            {PHONE_NUMBER}
+            Call Now
           </a>
+          <button
+            onClick={onQuizOpen}
+            className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2.5 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px"
+          >
+            Get Free Quote
+          </button>
         </div>
       </div>
 
-      {/* Mobile sticky bottom bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-700 px-4 py-3 flex gap-2 h-14">
-        <button
-          onClick={onQuizOpen}
-          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-heading font-semibold text-sm transition-colors duration-200"
-        >
-          Get My Free Quote
-        </button>
+      {/* Mobile sticky bar */}
+      <div
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm border-t border-slate-200 px-4 py-2.5 flex gap-2 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        style={{ transform: visible ? 'translateY(0)' : 'translateY(100%)' }}
+      >
         <a
           href={`tel:${PHONE_NUMBER_RAW}`}
           onClick={trackPhoneClick}
-          className="flex items-center justify-center w-12 bg-slate-800 text-white rounded-lg"
-          aria-label={`Call ${PHONE_NUMBER}`}
+          className="flex-1 flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-colors duration-300"
         >
-          <Phone size={18} />
+          Call Now
         </a>
+        <button
+          onClick={onQuizOpen}
+          className="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-colors duration-300"
+        >
+          Get Free Quote
+        </button>
       </div>
     </>
   )

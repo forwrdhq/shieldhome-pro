@@ -26,33 +26,38 @@ export default function Navigation({ onQuizOpen }: NavigationProps) {
 
   return (
     <>
-      {/* Utility Bar */}
-      <div className="bg-slate-950 h-10 flex items-center">
-        <div className="max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-16 flex items-center justify-between">
-          <span className="text-xs text-slate-400 font-body hidden sm:block">
-            24/7 Professional Monitoring
+      {/* Trust Bar — fixed top */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-sm text-white h-9 flex items-center justify-center px-4">
+        {/* Mobile */}
+        <p className="md:hidden text-[11px] font-body text-slate-400 text-center tracking-[0.03em]">
+          <span className="text-amber-400">&#9733;</span>{' '}
+          4.8/5 from 58,000+ Reviews &middot; Vivint Authorized Partner
+        </p>
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-0 text-[11px] font-body text-slate-400 tracking-[0.03em]">
+          <span className="flex items-center gap-1">
+            <span className="text-amber-400">&#9733;</span>
+            4.8/5 &middot; 58,000+ Verified Reviews
           </span>
-          <a
-            href={`tel:${PHONE_NUMBER_RAW}`}
-            onClick={trackPhoneClick}
-            className="text-[13px] font-semibold text-brass-300 hover:text-brass-400 transition-colors duration-150 flex items-center gap-1.5 ml-auto sm:ml-0"
-          >
-            <Phone size={13} />
-            {PHONE_NUMBER}
-          </a>
+          <span className="mx-3 text-slate-700/60">|</span>
+          <span>Vivint Authorized Partner</span>
+          <span className="mx-3 text-slate-700/60">|</span>
+          <span>BBB A+ Rated</span>
+          <span className="mx-3 text-slate-700/60">|</span>
+          <span>SafeHome.org Best of 2025</span>
         </div>
       </div>
 
       {/* Main Navigation */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-200 ${
+        className={`sticky top-9 z-50 transition-all duration-200 ${
           scrolled
             ? 'h-14 bg-slate-900/85 backdrop-blur-xl backdrop-saturate-[180%] shadow-md'
             : 'h-[72px] bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto h-full px-6 md:px-12 lg:px-16 flex items-center justify-between">
-          {/* Logo — text wordmark */}
+          {/* Logo */}
           <a href="/" className="font-heading font-bold text-white text-xl tracking-tight drop-shadow-sm">
             Shield<span className="text-emerald-400">Home</span>
           </a>
@@ -74,14 +79,14 @@ export default function Navigation({ onQuizOpen }: NavigationProps) {
             {onQuizOpen ? (
               <button
                 onClick={onQuizOpen}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-heading font-semibold px-5 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(5,150,105,0.25)]"
+                className="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-heading font-semibold px-5 py-2 rounded-lg transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(5,150,105,0.25)]"
               >
                 Free Quote
               </button>
             ) : (
               <a
                 href="#quiz"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-heading font-semibold px-5 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(5,150,105,0.25)]"
+                className="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-heading font-semibold px-5 py-2 rounded-lg transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(5,150,105,0.25)]"
               >
                 Free Quote
               </a>

@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
         referrer: data.referrer,
         deviceType: data.deviceType,
         browser: data.browser,
+        creditScoreRange: data.creditScoreRange,
         ipAddress,
         leadScore: score,
         priority: priority as any,
@@ -251,5 +252,6 @@ function buildNotifData(lead: any) {
     currentProvider: lead.currentProvider,
     contractMonthsRemaining: lead.contractMonthsRemaining,
     currentMonthlyPayment: lead.currentMonthlyPayment,
+    creditScoreRange: lead.creditScoreRange,
   }
 }

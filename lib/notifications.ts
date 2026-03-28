@@ -4,6 +4,22 @@ import { prisma } from './db'
 import { PHONE_NUMBER, APP_URL } from './constants'
 import { PROPERTY_TYPE_LABELS, TIMELINE_LABELS, HOMEOWNERSHIP_LABELS, CONCERN_LABELS } from './constants'
 
+const CREDIT_SCORE_LABELS: Record<string, string> = {
+  EXCELLENT: 'Excellent (750+)',
+  GOOD: 'Good (700–749)',
+  FAIR: 'Fair (650–699)',
+  BELOW_650: 'Below 650',
+  NOT_SURE: 'Not sure',
+}
+
+const LANDING_PAGE_LABELS: Record<string, string> = {
+  '/': 'Homepage Quiz',
+  '/google': 'Google Ads',
+  '/get-quote': 'Cost/Pricing (homeshield.pro)',
+  '/switch': 'ADT Switch/Buyout',
+  '/fb': 'Facebook Ads',
+}
+
 interface LeadNotificationData {
   id: string
   firstName: string
@@ -27,6 +43,7 @@ interface LeadNotificationData {
   currentProvider?: string | null
   contractMonthsRemaining?: string | null
   currentMonthlyPayment?: string | null
+  creditScoreRange?: string | null
 }
 
 export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
@@ -67,6 +84,8 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
   const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
   const isSwitch = lead.segment === 'switch'
   const isUpgrade = lead.segment === 'upgrade'
+  const creditLabel = lead.creditScoreRange ? (CREDIT_SCORE_LABELS[lead.creditScoreRange] || lead.creditScoreRange) : 'Not provided'
+  const lpLabel = lead.landingPage ? (LANDING_PAGE_LABELS[lead.landingPage] || lead.landingPage) : 'Direct'
 
   let body: string
 
@@ -82,9 +101,11 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
       `🔄 Switching from: ${lead.currentProvider || 'Unknown'}`,
       `📋 Contract left: ${lead.contractMonthsRemaining || 'N/A'}`,
       `💰 Paying now: ${lead.currentMonthlyPayment ? '$' + lead.currentMonthlyPayment + '/mo' : 'Not provided'}`,
+      `💳 Credit Score: ${creditLabel}`,
       ``,
       `📊 Lead Score: ${lead.leadScore}/100`,
       `📣 Source: ${source}`,
+      `📍 Page: ${lpLabel}`,
       ``,
       `👉 ${APP_URL}/leads/${lead.id}`,
       `CALL NOW — pitch the $1,000 buyout offer!`,
@@ -99,9 +120,11 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
       ``,
       `⬆️ Existing Vivint customer — wants equipment upgrade`,
       `🎯 Offer: Buy 2 cameras get 1 free + up to $500 off`,
+      `💳 Credit Score: ${creditLabel}`,
       ``,
       `📊 Lead Score: ${lead.leadScore}/100`,
       `📣 Source: ${source}`,
+      `📍 Page: ${lpLabel}`,
       ``,
       `👉 ${APP_URL}/leads/${lead.id}`,
       `CALL NOW — discuss upgrade options!`,
@@ -122,9 +145,11 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
       `🏠 Property: ${propertyLabel}`,
       `⏰ Timeline: ${timelineLabel}`,
       `🛡️ Interested in: ${products}`,
+      `💳 Credit Score: ${creditLabel}`,
       ``,
       `📊 Lead Score: ${lead.leadScore}/100`,
       `📣 Source: ${source}`,
+      `📍 Page: ${lpLabel}`,
       ``,
       `👉 ${APP_URL}/leads/${lead.id}`,
       `CALL NOW — speed to lead is everything!`,
@@ -280,7 +305,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
   const emoji = priorityEmoji[lead.priority] || '🔵'
   const isSwitch = lead.segment === 'switch'
   const isUpgrade = lead.segment === 'upgrade'
-  const isGoogleAds = lead.landingPage === '/get-quote'
+  const isGoogleAds = lead.landingPage === '/google' || lead.landingPage === '/get-quote'
 
   // Build blocks based on lead type
   const headerText = isSwitch
@@ -381,6 +406,10 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
     )
   }
 
+  // Credit score + landing page
+  const creditLabel = lead.creditScoreRange ? CREDIT_SCORE_LABELS[lead.creditScoreRange] || lead.creditScoreRange : 'Not provided'
+  const landingPageLabel = lead.landingPage ? LANDING_PAGE_LABELS[lead.landingPage] || lead.landingPage : 'Direct'
+
   // Common footer blocks
   blocks.push(
     { type: 'divider' },
@@ -390,6 +419,13 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
         { type: 'mrkdwn', text: `*📊 Lead Score:*\n${lead.leadScore}/100` },
         { type: 'mrkdwn', text: `*🔥 Priority:*\n${lead.priority}` },
         { type: 'mrkdwn', text: `*📣 Source:*\n${source}` },
+        { type: 'mrkdwn', text: `*📍 Landing Page:*\n${landingPageLabel}` },
+      ]
+    },
+    {
+      type: 'section',
+      fields: [
+        { type: 'mrkdwn', text: `*💳 Credit Score:*\n${creditLabel}` },
       ]
     },
     {

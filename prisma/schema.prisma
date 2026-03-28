@@ -64,6 +64,7 @@ model Lead {
   currentProvider     String?
   contractMonthsRemaining String?
   currentMonthlyPayment String?
+  creditScoreRange    String?
 
   status          LeadStatus     @default(NEW)
   leadScore       Int            @default(0)

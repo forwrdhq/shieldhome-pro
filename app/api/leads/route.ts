@@ -61,6 +61,7 @@ export async function POST(req: NextRequest) {
         currentProvider: existing.currentProvider,
         contractMonthsRemaining: existing.contractMonthsRemaining,
         currentMonthlyPayment: existing.currentMonthlyPayment,
+        creditScoreRange: existing.creditScoreRange,
       }
 
       await Promise.allSettled([
@@ -100,6 +101,7 @@ export async function POST(req: NextRequest) {
         currentProvider: data.currentProvider,
         contractMonthsRemaining: data.contractMonthsRemaining,
         currentMonthlyPayment: data.currentMonthlyPayment,
+        creditScoreRange: data.creditScoreRange,
         leadScore: score,
         priority: priority as any,
         source: data.source,
@@ -155,6 +157,7 @@ export async function POST(req: NextRequest) {
       currentProvider: lead.currentProvider,
       contractMonthsRemaining: lead.contractMonthsRemaining,
       currentMonthlyPayment: lead.currentMonthlyPayment,
+      creditScoreRange: lead.creditScoreRange,
     }
 
     await Promise.allSettled([

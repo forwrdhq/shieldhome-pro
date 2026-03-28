@@ -17,6 +17,7 @@ export const leadSchema = z.object({
   currentProvider: z.string().optional().nullable(),
   contractMonthsRemaining: z.string().optional().nullable(),
   currentMonthlyPayment: z.string().optional().nullable(),
+  creditScoreRange: z.string().optional().nullable(),
 
   source: z.string().optional().nullable(),
   medium: z.string().optional().nullable(),
@@ -76,6 +77,7 @@ export const googleStep1Schema = z.object({
   firstName: z.string().min(1, 'Name is required').max(50),
   phone: z.string().min(10, 'Valid phone number required').max(20),
   zipCode: z.string().regex(/^\d{5}$/, 'Valid 5-digit ZIP required'),
+  creditScoreRange: z.string().optional().nullable(),
   ...trackingFields,
 })
 

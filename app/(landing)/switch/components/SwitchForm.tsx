@@ -100,7 +100,10 @@ export default function SwitchForm({ className }: SwitchFormProps) {
   const [contractMonths, setContractMonths] = useState('')
   const [monthlyPayment, setMonthlyPayment] = useState('')
 
-  // Step 3 — Contact
+  // Step 3 — Credit Score
+  const [creditScore, setCreditScore] = useState('')
+
+  // Step 4 — Contact
   const [firstName, setFirstName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
@@ -140,6 +143,12 @@ export default function SwitchForm({ className }: SwitchFormProps) {
     goToStep(3)
   }
 
+  function handleCreditScore(value: string) {
+    setCreditScore(value)
+    pushDataLayer('switch_step_3', { creditScore: value })
+    goToStep(4)
+  }
+
   // ── Step 3 validation + submit ──
 
   function validate(): boolean {
@@ -172,6 +181,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
           currentProvider,
           contractMonthsRemaining: contractMonths,
           currentMonthlyPayment: monthlyPayment || null,
+          creditScoreRange: creditScore || null,
           tcpaConsent: consent,
           ...tracking,
           landingPage: '/switch',
@@ -242,7 +252,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
 
   // ── Progress ──
 
-  const progressPercent = currentStep === 1 ? 33 : currentStep === 2 ? 66 : 100
+  const progressPercent = currentStep === 1 ? 25 : currentStep === 2 ? 50 : currentStep === 3 ? 75 : 100
 
   // ── Context per step ──
 
@@ -254,6 +264,9 @@ export default function SwitchForm({ className }: SwitchFormProps) {
       return { icon: <span>⚡</span>, text: 'Most switches complete within 24–48 hours — zero gap in protection' }
     }
     if (currentStep === 3) {
+      return { icon: <span>💳</span>, text: 'Vivint offers $0-down financing for qualifying credit — most customers are approved' }
+    }
+    if (currentStep === 4) {
       return { icon: <span>📦</span>, text: `Your buyout quote includes free installation + the latest Vivint equipment` }
     }
     return null
@@ -267,7 +280,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
       <div className="px-5 pt-4 pb-2">
         <div className="flex items-center justify-between mb-2.5">
           <span className="text-[11px] font-heading font-semibold text-slate-400 uppercase tracking-[0.06em]">
-            Step {currentStep} of 3
+            Step {currentStep} of 4
           </span>
         </div>
         <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
@@ -419,9 +432,9 @@ export default function SwitchForm({ className }: SwitchFormProps) {
           </div>
         )}
 
-        {/* ── Step 3: Contact Info ── */}
+        {/* ── Step 3: Credit Score ── */}
         {currentStep === 3 && (
-          <div className="pb-1">
+          <div>
             <BackButton onClick={() => goToStep(2)} />
 
             {/* Answer badges */}
@@ -434,6 +447,59 @@ export default function SwitchForm({ className }: SwitchFormProps) {
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5L5 9l4.5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 {CONTRACT_OPTIONS.find(o => o.value === contractMonths)?.label}
               </span>
+            </div>
+
+            <p className="text-[15px] font-heading font-semibold text-slate-900 mb-1 text-center">
+              What&apos;s your estimated credit score?
+            </p>
+            <p className="text-[12px] font-body text-slate-400 mb-4 text-center">
+              This helps us find the best $0-down financing option
+            </p>
+
+            <div className="space-y-3">
+              {[
+                { value: 'EXCELLENT', label: 'Excellent (750+)' },
+                { value: 'GOOD', label: 'Good (700–749)' },
+                { value: 'FAIR', label: 'Fair (650–699)' },
+                { value: 'BELOW_650', label: 'Below 650' },
+                { value: 'NOT_SURE', label: "I'm not sure" },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => handleCreditScore(opt.value)}
+                  className="relative w-full py-3.5 rounded-lg border-2 border-slate-200 bg-white text-[15px] font-heading font-medium text-slate-700 text-center transition-all duration-200 hover:border-emerald-500 hover:shadow-sm active:bg-emerald-50 active:border-emerald-500 active:scale-[1.01]"
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            {context && <ContextCard {...context} />}
+          </div>
+        )}
+
+        {/* ── Step 4: Contact Info ── */}
+        {currentStep === 4 && (
+          <div className="pb-1">
+            <BackButton onClick={() => goToStep(3)} />
+
+            {/* Answer badges */}
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 text-[11px] font-heading font-semibold px-2.5 py-1 rounded-full">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5L5 9l4.5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                {provider}
+              </span>
+              <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 text-[11px] font-heading font-semibold px-2.5 py-1 rounded-full">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5L5 9l4.5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                {CONTRACT_OPTIONS.find(o => o.value === contractMonths)?.label}
+              </span>
+              {creditScore && (
+                <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 text-[11px] font-heading font-semibold px-2.5 py-1 rounded-full">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5L5 9l4.5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  Credit: {creditScore === 'EXCELLENT' ? '750+' : creditScore === 'GOOD' ? '700–749' : creditScore === 'FAIR' ? '650–699' : creditScore === 'BELOW_650' ? '<650' : 'Not sure'}
+                </span>
+              )}
             </div>
 
             <p className="text-[15px] font-heading font-semibold text-slate-900 mb-1 text-center">

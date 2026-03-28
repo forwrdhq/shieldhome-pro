@@ -9,7 +9,7 @@ import {
   ChevronLeft, X, Home, Building2, Building, Briefcase,
   Key, ClipboardList, ShoppingCart, Shield, AlertTriangle,
   PawPrint, CheckCircle2, Lock, Award, Users,
-  Bolt, Calendar, Search, CheckCircle, DoorOpen, Flame
+  Bolt, Calendar, Search, CheckCircle, DoorOpen, Flame, CreditCard
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
@@ -30,6 +30,7 @@ interface QuizState {
   securityConcerns: string[]
   entryPoints: string
   timeline: string
+  creditScoreRange: string
 }
 
 interface QuizFunnelProps {
@@ -38,7 +39,7 @@ interface QuizFunnelProps {
   onClose?: () => void
 }
 
-const TOTAL_STEPS = 6
+const TOTAL_STEPS = 7
 
 function formatPhone(value: string): string {
   const digits = value.replace(/\D/g, '').slice(0, 10)
@@ -107,6 +108,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
     securityConcerns: [],
     entryPoints: '',
     timeline: '',
+    creditScoreRange: '',
   })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -122,7 +124,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
 
   // Auto-detect zip code via geolocation
   useEffect(() => {
-    if (step === 6 && navigator.geolocation) {
+    if (step === 7 && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           const { latitude, longitude } = position.coords
@@ -210,6 +212,12 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
     setStep(6)
   }
 
+  function selectCreditScore(value: string) {
+    setQuiz(q => ({ ...q, creditScoreRange: value }))
+    trackStep(6, value)
+    setStep(7)
+  }
+
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
     const formatted = formatPhone(e.target.value)
     setPhoneDisplay(formatted)
@@ -232,6 +240,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
           productsInterested: quiz.securityConcerns,
           timeline: quiz.timeline,
           entryPoints: quiz.entryPoints,
+          creditScoreRange: quiz.creditScoreRange,
           tcpaConsent,
           ...tracking,
         }),
@@ -298,13 +307,21 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
     { value: 'JUST_RESEARCHING', label: 'Just researching', icon: <Search size={24} /> },
   ]
 
+  const creditScoreOptions = [
+    { value: 'EXCELLENT', label: 'Excellent (750+)' },
+    { value: 'GOOD', label: 'Good (700–749)' },
+    { value: 'FAIR', label: 'Fair (650–699)' },
+    { value: 'BELOW_650', label: 'Below 650' },
+    { value: 'NOT_SURE', label: "I'm not sure" },
+  ]
+
   const qualification = getQualificationMessage(quiz)
 
   const quizContent = (
-    <div className={cn('w-full', isModal ? 'max-w-lg mx-auto' : 'max-w-xl mx-auto', className)}>
+    <div className={cn('w-full', isModal ? '' : 'max-w-xl mx-auto', className)}>
       <div className={cn(
-        'bg-white overflow-hidden',
-        isModal ? 'rounded-none sm:rounded-xl' : 'rounded-xl shadow-md border border-slate-200'
+        'overflow-hidden',
+        isModal ? '' : 'bg-white rounded-xl shadow-md border border-slate-200'
       )}>
         {/* Header for modal */}
         {isModal && (
@@ -518,8 +535,35 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
             </div>
           )}
 
-          {/* Step 6: Contact Form */}
+          {/* Step 6: Credit Score Range */}
           {step === 6 && (
+            <div className="animate-in">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                What&apos;s your estimated credit score?
+              </h2>
+              <p className="text-gray-500 mb-6 text-sm">
+                Vivint offers $0-down financing for qualifying credit. This helps us find the best plan for you.
+              </p>
+              <div className="flex flex-col gap-3">
+                {creditScoreOptions.map(opt => (
+                  <button
+                    key={opt.value}
+                    onClick={() => selectCreditScore(opt.value)}
+                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-200 text-left group min-h-[56px]"
+                    aria-label={`Select ${opt.label}`}
+                  >
+                    <span className="text-gray-500 group-hover:text-emerald-500 transition-colors">
+                      <CreditCard size={24} />
+                    </span>
+                    <span className="font-semibold text-gray-800">{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Step 7: Contact Form */}
+          {step === 7 && (
             <div className="animate-in">
               <div className="text-center mb-6">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 rounded-full mb-3">
@@ -529,7 +573,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                 <p className="text-gray-500 mt-1 text-sm max-w-md mx-auto">{qualification.subtext}</p>
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form id="quiz-contact-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <Input
                   label="First Name"
                   placeholder="John"
@@ -590,51 +634,53 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                   </span>
                 </label>
 
-                {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
-                    {error}
-                  </div>
+                {/* Button + trust seals inline for non-modal */}
+                {!isModal && (
+                  <>
+                    {error && (
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                        {error}
+                      </div>
+                    )}
+
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="xl"
+                      className="w-full text-lg"
+                      loading={submitting}
+                    >
+                      Get My Free Quote
+                    </Button>
+
+                    <div className="pt-2 space-y-3">
+                      <div className="flex items-center justify-center gap-1.5 text-gray-500">
+                        <Lock size={14} className="text-emerald-500" />
+                        <span className="text-xs font-medium">Your info is 100% secure. We never sell or share your data.</span>
+                      </div>
+                      <div className="flex items-center justify-center gap-6 text-gray-500">
+                        <div className="flex items-center gap-1.5">
+                          <Lock size={14} className="text-emerald-500" />
+                          <span className="text-xs font-medium">256-bit SSL</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Shield size={14} className="text-emerald-500" />
+                          <span className="text-xs font-medium">BBB A+ Rated</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Award size={14} className="text-emerald-500" />
+                          <span className="text-xs font-medium">#1 Rated</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-center gap-2 pt-1">
+                        <Users size={14} className="text-gray-400" />
+                        <p className="text-xs text-gray-500 font-medium">
+                          <span className="text-emerald-500 font-bold">2,847 homeowners</span> requested a quote this month
+                        </p>
+                      </div>
+                    </div>
+                  </>
                 )}
-
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="xl"
-                  className="w-full text-lg"
-                  loading={submitting}
-                >
-                  Get My Free Quote
-                </Button>
-
-                {/* Trust seals */}
-                <div className="pt-2 space-y-3">
-                  <div className="flex items-center justify-center gap-1.5 text-gray-500">
-                    <Lock size={14} className="text-emerald-500" />
-                    <span className="text-xs font-medium">Your info is 100% secure. We never sell or share your data.</span>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-6 text-gray-500">
-                    <div className="flex items-center gap-1.5">
-                      <Lock size={14} className="text-emerald-500" />
-                      <span className="text-xs font-medium">256-bit SSL</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Shield size={14} className="text-emerald-500" />
-                      <span className="text-xs font-medium">BBB A+ Rated</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Award size={14} className="text-emerald-500" />
-                      <span className="text-xs font-medium">#1 Rated</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-2 pt-1">
-                    <Users size={14} className="text-gray-400" />
-                    <p className="text-xs text-gray-500 font-medium">
-                      <span className="text-emerald-500 font-bold">2,847 homeowners</span> requested a quote this month
-                    </p>
-                  </div>
-                </div>
               </form>
             </div>
           )}
@@ -645,10 +691,46 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
 
   if (isModal) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center">
+      <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-        <div className="relative w-full h-full sm:h-auto sm:max-h-[90vh] overflow-y-auto">
-          {quizContent}
+        <div className="relative w-full sm:max-w-lg flex flex-col bg-white rounded-t-2xl sm:rounded-xl overflow-hidden" style={{ maxHeight: '95dvh' }}>
+          <div className="overflow-y-auto flex-1 min-h-0">
+            {quizContent}
+          </div>
+          {/* Sticky footer: submit button always visible on step 6 */}
+          {step === 7 && (
+            <div className="border-t border-slate-100 bg-white px-6 py-4 space-y-3 flex-shrink-0">
+              {error && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                  {error}
+                </div>
+              )}
+              <Button
+                type="submit"
+                form="quiz-contact-form"
+                variant="primary"
+                size="xl"
+                className="w-full text-lg"
+                loading={submitting}
+              >
+                Get My Free Quote
+              </Button>
+              <div className="flex items-center justify-center gap-4 text-gray-500">
+                <div className="flex items-center gap-1">
+                  <Lock size={12} className="text-emerald-500" />
+                  <span className="text-[11px] font-medium">256-bit SSL</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Shield size={12} className="text-emerald-500" />
+                  <span className="text-[11px] font-medium">BBB A+ Rated</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Award size={12} className="text-emerald-500" />
+                  <span className="text-[11px] font-medium">#1 Rated</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     )

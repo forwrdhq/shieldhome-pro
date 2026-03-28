@@ -107,10 +107,11 @@ export default function GoogleLeadForm({ className, compact }: GoogleLeadFormPro
   const [tracking, setTracking] = useState<TrackingData | null>(null)
   const [submitted, setSubmitted] = useState(false)
 
-  // Qualification state (Steps 1-3)
+  // Qualification state (Steps 1-4)
   const [ownership, setOwnership] = useState<'OWN' | 'RENT' | null>(null)
   const [hasSystem, setHasSystem] = useState<'yes' | 'no' | null>(null)
   const [timeline, setTimeline] = useState<string | null>(null)
+  const [creditScore, setCreditScore] = useState<string | null>(null)
 
   // Contact state (Step 4)
   const [firstName, setFirstName] = useState('')
@@ -148,6 +149,12 @@ export default function GoogleLeadForm({ className, compact }: GoogleLeadFormPro
     goToStep(4)
   }
 
+  function handleCreditScore(value: string) {
+    setCreditScore(value)
+    pushDataLayer('form_step_4_complete', { formType: 'google_lead', creditScore: value })
+    goToStep(5)
+  }
+
   // ── Step 4 validation + submit ──
 
   function validate(): boolean {
@@ -174,6 +181,7 @@ export default function GoogleLeadForm({ className, compact }: GoogleLeadFormPro
           firstName: firstName.trim(),
           phone,
           zipCode: zip,
+          creditScoreRange: creditScore,
           ...tracking,
         }),
       })
@@ -279,7 +287,7 @@ export default function GoogleLeadForm({ className, compact }: GoogleLeadFormPro
 
   // ── Progress ──
 
-  const progressPercent = currentStep === 1 ? 25 : currentStep === 2 ? 50 : currentStep === 3 ? 75 : 100
+  const progressPercent = currentStep === 1 ? 20 : currentStep === 2 ? 40 : currentStep === 3 ? 60 : currentStep === 4 ? 80 : 100
 
   // ── Context content per step ──
 
@@ -307,6 +315,12 @@ export default function GoogleLeadForm({ className, compact }: GoogleLeadFormPro
     }
     if (currentStep === 4) {
       return {
+        icon: <span>💳</span>,
+        text: 'Vivint offers $0-down financing for qualifying credit — most customers are approved',
+      }
+    }
+    if (currentStep === 5) {
+      return {
         icon: <span>📦</span>,
         text: 'Your custom quote includes up to $2,194 in equipment + free professional installation',
       }
@@ -322,7 +336,7 @@ export default function GoogleLeadForm({ className, compact }: GoogleLeadFormPro
       <div className="px-5 pt-4 pb-2">
         <div className="flex items-center justify-between mb-2.5">
           <span className="text-[11px] font-heading font-semibold text-slate-400 uppercase tracking-[0.06em]">
-            Step {currentStep} of 4
+            Step {currentStep} of 5
           </span>
         </div>
         <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
@@ -378,8 +392,28 @@ export default function GoogleLeadForm({ className, compact }: GoogleLeadFormPro
         )}
 
         {currentStep === 4 && (
-          <div className="pb-1">
+          <div>
             <BackButton onClick={() => goToStep(3)} />
+            <p className="text-[15px] font-heading font-semibold text-slate-900 mb-1 text-center">
+              What&apos;s your estimated credit score?
+            </p>
+            <p className="text-[12px] font-body text-slate-400 mb-4 text-center">
+              This helps us find the best $0-down financing option for you
+            </p>
+            <div className="space-y-3">
+              <QuizButton onClick={() => handleCreditScore('EXCELLENT')}>Excellent (750+)</QuizButton>
+              <QuizButton onClick={() => handleCreditScore('GOOD')}>Good (700–749)</QuizButton>
+              <QuizButton onClick={() => handleCreditScore('FAIR')}>Fair (650–699)</QuizButton>
+              <QuizButton onClick={() => handleCreditScore('BELOW_650')}>Below 650</QuizButton>
+              <QuizButton onClick={() => handleCreditScore('NOT_SURE')}>I&apos;m not sure</QuizButton>
+            </div>
+            {context && <ContextCard {...context} />}
+          </div>
+        )}
+
+        {currentStep === 5 && (
+          <div className="pb-1">
+            <BackButton onClick={() => goToStep(4)} />
             <p className="text-[15px] font-heading font-semibold text-slate-900 mb-1 text-center">
               Almost done — let&apos;s build your custom quote.
             </p>

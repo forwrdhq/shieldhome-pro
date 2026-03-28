@@ -5,6 +5,7 @@ import { useScrollReveal, useStaggerReveal } from './useScrollReveal'
 
 interface ValueStackProps {
   isBuyoutVisitor?: boolean
+  title?: string
 }
 
 const items = [
@@ -20,7 +21,7 @@ const items = [
 
 const buyoutItem = { name: 'Contract Buyout — We Pay Up to $1,000 to End Your Contract', value: 1000 }
 
-export default function ValueStack({ isBuyoutVisitor }: ValueStackProps) {
+export default function ValueStack({ isBuyoutVisitor, title = 'The Total Shield Package' }: ValueStackProps) {
   const allItems = isBuyoutVisitor ? [buyoutItem, ...items] : items
   const totalValue = allItems.reduce((sum, item) => sum + item.value, 0)
   const headingRef = useScrollReveal<HTMLDivElement>()
@@ -35,7 +36,7 @@ export default function ValueStack({ isBuyoutVisitor }: ValueStackProps) {
             What You Get
           </p>
           <h2 className="font-heading font-bold text-[24px] md:text-[38px] tracking-[-0.03em] text-slate-900 mb-2 md:mb-3">
-            The Total Shield Package
+            {title}
           </h2>
           <p className="text-[14px] md:text-[16px] font-body text-slate-400 max-w-md mx-auto">
             Our exclusive partner package — deals and bonuses you won&apos;t get going direct. Installed by a certified Vivint technician, usually within 24 hours.

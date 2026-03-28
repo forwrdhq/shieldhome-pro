@@ -49,6 +49,12 @@ model Lead {
   phone           String
   fullName        String
 
+  leadType        String    @default("RESIDENTIAL")
+  businessName    String?
+  numberOfLocations String?
+  businessType    String?
+  biggestConcern  String?
+
   address         String?
   city            String?
   state           String?

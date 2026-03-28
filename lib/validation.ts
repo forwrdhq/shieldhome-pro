@@ -37,6 +37,40 @@ export const leadSchema = z.object({
 
 export type LeadFormData = z.infer<typeof leadSchema>
 
+export const b2bLeadSchema = z.object({
+  firstName: z.string().min(1, 'First name is required').max(50),
+  lastName: z.string().min(1, 'Last name is required').max(50),
+  email: z.string().email('Valid business email required'),
+  phone: z.string().min(10, 'Valid phone number required').max(20),
+  businessName: z.string().min(1, 'Business name is required').max(100),
+  numberOfLocations: z.enum(['1 Location', '2–5 Locations', '6–10 Locations', '11+ Locations']),
+  businessType: z.enum([
+    'Dental/Medical Office',
+    'Retail Store',
+    'Restaurant/Food Service',
+    'Warehouse/Distribution',
+    'Cannabis Dispensary',
+    'Property Management',
+    'Auto Dealership',
+    'Corporate Office',
+    'Daycare/Childcare',
+    'Gym/Fitness Center',
+    'Other',
+  ]),
+  biggestConcern: z.enum([
+    'Theft & Break-ins',
+    'Compliance Requirements (HIPAA, State)',
+    'Outdated/Failing System',
+    'High Monitoring Costs',
+    'No System Currently',
+    'Employee Safety',
+    'Other',
+  ]),
+  tcpaConsent: z.literal(true, { error: 'You must agree to the terms' }),
+})
+
+export type B2BLeadFormData = z.infer<typeof b2bLeadSchema>
+
 export const updateLeadSchema = z.object({
   status: z.string().optional(),
   appointmentDate: z.string().optional().nullable(),

@@ -40,6 +40,9 @@ export default function HomePage() {
       {/* Skip to content */}
       <a href="#main-content" className="skip-to-content">Skip to content</a>
 
+      {/* Spacer for fixed trust bar (h-9 = 36px) so sticky nav starts below it */}
+      <div className="h-9" />
+
       <Navigation onQuizOpen={openQuiz} />
       <PromoBanner onQuizOpen={openQuiz} />
 

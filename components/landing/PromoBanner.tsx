@@ -59,7 +59,7 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
     }
   }
 
-  if (dismissed || !mounted) return null
+  if (dismissed) return null
 
   const timerBoxes = [
     { value: timeLeft.days, label: 'd' },
@@ -70,7 +70,7 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
 
   return (
     <div
-      className="w-full relative z-40"
+      className={`w-full relative z-40 transition-all duration-300 ${mounted ? 'opacity-100 max-h-[200px]' : 'opacity-0 max-h-0 overflow-hidden'}`}
       style={{ backgroundColor: 'rgba(253, 255, 231, 0.95)' }}
     >
       {/* Desktop */}

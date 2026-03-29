@@ -317,3 +317,86 @@ model Campaign {
 
   @@map("campaigns")
 }
+
+// ============================================
+// META QUIZ FUNNEL LEADS
+// ============================================
+
+model MetaQuizLead {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Contact info (captured at gate)
+  firstName         String
+  lastName          String?
+  email             String
+  phone             String
+  zipCode           String
+
+  // Quiz answers (stored as JSON for flexibility)
+  quizAnswers       Json     // { propertyType, ownership, topConcern, neighborhood, currentSystem, features, timeline }
+
+  // Computed fields
+  securityScore     Int      // 0-100, calculated from answers
+  riskLevel         String   // "high", "medium", "low"
+  recommendedPackage String  // "total_shield", "essential", "starter"
+  urgencyLevel      String   // "asap", "within_30_days", "within_3_months", "researching"
+
+  // Lead qualification
+  isHomeowner       Boolean  @default(true)
+  propertyType      String?  // "house", "townhouse", "condo", "multi_family"
+  hasCurrentSystem  String?  // "none", "basic_diy", "outdated", "unhappy_professional"
+  topConcern        String?  // "breakins", "package_theft", "fire_co", "kids_alone", "vacation"
+
+  // Funnel tracking
+  quizStartedAt     DateTime?
+  quizCompletedAt   DateTime?
+  contactSubmittedAt DateTime?
+  resultsViewedAt   DateTime?
+  consultationBooked Boolean @default(false)
+  guideDownloaded   Boolean  @default(false)
+
+  // Attribution (Meta-specific)
+  fbclid            String?
+  fbp               String?  // _fbp cookie value
+  fbc               String?  // _fbc cookie value (constructed from fbclid)
+  utmSource         String?  @default("facebook")
+  utmMedium         String?  @default("paid")
+  utmCampaign       String?
+  utmContent        String?
+  utmTerm           String?
+  utmAdset          String?
+  utmAdId           String?
+  landingPage       String?
+  referrer          String?
+  deviceType        String?  // "mobile", "tablet", "desktop"
+  browser           String?
+  ipAddress         String?
+  userAgent         String?
+
+  // Lead management
+  status            String   @default("NEW") // NEW, CONTACTED, BOOKED, CLOSED_WON, CLOSED_LOST, NURTURE
+  leadScore         Int      @default(0)
+  priority          String   @default("MEDIUM") // HOT, HIGH, MEDIUM, LOW
+  notes             String?
+
+  // Notification tracking
+  smsToLeadSent     Boolean  @default(false)
+  smsToRepSent      Boolean  @default(false)
+  emailToLeadSent   Boolean  @default(false)
+  slackNotifSent    Boolean  @default(false)
+  ghlWebhookSent    Boolean  @default(false)
+
+  // Consent
+  smsConsent        Boolean  @default(false)
+  tcpaConsent       Boolean  @default(false)
+  tcpaConsentAt     DateTime?
+
+  @@index([email])
+  @@index([phone])
+  @@index([createdAt])
+  @@index([status])
+  @@index([urgencyLevel])
+  @@map("meta_quiz_leads")
+}

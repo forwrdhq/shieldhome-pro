@@ -3,6 +3,7 @@ import { sendEmail } from './sendgrid'
 import { prisma } from './db'
 import { PHONE_NUMBER, APP_URL } from './constants'
 import { PROPERTY_TYPE_LABELS, TIMELINE_LABELS, HOMEOWNERSHIP_LABELS, CONCERN_LABELS } from './constants'
+import { buildWelcomeEmail, type EmailRecipient } from './email-templates'
 
 const CREDIT_SCORE_LABELS: Record<string, string> = {
   EXCELLENT: 'Excellent (750+)',
@@ -160,128 +161,34 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
 }
 
 export async function sendWelcomeEmail(lead: LeadNotificationData) {
-  const isSwitch = lead.segment === 'switch'
-  const isUpgrade = lead.segment === 'upgrade'
+  if (!lead.email) return
 
-  const subject = isSwitch
-    ? 'Your Contract Buyout Request — Here\'s What\'s Next'
-    : isUpgrade
-    ? 'Your Vivint Upgrade Request — Here\'s What\'s Next'
-    : 'Your Free Home Security Quote — Here\'s What\'s Next'
+  const unsubUrl = `${APP_URL}/unsubscribe?email=${encodeURIComponent(lead.email)}&id=${lead.id}`
 
-  let detailsHtml: string
-
-  if (isUpgrade) {
-    detailsHtml = `
-    <h2 style="color: #1a1a2e;">Your Vivint Upgrade Request</h2>
-    <p>Hi ${lead.firstName},</p>
-    <p>Thanks for your interest in upgrading your Vivint system! An upgrade specialist will call you shortly.</p>
-
-    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #00C853;">
-      <h3 style="margin-top: 0;">Here's what happens next:</h3>
-      <p>📞 An upgrade specialist will call you at <strong>${lead.phone}</strong> to discuss your options.</p>
-      <p>During your consultation, they'll:</p>
-      <ul>
-        <li>Review your current Vivint equipment</li>
-        <li>Recommend the best upgrades for your home</li>
-        <li>Apply your upgrade savings (Buy 2 cameras get 1 free + up to $500 off)</li>
-        <li>Schedule professional installation at your convenience</li>
-      </ul>
-    </div>
-
-    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
-      <h3 style="margin-top: 0;">Your exclusive offers:</h3>
-      <p>📷 <strong>Buy 2 cameras, get 1 free</strong> — Outdoor Camera Pro, Indoor Camera, or Doorbell Camera Pro</p>
-      <p>💰 <strong>Up to $500 off equipment</strong> — cameras, smart locks, sensors, and more</p>
-      <p>🔧 <strong>Free professional installation</strong> — a certified tech handles everything</p>
-    </div>`
-  } else if (isSwitch) {
-    detailsHtml = `
-    <h2 style="color: #1a1a2e;">Your Contract Buyout Request</h2>
-    <p>Hi ${lead.firstName},</p>
-    <p>Thanks for reaching out about switching your home security! We're reviewing your details and preparing your buyout offer.</p>
-
-    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #00C853;">
-      <h3 style="margin-top: 0;">Here's what happens next:</h3>
-      <p>📞 A Vivint Smart Home Pro will call you shortly at <strong>${lead.phone}</strong> to discuss your buyout options.</p>
-      <p>During your free consultation, they'll:</p>
-      <ul>
-        <li>Calculate your exact buyout amount (up to $1,000 covered)</li>
-        <li>Design a custom Vivint system for your home</li>
-        <li>Handle all cancellation paperwork with ${lead.currentProvider || 'your current provider'}</li>
-        <li>Schedule your installation — usually under 2 hours</li>
-      </ul>
-    </div>
-
-    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
-      <h3 style="margin-top: 0;">What you told us:</h3>
-      <p>🔄 Current Provider: <strong>${lead.currentProvider || 'N/A'}</strong></p>
-      <p>📋 Contract Remaining: <strong>${lead.contractMonthsRemaining || 'N/A'}</strong></p>
-      ${lead.currentMonthlyPayment ? `<p>💰 Current Monthly: <strong>$${lead.currentMonthlyPayment}/mo</strong></p>` : ''}
-    </div>`
-  } else {
-    const productsLabel = lead.productsInterested.join(', ') || 'N/A'
-    const propertyLabel = lead.propertyType ? PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType : 'N/A'
-    const timelineLabel = lead.timeline ? TIMELINE_LABELS[lead.timeline] || lead.timeline : 'N/A'
-
-    detailsHtml = `
-    <h2 style="color: #1a1a2e;">Your Free Home Security Quote</h2>
-    <p>Hi ${lead.firstName},</p>
-    <p>Thanks for requesting your free home security quote! You're one step closer to protecting what matters most.</p>
-
-    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #00C853;">
-      <h3 style="margin-top: 0;">Here's what happens next:</h3>
-      <p>📞 A Vivint Smart Home Pro will call you shortly at <strong>${lead.phone}</strong> to discuss your personalized security recommendation.</p>
-      <p>During your free consultation, they'll:</p>
-      <ul>
-        <li>Assess your home's unique security needs</li>
-        <li>Recommend the right cameras, sensors, and smart devices</li>
-        <li>Provide a custom quote with current promotions</li>
-        <li>Answer any questions — zero pressure, zero obligation</li>
-      </ul>
-    </div>
-
-    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
-      <h3 style="margin-top: 0;">What you told us:</h3>
-      <p>🏠 Property: <strong>${propertyLabel}</strong></p>
-      <p>🛡️ Interested in: <strong>${productsLabel}</strong></p>
-      <p>⏰ Timeline: <strong>${timelineLabel}</strong></p>
-    </div>`
+  const recipient: EmailRecipient = {
+    firstName: lead.firstName,
+    email: lead.email,
+    phone: lead.phone,
+    landingPage: lead.landingPage,
+    segment: lead.segment,
+    currentProvider: lead.currentProvider,
+    contractMonthsRemaining: lead.contractMonthsRemaining,
+    currentMonthlyPayment: lead.currentMonthlyPayment,
+    propertyType: lead.propertyType,
+    timeline: lead.timeline,
+    productsInterested: lead.productsInterested,
+    creditScoreRange: lead.creditScoreRange,
   }
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
-<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1a1a2e;">
-  <div style="background: #00C853; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
-    <h1 style="color: white; margin: 0; font-size: 24px;">ShieldHome Pro</h1>
-    <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0;">Authorized Vivint Smart Home Dealer</p>
-  </div>
-  <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px;">
-    ${detailsHtml}
-
-    <p>Can't wait for the call? Reach us anytime at <a href="tel:${PHONE_NUMBER}" style="color: #00C853;">${PHONE_NUMBER}</a></p>
-
-    <div style="text-align: center; margin: 30px 0;">
-      <a href="${APP_URL}" style="background: #00C853; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">${isSwitch ? 'Learn About Vivint Systems →' : 'Learn About Vivint Products →'}</a>
-    </div>
-
-    <p style="color: #666; font-size: 12px;">Talk soon,<br>The ShieldHome Pro Team<br>Authorized Vivint Smart Home Dealer</p>
-    <p style="color: #999; font-size: 11px;"><a href="${APP_URL}/unsubscribe" style="color: #999;">Unsubscribe</a> | <a href="${APP_URL}/privacy" style="color: #999;">Privacy Policy</a></p>
-  </div>
-</body>
-</html>`
-
-  if (!lead.email) return
-  const msgId = await sendEmail({ to: lead.email, subject, html })
+  const emailContent = buildWelcomeEmail(recipient, unsubUrl)
+  const msgId = await sendEmail({ to: lead.email, subject: emailContent.subject, html: emailContent.html })
 
   if (msgId) {
     await prisma.emailLog.create({
       data: {
         leadId: lead.id,
-        type: 'welcome',
-        subject,
+        type: emailContent.type,
+        subject: emailContent.subject,
         sendgridId: msgId,
         status: 'sent',
       }

@@ -8,11 +8,11 @@ import { APP_URL } from '@/lib/constants'
 const META_PHONE = process.env.NEXT_PUBLIC_META_PHONE || '(801) 616-6301'
 
 const metaLeadSchema = z.object({
-  // Contact
+  // Contact (phone-first: email + zip are optional, captured in Step B)
   firstName: z.string().min(1).max(50),
-  email: z.string().email(),
+  email: z.string().email().optional(),
   phone: z.string().min(10).max(20),
-  zipCode: z.string().length(5),
+  zipCode: z.string().length(5).optional(),
   smsConsent: z.boolean().default(false),
   tcpaConsent: z.boolean().default(false),
 
@@ -76,9 +76,12 @@ export async function POST(req: NextRequest) {
 
     // Check for duplicate phone in last 30 days
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+    const orConditions: Array<{ phone?: string; email?: string }> = [{ phone: data.phone }]
+    if (data.email) orConditions.push({ email: data.email })
+
     const existing = await prisma.metaQuizLead.findFirst({
       where: {
-        OR: [{ phone: data.phone }, { email: data.email }],
+        OR: orConditions,
         createdAt: { gte: thirtyDaysAgo },
       },
     })
@@ -102,9 +105,9 @@ export async function POST(req: NextRequest) {
     const lead = await prisma.metaQuizLead.create({
       data: {
         firstName: data.firstName,
-        email: data.email,
+        email: data.email || null,
         phone: data.phone,
-        zipCode: data.zipCode,
+        zipCode: data.zipCode || null,
 
         quizAnswers: data.quizAnswers,
         securityScore: data.securityScore,
@@ -147,13 +150,17 @@ export async function POST(req: NextRequest) {
     })
 
     // Fire all notifications + CAPI in parallel — must be awaited or Vercel kills them
-    await Promise.allSettled([
+    const notifications: Promise<unknown>[] = [
       sendMetaLeadConfirmationSms(lead),
       sendMetaRepAlertSms(lead),
       sendMetaSlackNotification(lead),
-      sendMetaLeadEmail(lead),
       sendMetaCapiEvent(lead, data, ipAddress, req.headers.get('user-agent') || undefined),
-    ])
+    ]
+    // Only send email if we have an email address (may come later in Step B)
+    if (lead.email) {
+      notifications.push(sendMetaLeadEmail(lead))
+    }
+    await Promise.allSettled(notifications)
 
     return NextResponse.json({
       success: true,
@@ -178,9 +185,9 @@ export async function POST(req: NextRequest) {
 interface MetaLeadData {
   id: string
   firstName: string
-  email: string
+  email: string | null
   phone: string
-  zipCode: string
+  zipCode: string | null
   securityScore: number
   riskLevel: string
   recommendedPackage: string
@@ -226,8 +233,8 @@ async function sendMetaRepAlertSms(lead: MetaLeadData) {
     '',
     `\u{1F464} ${lead.firstName}`,
     `\u{1F4DE} ${lead.phone}`,
-    `\u{1F4E7} ${lead.email}`,
-    `\u{1F4CD} ZIP: ${lead.zipCode}`,
+    `\u{1F4E7} ${lead.email || 'Not provided yet'}`,
+    `\u{1F4CD} ZIP: ${lead.zipCode || 'Not provided yet'}`,
     '',
     `\u{1F3E0} ${lead.propertyType || 'N/A'} | ${lead.hasCurrentSystem || 'N/A'}`,
     `\u{23F0} Timeline: ${lead.urgencyLevel}`,
@@ -237,7 +244,7 @@ async function sendMetaRepAlertSms(lead: MetaLeadData) {
     '',
     `\u{1F4E3} Source: ${source}`,
     '',
-    `\u{1F449} ${APP_URL}/leads/meta/${lead.id}`,
+    `\u{1F449} ${APP_URL}/meta-leads/${lead.id}`,
     `CALL NOW \u2014 speed to lead is everything!`,
   ].join('\n')
 
@@ -306,7 +313,7 @@ async function sendMetaSlackNotification(lead: MetaLeadData) {
         {
           type: 'button',
           text: { type: 'plain_text', text: 'View Lead' },
-          url: `${APP_URL}/leads/meta/${lead.id}`,
+          url: `${APP_URL}/meta-leads/${lead.id}`,
           style: 'primary',
         },
       ],

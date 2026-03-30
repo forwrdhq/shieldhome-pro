@@ -95,6 +95,8 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
               callsMade: lead.callsMade,
               smsSent: lead.smsSent,
               firstContactAt: lead.firstContactAt?.toISOString() ?? null,
+              speedToContact: lead.speedToContact,
+              submittedAt: lead.submittedAt.toISOString(),
             }}
             reps={reps}
           />

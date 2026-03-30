@@ -3,6 +3,14 @@ import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/db'
 import { updateLeadSchema } from '@/lib/validation'
 
+function formatSpeed(secs: number): string {
+  if (secs < 60) return `${secs}s`
+  if (secs < 3600) return `${Math.floor(secs / 60)}m ${secs % 60}s`
+  const h = Math.floor(secs / 3600)
+  const m = Math.floor((secs % 3600) / 60)
+  return `${h}h ${m}m`
+}
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession()
   if (!session) {
@@ -38,8 +46,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     if (!existing) return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
 
     const updateData: any = { ...data }
+    const now = new Date()
 
-    // Handle firstContactAt
+    // Handle firstContactAt — calculate speed-to-contact
     if (data.firstContactAt && !existing.firstContactAt) {
       const firstContact = new Date(data.firstContactAt)
       const speedToContact = Math.floor((firstContact.getTime() - existing.submittedAt.getTime()) / 1000)
@@ -50,6 +59,38 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     // Handle appointment date
     if (data.appointmentDate) {
       updateData.appointmentDate = new Date(data.appointmentDate)
+    }
+
+    // Log call activity with timestamp
+    if (data.callsMade && data.callsMade > existing.callsMade) {
+      const speedSecs = existing.firstContactAt
+        ? null
+        : Math.floor((now.getTime() - existing.submittedAt.getTime()) / 1000)
+      await prisma.activity.create({
+        data: {
+          leadId: id,
+          type: 'CALL_MADE',
+          description: `Call #${data.callsMade} logged${speedSecs !== null ? ` — speed to contact: ${formatSpeed(speedSecs)}` : ''}`,
+          metadata: { timestamp: now.toISOString(), callNumber: data.callsMade, speedToContactSecs: speedSecs },
+        }
+      })
+      // Set firstContactAt if this is the first call
+      if (!existing.firstContactAt) {
+        updateData.firstContactAt = now
+        updateData.speedToContact = Math.floor((now.getTime() - existing.submittedAt.getTime()) / 1000)
+      }
+    }
+
+    // Log SMS activity with timestamp
+    if (data.smsSent && data.smsSent > existing.smsSent) {
+      await prisma.activity.create({
+        data: {
+          leadId: id,
+          type: 'SMS_SENT',
+          description: `SMS #${data.smsSent} logged`,
+          metadata: { timestamp: now.toISOString(), smsNumber: data.smsSent },
+        }
+      })
     }
 
     // Handle sale
@@ -80,6 +121,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
           leadId: id,
           type: 'STATUS_CHANGE',
           description: `Status changed from ${existing.status} to ${data.status}`,
+          metadata: { from: existing.status, to: data.status, timestamp: now.toISOString() },
         }
       })
     }

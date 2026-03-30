@@ -27,6 +27,8 @@ interface LeadActionsProps {
     callsMade: number
     smsSent: number
     firstContactAt: string | null
+    speedToContact: number | null
+    submittedAt: string
   }
   reps: Rep[]
 }
@@ -82,26 +84,22 @@ export default function LeadActions({ lead, reps }: LeadActionsProps) {
     }
   }
 
+  function formatSpeed(secs: number): string {
+    if (secs < 60) return `${secs}s`
+    if (secs < 3600) return `${Math.floor(secs / 60)}m ${secs % 60}s`
+    const h = Math.floor(secs / 3600)
+    const m = Math.floor((secs % 3600) / 60)
+    return `${h}h ${m}m`
+  }
+
   async function quickAction(action: string) {
     setQuickLoading(action)
     try {
       if (action === 'called') {
-        await patchLead(
-          {
-            callsMade: lead.callsMade + 1,
-            ...(!lead.firstContactAt ? { firstContactAt: new Date().toISOString() } : {}),
-          },
-          'Call logged'
-        )
+        await patchLead({ callsMade: lead.callsMade + 1 }, 'Call logged')
       } else if (action === 'contacted') {
         setStatus('CONTACTED')
-        await patchLead(
-          {
-            status: 'CONTACTED',
-            ...(!lead.firstContactAt ? { firstContactAt: new Date().toISOString() } : {}),
-          },
-          'Marked as Contacted'
-        )
+        await patchLead({ status: 'CONTACTED' }, 'Marked as Contacted')
       } else if (action === 'sms') {
         await patchLead({ smsSent: lead.smsSent + 1 }, 'SMS logged')
       }
@@ -114,6 +112,28 @@ export default function LeadActions({ lead, reps }: LeadActionsProps) {
 
   return (
     <div className="space-y-4">
+      {/* Speed to Contact KPI */}
+      <Card padding="sm">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Speed to Contact</p>
+            {lead.speedToContact !== null ? (
+              <p className={`text-xl font-bold ${lead.speedToContact < 300 ? 'text-green-600' : lead.speedToContact < 900 ? 'text-yellow-600' : 'text-red-600'}`}>
+                {formatSpeed(lead.speedToContact)}
+              </p>
+            ) : (
+              <p className="text-xl font-bold text-gray-300">Not yet</p>
+            )}
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">First Contact</p>
+            <p className="text-sm font-medium text-gray-700">
+              {lead.firstContactAt ? new Date(lead.firstContactAt).toLocaleString() : '—'}
+            </p>
+          </div>
+        </div>
+      </Card>
+
       {/* Quick Actions */}
       <Card>
         <h3 className="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wide">Quick Actions</h3>

@@ -1,24 +1,38 @@
 import { prisma } from '@/lib/db'
-import { LEAD_STATUS_LABELS, PIPELINE_COLUMNS } from '@/lib/constants'
+import { LEAD_STATUS_LABELS, PIPELINE_COLUMNS, SOURCE_LABELS, PRIORITY_LABELS } from '@/lib/constants'
 import LeadCard from '@/components/dashboard/LeadCard'
 import Link from 'next/link'
 import Badge from '@/components/ui/Badge'
+import type { Prisma } from '@prisma/client'
 
 export default async function LeadsPage({
-  searchParams
+  searchParams,
 }: {
-  searchParams: Promise<{ status?: string; source?: string; view?: string }>
+  searchParams: Promise<{ status?: string; source?: string; priority?: string; view?: string; q?: string }>
 }) {
   const params = await searchParams
   const view = params.view || 'pipeline'
+  const q = params.q || ''
+
+  const where: Prisma.LeadWhereInput = {
+    ...(params.status ? { status: params.status as any } : {}),
+    ...(params.source ? { source: params.source } : {}),
+    ...(params.priority ? { priority: params.priority as any } : {}),
+    ...(q
+      ? {
+          OR: [
+            { fullName: { contains: q, mode: 'insensitive' } },
+            { phone: { contains: q } },
+            { email: { contains: q, mode: 'insensitive' } },
+          ],
+        }
+      : {}),
+  }
 
   const leads = await prisma.lead.findMany({
-    where: {
-      ...(params.status ? { status: params.status as any } : {}),
-      ...(params.source ? { source: params.source } : {}),
-    },
+    where,
     orderBy: { submittedAt: 'desc' },
-    include: { assignedRep: { select: { name: true } } }
+    include: { assignedRep: { select: { name: true } } },
   })
 
   const byStatus = PIPELINE_COLUMNS.reduce((acc, col) => {
@@ -28,21 +42,80 @@ export default async function LeadsPage({
 
   return (
     <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold text-slate-900">Lead Pipeline</h1>
         <div className="flex items-center gap-2">
           <Link
-            href="/leads?view=pipeline"
+            href={`/leads?view=pipeline${q ? `&q=${q}` : ''}`}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${view === 'pipeline' ? 'bg-slate-900 text-white' : 'bg-white text-gray-600 border'}`}
           >
             Pipeline
           </Link>
           <Link
-            href="/leads?view=table"
+            href={`/leads?view=table${q ? `&q=${q}` : ''}`}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${view === 'table' ? 'bg-slate-900 text-white' : 'bg-white text-gray-600 border'}`}
           >
             Table
           </Link>
+        </div>
+      </div>
+
+      {/* Search + Filters */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <form className="flex-1 min-w-[200px] max-w-md">
+          <input
+            type="text"
+            name="q"
+            defaultValue={q}
+            placeholder="Search by name, phone, or email..."
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500"
+          />
+        </form>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs text-gray-500 font-medium">Source:</span>
+          {Object.entries(SOURCE_LABELS).map(([val, label]) => {
+            const isActive = params.source === val
+            const p = new URLSearchParams()
+            if (view !== 'pipeline') p.set('view', view)
+            if (q) p.set('q', q)
+            if (params.priority) p.set('priority', params.priority)
+            if (!isActive) p.set('source', val)
+            return (
+              <Link
+                key={val}
+                href={`/leads?${p.toString()}`}
+                className={`text-xs px-2.5 py-1 rounded-full font-medium transition-colors ${isActive ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              >
+                {label}
+              </Link>
+            )
+          })}
+
+          <span className="text-xs text-gray-500 font-medium ml-2">Priority:</span>
+          {Object.entries(PRIORITY_LABELS).map(([val, label]) => {
+            const isActive = params.priority === val
+            const p = new URLSearchParams()
+            if (view !== 'pipeline') p.set('view', view)
+            if (q) p.set('q', q)
+            if (params.source) p.set('source', params.source)
+            if (!isActive) p.set('priority', val)
+            return (
+              <Link
+                key={val}
+                href={`/leads?${p.toString()}`}
+                className={`text-xs px-2.5 py-1 rounded-full font-medium transition-colors ${isActive ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              >
+                {label}
+              </Link>
+            )
+          })}
+
+          {(params.source || params.priority || q) && (
+            <Link href="/leads" className="text-xs text-red-500 hover:text-red-700 font-medium ml-1">
+              Clear all
+            </Link>
+          )}
         </div>
       </div>
 

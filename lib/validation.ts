@@ -40,6 +40,7 @@ export type LeadFormData = z.infer<typeof leadSchema>
 
 export const updateLeadSchema = z.object({
   status: z.string().optional(),
+  priority: z.string().optional(),
   appointmentDate: z.string().optional().nullable(),
   saleAmount: z.number().optional().nullable(),
   monthlyAmount: z.number().optional().nullable(),
@@ -47,6 +48,8 @@ export const updateLeadSchema = z.object({
   notes: z.string().optional().nullable(),
   assignedRepId: z.string().optional().nullable(),
   firstContactAt: z.string().optional().nullable(),
+  callsMade: z.number().optional(),
+  smsSent: z.number().optional(),
 })
 
 export const dispositionSchema = z.object({

@@ -103,3 +103,16 @@ export const googleStep3Schema = z.object({
 })
 
 export type GoogleStep3Data = z.infer<typeof googleStep3Schema>
+
+// ============================================
+// BUSINESS LANDING PAGE — LEAD SCHEMA
+// ============================================
+
+export const businessLeadSchema = z.object({
+  fullName: z.string().min(1, 'Name is required').max(100),
+  phone: z.string().min(10, 'Valid phone number required').max(20),
+  currentProvider: z.string().optional().nullable(),
+  ...trackingFields,
+})
+
+export type BusinessLeadData = z.infer<typeof businessLeadSchema>

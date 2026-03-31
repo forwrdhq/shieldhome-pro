@@ -1,16 +1,16 @@
 'use client'
 
 const items = [
-  '🏪 Retail Stores',
-  '🏢 Office Buildings',
-  '🏭 Warehouses',
-  '🍽️ Restaurants',
-  '🏘️ Property Managers',
-  '⚕️ Medical Offices',
-  '🏋️ Gyms & Fitness',
-  '🚗 Auto Dealerships',
-  '🏨 Hotels & Hospitality',
-  '📦 Distribution Centers',
+  'Retail Stores',
+  'Office Buildings',
+  'Warehouses',
+  'Restaurants',
+  'Property Managers',
+  'Medical Offices',
+  'Gyms & Fitness',
+  'Auto Dealerships',
+  'Hotels & Hospitality',
+  'Distribution Centers',
 ]
 
 export default function SocialProofTicker() {
@@ -22,10 +22,10 @@ export default function SocialProofTicker() {
         {doubled.map((item, i) => (
           <span
             key={i}
-            className="flex-shrink-0 flex items-center gap-2 text-[12px] md:text-[13px] font-body text-slate-400 px-6"
+            className="flex-shrink-0 flex items-center text-[11px] md:text-[12px] font-heading font-semibold uppercase tracking-[0.12em] text-slate-500 px-6"
           >
             {item}
-            <span className="text-slate-700 ml-4">·</span>
+            <span className="ml-6 w-1 h-1 rounded-full bg-slate-700 inline-block" />
           </span>
         ))}
       </div>
@@ -36,7 +36,7 @@ export default function SocialProofTicker() {
           100% { transform: translateX(-50%); }
         }
         .animate-ticker {
-          animation: ticker 30s linear infinite;
+          animation: ticker 35s linear infinite;
           width: max-content;
         }
       `}</style>

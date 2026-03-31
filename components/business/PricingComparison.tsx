@@ -1,7 +1,7 @@
 'use client'
 
 import { useScrollReveal } from '@/hooks/useScrollReveal'
-import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react'
+import { CheckCircle, XCircle, AlertTriangle, Lightbulb } from 'lucide-react'
 
 function scrollToForm() {
   document.querySelector('#business-form')?.scrollIntoView({ behavior: 'smooth' })
@@ -224,7 +224,8 @@ export default function PricingComparison() {
         {/* ROI Callout */}
         <div ref={roiRef} className="max-w-2xl mx-auto bg-white border-2 border-emerald-200 rounded-2xl p-6 md:p-8">
           <p className="font-heading font-bold text-[16px] md:text-[18px] text-slate-900 mb-4 flex items-center gap-2">
-            💡 The Math That Changes the Conversation
+            <Lightbulb size={20} className="text-amber-500 flex-shrink-0" />
+            The Math That Changes the Conversation
           </p>
 
           <div className="space-y-1.5 text-[13px] md:text-[14px] font-mono text-slate-600 mb-5">

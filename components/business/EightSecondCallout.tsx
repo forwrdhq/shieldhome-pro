@@ -30,15 +30,15 @@ export default function EightSecondCallout() {
 
         {/* Supporting Copy */}
         <p className="text-[14px] md:text-[16px] font-body text-slate-300 max-w-xl mx-auto leading-relaxed mb-8 md:mb-10">
-          When your alarm triggers, Vivint&apos;s in-house monitoring centre responds in 8 seconds — not 60.
-          Police are dispatched before most intruders realise the alarm isn&apos;t going to stop.
+          When your alarm triggers, Vivint&apos;s in-house monitoring center responds in 8 seconds — not 60.
+          Police are dispatched before most intruders realize the alarm isn&apos;t going to stop.
         </p>
 
         {/* Secondary Stats Strip */}
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] md:text-[13px] font-body text-slate-400 mb-8 md:mb-10">
           <span>24/7 in-house monitoring</span>
           <span className="text-slate-700">·</span>
-          <span>No outsourced call centres</span>
+          <span>No outsourced call centers</span>
           <span className="text-slate-700">·</span>
           <span>Police dispatch in under 2 minutes</span>
         </div>

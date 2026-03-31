@@ -327,12 +327,12 @@ model MetaQuizLead {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  // Contact info (captured at gate)
+  // Contact info (Step A: name + phone, Step B: email + zip)
   firstName         String
   lastName          String?
-  email             String
+  email             String?
   phone             String
-  zipCode           String
+  zipCode           String?
 
   // Quiz answers (stored as JSON for flexibility)
   quizAnswers       Json     // { propertyType, ownership, topConcern, neighborhood, currentSystem, features, timeline }

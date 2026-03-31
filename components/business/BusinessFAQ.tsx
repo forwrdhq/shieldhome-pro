@@ -12,39 +12,51 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     question: 'Does Vivint actually charge businesses the same as homes?',
-    answer: 'Yes. Equipment and installation are identical — same 4K cameras, same smart locks, same AI hardware. Business monitoring starts at $39.99/mo, comparable to residential Smart Home plans. There is no commercial surcharge on hardware the way ADT structures their business pricing.',
+    answer: 'Equipment and installation are identical — same 4K cameras, smart locks, and AI hardware used in residential installs. Business monitoring starts at $39.99/mo, comparable to residential Smart Home plans. There is no commercial surcharge on hardware the way ADT structures their business pricing. ADT\'s business monitoring floors at $49.99/mo for the same system.',
   },
   {
-    question: "What's your 30-Day Guarantee exactly?",
-    answer: "Simple and unconditional. If you're not completely satisfied within 30 days of installation — for any reason — we'll send a technician back out, adjust the system to your needs, or refund your first month's monitoring fee. No arguments. No conditions.",
+    question: "What's the 30-Day Guarantee exactly?",
+    answer: "Simple and unconditional. If you're not completely satisfied within 30 days of installation — for any reason — we'll send a certified technician back out, adjust the system to your exact needs, or refund your first month's monitoring fee. No conditions. No arguments.",
   },
   {
-    question: "I'm locked into a contract with my current provider. What happens?",
-    answer: "We cover contract buyouts up to $1,000 regardless of your current provider. Your ShieldHome Pro will assess your exact situation on the quote call. In most cases, the monitoring savings plus the buyout means you're financially ahead from Month 1.",
+    question: "I'm locked into a contract with my current provider. Now what?",
+    answer: "We cover contract buyouts up to $1,000 regardless of your current provider. Your ShieldHome Pro will assess your exact situation on the audit call. In most cases, the monitoring savings plus the buyout means you're financially ahead from Month 1. For contracts with more than $1,000 remaining, we'll calculate whether switching still makes sense — and we'll be honest if it doesn't.",
   },
   {
-    question: 'I have multiple locations. Can you manage that?',
-    answer: 'Yes. Vivint supports multiple locations under one account and one app. Your ShieldHome Pro will quote each location individually. Multi-location customers typically see larger total savings because the markup compounds across every site.',
+    question: 'I have multiple locations. Can you handle that?',
+    answer: 'Yes. Vivint supports multiple locations under one account and one app. Your ShieldHome Pro will quote each location individually. Multi-location customers typically see larger total savings because the commercial markup compounds across every site. We focus on businesses with 1–10 locations.',
   },
   {
     question: "Is installation actually free — what's the catch?",
-    answer: "100% free. Certified Vivint technician. No hidden fees. The arrangement is that you become a Vivint monitoring customer — the free installation is tied to the monitoring plan. Your ShieldHome Pro will be completely transparent about the full cost structure on the call. No surprises.",
+    answer: "100% free installation by a certified Vivint technician. The arrangement is that you become a Vivint monitoring customer — the free installation is tied to the monitoring plan. Your ShieldHome Pro will be completely transparent about the full cost structure on the audit call. No surprises, no hidden fees.",
   },
   {
-    question: 'Will this qualify me for an insurance discount?',
-    answer: 'In almost every case, yes. We provide the documentation your carrier needs to apply the monitored security discount — typically 5–20% on your annual premium. Most business owners save $500–$2,000/yr. Ask us on the quote call about your specific carrier.',
+    question: 'Will this qualify me for a business insurance discount?',
+    answer: 'In almost every case, yes. Professionally monitored security systems typically qualify for 5–20% discounts on commercial property insurance premiums. We provide the documentation your carrier needs. Most business owners save $500–$2,000/year. Ask your ShieldHome Pro about your specific carrier on the call.',
   },
   {
     question: 'What are the contract options?',
-    answer: "Month-to-month through to multi-year. Longer plans include better equipment promotions. No pressure to commit to any term — your ShieldHome Pro will walk you through what makes financial sense for your specific situation.",
+    answer: "Monitoring agreements range from month-to-month to multi-year. Longer plans include better equipment promotions and pricing. Your ShieldHome Pro will walk you through what makes financial sense for your specific situation — no pressure to commit to any term.",
   },
   {
     question: 'How is ShieldHome different from calling Vivint directly?',
-    answer: "ShieldHome Pro is an authorised Vivint dealer with exclusive promotions — like the current free AI camera upgrade — that aren't always available direct. You're still a full Vivint customer with all warranties, monitoring, and support. We just get you better entry deals.",
+    answer: "ShieldHome Pro is an authorized Vivint dealer with exclusive promotions — like the current free AI camera upgrade and $1,000 contract buyout — that aren't always available direct. You're still a full Vivint customer with all warranties, monitoring, and support. We just get you better entry-point deals.",
   },
   {
     question: 'What if something malfunctions after installation?',
-    answer: "All Vivint equipment carries a manufacturer warranty. Vivint's monitoring centre also runs remote diagnostics. If something needs an on-site fix, a technician is dispatched. ShieldHome customers have a direct line to our team for the lifetime of the account.",
+    answer: "Two layers of protection. Our 30-Day Satisfaction Guarantee covers the first month completely. After that, Vivint's lifetime equipment warranty covers hardware failures with remote diagnostics and on-site technician dispatch when needed. ShieldHome customers also have a direct line to our team for the lifetime of their account.",
+  },
+  {
+    question: 'How long does installation take?',
+    answer: 'Typically 24–48 hours from quote to fully installed system. Single-location businesses are usually complete in half a day (2–3 hours on-site). Multi-location businesses: we stagger installations to minimize disruption.',
+  },
+  {
+    question: 'Does it work with my compliance or insurance requirements?',
+    answer: "For most businesses — yes. Vivint generates the documentation most carriers require: 24/7 monitored alarm certificate, access control logs with timestamps, and video retention records. For highly specific requirements (certain HIPAA configurations, state-specific mandates), your Business Pro will confirm compatibility on the call. We don't guess on compliance.",
+  },
+  {
+    question: "I'm already a Vivint customer. Can I upgrade?",
+    answer: 'Yes — and this is often the fastest path. If you have Vivint residential, adding a business account or upgrading existing equipment is streamlined. Call us at (801) 616-6301 and ask about the business upgrade path.',
   },
 ]
 

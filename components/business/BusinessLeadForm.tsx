@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { captureTrackingData, type TrackingData } from '@/lib/utm'
 import { pushDataLayer, fireMetaEvent, pushEnhancedConversions } from '@/lib/google-tracking'
-import { Lock, CheckCircle, Shield, Star, Phone } from 'lucide-react'
+import { Lock, CheckCircle, Shield, Star } from 'lucide-react'
 
 function formatPhone(value: string): string {
   let digits = value.replace(/\D/g, '')
@@ -25,7 +25,17 @@ function Spinner() {
   )
 }
 
-const providers = ['ADT', 'Ring', 'SimpliSafe', 'Brinks', 'None', 'Other']
+const BUSINESS_TYPES = [
+  'Retail / Small Business',
+  'Office / Professional Services',
+  'Warehouse / Industrial',
+  'Restaurant / Food Service',
+  'Multi-Family / Property Management',
+  'Other',
+]
+const LOCATIONS = ['1', '2–3', '4–10', '10+']
+const PROVIDERS = ['ADT', 'Ring', 'SimpliSafe', 'Brinks', 'Vivint (upgrading)', 'None Currently', 'Other']
+const MONTHS_REMAINING = ['No contract', 'Less than 6 months', '6–12 months', '12–24 months', '24+ months']
 
 interface BusinessLeadFormProps {
   kw?: string
@@ -34,9 +44,12 @@ interface BusinessLeadFormProps {
 export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
   const ref = useScrollReveal<HTMLElement>()
 
+  const [businessType, setBusinessType] = useState('')
+  const [numLocations, setNumLocations] = useState('')
+  const [currentProvider, setCurrentProvider] = useState('')
+  const [monthsRemaining, setMonthsRemaining] = useState('')
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
-  const [currentProvider, setCurrentProvider] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -48,6 +61,8 @@ export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
 
   function validate(): boolean {
     const errs: Record<string, string> = {}
+    if (!businessType) errs.businessType = 'Please select your business type'
+    if (!numLocations) errs.numLocations = 'Please select number of locations'
     if (!fullName.trim()) errs.fullName = 'Please enter your name'
     if (phone.replace(/\D/g, '').length < 10) errs.phone = 'Please enter a valid phone number'
     setErrors(errs)
@@ -66,7 +81,10 @@ export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
         body: JSON.stringify({
           fullName: fullName.trim(),
           phone: phone.replace(/\D/g, ''),
+          businessType,
+          numLocations,
           currentProvider: currentProvider || null,
+          monthsRemaining: monthsRemaining || null,
           kwParam: kw || null,
           ...tracking,
           landingPage: '/business',
@@ -75,9 +93,15 @@ export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
       const result = await res.json()
 
       if (result.success) {
-        // Analytics
+        // generate_lead — primary Google Ads conversion
+        pushDataLayer('generate_lead', {
+          event_category: 'business_lead',
+          value: 900,
+          currency: 'USD',
+          business_type: businessType,
+          num_locations: numLocations,
+        })
         fireMetaEvent('Lead', { content_name: 'business_lead', content_category: 'commercial', value: 50, currency: 'USD' })
-        pushDataLayer('business_lead_form_submit', { formType: 'business_lead', value: 900, currency: 'USD' })
         pushEnhancedConversions({
           email: '',
           phone: phone.replace(/\D/g, ''),
@@ -96,7 +120,9 @@ export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
 
   const firstName = fullName.trim().split(/\s+/)[0] || ''
 
-  // ── Success State ──
+  const selectClass = (hasError?: boolean) =>
+    `w-full px-4 py-3 rounded-lg border text-slate-900 text-[15px] font-body bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all duration-200 ${hasError ? 'border-red-300 bg-red-50/50' : 'border-slate-200 hover:border-slate-300'}`
+
   if (submitted) {
     return (
       <section id="business-form" className="py-14 md:py-20 bg-emerald-50/40">
@@ -107,32 +133,15 @@ export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
                 <path d="M5 13l4 4L19 7" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-
             <h3 className="font-heading font-bold text-[22px] tracking-[-0.02em] text-slate-900 mb-2">
               You&apos;re all set{firstName ? `, ${firstName}` : ''}.
             </h3>
             <p className="text-[15px] font-body text-slate-500 mb-6 leading-relaxed">
-              A ShieldHome Business Pro will call you at <strong className="text-slate-700">{phone}</strong> within 2 hours.
+              A ShieldHome Business Pro will call you at{' '}
+              <strong className="text-slate-700">{phone}</strong> within 2 business hours to walk through your free quote.
             </p>
-
-            {/* Content Offer */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-100 mb-5 text-left">
-              <p className="text-[13px] font-heading font-semibold text-slate-700 mb-2">
-                While you wait — grab the free guide:
-              </p>
-              <p className="text-[13px] font-body text-slate-600 mb-3">
-                📋 &ldquo;The 5 Security Mistakes Business Owners Make (And How to Fix All of Them in Under a Day)&rdquo;
-              </p>
-              <button
-                onClick={() => pushDataLayer('content_offer_download', { content: 'business_security_guide' })}
-                className="text-emerald-600 hover:text-emerald-700 font-heading font-semibold text-[13px] underline underline-offset-2"
-              >
-                Download Free Guide →
-              </button>
-            </div>
-
             <p className="text-[13px] font-body text-slate-500">
-              Have questions now? Call{' '}
+              Have questions right now? Call{' '}
               <a href="tel:+18016166301" className="text-emerald-600 hover:text-emerald-700 font-medium">
                 (801) 616-6301
               </a>
@@ -143,7 +152,6 @@ export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
     )
   }
 
-  // ── Form ──
   return (
     <section ref={ref} id="business-form" className="py-14 md:py-20 bg-emerald-50/40">
       <div className="max-w-lg mx-auto px-5 md:px-12">
@@ -157,65 +165,77 @@ export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
-          {/* Full Name */}
-          <div className="mb-4">
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 md:p-8 space-y-4">
+          {/* Business Type */}
+          <div>
+            <select value={businessType} onChange={e => setBusinessType(e.target.value)} className={selectClass(!!errors.businessType)}>
+              <option value="">Business Type *</option>
+              {BUSINESS_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+            {errors.businessType && <p className="text-[12px] font-body text-red-500 mt-1">{errors.businessType}</p>}
+          </div>
+
+          {/* Number of Locations */}
+          <div>
+            <select value={numLocations} onChange={e => setNumLocations(e.target.value)} className={selectClass(!!errors.numLocations)}>
+              <option value="">Number of Locations *</option>
+              {LOCATIONS.map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
+            {errors.numLocations && <p className="text-[12px] font-body text-red-500 mt-1">{errors.numLocations}</p>}
+          </div>
+
+          {/* Current Provider */}
+          <div>
+            <select value={currentProvider} onChange={e => setCurrentProvider(e.target.value)} className={selectClass()}>
+              <option value="">Current Security Provider (optional)</option>
+              {PROVIDERS.map(p => <option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+
+          {/* Months Remaining */}
+          <div>
+            <select value={monthsRemaining} onChange={e => setMonthsRemaining(e.target.value)} className={selectClass()}>
+              <option value="">Months Remaining on Contract (optional)</option>
+              {MONTHS_REMAINING.map(m => <option key={m} value={m}>{m}</option>)}
+            </select>
+          </div>
+
+          {/* Name */}
+          <div>
             <input
               type="text"
-              placeholder="Your name"
+              placeholder="First name *"
               value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className={`w-full px-4 py-3 rounded-lg border text-slate-900 placeholder-slate-400 transition-all duration-200 text-[16px] font-body bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 ${errors.fullName ? 'border-red-300 bg-red-50/50' : 'border-slate-200 hover:border-slate-300'}`}
+              onChange={e => setFullName(e.target.value)}
+              className={`w-full px-4 py-3 rounded-lg border text-slate-900 placeholder-slate-400 transition-all duration-200 text-[15px] font-body bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 ${errors.fullName ? 'border-red-300 bg-red-50/50' : 'border-slate-200 hover:border-slate-300'}`}
             />
             {errors.fullName && <p className="text-[12px] font-body text-red-500 mt-1">{errors.fullName}</p>}
           </div>
 
           {/* Phone */}
-          <div className="mb-5">
+          <div>
             <input
               type="tel"
-              placeholder="(801) 000-0000"
+              placeholder="Phone number *"
               value={phone}
-              onChange={(e) => setPhone(formatPhone(e.target.value))}
-              className={`w-full px-4 py-3 rounded-lg border text-slate-900 placeholder-slate-400 transition-all duration-200 text-[16px] font-body bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 ${errors.phone ? 'border-red-300 bg-red-50/50' : 'border-slate-200 hover:border-slate-300'}`}
+              onChange={e => setPhone(formatPhone(e.target.value))}
+              className={`w-full px-4 py-3 rounded-lg border text-slate-900 placeholder-slate-400 transition-all duration-200 text-[15px] font-body bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 ${errors.phone ? 'border-red-300 bg-red-50/50' : 'border-slate-200 hover:border-slate-300'}`}
             />
             {errors.phone && <p className="text-[12px] font-body text-red-500 mt-1">{errors.phone}</p>}
           </div>
 
-          {/* Current Provider (optional radio) */}
-          <div className="mb-5">
-            <p className="text-[12px] font-heading font-semibold text-slate-500 uppercase tracking-[0.1em] mb-2.5">
-              Current provider <span className="text-slate-400 normal-case tracking-normal">(optional)</span>
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {providers.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setCurrentProvider(currentProvider === p ? null : p)}
-                  className={`px-3.5 py-2 rounded-lg border text-[13px] font-body transition-all duration-200 ${
-                    currentProvider === p
-                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700 font-medium'
-                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-heading font-semibold text-[15px] md:text-[16px] rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(5,150,105,0.25)] flex items-center justify-center gap-2"
+            className="w-full py-4 disabled:opacity-60 disabled:cursor-not-allowed text-white font-heading font-bold text-[15px] md:text-[16px] rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(0,200,83,0.35)] flex items-center justify-center gap-2"
+            style={{ backgroundColor: '#00C853' }}
           >
             {loading ? <Spinner /> : 'Claim My Free Business Audit →'}
           </button>
 
-          {/* Trust Strip */}
-          <div className="mt-5 space-y-2">
+          {/* Trust signals */}
+          <div className="space-y-2 pt-1">
             <div className="flex items-center gap-2 text-[12px] font-body text-slate-500">
               <Lock size={13} className="text-slate-400 flex-shrink-0" />
               Your information is never sold or shared.

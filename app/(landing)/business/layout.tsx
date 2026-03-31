@@ -3,8 +3,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Business Security Systems | No Commercial Markup | ShieldHome Pro',
   description:
-    'Vivint-powered business security — same rates as home security. AI cameras, 8-second monitoring response, $0 down, contract buyout up to $1,000. Free quote for businesses nationwide.',
-  robots: 'noindex, nofollow',
+    'Professional business security systems with zero commercial markup. Same Vivint AI hardware. Free installation. Up to $1,000 contract buyout. Call (801) 616-6301.',
+  keywords:
+    'business security system, commercial security system, small business security cameras, business security monitoring, Vivint business security, ADT business alternative',
   openGraph: {
     title: 'Get Vivint AI Security Installed FREE — We\'ll Buy Out Your Current Contract Up to $1,000',
     description:
@@ -116,7 +117,7 @@ const faqSchema = {
       name: 'What if something malfunctions after installation?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "All Vivint equipment carries a manufacturer warranty. Vivint's monitoring centre also runs remote diagnostics. If something needs an on-site fix, a technician is dispatched. ShieldHome customers have a direct line to our team for the lifetime of the account.",
+        text: "All Vivint equipment carries a manufacturer warranty. Vivint's monitoring center also runs remote diagnostics. If something needs an on-site fix, a technician is dispatched. ShieldHome customers have a direct line to our team for the lifetime of the account.",
       },
     },
   ],

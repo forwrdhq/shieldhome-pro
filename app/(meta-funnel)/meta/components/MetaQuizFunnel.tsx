@@ -7,7 +7,7 @@ import { calculateSecurityScore, scoreMetaLead } from './scoring'
 import { fireMetaEvent, fireMetaCustomEvent, fireMetaEventWithId } from './MetaPixelEvents'
 import { QUIZ_QUESTIONS, TOTAL_QUESTIONS } from './questions'
 import type { QuizAnswers } from './scoring'
-import type { ContactSubmitData } from './QuizContactCapture'
+import type { StepASubmitData, StepBSubmitData } from './QuizContactCapture'
 
 import QuizStartScreen from './QuizStartScreen'
 import QuizQuestion from './QuizQuestion'
@@ -28,7 +28,11 @@ export default function MetaQuizFunnel() {
   const [stage, setStage] = useState<FunnelStage>('start')
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({})
-  const [loading, setLoading] = useState(false)
+  const [loadingA, setLoadingA] = useState(false)
+  const [loadingB, setLoadingB] = useState(false)
+  const [stepAComplete, setStepAComplete] = useState(false)
+  const [leadId, setLeadId] = useState<string | null>(null)
+  const [stepAData, setStepAData] = useState<{ firstName: string; score: number; riskLevel: string; vulnerabilities: string[]; recommendedPackage: string } | null>(null)
   const [eventId] = useState(() => typeof crypto !== 'undefined' ? crypto.randomUUID() : Math.random().toString(36).slice(2))
   const [quizStartTime] = useState(() => new Date().toISOString())
 
@@ -40,9 +44,9 @@ export default function MetaQuizFunnel() {
 
   const getQuizAnswers = useCallback((): QuizAnswers => ({
     propertyType: answers['1'] as string,
-    ownership: answers['2'] as string,
-    topConcern: answers['3'] as string,
-    neighborhood: answers['4'] as string,
+    topConcern: answers['2'] as string,
+    neighborhood: answers['3'] as string,
+    ownership: answers['4'] as string,
     currentSystem: answers['5'] as string,
     features: Array.isArray(answers['6']) ? answers['6'] : answers['6'] ? [answers['6'] as string] : [],
     timeline: answers['7'] as string,
@@ -51,7 +55,6 @@ export default function MetaQuizFunnel() {
   const handleStart = () => {
     setStage('questions')
     fireMetaCustomEvent('QuizStart', {
-      content_category: 'home_security_quiz',
       traffic_source: 'meta_ads',
     })
   }
@@ -88,12 +91,12 @@ export default function MetaQuizFunnel() {
     }
   }
 
-  const handleContactSubmit = async (contactData: ContactSubmitData) => {
-    setLoading(true)
+  // Step A: Phone-first capture — fires API immediately
+  const handleStepASubmit = async (contactData: StepASubmitData) => {
+    setLoadingA(true)
 
     const tracking = getTracking()
     const quizAnswers = getQuizAnswers()
-    // Include the last answer which may have been set in the same render cycle
     const finalAnswers = {
       ...quizAnswers,
       timeline: (answers['7'] as string) || quizAnswers.timeline,
@@ -107,11 +110,9 @@ export default function MetaQuizFunnel() {
     const fbc = fbclid ? `fb.1.${Date.now()}.${fbclid}` : getCookie('_fbc')
 
     const payload = {
-      // Contact
+      // Contact (phone-first — no email/zip required)
       firstName: contactData.firstName,
-      email: contactData.email,
       phone: contactData.phone,
-      zipCode: contactData.zipCode,
       smsConsent: contactData.smsConsent,
       tcpaConsent: contactData.tcpaConsent,
 
@@ -170,10 +171,13 @@ export default function MetaQuizFunnel() {
         value: 50.0,
         currency: 'USD',
         content_name: 'meta_quiz_lead',
-        content_category: 'home_security',
       })
 
-      // Store results data in sessionStorage for results page
+      // Store lead data for results page and Step B
+      setLeadId(result.leadId)
+      setStepAData({ firstName: contactData.firstName, score, riskLevel, vulnerabilities, recommendedPackage })
+
+      // Store results in sessionStorage
       sessionStorage.setItem('metaQuizResults', JSON.stringify({
         leadId: result.leadId,
         firstName: contactData.firstName,
@@ -185,12 +189,12 @@ export default function MetaQuizFunnel() {
         eventId,
       }))
 
-      setLoading(false)
-      setStage('calculating')
+      setLoadingA(false)
+      setStepAComplete(true)
     } catch (err) {
       console.error('Meta lead submission error:', err)
-      setLoading(false)
-      // Still proceed to calculating even on error — the UX shouldn't break
+      setLoadingA(false)
+      // Still proceed — save what we can
       sessionStorage.setItem('metaQuizResults', JSON.stringify({
         leadId: null,
         firstName: contactData.firstName,
@@ -201,8 +205,42 @@ export default function MetaQuizFunnel() {
         quizAnswers: finalAnswers,
         eventId,
       }))
-      setStage('calculating')
+      setStepAData({ firstName: contactData.firstName, score, riskLevel, vulnerabilities, recommendedPackage })
+      setStepAComplete(true)
     }
+  }
+
+  // Step B: Email + ZIP enrichment — PATCH existing lead
+  const handleStepBSubmit = async (data: StepBSubmitData) => {
+    setLoadingB(true)
+
+    if (leadId) {
+      try {
+        await fetch(`/api/leads/meta/${leadId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: data.email, zipCode: data.zipCode }),
+        })
+
+        // Update sessionStorage with email for results page
+        const stored = sessionStorage.getItem('metaQuizResults')
+        if (stored) {
+          const parsed = JSON.parse(stored)
+          parsed.email = data.email
+          sessionStorage.setItem('metaQuizResults', JSON.stringify(parsed))
+        }
+      } catch (err) {
+        console.error('Meta lead enrichment error:', err)
+      }
+    }
+
+    setLoadingB(false)
+    setStage('calculating')
+  }
+
+  // Skip Step B — go straight to calculating
+  const handleSkipStepB = () => {
+    setStage('calculating')
   }
 
   const handleCalculatingComplete = useCallback(() => {
@@ -229,8 +267,12 @@ export default function MetaQuizFunnel() {
         <QuizContactCapture
           totalQuestions={TOTAL_QUESTIONS}
           quizAnswers={getQuizAnswers()}
-          onSubmit={handleContactSubmit}
-          loading={loading}
+          onSubmitStepA={handleStepASubmit}
+          onSubmitStepB={handleStepBSubmit}
+          onSkipStepB={handleSkipStepB}
+          loadingA={loadingA}
+          loadingB={loadingB}
+          stepAComplete={stepAComplete}
         />
       )}
 

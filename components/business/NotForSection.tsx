@@ -9,7 +9,7 @@ function scrollToForm() {
 
 const notFor = [
   'You need enterprise-scale coverage across 50+ locations (we focus on 1–10 location businesses)',
-  'You need specialised industrial CCTV with custom server infrastructure',
+  'You need specialized industrial CCTV with custom server infrastructure',
   'Your insurance requires a specific non-Vivint monitoring company by name',
   'You want to self-install — our process requires a certified technician installation',
 ]

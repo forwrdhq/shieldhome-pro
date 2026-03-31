@@ -111,8 +111,20 @@ export type GoogleStep3Data = z.infer<typeof googleStep3Schema>
 export const businessLeadSchema = z.object({
   fullName: z.string().min(1, 'Name is required').max(100),
   phone: z.string().min(10, 'Valid phone number required').max(20),
+  businessType: z.string().optional().nullable(),
   currentProvider: z.string().optional().nullable(),
+  numLocations: z.string().optional().nullable(),
+  monthsRemaining: z.string().optional().nullable(),
   ...trackingFields,
 })
 
+export const businessQualifySchema = z.object({
+  leadId: z.string().min(1),
+  currentProvider: z.string().optional().nullable(),
+  numLocations: z.string().optional().nullable(),
+  monthsRemaining: z.string().optional().nullable(),
+  businessType: z.string().optional().nullable(),
+})
+
 export type BusinessLeadData = z.infer<typeof businessLeadSchema>
+export type BusinessQualifyData = z.infer<typeof businessQualifySchema>

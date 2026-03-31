@@ -63,8 +63,6 @@ export default function QuizExitIntent() {
         body: JSON.stringify({
           firstName: 'Exit Popup Lead',
           phone: digits,
-          email: 'exit-popup@placeholder.com',
-          zipCode: '00000',
           smsConsent: false,
           tcpaConsent: true,
           quizAnswers: {},
@@ -73,8 +71,7 @@ export default function QuizExitIntent() {
           vulnerabilities: [],
           recommendedPackage: 'Unknown',
           leadScore: 0,
-          leadPriority: 'LOW',
-          source: 'meta_exit_popup',
+          priority: 'LOW',
         }),
       })
       fireMetaEvent('Lead', { value: 50, currency: 'USD', content_name: 'exit_popup' })

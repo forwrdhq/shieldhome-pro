@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Shield, Lock, CheckCircle } from 'lucide-react'
 import { fireMetaEvent } from '../../components/MetaPixelEvents'
 import SecurityScoreGauge from './SecurityScoreGauge'
+import FloodlightCameraSection from './FloodlightCameraSection'
 import ValueStack from './ValueStack'
 import BookingCTA from './BookingCTA'
 
@@ -91,6 +92,14 @@ export default function MetaResultsPage() {
             &ldquo;Homes without a security system are broken into every <strong className="text-red-300">25.7 seconds</strong> in the United States.&rdquo;
           </p>
         </div>
+      </div>
+
+      {/* ═══ Floodlight Camera Section ═══ */}
+      <div
+        className="relative z-10 px-5 mb-10"
+        style={{ animation: 'fadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 350ms both' }}
+      >
+        <FloodlightCameraSection />
       </div>
 
       {/* ═══ Value Stack ═══ */}

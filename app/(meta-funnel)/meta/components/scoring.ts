@@ -19,71 +19,107 @@ export function calculateSecurityScore(answers: QuizAnswers): SecurityScoreResul
   let score = 100
   const vulnerabilities: string[] = []
 
-  // No security system = major deduction
+  // === CURRENT SYSTEM (biggest factor) ===
   if (answers.currentSystem === 'none') {
-    score -= 40
-    vulnerabilities.push('No security system installed')
-  } else if (answers.currentSystem === 'basic_diy') {
-    score -= 25
-    vulnerabilities.push('Basic DIY system with limited coverage')
-  } else if (answers.currentSystem === 'outdated') {
     score -= 35
-    vulnerabilities.push('Outdated system may not function properly')
+    vulnerabilities.push('No security system installed \u2014 your home is unmonitored 24/7')
+  } else if (answers.currentSystem === 'basic_diy') {
+    score -= 22
+    vulnerabilities.push('Basic DIY system \u2014 records events but cannot dispatch help or actively deter')
+  } else if (answers.currentSystem === 'outdated') {
+    score -= 30
+    vulnerabilities.push('Outdated system \u2014 may fail to detect or respond when it matters most')
   } else if (answers.currentSystem === 'unhappy_professional') {
-    score -= 15
-    vulnerabilities.push('Current system not meeting your needs')
+    score -= 10
+    vulnerabilities.push('Current system may have gaps in coverage or response quality')
   }
 
-  // Neighborhood risk
+  // === NEIGHBORHOOD RISK ===
   if (answers.neighborhood === 'high_crime') {
-    score -= 20
-    vulnerabilities.push('High-crime neighborhood increases risk')
+    score -= 18
+    vulnerabilities.push('High-crime area \u2014 statistically elevated break-in risk')
   } else if (answers.neighborhood === 'some_incidents') {
-    score -= 15
-    vulnerabilities.push('Recent incidents in your area')
+    score -= 12
+    vulnerabilities.push('Recent incidents nearby \u2014 your neighborhood risk is rising')
   } else if (answers.neighborhood === 'safe_but_concerns') {
-    score -= 10
-    vulnerabilities.push('Growing security concerns in neighborhood')
+    score -= 7
+    vulnerabilities.push('Growing concerns in area \u2014 most break-ins happen in "safe" neighborhoods')
+  } else if (answers.neighborhood === 'very_safe') {
+    score -= 3
+    vulnerabilities.push('Even safe neighborhoods see break-ins \u2014 65% occur in suburban areas')
   }
 
-  // Property type (more entry points = more vulnerable)
+  // === PROPERTY TYPE (entry point exposure) ===
   if (answers.propertyType === 'house') {
-    score -= 10
-    vulnerabilities.push('Single-family homes have the most entry points')
-  } else if (answers.propertyType === 'multi_family') {
     score -= 8
-    vulnerabilities.push('Multi-family properties need comprehensive coverage')
-  }
-
-  // No smoke/CO detection selected
-  if (!answers.features?.includes('smoke_co') && !answers.features?.includes('all')) {
+    vulnerabilities.push('Single-family homes have the most entry points to secure')
+  } else if (answers.propertyType === 'townhouse') {
     score -= 5
-    vulnerabilities.push('No fire/CO monitoring')
+    vulnerabilities.push('Townhomes share walls but still have ground-level entry exposure')
+  } else if (answers.propertyType === 'multi_family') {
+    score -= 6
+    vulnerabilities.push('Multi-family properties have multiple access points per unit')
   }
 
-  // Concern-based vulnerabilities
+  // === CONCERN-SPECIFIC VULNERABILITIES ===
   if (answers.topConcern === 'breakins') {
-    vulnerabilities.push('Break-in risk: homes without security are 300% more likely to be targeted')
-  }
-  if (answers.topConcern === 'kids_alone') {
-    vulnerabilities.push('Children home alone without monitored entry alerts')
-  }
-  if (answers.topConcern === 'package_theft') {
-    vulnerabilities.push('Package theft on the rise — doorbell cameras reduce theft by 50%')
-  }
-  if (answers.topConcern === 'fire_co') {
-    vulnerabilities.push('Fire/CO incidents require 24/7 professional monitoring for fastest response')
+    score -= 5
+    vulnerabilities.push('Break-in concern: homes without systems are 300% more likely to be targeted')
+  } else if (answers.topConcern === 'kids_alone') {
+    score -= 5
+    vulnerabilities.push('Children home alone: no monitored entry alerts or activity notifications')
+  } else if (answers.topConcern === 'package_theft') {
+    score -= 3
+    vulnerabilities.push('Package theft: 120M packages stolen annually \u2014 a front-door camera alone is not enough')
+  } else if (answers.topConcern === 'vacation') {
+    score -= 4
+    vulnerabilities.push('Vacation monitoring gap: no one watching your home while you\u2019re away')
+  } else if (answers.topConcern === 'fire_co') {
+    score -= 4
+    vulnerabilities.push('No connected smoke/CO monitoring \u2014 early detection saves lives')
   }
 
-  // Ensure score stays in 0-100 range
-  score = Math.max(0, Math.min(100, score))
+  // === FEATURE GAPS (what they want but don't have) ===
+  const wantedFeatures = answers.features || []
+  if (answers.currentSystem === 'none' || answers.currentSystem === 'basic_diy') {
+    if (wantedFeatures.includes('smart_locks') || wantedFeatures.includes('all')) {
+      score -= 3
+      vulnerabilities.push('No smart lock control \u2014 cannot verify doors are locked remotely')
+    }
+    if (wantedFeatures.includes('smoke_co') || wantedFeatures.includes('all')) {
+      if (answers.topConcern !== 'fire_co') {
+        score -= 2
+        vulnerabilities.push('No connected fire/CO detection')
+      }
+    }
+    if (wantedFeatures.includes('outdoor_cameras') || wantedFeatures.includes('all')) {
+      score -= 3
+      vulnerabilities.push('No outdoor camera coverage \u2014 blind spots around your property')
+    }
+  }
 
-  const riskLevel: 'high' | 'medium' | 'low' = score >= 70 ? 'low' : score >= 40 ? 'medium' : 'high'
+  // === OWNERSHIP FACTOR ===
+  if (answers.ownership === 'rent') {
+    score += 5
+  }
 
-  // Package recommendation based on features interest
-  const featureCount = answers.features?.includes('all') ? 5 : (answers.features?.length ?? 0)
+  // === SMALL RANDOM VARIANCE ===
+  const variance = Math.floor(Math.random() * 5) - 2
+  score += variance
+
+  // Clamp to 5-95 (never show 0 or 100)
+  score = Math.max(5, Math.min(95, score))
+
+  const riskLevel: 'high' | 'medium' | 'low' = score >= 65 ? 'low' : score >= 35 ? 'medium' : 'high'
+
+  // Package recommendation
+  const featureCount = wantedFeatures.includes('all') ? 5 : wantedFeatures.length
   const recommendedPackage: 'total_shield' | 'essential' | 'starter' =
-    featureCount >= 3 ? 'total_shield' : featureCount >= 2 ? 'essential' : 'starter'
+    featureCount >= 3 || answers.topConcern === 'breakins'
+      ? 'total_shield'
+      : featureCount >= 2
+        ? 'essential'
+        : 'starter'
 
   return { score, riskLevel, vulnerabilities, recommendedPackage }
 }

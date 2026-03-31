@@ -30,18 +30,6 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
   },
   {
     id: 2,
-    question: 'Do you own or rent your home?',
-    subtext: null,
-    type: 'single_select',
-    renterWarning: true,
-    options: [
-      { value: 'own', label: 'I Own My Home', icon: '\u{1F511}' },
-      { value: 'rent', label: 'I Rent', icon: '\u{1F4CB}' },
-      { value: 'buying', label: "I'm Buying Soon", icon: '\u{1F3E1}' },
-    ],
-  },
-  {
-    id: 3,
     question: "What's your biggest security concern right now?",
     subtext: 'Select the one that matters most',
     type: 'single_select',
@@ -54,7 +42,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
     ],
   },
   {
-    id: 4,
+    id: 3,
     question: 'How would you describe your neighborhood?',
     subtext: null,
     type: 'single_select',
@@ -63,6 +51,18 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
       { value: 'safe_but_concerns', label: 'Safe, But Growing Concerns', icon: '\u{1F7E1}' },
       { value: 'some_incidents', label: 'Some Recent Incidents', icon: '\u{1F7E0}' },
       { value: 'high_crime', label: 'High Crime Area', icon: '\u{1F534}' },
+    ],
+  },
+  {
+    id: 4,
+    question: 'Do you own or rent your home?',
+    subtext: null,
+    type: 'single_select',
+    renterWarning: true,
+    options: [
+      { value: 'own', label: 'I Own My Home', icon: '\u{1F511}' },
+      { value: 'rent', label: 'I Rent', icon: '\u{1F4CB}' },
+      { value: 'buying', label: "I'm Buying Soon", icon: '\u{1F3E1}' },
     ],
   },
   {

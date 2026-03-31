@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { businessLeadSchema } from '@/lib/validation'
+import { businessLeadSchema, businessQualifySchema } from '@/lib/validation'
 import { calculateLeadScore } from '@/lib/lead-scoring'
 import { sendLeadConfirmationSms, sendRepAlertSms, sendSlackNotification } from '@/lib/notifications'
 
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
         ipAddress,
         leadScore: score,
         priority: priority as any,
-        notes: `[Business LP — ${data.currentProvider ? `switching from ${data.currentProvider}` : 'new customer'}]`,
+        notes: `[Business LP — ${data.businessType || 'business'}${data.currentProvider ? ` switching from ${data.currentProvider}` : ''} — ${data.numLocations || '1'} location(s)]`,
       }
     })
 
@@ -111,6 +111,46 @@ export async function POST(req: NextRequest) {
     console.error('Business lead creation error:', err)
     if (err.name === 'ZodError') {
       return NextResponse.json({ error: 'Invalid form data', details: err.errors }, { status: 400 })
+    }
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+
+// ── PATCH — Step 2 qualifier enrichment ──────────────────────────────────────
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const data = businessQualifySchema.parse(body)
+
+    const lead = await prisma.lead.findUnique({ where: { id: data.leadId } })
+    if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
+
+    const switchProviders = ['ADT', 'Ring', 'SimpliSafe', 'Brinks']
+    const isSwitcher = data.currentProvider && switchProviders.includes(data.currentProvider)
+    const segment = isSwitcher ? 'switch-business' : 'business'
+
+    const updatedLead = await prisma.lead.update({
+      where: { id: data.leadId },
+      data: {
+        currentProvider: data.currentProvider || lead.currentProvider,
+        segment,
+        notes: (lead.notes || '') + `\n[Qualified: ${data.numLocations || '1'} location(s), ${data.monthsRemaining || 'no contract'} remaining${data.currentProvider ? `, switching from ${data.currentProvider}` : ''}]`,
+      },
+    })
+
+    await prisma.activity.create({
+      data: {
+        leadId: data.leadId,
+        type: 'NOTE_ADDED',
+        description: `Step 2 qualification: provider=${data.currentProvider || 'none'}, locations=${data.numLocations}, contract=${data.monthsRemaining}`,
+      },
+    })
+
+    return NextResponse.json({ success: true, leadId: updatedLead.id })
+  } catch (err: any) {
+    console.error('Business qualify error:', err)
+    if (err.name === 'ZodError') {
+      return NextResponse.json({ error: 'Invalid data', details: err.errors }, { status: 400 })
     }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

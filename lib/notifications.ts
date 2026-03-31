@@ -19,6 +19,7 @@ const LANDING_PAGE_LABELS: Record<string, string> = {
   '/get-quote': 'Cost/Pricing (homeshield.pro)',
   '/switch': 'ADT Switch/Buyout',
   '/fb': 'Facebook Ads',
+  '/business': 'Commercial / Business Security',
 }
 
 interface LeadNotificationData {
@@ -50,8 +51,14 @@ interface LeadNotificationData {
 export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
   const isSwitch = lead.segment === 'switch'
   const isUpgrade = lead.segment === 'upgrade'
+  const isBusinessSwitch = lead.segment === 'switch-business'
+  const isBusiness = lead.segment === 'business'
   let body: string
-  if (isSwitch) {
+  if (isBusinessSwitch) {
+    body = `Hi ${lead.firstName}! This is ShieldHome Pro. We received your business security audit request${lead.currentProvider ? ` — including your ${lead.currentProvider} contract buyout` : ''}. A Business Security Specialist will call you shortly to go over your options (we cover up to $1,000 in switching costs). Questions? Call/text: ${PHONE_NUMBER}`
+  } else if (isBusiness) {
+    body = `Hi ${lead.firstName}! This is ShieldHome Pro. We received your free business security audit request! A Business Security Specialist will call you shortly to walk through a custom quote for your business. Questions? Call/text: ${PHONE_NUMBER}`
+  } else if (isSwitch) {
     body = `Hi ${lead.firstName}! This is ShieldHome Pro. We received your contract buyout request${lead.currentProvider ? ` for your ${lead.currentProvider} system` : ''}. A Smart Home Pro will call you shortly to discuss your buyout options (up to $1,000 covered). Questions? Call/text us: ${PHONE_NUMBER}`
   } else if (isUpgrade) {
     body = `Hi ${lead.firstName}! This is ShieldHome Pro. We received your upgrade request! A Smart Home Pro will call you shortly to discuss your camera and equipment upgrade options. Questions? Call/text us: ${PHONE_NUMBER}`
@@ -85,12 +92,33 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
   const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
   const isSwitch = lead.segment === 'switch'
   const isUpgrade = lead.segment === 'upgrade'
+  const isBusinessSwitch = lead.segment === 'switch-business'
+  const isBusiness = lead.segment === 'business' || isBusinessSwitch
   const creditLabel = lead.creditScoreRange ? (CREDIT_SCORE_LABELS[lead.creditScoreRange] || lead.creditScoreRange) : 'Not provided'
   const lpLabel = lead.landingPage ? (LANDING_PAGE_LABELS[lead.landingPage] || lead.landingPage) : 'Direct'
 
   let body: string
 
-  if (isSwitch) {
+  if (isBusiness) {
+    body = [
+      `${priorityEmoji[lead.priority] || '🔵'} 🏢 COMMERCIAL LEAD — ${lead.priority} PRIORITY`,
+      ``,
+      `👤 ${lead.fullName}`,
+      `📞 ${lead.phone}`,
+      ``,
+      isBusinessSwitch
+        ? `🔄 Switching from: ${lead.currentProvider || 'Unknown'}`
+        : `🆕 New commercial customer`,
+      `📊 Lead Score: ${lead.leadScore}/100`,
+      `📣 Source: ${source}`,
+      `📍 Page: ${lpLabel}`,
+      ``,
+      `👉 ${APP_URL}/leads/${lead.id}`,
+      isBusinessSwitch
+        ? `CALL NOW — business lead switching from ${lead.currentProvider || 'current provider'}, cover up to $1,000 buyout!`
+        : `CALL NOW — commercial/business security lead, high intent!`,
+    ].join('\n')
+  } else if (isSwitch) {
     body = [
       `${priorityEmoji[lead.priority] || '🔵'} CONTRACT BUYOUT LEAD — ${lead.priority} PRIORITY`,
       ``,
@@ -212,10 +240,16 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
   const emoji = priorityEmoji[lead.priority] || '🔵'
   const isSwitch = lead.segment === 'switch'
   const isUpgrade = lead.segment === 'upgrade'
+  const isBusinessSwitch = lead.segment === 'switch-business'
+  const isBusiness = lead.segment === 'business' || isBusinessSwitch
   const isGoogleAds = lead.landingPage === '/google' || lead.landingPage === '/get-quote'
 
   // Build blocks based on lead type
-  const headerText = isSwitch
+  const headerText = isBusinessSwitch
+    ? `${emoji} 🏢 COMMERCIAL BUYOUT LEAD: ${lead.fullName}`
+    : isBusiness
+    ? `${emoji} 🏢 COMMERCIAL LEAD: ${lead.fullName}`
+    : isSwitch
     ? `${emoji} CONTRACT BUYOUT LEAD: ${lead.fullName}`
     : isUpgrade
     ? `${emoji} UPGRADE LEAD: ${lead.fullName}`
@@ -230,7 +264,28 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
     },
   ]
 
-  if (isUpgrade) {
+  if (isBusiness) {
+    blocks.push(
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: isBusinessSwitch
+            ? `🏢 *Commercial customer switching from ${lead.currentProvider || 'current provider'}* — contract buyout up to $1,000`
+            : `🏢 *New commercial/business security lead* — $39.99/mo monitoring, no commercial markup`,
+        }
+      },
+      {
+        type: 'section',
+        fields: [
+          { type: 'mrkdwn', text: `*📞 Phone:*\n${lead.phone}` },
+          { type: 'mrkdwn', text: `*🏢 Current Provider:*\n${lead.currentProvider || 'None / New'}` },
+          { type: 'mrkdwn', text: `*📊 Lead Score:*\n${lead.leadScore}/100` },
+          { type: 'mrkdwn', text: `*🔥 Priority:*\n${lead.priority}` },
+        ]
+      },
+    )
+  } else if (isUpgrade) {
     blocks.push(
       {
         type: 'section',
@@ -340,7 +395,11 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
       elements: [
         {
           type: 'mrkdwn',
-          text: isSwitch
+          text: isBusinessSwitch
+            ? `⚡ *COMMERCIAL BUYOUT — pitch contract buyout up to $1,000 + $39.99/mo business monitoring. Call now!*`
+            : isBusiness
+            ? `⚡ *COMMERCIAL LEAD — pitch $39.99/mo business monitoring, no commercial markup. Call now!*`
+            : isSwitch
             ? `⚡ *BUYOUT LEAD — pitch the $1,000 contract buyout offer. Call now!*`
             : isUpgrade
             ? `⚡ *UPGRADE LEAD — existing customer, discuss camera & equipment upgrade options!*`

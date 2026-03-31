@@ -30,7 +30,7 @@ export default async function BusinessPage({ searchParams }: PageProps) {
   const kw = typeof params.kw === 'string' ? params.kw : ''
 
   return (
-    <div className="min-h-screen bg-white" id="hero-form">
+    <div className="min-h-screen bg-slate-900" id="hero-form">
       <Navigation />
       <BusinessHero />
       <BusinessPainBar />

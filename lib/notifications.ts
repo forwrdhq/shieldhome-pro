@@ -230,7 +230,10 @@ export async function sendWelcomeEmail(lead: LeadNotificationData) {
 
 export async function sendSlackNotification(lead: LeadNotificationData) {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL
-  if (!webhookUrl) return
+  if (!webhookUrl) {
+    console.warn('SLACK_WEBHOOK_URL not configured — skipping Slack notification')
+    return
+  }
 
   const priorityEmoji: Record<string, string> = {
     HOT: '🔴', HIGH: '🟠', MEDIUM: '🔵', LOW: '⚪'

@@ -11,6 +11,7 @@ export interface TrackingData {
   gclid: string | null
   fbclid: string | null
   kwParam: string | null
+  oid: string | null // outreach prospect ID for cold email attribution
   landingPage: string
   referrer: string
   deviceType: 'mobile' | 'desktop' | 'tablet'
@@ -40,7 +41,7 @@ export function captureTrackingData(): TrackingData {
     return {
       source: null, medium: null, campaign: null, adSet: null,
       adId: null, keyword: null, utmContent: null, gclid: null,
-      fbclid: null, kwParam: null, landingPage: '/', referrer: '', deviceType: 'desktop', browser: 'Unknown'
+      fbclid: null, kwParam: null, oid: null, landingPage: '/', referrer: '', deviceType: 'desktop', browser: 'Unknown'
     }
   }
 
@@ -57,6 +58,7 @@ export function captureTrackingData(): TrackingData {
     gclid: params.get('gclid'),
     fbclid: params.get('fbclid'),
     kwParam: params.get('kw'),
+    oid: params.get('oid'),
     landingPage: window.location.pathname,
     referrer: document.referrer,
     deviceType: detectDeviceType(),

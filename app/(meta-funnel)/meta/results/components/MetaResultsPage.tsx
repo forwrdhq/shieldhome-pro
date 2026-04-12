@@ -227,7 +227,7 @@ export default function MetaResultsPage() {
             installations per month in your area.
           </p>
           <p className="text-[11px] text-amber-300/50 mt-2 font-body">
-            The Welcome Home Reward ($200 Visa gift card) expires 7 days from your assessment date.
+            This exclusive offer expires 7 days from your assessment date.
           </p>
         </div>
       </div>

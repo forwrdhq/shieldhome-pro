@@ -425,7 +425,7 @@ export default function QuizStartScreen({ onStart }: QuizStartScreenProps) {
             </p>
             <p className="text-slate-200 text-[14px] font-body flex items-start gap-2.5">
               <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
-              $200 Visa gift card with qualifying installation
+              90 days free professional monitoring included
             </p>
           </div>
 

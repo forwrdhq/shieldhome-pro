@@ -74,6 +74,7 @@ const trackingFields = {
   referrer: z.string().optional().nullable(),
   deviceType: z.string().optional().nullable(),
   browser: z.string().optional().nullable(),
+  oid: z.string().optional().nullable(),
 }
 
 export const googleStep1Schema = z.object({

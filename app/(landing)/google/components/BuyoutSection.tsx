@@ -27,7 +27,7 @@ export default function BuyoutSection() {
                 { bold: 'We pay up to $1,000', rest: ' to buy out your contract' },
                 { bold: 'We install your new system', rest: ' — usually next day' },
                 { bold: 'We configure everything', rest: ' and train your family' },
-                { bold: 'You get a $200 Visa gift card', rest: ' on top' },
+                { bold: 'You get 90 days free monitoring', rest: ' on top' },
               ].map((item) => (
                 <div key={item.bold} className="flex items-start gap-3">
                   <span

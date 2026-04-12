@@ -13,17 +13,17 @@ datasource db {
 // ============================================
 
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  phone         String?
-  role          UserRole  @default(REP)
-  passwordHash  String
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  phone        String?
+  role         UserRole @default(REP)
+  passwordHash String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  assignedLeads Lead[]    @relation("AssignedRep")
+  assignedLeads Lead[]       @relation("AssignedRep")
   activities    Activity[]
   commissions   Commission[]
 
@@ -41,90 +41,93 @@ enum UserRole {
 // ============================================
 
 model Lead {
-  id              String      @id @default(cuid())
+  id String @id @default(cuid())
 
-  firstName       String
-  lastName        String
-  email           String?
-  phone           String
-  fullName        String
+  firstName String
+  lastName  String
+  email     String?
+  phone     String
+  fullName  String
 
-  address         String?
-  city            String?
-  state           String?
-  zipCode         String?
+  address String?
+  city    String?
+  state   String?
+  zipCode String?
 
-  propertyType    PropertyType?
-  doorsWindows    String?
+  propertyType       PropertyType?
+  doorsWindows       String?
   productsInterested String[]
-  homeownership   Homeownership?
-  timeline        Timeline?
+  homeownership      Homeownership?
+  timeline           Timeline?
 
-  segment             String?
-  currentProvider     String?
+  segment                 String?
+  currentProvider         String?
   contractMonthsRemaining String?
-  currentMonthlyPayment String?
-  creditScoreRange    String?
+  currentMonthlyPayment   String?
+  creditScoreRange        String?
 
-  status          LeadStatus     @default(NEW)
-  leadScore       Int            @default(0)
-  priority        Priority       @default(MEDIUM)
+  status    LeadStatus @default(NEW)
+  leadScore Int        @default(0)
+  priority  Priority   @default(MEDIUM)
 
-  assignedRepId   String?
-  assignedRep     User?          @relation("AssignedRep", fields: [assignedRepId], references: [id])
+  assignedRepId String?
+  assignedRep   User?   @relation("AssignedRep", fields: [assignedRepId], references: [id])
 
-  source          String?
-  medium          String?
-  campaign        String?
-  adSet           String?
-  adId            String?
-  keyword         String?
-  landingPage     String?
-  referrer        String?
-  utmContent      String?
-  gclid           String?
-  fbclid          String?
-  kwParam         String?
-  deviceType      String?
-  browser         String?
-  ipAddress       String?
+  source      String?
+  medium      String?
+  campaign    String?
+  adSet       String?
+  adId        String?
+  keyword     String?
+  landingPage String?
+  referrer    String?
+  utmContent  String?
+  gclid       String?
+  fbclid      String?
+  kwParam     String?
+  deviceType  String?
+  browser     String?
+  ipAddress   String?
 
-  submittedAt     DateTime       @default(now())
-  firstContactAt  DateTime?
-  speedToContact  Int?
+  submittedAt    DateTime  @default(now())
+  firstContactAt DateTime?
+  speedToContact Int?
 
   appointmentDate DateTime?
-  appointmentSat  Boolean        @default(false)
+  appointmentSat  Boolean   @default(false)
 
-  saleDate        DateTime?
-  saleAmount      Float?
-  monthlyAmount   Float?
-  contractLength  Int?
+  saleDate       DateTime?
+  saleAmount     Float?
+  monthlyAmount  Float?
+  contractLength Int?
 
-  emailsSent      Int            @default(0)
-  smsSent         Int            @default(0)
-  callsMade       Int            @default(0)
+  emailsSent      Int       @default(0)
+  smsSent         Int       @default(0)
+  callsMade       Int       @default(0)
   lastContactDate DateTime?
 
-  nurtureStep     Int            @default(0)
-  nurtureActive   Boolean        @default(true)
+  nurtureStep   Int     @default(0)
+  nurtureActive Boolean @default(true)
 
-  tcpaConsent     Boolean        @default(false)
-  tcpaConsentAt   DateTime?
+  tcpaConsent   Boolean   @default(false)
+  tcpaConsentAt DateTime?
 
   notes           String?
   dispositionNote String?
 
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  activities      Activity[]
-  commissions     Commission[]
-  emailLogs       EmailLog[]
-  smsLogs         SmsLog[]
+  activities  Activity[]
+  commissions Commission[]
+  emailLogs   EmailLog[]
+  smsLogs     SmsLog[]
+
+  outreachProspect OutreachProspect? @relation("OutreachToLead")
 
   @@index([status])
   @@index([source])
+  @@index([email])
   @@index([assignedRepId])
   @@index([createdAt])
   @@index([submittedAt])
@@ -176,19 +179,19 @@ enum Priority {
 // ============================================
 
 model Activity {
-  id          String       @id @default(cuid())
+  id String @id @default(cuid())
 
-  leadId      String
-  lead        Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
-  userId      String?
-  user        User?        @relation(fields: [userId], references: [id])
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 
   type        ActivityType
   description String
   metadata    Json?
 
-  createdAt   DateTime     @default(now())
+  createdAt DateTime @default(now())
 
   @@index([leadId])
   @@index([createdAt])
@@ -218,27 +221,27 @@ enum ActivityType {
 // ============================================
 
 model Commission {
-  id            String          @id @default(cuid())
+  id String @id @default(cuid())
 
-  leadId        String
-  lead          Lead            @relation(fields: [leadId], references: [id])
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id])
 
-  repId         String
-  rep           User            @relation(fields: [repId], references: [id])
+  repId String
+  rep   User   @relation(fields: [repId], references: [id])
 
-  saleAmount    Float
+  saleAmount      Float
   grossCommission Float
-  splitPercent  Float           @default(50)
-  ourShare      Float
-  repShare      Float
-  adSpend       Float?
-  netProfit     Float?
+  splitPercent    Float  @default(50)
+  ourShare        Float
+  repShare        Float
+  adSpend         Float?
+  netProfit       Float?
 
-  status        CommissionStatus @default(PENDING)
-  paidDate      DateTime?
+  status   CommissionStatus @default(PENDING)
+  paidDate DateTime?
 
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([repId])
   @@index([status])
@@ -257,34 +260,34 @@ enum CommissionStatus {
 // ============================================
 
 model EmailLog {
-  id          String    @id @default(cuid())
-  leadId      String
-  lead        Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
-  type        String
-  subject     String
-  sendgridId  String?
-  status      String    @default("sent")
-  openedAt    DateTime?
-  clickedAt   DateTime?
+  type       String
+  subject    String
+  sendgridId String?
+  status     String    @default("sent")
+  openedAt   DateTime?
+  clickedAt  DateTime?
 
-  sentAt      DateTime  @default(now())
+  sentAt DateTime @default(now())
 
   @@index([leadId])
   @@map("email_logs")
 }
 
 model SmsLog {
-  id          String    @id @default(cuid())
-  leadId      String
-  lead        Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
-  type        String
-  body        String
-  twilioSid   String?
-  status      String    @default("sent")
+  type      String
+  body      String
+  twilioSid String?
+  status    String  @default("sent")
 
-  sentAt      DateTime  @default(now())
+  sentAt DateTime @default(now())
 
   @@index([leadId])
   @@map("sms_logs")
@@ -295,25 +298,25 @@ model SmsLog {
 // ============================================
 
 model Campaign {
-  id           String   @id @default(cuid())
-  name         String
-  source       String
-  medium       String
-  budget       Float?
-  startDate    DateTime?
-  endDate      DateTime?
-  isActive     Boolean  @default(true)
+  id        String    @id @default(cuid())
+  name      String
+  source    String
+  medium    String
+  budget    Float?
+  startDate DateTime?
+  endDate   DateTime?
+  isActive  Boolean   @default(true)
 
-  totalLeads   Int      @default(0)
-  totalSpend   Float    @default(0)
-  totalSales   Int      @default(0)
-  totalRevenue Float    @default(0)
+  totalLeads   Int    @default(0)
+  totalSpend   Float  @default(0)
+  totalSales   Int    @default(0)
+  totalRevenue Float  @default(0)
   cpl          Float?
   cpa          Float?
   roas         Float?
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("campaigns")
 }
@@ -323,75 +326,75 @@ model Campaign {
 // ============================================
 
 model MetaQuizLead {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Contact info (Step A: name + phone, Step B: email + zip)
-  firstName         String
-  lastName          String?
-  email             String?
-  phone             String
-  zipCode           String?
+  firstName String
+  lastName  String?
+  email     String?
+  phone     String
+  zipCode   String?
 
   // Quiz answers (stored as JSON for flexibility)
-  quizAnswers       Json     // { propertyType, ownership, topConcern, neighborhood, currentSystem, features, timeline }
+  quizAnswers Json // { propertyType, ownership, topConcern, neighborhood, currentSystem, features, timeline }
 
   // Computed fields
-  securityScore     Int      // 0-100, calculated from answers
-  riskLevel         String   // "high", "medium", "low"
-  recommendedPackage String  // "total_shield", "essential", "starter"
-  urgencyLevel      String   // "asap", "within_30_days", "within_3_months", "researching"
+  securityScore      Int // 0-100, calculated from answers
+  riskLevel          String // "high", "medium", "low"
+  recommendedPackage String // "total_shield", "essential", "starter"
+  urgencyLevel       String // "asap", "within_30_days", "within_3_months", "researching"
 
   // Lead qualification
-  isHomeowner       Boolean  @default(true)
-  propertyType      String?  // "house", "townhouse", "condo", "multi_family"
-  hasCurrentSystem  String?  // "none", "basic_diy", "outdated", "unhappy_professional"
-  topConcern        String?  // "breakins", "package_theft", "fire_co", "kids_alone", "vacation"
+  isHomeowner      Boolean @default(true)
+  propertyType     String? // "house", "townhouse", "condo", "multi_family"
+  hasCurrentSystem String? // "none", "basic_diy", "outdated", "unhappy_professional"
+  topConcern       String? // "breakins", "package_theft", "fire_co", "kids_alone", "vacation"
 
   // Funnel tracking
-  quizStartedAt     DateTime?
-  quizCompletedAt   DateTime?
+  quizStartedAt      DateTime?
+  quizCompletedAt    DateTime?
   contactSubmittedAt DateTime?
-  resultsViewedAt   DateTime?
-  consultationBooked Boolean @default(false)
-  guideDownloaded   Boolean  @default(false)
+  resultsViewedAt    DateTime?
+  consultationBooked Boolean   @default(false)
+  guideDownloaded    Boolean   @default(false)
 
   // Attribution (Meta-specific)
-  fbclid            String?
-  fbp               String?  // _fbp cookie value
-  fbc               String?  // _fbc cookie value (constructed from fbclid)
-  utmSource         String?  @default("facebook")
-  utmMedium         String?  @default("paid")
-  utmCampaign       String?
-  utmContent        String?
-  utmTerm           String?
-  utmAdset          String?
-  utmAdId           String?
-  landingPage       String?
-  referrer          String?
-  deviceType        String?  // "mobile", "tablet", "desktop"
-  browser           String?
-  ipAddress         String?
-  userAgent         String?
+  fbclid      String?
+  fbp         String? // _fbp cookie value
+  fbc         String? // _fbc cookie value (constructed from fbclid)
+  utmSource   String? @default("facebook")
+  utmMedium   String? @default("paid")
+  utmCampaign String?
+  utmContent  String?
+  utmTerm     String?
+  utmAdset    String?
+  utmAdId     String?
+  landingPage String?
+  referrer    String?
+  deviceType  String? // "mobile", "tablet", "desktop"
+  browser     String?
+  ipAddress   String?
+  userAgent   String?
 
   // Lead management
-  status            String   @default("NEW") // NEW, CONTACTED, BOOKED, CLOSED_WON, CLOSED_LOST, NURTURE
-  leadScore         Int      @default(0)
-  priority          String   @default("MEDIUM") // HOT, HIGH, MEDIUM, LOW
-  notes             String?
+  status    String  @default("NEW") // NEW, CONTACTED, BOOKED, CLOSED_WON, CLOSED_LOST, NURTURE
+  leadScore Int     @default(0)
+  priority  String  @default("MEDIUM") // HOT, HIGH, MEDIUM, LOW
+  notes     String?
 
   // Notification tracking
-  smsToLeadSent     Boolean  @default(false)
-  smsToRepSent      Boolean  @default(false)
-  emailToLeadSent   Boolean  @default(false)
-  slackNotifSent    Boolean  @default(false)
-  ghlWebhookSent    Boolean  @default(false)
+  smsToLeadSent   Boolean @default(false)
+  smsToRepSent    Boolean @default(false)
+  emailToLeadSent Boolean @default(false)
+  slackNotifSent  Boolean @default(false)
+  ghlWebhookSent  Boolean @default(false)
 
   // Consent
-  smsConsent        Boolean  @default(false)
-  tcpaConsent       Boolean  @default(false)
-  tcpaConsentAt     DateTime?
+  smsConsent    Boolean   @default(false)
+  tcpaConsent   Boolean   @default(false)
+  tcpaConsentAt DateTime?
 
   @@index([email])
   @@index([phone])
@@ -399,4 +402,174 @@ model MetaQuizLead {
   @@index([status])
   @@index([urgencyLevel])
   @@map("meta_quiz_leads")
+}
+
+// ============================================
+// COLD OUTREACH SYSTEM
+// ============================================
+
+model OutreachProspect {
+  id String @id @default(cuid())
+
+  email        String  @unique
+  firstName    String?
+  lastName     String?
+  businessName String
+  phone        String?
+  website      String?
+
+  nicheSlug String // references code constant (e.g. "dispensary", "gun_shop")
+  dmaId     String?
+  dma       OutreachDMA? @relation(fields: [dmaId], references: [id])
+
+  city    String?
+  state   String?
+  zipCode String?
+
+  source          String // "supersearch", "google_places", "atf_ffl", "state_cannabis", "manual"
+  instantlyLeadId String? @unique
+
+  status OutreachProspectStatus @default(QUEUED)
+
+  campaignId String?
+  campaign   OutreachCampaign? @relation(fields: [campaignId], references: [id])
+
+  // Engagement tracking (updated via webhooks)
+  emailsSent  Int       @default(0)
+  opensCount  Int       @default(0)
+  clicksCount Int       @default(0)
+  repliedAt   DateTime?
+  replyLabel  String? // "interested", "not_interested", "out_of_office", "wrong_person"
+
+  // Conversion
+  convertedLeadId String?   @unique
+  convertedLead   Lead?     @relation("OutreachToLead", fields: [convertedLeadId], references: [id])
+  convertedAt     DateTime?
+
+  events OutreachEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([nicheSlug])
+  @@index([dmaId])
+  @@index([status])
+  @@index([campaignId])
+  @@index([createdAt])
+  @@map("outreach_prospects")
+}
+
+enum OutreachProspectStatus {
+  QUEUED
+  SENT
+  OPENED
+  CLICKED
+  REPLIED
+  INTERESTED
+  NOT_INTERESTED
+  CONVERTED
+  BOUNCED
+  UNSUBSCRIBED
+}
+
+model OutreachCampaign {
+  id String @id @default(cuid())
+
+  name      String
+  nicheSlug String
+  dmaId     String?
+  dma       OutreachDMA? @relation(fields: [dmaId], references: [id])
+
+  instantlyCampaignId String? @unique
+
+  status OutreachCampaignStatus @default(DRAFT)
+
+  // Stats (synced from Instantly)
+  totalProspects   Int @default(0)
+  totalSent        Int @default(0)
+  totalOpens       Int @default(0)
+  totalClicks      Int @default(0)
+  totalReplies     Int @default(0)
+  totalInterested  Int @default(0)
+  totalConversions Int @default(0)
+
+  prospects OutreachProspect[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([nicheSlug])
+  @@index([status])
+  @@index([createdAt])
+  @@map("outreach_campaigns")
+}
+
+enum OutreachCampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+model OutreachDMA {
+  id        String   @id // e.g. "new-york", "los-angeles"
+  metroName String
+  states    String[]
+
+  isActive Boolean @default(true)
+
+  prospects    OutreachProspect[]
+  campaigns    OutreachCampaign[]
+  rotationLogs OutreachRotationLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("outreach_dmas")
+}
+
+model OutreachRotationLog {
+  id String @id @default(cuid())
+
+  dmaId     String
+  dma       OutreachDMA @relation(fields: [dmaId], references: [id])
+  nicheSlug String
+
+  campaignId      String?
+  prospectsQueued Int     @default(0)
+
+  contactedAt DateTime @default(now())
+
+  @@index([dmaId, nicheSlug])
+  @@index([contactedAt])
+  @@map("outreach_rotation_logs")
+}
+
+model OutreachEvent {
+  id String @id @default(cuid())
+
+  eventId    String?  @unique // Instantly event ID for idempotency
+  eventType  String // "reply", "open", "click", "bounce", "unsubscribe"
+  prospectId String?
+  prospect   OutreachProspect? @relation(fields: [prospectId], references: [id])
+
+  campaignId String?
+  payload    Json
+
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([eventType, createdAt])
+  @@index([prospectId])
+  @@map("outreach_events")
+}
+
+model SuppressionList {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  reason    String // "unsubscribe", "bounce", "complaint", "manual"
+  source    String // "instantly_webhook", "crm", "manual"
+  createdAt DateTime @default(now())
+
+  @@map("suppression_list")
 }

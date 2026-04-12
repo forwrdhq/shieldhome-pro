@@ -90,6 +90,24 @@ export async function POST(req: NextRequest) {
       }
     })
 
+    // Link outreach prospect if this lead came from cold email (oid param)
+    if (data.oid) {
+      try {
+        // Atomic update — only converts if not already converted (prevents race condition)
+        await prisma.outreachProspect.updateMany({
+          where: { id: data.oid, convertedLeadId: null },
+          data: {
+            convertedLeadId: lead.id,
+            convertedAt: new Date(),
+            status: 'CONVERTED',
+          },
+        })
+      } catch {
+        // Non-critical — log but don't fail lead creation
+        console.warn('Failed to link outreach prospect:', data.oid)
+      }
+    }
+
     await prisma.activity.create({
       data: {
         leadId: lead.id,

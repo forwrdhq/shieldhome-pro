@@ -29,9 +29,9 @@ const VALUE_ITEMS = [
     retailPrice: '$150',
   },
   {
-    name: 'The Welcome Home Reward',
-    description: '$200 Visa gift card (schedule this week)',
-    retailPrice: '$200',
+    name: 'Free Doorbell Camera',
+    description: 'Included with qualifying system purchase',
+    retailPrice: '$249',
   },
 ]
 

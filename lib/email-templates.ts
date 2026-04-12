@@ -281,7 +281,7 @@ function welcomeSwitch(lead: EmailRecipient): string {
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ Up to $1,000 contract buyout</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ Free professional installation</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ Free doorbell camera</td></tr>
-        <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ Up to $200 Visa gift card</td></tr>
+        <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ 90 days free monitoring ($150 value)</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ 60-day money-back guarantee</td></tr>
       </table>
     </div>
@@ -312,7 +312,7 @@ function welcomeVivint(lead: EmailRecipient): string {
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">🎁 Buy 2 cameras, get 1 FREE</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">💰 $0 down + $24.99/mo starting</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">🔧 Free professional installation</td></tr>
-        <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">🎁 Up to $200 Visa gift card</td></tr>
+        <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">🎁 90 days free monitoring ($150 value)</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">📺 90 days free monitoring (worth $150)</td></tr>
       </table>
     </div>
@@ -493,7 +493,7 @@ function nurtureVivint(step: number, lead: EmailRecipient): EmailContent {
     case 3: return {
       type: 'nurture-vivint-3',
       subject: `Spring Flash Sale — Buy 2 Cameras, Get 1 Free`,
-      preheader: 'Plus a $200 Visa gift card. This deal expires soon.',
+      preheader: 'Plus 90 days free monitoring. This deal expires soon.',
       html: `
         ${urgencyBanner('Spring Flash Sale — limited-time pricing for your area')}
         ${heading(`${name}, this is the best Vivint deal we've seen all year.`)}
@@ -502,7 +502,7 @@ function nurtureVivint(step: number, lead: EmailRecipient): EmailContent {
         <div style="margin:24px 0;">
           <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;">
             ${featureRow('📷', 'Buy 2 Cameras, Get 1 FREE', 'Choose from Outdoor Pro, Indoor Pro, or Doorbell Camera')}
-            ${featureRow('💳', '$200 Visa Gift Card', 'Mailed after installation')}
+            ${featureRow('🔧', 'Free Professional Installation', 'Certified tech handles everything in ~2 hours')}
             ${featureRow('📺', '90 Days Free Monitoring', '$150 value — on the house')}
             ${featureRow('🔧', 'Free Professional Installation', 'Certified tech handles everything in ~2 hours')}
             ${featureRow('🛡️', '60-Day Money-Back Guarantee', 'Try the full system risk-free')}
@@ -587,7 +587,7 @@ function nurtureSwitch(step: number, lead: EmailRecipient): EmailContent {
             ${featureRow('📋', 'We handle cancellation', `No awkward call to ${provider} — we do the paperwork`)}
             ${featureRow('🔧', 'Free professional installation', 'Certified tech installs your new Vivint system in ~2 hours')}
             ${featureRow('📷', 'Free doorbell camera', '$249 value — included with your switch')}
-            ${featureRow('💳', '$200 Visa gift card', 'Welcome bonus mailed after install')}
+            ${featureRow('📺', '90 Days Free Monitoring', '$150 value — on the house')}
           </table>
         </div>
 
@@ -663,7 +663,7 @@ function nurtureSwitch(step: number, lead: EmailRecipient): EmailContent {
             <div style="background:${COLORS.emerald};color:white;font-weight:800;width:32px;height:32px;border-radius:50%;text-align:center;line-height:32px;font-size:14px;flex-shrink:0;">4</div>
             <div>
               <p style="margin:0;font-weight:700;color:${COLORS.slate900};font-size:14px;">You're fully protected with Vivint</p>
-              <p style="margin:4px 0 0;color:${COLORS.slate500};font-size:13px;">24/7 monitoring active, app set up, $200 Visa gift card on the way. Done.</p>
+              <p style="margin:4px 0 0;color:${COLORS.slate500};font-size:13px;">24/7 monitoring active, app set up, and you're fully covered. Done.</p>
             </div>
           </div>
         </div>
@@ -1039,7 +1039,7 @@ function nurtureStandard(step: number, lead: EmailRecipient): EmailContent {
     case 3: return {
       type: 'nurture-standard-3',
       subject: "Your exclusive spring offer — this won't last long",
-      preheader: 'Buy 2 cameras get 1 free, $200 Visa gift card, and more.',
+      preheader: 'Buy 2 cameras get 1 free, free installation, and more.',
       html: `
         ${urgencyBanner('Spring Flash Sale — limited-time promotions for your area')}
         ${heading(`${name}, a quick heads up.`)}
@@ -1049,7 +1049,7 @@ function nurtureStandard(step: number, lead: EmailRecipient): EmailContent {
           <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;">
             ${featureRow('📷', 'Buy 2 Cameras, Get 1 FREE', 'Outdoor Pro, Indoor Pro, or Doorbell — your choice')}
             ${featureRow('🔧', 'Free Professional Installation', 'Certified technician installs your entire system ($199 value)')}
-            ${featureRow('💳', '$200 Visa Gift Card', 'Welcome bonus mailed after installation')}
+            ${featureRow('📺', '90 Days Free Monitoring', '$150 value — on the house')}
             ${featureRow('💰', '$0 Down on Equipment', 'No large upfront cost — flexible monthly financing')}
             ${featureRow('📺', '90 Days Free Monitoring', '$150 value — on the house')}
           </table>

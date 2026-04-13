@@ -45,11 +45,27 @@ export interface InstantlyCampaign {
   [key: string]: unknown
 }
 
+/**
+ * Get the configured sending email accounts from INSTANTLY_SENDING_EMAILS env var.
+ * Returns an array of email addresses (e.g. ["gunnar@shieldhome.pro", "hello@shieldhome.pro"]).
+ */
+export function getSendingAccounts(): string[] {
+  const raw = process.env.INSTANTLY_SENDING_EMAILS?.trim()
+  if (!raw) return []
+  return raw.split(',').map((e) => e.trim()).filter(Boolean)
+}
+
 export async function createCampaign(data: {
   name: string
+  email_list?: string[]
   [key: string]: unknown
 }): Promise<InstantlyCampaign> {
-  return request<InstantlyCampaign>('POST', '/campaigns', data)
+  // Auto-inject sending accounts if not explicitly provided
+  const payload = {
+    ...data,
+    email_list: data.email_list ?? getSendingAccounts(),
+  }
+  return request<InstantlyCampaign>('POST', '/campaigns', payload)
 }
 
 export async function getCampaign(id: string): Promise<InstantlyCampaign> {

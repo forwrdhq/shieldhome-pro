@@ -49,7 +49,7 @@ export async function PATCH(
 
     const validStatuses = [
       'QUEUED', 'SENT', 'OPENED', 'CLICKED', 'REPLIED',
-      'INTERESTED', 'CONVERTED', 'BOUNCED', 'UNSUBSCRIBED', 'SUPPRESSED',
+      'INTERESTED', 'NOT_INTERESTED', 'CONVERTED', 'BOUNCED', 'UNSUBSCRIBED',
     ]
     if (status && !validStatuses.includes(status)) {
       return NextResponse.json(

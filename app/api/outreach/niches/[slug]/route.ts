@@ -10,14 +10,15 @@ import { verifyOutreachAuth } from '@/lib/outreach/auth'
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   const authError = verifyOutreachAuth(req)
   if (authError) return authError
 
-  const niche = getNiche(params.slug)
+  const { slug } = await params
+  const niche = getNiche(slug)
   if (!niche) {
-    return NextResponse.json({ error: `Unknown niche: ${params.slug}` }, { status: 404 })
+    return NextResponse.json({ error: `Unknown niche: ${slug}` }, { status: 404 })
   }
 
   return NextResponse.json({ niche })

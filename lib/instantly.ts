@@ -77,7 +77,17 @@ export async function listCampaigns(): Promise<InstantlyCampaign[]> {
 }
 
 export async function activateCampaign(id: string): Promise<void> {
-  await request('POST', `/campaigns/${id}/activate`)
+  // Activate endpoint rejects Content-Type header when body is empty
+  const apiKey = process.env.INSTANTLY_API_KEY?.trim()
+  if (!apiKey) throw new Error('INSTANTLY_API_KEY environment variable is not set')
+  const res = await fetch(`${BASE_URL}/campaigns/${id}/activate`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}` },
+  })
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Instantly API POST /campaigns/${id}/activate failed (${res.status}): ${text}`)
+  }
 }
 
 export async function pauseCampaign(id: string): Promise<void> {

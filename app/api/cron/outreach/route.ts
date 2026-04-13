@@ -92,15 +92,7 @@ export async function GET(req: NextRequest) {
         schedules: [{
           name: 'Default',
           timing: { from: '08:00', to: '18:00' },
-          days: {
-            monday: true,
-            tuesday: true,
-            wednesday: true,
-            thursday: true,
-            friday: true,
-            saturday: false,
-            sunday: false,
-          },
+          days: { '0': false, '1': true, '2': true, '3': true, '4': true, '5': true, '6': false },
           timezone: 'America/Chicago',
         }],
       },

@@ -30,14 +30,24 @@ export interface NicheDefinition {
   sequence: [EmailStep, EmailStep, EmailStep]
 }
 
-// Helper to build the CTA link with proper UTM tracking
+// Helper to build the CTA link — oid param ties the click back to the outreach prospect for conversion tracking
 function ctaLink(label: string): string {
-  return `${label}\n\nhttps://shieldhome.pro/business?utm_source=instantly&utm_medium=cold_email&utm_campaign={{campaign_slug}}&oid={{lead_id}}`
+  return `${label}\n\nhttps://shieldhome.pro/business?oid={{lead_id}}`
 }
 
 // Physical address for CAN-SPAM compliance (must be a real postal address)
 const PHYSICAL_ADDRESS = 'ShieldHome Pro | Vivint Authorized Partner\n4931 N 300 W, Provo, UT 84604'
 const UNSUB_LINE = `\n\n---\n${PHYSICAL_ADDRESS}\nNo longer interested? Reply "unsubscribe" or opt out here: https://shieldhome.pro/api/outreach/unsubscribe?email={{lead_email}}`
+
+// Pricing + buyout value prop — injected into Email 2 of every sequence
+// Tone: low-pressure, "why wouldn't I look into this?" framing
+const PRICING_BLURB = `\n\nI should also mention something that surprises most business owners: our monitoring is $39.99/month. No commercial upcharge — it's the same rate we charge homeowners — backed by Vivint's newest commercial-grade equipment with 24/7 professional monitoring and remote access from your phone. If you're locked into a contract with your current provider, we cover up to $1,000 to buy you out of it. Most businesses we replace were paying $80–$150/month for older, less capable systems. There's genuinely not much downside to at least seeing what we'd put together for you.`
+
+// Shorter pricing reminder for Email 3 graceful exits
+const PRICING_REMINDER = `\n\nJust so you have the numbers: $39.99/month flat — no commercial markup — and we'll cover up to $1,000 to buy out your existing contract if you're currently locked in. If your provider is charging more than that (most are), a 10-minute conversation is probably worth it.`
+
+// Brief pricing hook for Email 1 — gets the value prop in front of them immediately
+const PRICING_HOOK = `\n\nQuick context on why this might be worth your time: our monitoring is $39.99/month — no commercial upcharge, same price we charge homeowners — backed by Vivint's newest commercial-grade equipment. If you're locked into a contract with your current provider, we cover up to $1,000 to buy you out. Most businesses we replace were paying $80–$150/month for older systems. There's not much downside to at least seeing what we'd put together for you.`
 
 // ============================================
 // TIER A — Highest Priority (Score >= 8.0)
@@ -64,7 +74,7 @@ Quick question — does your current system cover every sales floor angle, vault
 
 Most dispensaries I talk to have at least one blind spot they didn't know about until inspection day.
 
-I put together a free compliance camera checklist specifically for {{state}} dispensaries. Happy to send it over if you'd like — no strings attached.
+I put together a free compliance camera checklist specifically for {{state}} dispensaries. Happy to send it over if you'd like — no strings attached.${PRICING_HOOK}
 
 ${ctaLink('Or if you want, I can do a quick virtual walkthrough of your floor plan (takes about 10 minutes):')}${UNSUB_LINE}`,
     },
@@ -80,6 +90,7 @@ One dispensary owner I worked with in {{state}} failed an inspection over a sing
 The system we set up for them cost a fraction of what that closure did, and they haven't had a compliance issue since.
 
 If that's something you'd want to avoid, I'm happy to do a no-pressure review of your current setup.
+${PRICING_BLURB}
 
 ${ctaLink('You can grab a time here:')}${UNSUB_LINE}`,
     },
@@ -93,6 +104,7 @@ I'll keep this short — I don't want to be that person who won't stop emailing.
 If camera compliance is handled and you're feeling good about your current system, no worries at all. I'll step aside.
 
 But if there's even a small question in the back of your mind about whether your setup would hold up during an inspection, that's exactly what I help with.
+${PRICING_REMINDER}
 
 Either way, here's the {{state}} dispensary compliance checklist I mentioned — yours to keep regardless:
 
@@ -122,7 +134,7 @@ I specialize in helping licensed cultivators meet their state camera coverage re
 
 Most grow facilities I visit have solid coverage in flowering rooms but gaps in processing areas, drying rooms, or loading docks. Those gaps are exactly where auditors look first.
 
-Would it be helpful if I sent you a zone-by-zone camera placement guide for cultivation facilities in {{state}}? It maps to your state's specific retention and coverage requirements.
+Would it be helpful if I sent you a zone-by-zone camera placement guide for cultivation facilities in {{state}}? It maps to your state's specific retention and coverage requirements.${PRICING_HOOK}
 
 ${ctaLink('Or we can do a 10-minute virtual walkthrough of your facility layout:')}${UNSUB_LINE}`,
     },
@@ -136,6 +148,7 @@ Quick follow-up — I recently helped a 15,000 sq ft cultivation facility in {{s
 The result: they went from storing 30 days of footage (below their state minimum) to 90+ days with remote access. Their next audit took 15 minutes instead of 3 hours.
 
 If your current system is giving you any headaches — storage running out, cameras going offline, footage quality too low for auditors — I can probably help.
+${PRICING_BLURB}
 
 ${ctaLink('Happy to take a look at what you have now:')}${UNSUB_LINE}`,
     },
@@ -149,6 +162,7 @@ Last note — I know you're running a complex operation and camera systems are j
 If your coverage is solid and your retention meets {{state}} requirements, that's great. I'll leave you be.
 
 But if you ever need a second opinion on your camera layout or want to compare what you're paying vs. what's available now, the offer stands.
+${PRICING_REMINDER}
 
 ${ctaLink('Here\'s where to reach me:')}
 
@@ -176,7 +190,7 @@ I work with FFL holders to make sure their camera systems meet ATF expectations 
 
 After a theft incident, the first thing ATF asks for is camera footage. If it's not there, or the quality isn't usable, that creates a very different conversation.
 
-I put together a short ATF camera compliance checklist for FFL dealers. Want me to send it your way?
+I put together a short ATF camera compliance checklist for FFL dealers. Want me to send it your way?${PRICING_HOOK}
 
 ${ctaLink('Or if you\'d rather, we can do a quick review of your current setup (takes about 10 minutes):')}${UNSUB_LINE}`,
     },
@@ -192,6 +206,7 @@ Great cameras on the sales floor, but blind spots in the back room where invento
 One dealer I worked with had a break-in attempt at the back door. Because we'd covered that entry point with a deterrent camera (spotlight + siren + two-way audio), the attempt was stopped before entry. ATF was satisfied, insurance didn't spike, and his license was never in question.
 
 That peace of mind is worth a lot in this business.
+${PRICING_BLURB}
 
 ${ctaLink('If you want to see what a system like that looks like for your shop:')}${UNSUB_LINE}`,
     },
@@ -203,6 +218,7 @@ ${ctaLink('If you want to see what a system like that looks like for your shop:'
 I'll wrap up here — I know you're busy running {{company_name}}.
 
 If your camera setup is solid and ATF-ready, you're in great shape. But if there's any part of your shop where you're not 100% confident the footage would hold up during an inspection, that's exactly the kind of thing I help with.
+${PRICING_REMINDER}
 
 The offer for a free review is open whenever you're ready.
 
@@ -232,7 +248,7 @@ Quick question — does your current camera system meet the retention requiremen
 
 Most jurisdictions require 30–60 days of stored footage and the ability to provide it to law enforcement within 24 hours. A lot of the older DVR systems I see in pawn shops can't reliably do that.
 
-I help pawn shop owners upgrade to compliant systems that also make it easier to work with detectives when they come looking for footage — which keeps your relationship with local PD smooth.
+I help pawn shop owners upgrade to compliant systems that also make it easier to work with detectives when they come looking for footage — which keeps your relationship with local PD smooth.${PRICING_HOOK}
 
 ${ctaLink('Want me to check what your city specifically requires? Takes 2 minutes:')}${UNSUB_LINE}`,
     },
@@ -246,6 +262,7 @@ Following up — one thing I see a lot with pawn shops is that the cameras are t
 That's a compliance problem hiding in plain sight. Everything looks fine until a detective shows up asking for footage from 3 weeks ago and it's already been overwritten.
 
 The fix is usually straightforward — modern systems with cloud backup ensure you never lose footage, and detectives can access clips remotely instead of coming into your shop.
+${PRICING_BLURB}
 
 ${ctaLink('Happy to show you what that looks like for a shop your size:')}${UNSUB_LINE}`,
     },
@@ -257,6 +274,7 @@ ${ctaLink('Happy to show you what that looks like for a shop your size:')}${UNSU
 Last message from me — if your cameras and retention are solid, that's great. One less thing to worry about.
 
 But if you've ever had a detective ask for footage and felt even slightly unsure whether your system had it, that's exactly the gap I help close.
+${PRICING_REMINDER}
 
 ${ctaLink('The offer for a free compliance check is always open:')}
 
@@ -284,7 +302,7 @@ I work with jewelry store owners on one specific issue: making sure their securi
 
 Jewelers Mutual and most specialty carriers now require UL-listed alarm and camera systems. If your system doesn't meet that standard, you could face higher premiums — or worse, a denied claim after an incident.
 
-When does your policy renew? I'd like to make sure you're covered before then.
+When does your policy renew? I'd like to make sure you're covered before then.${PRICING_HOOK}
 
 ${ctaLink('Happy to do a quick check — takes about 10 minutes:')}${UNSUB_LINE}`,
     },
@@ -298,6 +316,7 @@ Quick follow-up — after the wave of smash-and-grab incidents across the countr
 One jeweler I worked with had a break-in, filed a claim for $180K in stolen inventory, and nearly had it denied because his camera system wasn't on his carrier's approved list. We got him set up properly before his renewal, and the next year his premium actually dropped 15%.
 
 That's the ROI story: better security = lower premiums + protected claims.
+${PRICING_BLURB}
 
 ${ctaLink('If you want to see what an insurance-compliant system looks like for your store:')}${UNSUB_LINE}`,
     },
@@ -309,6 +328,7 @@ ${ctaLink('If you want to see what an insurance-compliant system looks like for 
 I'll leave you with this: the worst time to find out your security system doesn't meet your insurance requirements is after something happens.
 
 If you're confident your system is UL-listed and your carrier is happy with it, you're in great shape. But if there's any uncertainty, a 10-minute review could save you a world of trouble later.
+${PRICING_REMINDER}
 
 ${ctaLink('Open invitation to check:')}
 
@@ -340,7 +360,7 @@ Independent pharmacies are one of DEA's top audit targets for controlled substan
 
 I help pharmacist-owners make sure their camera systems document exactly what DEA wants to see, so that an audit is a formality rather than a fire drill.
 
-Would it be helpful if I sent you a quick DEA camera compliance checklist for independent pharmacies?
+Would it be helpful if I sent you a quick DEA camera compliance checklist for independent pharmacies?${PRICING_HOOK}
 
 ${ctaLink('Or we can do a brief virtual walkthrough of your pharmacy layout:')}${UNSUB_LINE}`,
     },
@@ -354,6 +374,7 @@ Following up — beyond DEA compliance, the other reason pharmacy owners reach o
 Pharmacies are one of the most targeted business types for after-hours break-ins. Modern deterrent cameras (with spotlights, sirens, and live monitoring) can stop attempts before entry — which is a very different outcome than reviewing footage after the fact.
 
 One pharmacy owner I work with in {{state}} said the system paid for itself in the first year just through the insurance premium reduction.
+${PRICING_BLURB}
 
 ${ctaLink('Worth a 10-minute conversation?')}${UNSUB_LINE}`,
     },
@@ -365,6 +386,7 @@ ${ctaLink('Worth a 10-minute conversation?')}${UNSUB_LINE}`,
 Final note — if your pharmacy security is dialed in and DEA-ready, excellent. That puts you ahead of most independents I talk to.
 
 If not, the offer for a free compliance review stands whenever you're ready.
+${PRICING_REMINDER}
 
 ${ctaLink('Here\'s where to reach me:')}
 
@@ -392,7 +414,7 @@ After-hours break-ins at medical and dental practices have increased significant
 
 Beyond the theft itself, a break-in can trigger HIPAA breach reporting requirements if patient records are accessed or compromised. That's a regulatory headache on top of a security one.
 
-I help practice owners set up deterrent systems that stop break-in attempts before entry — the camera sees the person, activates spotlights and a siren, and alerts monitoring. Most attempts end right there.
+I help practice owners set up deterrent systems that stop break-in attempts before entry — the camera sees the person, activates spotlights and a siren, and alerts monitoring. Most attempts end right there.${PRICING_HOOK}
 
 ${ctaLink('Would a 10-minute virtual walkthrough of your practice layout be helpful?')}${UNSUB_LINE}`,
     },
@@ -406,6 +428,7 @@ Following up — I recently helped a dental practice in {{state}} that had two b
 After we installed a smart deterrent system, a third attempt happened. This time: motion detected, spotlights activated, siren sounded, and a live monitoring agent verbally warned the intruder through the camera speaker. He ran. Zero damage, zero breach, zero HIPAA paperwork.
 
 That's the difference between a system that records and one that prevents.
+${PRICING_BLURB}
 
 ${ctaLink('If that\'s interesting, I can show you what it looks like for your practice:')}${UNSUB_LINE}`,
     },
@@ -417,6 +440,7 @@ ${ctaLink('If that\'s interesting, I can show you what it looks like for your pr
 Last note from me — if your practice's after-hours security is solid, that's one less thing to worry about.
 
 If it's something you've been meaning to look into, I'm here whenever you're ready. No pressure, no sales pitch — just a straightforward review of your current setup and what, if anything, could be improved.
+${PRICING_REMINDER}
 
 ${ctaLink('Open invitation:')}
 
@@ -444,7 +468,7 @@ Quick question — does your current camera system meet the requirements tied to
 
 Most state liquor boards require operational cameras covering the sales floor, register area, and all entry/exit points. During a license renewal or incident review, they'll ask for footage — and if it's not there or not usable, it creates a problem.
 
-I help liquor store owners make sure their cameras aren't just installed, but actually compliant and reliable when it matters.
+I help liquor store owners make sure their cameras aren't just installed, but actually compliant and reliable when it matters.${PRICING_HOOK}
 
 ${ctaLink('Want me to pull up the specific requirements for your area? Takes 2 minutes:')}${UNSUB_LINE}`,
     },
@@ -458,6 +482,7 @@ Following up — one issue I see repeatedly with liquor stores: the cameras are 
 That might have been fine 5 years ago, but regulators and insurance companies have raised the bar. They want HD footage with 30+ days of retention. If you're still on an analog system, you're probably not meeting that standard.
 
 The good news: upgrading is more affordable than most owners expect, and the insurance savings often offset the cost within the first year.
+${PRICING_BLURB}
 
 ${ctaLink('Happy to show you the numbers for a store your size:')}${UNSUB_LINE}`,
     },
@@ -469,6 +494,7 @@ ${ctaLink('Happy to show you the numbers for a store your size:')}${UNSUB_LINE}`
 Last message — if your cameras are solid and your ABC compliance is handled, you're in good shape. No need to fix what isn't broken.
 
 But if there's any doubt, a quick review now is much better than discovering a gap during a license renewal or after an incident.
+${PRICING_REMINDER}
 
 ${ctaLink('The offer stands:')}
 
@@ -496,7 +522,7 @@ I've been working with auto dealers across {{state}}, and I'm seeing a trend: fl
 
 With stolen vehicles averaging $25K+ per loss, it makes sense from their perspective. But it means dealers who don't have compliant systems are getting flagged at renewal.
 
-Does your lender currently require documented lot security? If so, I can help make sure your setup meets their specific requirements.
+Does your lender currently require documented lot security? If so, I can help make sure your setup meets their specific requirements.${PRICING_HOOK}
 
 ${ctaLink('Happy to do a quick lot assessment:')}${UNSUB_LINE}`,
     },
@@ -512,6 +538,7 @@ Catalytic converter theft, wheel theft, and vandalism on the lot. One dealer I w
 Since installation: zero thefts. The cameras detect motion after hours, activate spotlights, and a live agent warns the person through the speaker. Thieves move on.
 
 The system paid for itself in the first month.
+${PRICING_BLURB}
 
 ${ctaLink('Want to see what coverage would look like for your lot size?')}${UNSUB_LINE}`,
     },
@@ -523,6 +550,7 @@ ${ctaLink('Want to see what coverage would look like for your lot size?')}${UNSU
 I'll keep this brief — if your lot security is handled and your lender is satisfied, great.
 
 If not, the offer for a free lot assessment stands. No pressure, just a straightforward review of your coverage and any gaps.
+${PRICING_REMINDER}
 
 ${ctaLink('Here\'s where to reach me:')}
 
@@ -552,7 +580,7 @@ The data is compelling: properties with visible, modern security systems see hig
 
 Some of our property management clients have even been able to justify $50–100/month rent premiums on units with smart security features.
 
-Would it be worth a conversation about how security could help {{company_name}}'s portfolio?
+Would it be worth a conversation about how security could help {{company_name}}'s portfolio?${PRICING_HOOK}
 
 ${ctaLink('Happy to do a property assessment:')}${UNSUB_LINE}`,
     },
@@ -572,6 +600,7 @@ A 200-unit apartment community we work with added smart cameras at entries, park
 That's $180K/year in additional revenue from a system that cost a fraction of that.
 
 If you manage multiple properties, the numbers scale even further.
+${PRICING_BLURB}
 
 ${ctaLink('Want me to run the ROI math for your portfolio?')}${UNSUB_LINE}`,
     },
@@ -585,6 +614,7 @@ Last note — I understand property managers juggle a hundred priorities. Securi
 But the property managers who get ahead of it — who use security as a leasing tool rather than a reactive expense — tend to see real bottom-line impact.
 
 If that's interesting, I'm here whenever it makes sense to talk.
+${PRICING_REMINDER}
 
 ${ctaLink('Open invitation:')}
 
@@ -612,7 +642,7 @@ Simple question: if something happened at {{company_name}} tonight, would your c
 
 A lot of convenience store owners I talk to have cameras — but the footage is grainy, the angles miss key areas, or the recorder is full and overwriting. When police ask for footage, it's either unusable or gone.
 
-Modern systems fix all of that: HD footage, 30+ days of cloud storage, and remote access from your phone so you can check in from anywhere.
+Modern systems fix all of that: HD footage, 30+ days of cloud storage, and remote access from your phone so you can check in from anywhere.${PRICING_HOOK}
 
 ${ctaLink('Want me to take a look at what you have now? Takes about 10 minutes:')}${UNSUB_LINE}`,
     },
@@ -626,6 +656,7 @@ Following up — here's the thing about convenience store security that most own
 Your insurance carrier likely requires working cameras. If you file a claim and the footage isn't there, you could face a denied claim or higher premiums. I've seen it happen.
 
 One store owner I work with switched to a modern system and his insurance premium dropped enough to cover the monthly cost of the new cameras. Net zero out of pocket, but dramatically better protection.
+${PRICING_BLURB}
 
 ${ctaLink('Worth exploring for {{company_name}}?')}${UNSUB_LINE}`,
     },
@@ -637,6 +668,7 @@ ${ctaLink('Worth exploring for {{company_name}}?')}${UNSUB_LINE}`,
 Last note — if your cameras are solid and your insurance is satisfied, you're ahead of most convenience store owners I talk to.
 
 If not, a quick review could save you real money on premiums and real headaches if something happens.
+${PRICING_REMINDER}
 
 ${ctaLink('The offer is always open:')}
 
@@ -664,7 +696,7 @@ Here's something bar owners don't think about until it happens: one assault or i
 
 Plaintiff attorneys request surveillance footage in every personal injury case. If you can't produce it, the assumption goes against you. And state liquor boards can use the lack of documented security as grounds to deny your license renewal.
 
-I help bar and nightclub owners set up camera systems that protect their license and their liability — not just record what happened, but actively deter incidents.
+I help bar and nightclub owners set up camera systems that protect their license and their liability — not just record what happened, but actively deter incidents.${PRICING_HOOK}
 
 ${ctaLink('When does your liquor license renew? I\'d like to make sure you\'re covered before then:')}${UNSUB_LINE}`,
     },
@@ -680,6 +712,7 @@ Because he had full camera coverage (including the lot), with timestamped HD foo
 Without that footage, his insurance company told him they would have settled for $250K+ — and his premiums would have doubled.
 
 The camera system cost less than one month of the premium increase would have been.
+${PRICING_BLURB}
 
 ${ctaLink('If protecting {{company_name}} from that kind of scenario is important to you:')}${UNSUB_LINE}`,
     },
@@ -691,6 +724,7 @@ ${ctaLink('If protecting {{company_name}} from that kind of scenario is importan
 Last message — bars and nightclubs operate in a high-liability environment. The right camera system isn't a luxury, it's litigation armor.
 
 If you're covered, great. If there's any gap, especially in parking areas, back exits, or the area around the bar itself, that's worth addressing before something happens.
+${PRICING_REMINDER}
 
 ${ctaLink('The offer for a free review stands:')}
 
@@ -718,7 +752,7 @@ I'm reaching out because cargo insurance underwriters are increasingly adding ca
 
 If your warehouse doesn't have documented perimeter coverage, loading dock cameras, and interior monitoring, you could face higher premiums or coverage restrictions at your next renewal.
 
-I work with warehouse and distribution center operators to get ahead of these requirements — ensuring your security setup meets what underwriters want to see.
+I work with warehouse and distribution center operators to get ahead of these requirements — ensuring your security setup meets what underwriters want to see.${PRICING_HOOK}
 
 ${ctaLink('What\'s the square footage of your facility? I can give you a rough camera count and budget range:')}${UNSUB_LINE}`,
     },
@@ -732,6 +766,7 @@ Following up — beyond insurance requirements, the biggest operational benefit 
 Employee theft, mis-shipments, and receiving discrepancies are all dramatically reduced when you have full camera coverage with cloud playback. One 50,000 sq ft distribution center I work with reduced inventory shrinkage by 40% in the first quarter after installation.
 
 That's a real, measurable ROI that goes straight to the bottom line.
+${PRICING_BLURB}
 
 ${ctaLink('Worth a conversation about your facility?')}${UNSUB_LINE}`,
     },
@@ -743,6 +778,7 @@ ${ctaLink('Worth a conversation about your facility?')}${UNSUB_LINE}`,
 Last note — if your warehouse security is solid and your insurance carrier is satisfied, you're in good shape.
 
 If there are gaps — especially at loading docks, perimeter access points, or high-value storage areas — addressing them now is a lot better than addressing them after an incident or at insurance renewal.
+${PRICING_REMINDER}
 
 ${ctaLink('Open invitation for a free facility assessment:')}
 
@@ -770,7 +806,7 @@ When a storage unit gets broken into, the tenant sues the facility first. Your d
 
 Cameras at every entry/exit point, gate access logs, and perimeter monitoring are what courts consider "reasonable." If you don't have those documented, you're exposed.
 
-I help storage facility operators set up security systems that protect against both break-ins and the lawsuits that follow.
+I help storage facility operators set up security systems that protect against both break-ins and the lawsuits that follow.${PRICING_HOOK}
 
 ${ctaLink('How many entry/exit points does your facility have? I can spec a system in 10 minutes:')}${UNSUB_LINE}`,
     },
@@ -784,6 +820,7 @@ Following up — beyond lawsuit protection, here's the business case for upgradi
 Facilities with visible, modern camera systems attract more tenants. It's often the first thing potential tenants ask about during a tour. Properties with documented smart security can command higher unit rates and see better occupancy.
 
 One facility operator I work with added smart cameras and electronic gate access across 3 locations. Occupancy increased 6% within a quarter, and they haven't had a successful break-in claim since.
+${PRICING_BLURB}
 
 ${ctaLink('Want to see what that would look like for your facility?')}${UNSUB_LINE}`,
     },
@@ -795,6 +832,7 @@ ${ctaLink('Want to see what that would look like for your facility?')}${UNSUB_LI
 Last message — if your facility security is solid and you're confident it would hold up in a liability claim, that's great.
 
 If there's any uncertainty about your coverage at entry points, hallways, or the perimeter, that's worth addressing before you need it.
+${PRICING_REMINDER}
 
 ${ctaLink('The offer stands:')}
 
@@ -822,7 +860,7 @@ Equipment theft from construction job sites costs US contractors over $1 billion
 
 No cameras, no documentation, no payout. That's the trend.
 
-I work with construction companies to deploy portable, solar-powered camera systems that move with the job site. Set up in minutes, work on cellular, and provide live deterrent capability.
+I work with construction companies to deploy portable, solar-powered camera systems that move with the job site. Set up in minutes, work on cellular, and provide live deterrent capability.${PRICING_HOOK}
 
 ${ctaLink('Do you have any active sites where theft has been a concern?')}${UNSUB_LINE}`,
     },
@@ -839,6 +877,7 @@ Following up — the key difference with construction site security vs. a buildi
 4. Move to the next job when this one wraps
 
 That's exactly what we provide. One GC I work with deploys our cameras on every job over $500K. His equipment theft went from 3–4 incidents per year to zero. His insurance carrier gave him a rate reduction as a result.
+${PRICING_BLURB}
 
 ${ctaLink('Worth a quick conversation about your active sites?')}${UNSUB_LINE}`,
     },
@@ -850,6 +889,7 @@ ${ctaLink('Worth a quick conversation about your active sites?')}${UNSUB_LINE}`,
 Wrapping up — if equipment theft isn't a problem you're dealing with, that's great. But if it is (or if your insurance is asking about site security), I can help.
 
 Portable, solar-powered cameras that move with your jobs. Simple as that.
+${PRICING_REMINDER}
 
 ${ctaLink('Here\'s where to reach me:')}
 
@@ -877,7 +917,7 @@ Two things keep vet clinic owners up at night: controlled substance storage and 
 
 Modern camera systems solve both — they document your drug storage area for DEA compliance and let you check on overnight boarders and post-surgery patients from your phone.
 
-I work with veterinary practice owners to set up systems that handle both the compliance and the peace-of-mind side.
+I work with veterinary practice owners to set up systems that handle both the compliance and the peace-of-mind side.${PRICING_HOOK}
 
 ${ctaLink('Would a quick look at your clinic layout be helpful?')}${UNSUB_LINE}`,
     },
@@ -891,6 +931,7 @@ Following up — one vet clinic owner I work with had a simple but powerful real
 After we set up interior cameras, she can check from her couch. She sees the recovery area, the kennel room, and the front entrance — all from her phone. No more late-night drives.
 
 That alone was worth the cost of the system, before you even factor in the security benefits.
+${PRICING_BLURB}
 
 ${ctaLink('If that sounds appealing for your practice:')}${UNSUB_LINE}`,
     },
@@ -902,6 +943,7 @@ ${ctaLink('If that sounds appealing for your practice:')}${UNSUB_LINE}`,
 Last note — between DEA compliance, after-hours patient monitoring, and general practice security, a good camera system checks a lot of boxes for veterinary clinics.
 
 If you'd ever like to explore what that looks like for {{company_name}}, I'm here.
+${PRICING_REMINDER}
 
 ${ctaLink('Open invitation:')}
 
@@ -924,9 +966,9 @@ const BANK: NicheDefinition = {
   complianceAngle: 'Federal banking regulations require comprehensive surveillance',
   legalStatesOnly: null,
   sequence: [
-    { subject: '{{company_name}} — branch surveillance upgrade question', delayDays: 0, body: `Hi {{first_name}},\n\nI work with banks and credit unions on surveillance system upgrades that meet current federal requirements while dramatically improving footage quality and remote access capabilities.\n\nMany branches I visit are still running 10+ year old systems with SD-quality footage. When an incident occurs, the footage is often too poor for law enforcement to use effectively.\n\nWould it be worth a brief conversation about {{company_name}}'s current branch surveillance infrastructure?\n\n${ctaLink('Happy to do a complimentary assessment:')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} branch surveillance', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one credit union I work with upgraded 12 branches from analog DVR to HD IP cameras with cloud backup. The result: 4K footage that law enforcement can actually use, remote access for the security team, and a 30% reduction in their insurance premium across all branches.\n\nThe ROI was clear within the first year.\n\n${ctaLink('If {{company_name}} is considering an upgrade:')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if your branch surveillance is current and meeting all requirements, that's great. If there's room for improvement, the offer for a complimentary assessment stands.\n\n${ctaLink('Here\'s where to reach me:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — branch surveillance upgrade question', delayDays: 0, body: `Hi {{first_name}},\n\nI work with banks and credit unions on surveillance system upgrades that meet current federal requirements while dramatically improving footage quality and remote access capabilities.\n\nMany branches I visit are still running 10+ year old systems with SD-quality footage. When an incident occurs, the footage is often too poor for law enforcement to use effectively.\n\nWould it be worth a brief conversation about {{company_name}}'s current branch surveillance infrastructure?${PRICING_HOOK}\n\n${ctaLink('Happy to do a complimentary assessment:')}${UNSUB_LINE}` },
+    { subject: 'Re: {{company_name}} branch surveillance', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one credit union I work with upgraded 12 branches from analog DVR to HD IP cameras with cloud backup. The result: 4K footage that law enforcement can actually use, remote access for the security team, and a 30% reduction in their insurance premium across all branches.\n\nThe ROI was clear within the first year.\n${PRICING_BLURB}\n\n${ctaLink('If {{company_name}} is considering an upgrade:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if your branch surveillance is current and meeting all requirements, that's great. If there's room for improvement, the offer for a complimentary assessment stands.\n${PRICING_REMINDER}\n\n${ctaLink('Here\'s where to reach me:')}${UNSUB_LINE}` },
   ],
 }
 
@@ -940,9 +982,9 @@ const TRUCKING: NicheDefinition = {
   complianceAngle: 'Cargo theft liability + insurance requirements for terminal security',
   legalStatesOnly: null,
   sequence: [
-    { subject: '{{company_name}} — terminal cargo security requirements', delayDays: 0, body: `Hi {{first_name}},\n\nCargo theft at freight terminals is a growing insurance concern. Underwriters are increasingly requiring documented perimeter camera coverage as a condition of cargo insurance.\n\nI work with terminal operators to install comprehensive surveillance that satisfies insurance requirements and deters theft at loading docks, yard areas, and perimeter access points.\n\n${ctaLink('What\'s the size of your terminal operation? I can provide a quick assessment:')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} terminal security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one freight terminal I work with reduced cargo theft claims by 85% after installing deterrent cameras with live monitoring at all dock doors and yard access points. Their insurance carrier reduced their cargo premium at the next renewal.\n\n${ctaLink('Worth exploring for {{company_name}}?')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — final note', delayDays: 5, body: `Hi {{first_name}},\n\nLast message — if your terminal security is solid, great. If your insurance carrier has been asking about it, I can help.\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — terminal cargo security requirements', delayDays: 0, body: `Hi {{first_name}},\n\nCargo theft at freight terminals is a growing insurance concern. Underwriters are increasingly requiring documented perimeter camera coverage as a condition of cargo insurance.\n\nI work with terminal operators to install comprehensive surveillance that satisfies insurance requirements and deters theft at loading docks, yard areas, and perimeter access points.${PRICING_HOOK}\n\n${ctaLink('What\'s the size of your terminal operation? I can provide a quick assessment:')}${UNSUB_LINE}` },
+    { subject: 'Re: {{company_name}} terminal security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one freight terminal I work with reduced cargo theft claims by 85% after installing deterrent cameras with live monitoring at all dock doors and yard access points. Their insurance carrier reduced their cargo premium at the next renewal.\n${PRICING_BLURB}\n\n${ctaLink('Worth exploring for {{company_name}}?')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — final note', delayDays: 5, body: `Hi {{first_name}},\n\nLast message — if your terminal security is solid, great. If your insurance carrier has been asking about it, I can help.\n${PRICING_REMINDER}\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
   ],
 }
 
@@ -956,9 +998,9 @@ const MANUFACTURING: NicheDefinition = {
   complianceAngle: 'OSHA documentation + theft prevention + insurance requirements',
   legalStatesOnly: null,
   sequence: [
-    { subject: '{{company_name}} — facility security + OSHA documentation', delayDays: 0, body: `Hi {{first_name}},\n\nModern camera systems in manufacturing facilities serve double duty: security monitoring and OSHA incident documentation. When a workplace incident occurs, having clear footage is the difference between a straightforward report and a protracted investigation.\n\nI work with manufacturing facilities to set up comprehensive coverage that addresses both needs.\n\n${ctaLink('What\'s the square footage of your facility? I can provide a quick assessment:')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} facility security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — beyond OSHA documentation, the operational visibility that comes with modern cameras is valuable. Production floor monitoring, loading dock management, and perimeter security — all accessible from your phone.\n\nOne manufacturing client reduced shrinkage by 35% and expedited two OSHA reviews because they had clear footage of the incidents in question.\n\n${ctaLink('If that\'s relevant for your operation:')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — wrapping up', delayDays: 5, body: `Hi {{first_name}},\n\nLast note — if your facility security and documentation systems are solid, excellent. If there are gaps, especially on the production floor or at receiving areas, I'm here when you're ready.\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — facility security + OSHA documentation', delayDays: 0, body: `Hi {{first_name}},\n\nModern camera systems in manufacturing facilities serve double duty: security monitoring and OSHA incident documentation. When a workplace incident occurs, having clear footage is the difference between a straightforward report and a protracted investigation.\n\nI work with manufacturing facilities to set up comprehensive coverage that addresses both needs.${PRICING_HOOK}\n\n${ctaLink('What\'s the square footage of your facility? I can provide a quick assessment:')}${UNSUB_LINE}` },
+    { subject: 'Re: {{company_name}} facility security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — beyond OSHA documentation, the operational visibility that comes with modern cameras is valuable. Production floor monitoring, loading dock management, and perimeter security — all accessible from your phone.\n\nOne manufacturing client reduced shrinkage by 35% and expedited two OSHA reviews because they had clear footage of the incidents in question.\n${PRICING_BLURB}\n\n${ctaLink('If that\'s relevant for your operation:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — wrapping up', delayDays: 5, body: `Hi {{first_name}},\n\nLast note — if your facility security and documentation systems are solid, excellent. If there are gaps, especially on the production floor or at receiving areas, I'm here when you're ready.\n${PRICING_REMINDER}\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
   ],
 }
 
@@ -976,9 +1018,9 @@ const HOTEL: NicheDefinition = {
   complianceAngle: 'Guest safety liability + insurance requirements',
   legalStatesOnly: null,
   sequence: [
-    { subject: '{{company_name}} — guest safety camera coverage', delayDays: 0, body: `Hi {{first_name}},\n\nGuest safety incidents at hotels and motels create significant liability exposure. Modern camera systems covering lobbies, hallways, parking areas, and entrances protect both guests and the property from claims.\n\nI work with hotel operators to upgrade surveillance systems that meet current insurance requirements and improve guest confidence.\n\n${ctaLink('Worth a brief conversation?')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} — hotel security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one hotel operator I work with saw a measurable improvement in online review scores after installing visible modern cameras in common areas. Guests mentioned feeling safer, which translated to higher ratings and more bookings.\n\nSecurity as a revenue driver, not just a cost.\n\n${ctaLink('If that\'s interesting for your property:')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if your property's security is current and your insurance is satisfied, great. If not, I'm here.\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — guest safety camera coverage', delayDays: 0, body: `Hi {{first_name}},\n\nGuest safety incidents at hotels and motels create significant liability exposure. Modern camera systems covering lobbies, hallways, parking areas, and entrances protect both guests and the property from claims.\n\nI work with hotel operators to upgrade surveillance systems that meet current insurance requirements and improve guest confidence.${PRICING_HOOK}\n\n${ctaLink('Worth a brief conversation?')}${UNSUB_LINE}` },
+    { subject: 'Re: {{company_name}} — hotel security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one hotel operator I work with saw a measurable improvement in online review scores after installing visible modern cameras in common areas. Guests mentioned feeling safer, which translated to higher ratings and more bookings.\n\nSecurity as a revenue driver, not just a cost.\n${PRICING_BLURB}\n\n${ctaLink('If that\'s interesting for your property:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if your property's security is current and your insurance is satisfied, great. If not, I'm here.\n${PRICING_REMINDER}\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
   ],
 }
 
@@ -992,9 +1034,9 @@ const RESTAURANT: NicheDefinition = {
   complianceAngle: 'Employee theft at POS accounts for 75% of shrinkage in restaurants',
   legalStatesOnly: null,
   sequence: [
-    { subject: '{{company_name}} — reducing shrinkage across your locations', delayDays: 0, body: `Hi {{first_name}},\n\nRestaurant owners lose 4–6% of revenue to employee theft — mostly at POS, the bar, and the walk-in. Multi-location operators feel this the most because patterns are harder to spot across sites.\n\nModern camera systems with remote monitoring let you watch any register, any location, from your phone. I work with multi-unit restaurant operators to set up exactly that.\n\n${ctaLink('How many locations do you operate?')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} — restaurant security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one multi-location franchisee I work with identified a cash skimming pattern across 3 of their 8 locations within the first month of installing smart cameras. The theft had been happening for over a year undetected.\n\nThe cameras paid for themselves in the first quarter.\n\n${ctaLink('Worth exploring for your locations?')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if shrinkage isn't a concern and your locations are covered, great. If not, I can help.\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — reducing shrinkage across your locations', delayDays: 0, body: `Hi {{first_name}},\n\nRestaurant owners lose 4–6% of revenue to employee theft — mostly at POS, the bar, and the walk-in. Multi-location operators feel this the most because patterns are harder to spot across sites.\n\nModern camera systems with remote monitoring let you watch any register, any location, from your phone. I work with multi-unit restaurant operators to set up exactly that.${PRICING_HOOK}\n\n${ctaLink('How many locations do you operate?')}${UNSUB_LINE}` },
+    { subject: 'Re: {{company_name}} — restaurant security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one multi-location franchisee I work with identified a cash skimming pattern across 3 of their 8 locations within the first month of installing smart cameras. The theft had been happening for over a year undetected.\n\nThe cameras paid for themselves in the first quarter.\n${PRICING_BLURB}\n\n${ctaLink('Worth exploring for your locations?')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if shrinkage isn't a concern and your locations are covered, great. If not, I can help.\n${PRICING_REMINDER}\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
   ],
 }
 
@@ -1008,9 +1050,9 @@ const DAYCARE: NicheDefinition = {
   complianceAngle: 'State licensing + parent transparency + liability protection',
   legalStatesOnly: null,
   sequence: [
-    { subject: '{{company_name}} — camera systems for daycare licensing compliance', delayDays: 0, body: `Hi {{first_name}},\n\nMany states are updating their daycare licensing requirements to include camera coverage of all childcare areas. Beyond compliance, parents increasingly expect it — and facilities that offer it have a real enrollment advantage.\n\nI help childcare operators set up camera systems that satisfy state requirements and give parents peace of mind.\n\n${ctaLink('Does your state currently require cameras? I can check for you:')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} — daycare cameras', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — beyond licensing, cameras in daycares serve a critical liability protection function. If a parent ever makes a complaint or allegation, clear footage is your strongest defense.\n\nOne daycare director I work with had a parent complaint completely resolved within an hour because the footage clearly showed what happened. Without cameras, it would have been a lengthy, costly investigation.\n\n${ctaLink('If protecting your center and your staff is a priority:')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — wrapping up', delayDays: 5, body: `Hi {{first_name}},\n\nLast note — cameras in childcare facilities protect everyone: children, staff, and the business. If it's something you've been considering, I'm here.\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — camera systems for daycare licensing compliance', delayDays: 0, body: `Hi {{first_name}},\n\nMany states are updating their daycare licensing requirements to include camera coverage of all childcare areas. Beyond compliance, parents increasingly expect it — and facilities that offer it have a real enrollment advantage.\n\nI help childcare operators set up camera systems that satisfy state requirements and give parents peace of mind.${PRICING_HOOK}\n\n${ctaLink('Does your state currently require cameras? I can check for you:')}${UNSUB_LINE}` },
+    { subject: 'Re: {{company_name}} — daycare cameras', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — beyond licensing, cameras in daycares serve a critical liability protection function. If a parent ever makes a complaint or allegation, clear footage is your strongest defense.\n\nOne daycare director I work with had a parent complaint completely resolved within an hour because the footage clearly showed what happened. Without cameras, it would have been a lengthy, costly investigation.\n${PRICING_BLURB}\n\n${ctaLink('If protecting your center and your staff is a priority:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — wrapping up', delayDays: 5, body: `Hi {{first_name}},\n\nLast note — cameras in childcare facilities protect everyone: children, staff, and the business. If it's something you've been considering, I'm here.\n${PRICING_REMINDER}\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
   ],
 }
 
@@ -1024,9 +1066,9 @@ const GYM: NicheDefinition = {
   complianceAngle: 'Member safety + equipment theft + liability protection',
   legalStatesOnly: null,
   sequence: [
-    { subject: '{{company_name}} — gym security + member safety', delayDays: 0, body: `Hi {{first_name}},\n\nGym owners face a unique security challenge: open floor plans, high foot traffic, locker room theft, and injury liability. Modern camera systems (covering workout areas, entrances, and parking — not locker rooms, obviously) address all of these.\n\nI help gym operators set up smart camera systems that protect members, reduce theft, and document incidents for liability purposes.\n\n${ctaLink('Would a quick look at your facility layout be helpful?')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} — gym cameras', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — the #1 reason gym owners reach out is locker room/car break-in complaints from members. You can't put cameras in the locker room, but you can cover every entrance, the parking lot, and common areas to identify who's coming and going.\n\nOne gym owner I work with reduced member theft complaints by 70% just by installing visible cameras at all entrances.\n\n${ctaLink('Worth exploring?')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if member safety and theft prevention are handled, great. If not, I'm here when you need it.\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — gym security + member safety', delayDays: 0, body: `Hi {{first_name}},\n\nGym owners face a unique security challenge: open floor plans, high foot traffic, locker room theft, and injury liability. Modern camera systems (covering workout areas, entrances, and parking — not locker rooms, obviously) address all of these.\n\nI help gym operators set up smart camera systems that protect members, reduce theft, and document incidents for liability purposes.${PRICING_HOOK}\n\n${ctaLink('Would a quick look at your facility layout be helpful?')}${UNSUB_LINE}` },
+    { subject: 'Re: {{company_name}} — gym cameras', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — the #1 reason gym owners reach out is locker room/car break-in complaints from members. You can't put cameras in the locker room, but you can cover every entrance, the parking lot, and common areas to identify who's coming and going.\n\nOne gym owner I work with reduced member theft complaints by 70% just by installing visible cameras at all entrances.\n${PRICING_BLURB}\n\n${ctaLink('Worth exploring?')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if member safety and theft prevention are handled, great. If not, I'm here when you need it.\n${PRICING_REMINDER}\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
   ],
 }
 
@@ -1040,9 +1082,9 @@ const CAR_WASH: NicheDefinition = {
   complianceAngle: 'Vehicle damage claims require camera evidence to defend',
   legalStatesOnly: null,
   sequence: [
-    { subject: '{{company_name}} — defending against vehicle damage claims', delayDays: 0, body: `Hi {{first_name}},\n\nCar wash operators know the drill: a customer claims their car was damaged during the wash. Without camera footage showing the vehicle's condition before, during, and after, you're on the hook.\n\nI help car wash owners set up camera systems that document every vehicle from entry to exit — protecting against fraudulent claims and giving you clear evidence when legitimate issues arise.\n\n${ctaLink('Want to see what that looks like for your operation?')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} — car wash cameras', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one car wash operator I work with was paying out $15K+/year in damage claims before installing cameras. After: zero successful fraudulent claims. The cameras show the vehicle condition at entry and exit, and customers stop pursuing claims when they know footage exists.\n\n${ctaLink('Worth exploring for your operation?')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — wrapping up', delayDays: 5, body: `Hi {{first_name}},\n\nLast note — if vehicle damage claims aren't a problem, great. If they are, cameras pay for themselves fast.\n\n${ctaLink('The offer stands:')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — defending against vehicle damage claims', delayDays: 0, body: `Hi {{first_name}},\n\nCar wash operators know the drill: a customer claims their car was damaged during the wash. Without camera footage showing the vehicle's condition before, during, and after, you're on the hook.\n\nI help car wash owners set up camera systems that document every vehicle from entry to exit — protecting against fraudulent claims and giving you clear evidence when legitimate issues arise.${PRICING_HOOK}\n\n${ctaLink('Want to see what that looks like for your operation?')}${UNSUB_LINE}` },
+    { subject: 'Re: {{company_name}} — car wash cameras', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one car wash operator I work with was paying out $15K+/year in damage claims before installing cameras. After: zero successful fraudulent claims. The cameras show the vehicle condition at entry and exit, and customers stop pursuing claims when they know footage exists.\n${PRICING_BLURB}\n\n${ctaLink('Worth exploring for your operation?')}${UNSUB_LINE}` },
+    { subject: '{{company_name}} — wrapping up', delayDays: 5, body: `Hi {{first_name}},\n\nLast note — if vehicle damage claims aren't a problem, great. If they are, cameras pay for themselves fast.\n${PRICING_REMINDER}\n\n${ctaLink('The offer stands:')}${UNSUB_LINE}` },
   ],
 }
 

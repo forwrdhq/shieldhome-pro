@@ -101,7 +101,7 @@ export async function sendRepAlertSms(lead: LeadNotificationData) {
 
   if (isBusiness) {
     body = [
-      `${priorityEmoji[lead.priority] || '🔵'} 🏢 COMMERCIAL LEAD — ${lead.priority} PRIORITY`,
+      `${priorityEmoji[lead.priority] || '🔵'} 🏢 BUSINESS SECURITY SYSTEM LEAD — ${lead.priority} PRIORITY`,
       ``,
       `👤 ${lead.fullName}`,
       `📞 ${lead.phone}`,
@@ -241,21 +241,21 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
   const isSwitch = lead.segment === 'switch'
   const isUpgrade = lead.segment === 'upgrade'
   const isBusinessSwitch = lead.segment === 'switch-business'
-  const isBusiness = lead.segment === 'business' || isBusinessSwitch
+  const isBusiness = lead.segment === 'business' || isBusinessSwitch || lead.landingPage === '/business'
   const isGoogleAds = lead.landingPage === '/google' || lead.landingPage === '/get-quote'
 
   // Build blocks based on lead type
   const headerText = isBusinessSwitch
-    ? `${emoji} 🏢 COMMERCIAL BUYOUT LEAD: ${lead.fullName}`
+    ? `${emoji} 🏢 BUSINESS SECURITY SYSTEM LEAD — CONTRACT BUYOUT: ${lead.fullName}`
     : isBusiness
-    ? `${emoji} 🏢 COMMERCIAL LEAD: ${lead.fullName}`
+    ? `${emoji} 🏢 BUSINESS SECURITY SYSTEM LEAD: ${lead.fullName}`
     : isSwitch
     ? `${emoji} CONTRACT BUYOUT LEAD: ${lead.fullName}`
     : isUpgrade
     ? `${emoji} UPGRADE LEAD: ${lead.fullName}`
     : isGoogleAds
     ? `${emoji} GOOGLE ADS LEAD: ${lead.fullName}`
-    : `${emoji} New Lead: ${lead.fullName}`
+    : `${emoji} NEW RESIDENTIAL LEAD: ${lead.fullName}`
 
   const blocks: any[] = [
     {
@@ -271,8 +271,8 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
         text: {
           type: 'mrkdwn',
           text: isBusinessSwitch
-            ? `🏢 *Commercial customer switching from ${lead.currentProvider || 'current provider'}* — contract buyout up to $1,000`
-            : `🏢 *New commercial/business security lead* — $39.99/mo monitoring, no commercial markup`,
+            ? `🏢 *Business security system lead — switching from ${lead.currentProvider || 'current provider'}* — contract buyout up to $1,000`
+            : `🏢 *New business security system lead* — $39.99/mo monitoring, no commercial markup`,
         }
       },
       {
@@ -398,7 +398,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
           text: isBusinessSwitch
             ? `⚡ *COMMERCIAL BUYOUT — pitch contract buyout up to $1,000 + $39.99/mo business monitoring. Call now!*`
             : isBusiness
-            ? `⚡ *COMMERCIAL LEAD — pitch $39.99/mo business monitoring, no commercial markup. Call now!*`
+            ? `⚡ *BUSINESS SECURITY SYSTEM LEAD — pitch $39.99/mo business monitoring, no commercial markup. Call now!*`
             : isSwitch
             ? `⚡ *BUYOUT LEAD — pitch the $1,000 contract buyout offer. Call now!*`
             : isUpgrade

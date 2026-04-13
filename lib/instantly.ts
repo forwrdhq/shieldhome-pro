@@ -231,15 +231,23 @@ export async function previewSuperSearchLeads(
 }
 
 export async function enrichFromSuperSearch(data: {
-  filters: Record<string, unknown>
+  search_filters: Record<string, unknown>
   list_id?: string
   campaign_id?: string
   limit?: number
+  work_email_enrichment?: boolean
+  show_one_lead_per_company?: boolean
+  skip_owned_leads?: boolean
+  skip_rows_without_email?: boolean
+  list_name?: string
 }): Promise<unknown> {
   return request(
     'POST',
     '/supersearch-enrichment/enrich-leads-from-supersearch',
-    data
+    {
+      ...data,
+      work_email_enrichment: data.work_email_enrichment ?? true,
+    }
   )
 }
 

@@ -17,21 +17,21 @@ const TIER_A_COOLDOWN_DAYS = 14  // Tier A niches can rotate back after 2 weeks 
  * 14 priority DMAs covering ~55% of US commercial establishments.
  * Seed data for the OutreachDMA table.
  */
+/**
+ * Texas-only DMAs — focused on the largest commercial markets in TX.
+ * Non-Texas DMAs are excluded per business decision to focus on Texas market.
+ */
 export const SEED_DMAS = [
-  { id: 'new-york', metroName: 'New York', states: ['NY', 'NJ', 'CT'] },
-  { id: 'los-angeles', metroName: 'Los Angeles', states: ['CA'] },
-  { id: 'chicago', metroName: 'Chicago', states: ['IL'] },
-  { id: 'philadelphia', metroName: 'Philadelphia', states: ['PA'] },
   { id: 'dallas-fort-worth', metroName: 'Dallas-Fort Worth', states: ['TX'] },
   { id: 'houston', metroName: 'Houston', states: ['TX'] },
-  { id: 'washington-dc', metroName: 'Washington DC', states: ['DC', 'MD', 'VA'] },
-  { id: 'miami', metroName: 'Miami-Fort Lauderdale', states: ['FL'] },
-  { id: 'atlanta', metroName: 'Atlanta', states: ['GA'] },
-  { id: 'seattle', metroName: 'Seattle-Tacoma', states: ['WA'] },
-  { id: 'minneapolis', metroName: 'Minneapolis-St. Paul', states: ['MN'] },
-  { id: 'phoenix', metroName: 'Phoenix', states: ['AZ'] },
-  { id: 'denver', metroName: 'Denver', states: ['CO'] },
-  { id: 'las-vegas', metroName: 'Las Vegas', states: ['NV'] },
+  { id: 'austin', metroName: 'Austin', states: ['TX'] },
+  { id: 'san-antonio', metroName: 'San Antonio', states: ['TX'] },
+  { id: 'el-paso', metroName: 'El Paso', states: ['TX'] },
+  { id: 'fort-worth', metroName: 'Fort Worth', states: ['TX'] },
+  { id: 'arlington', metroName: 'Arlington', states: ['TX'] },
+  { id: 'corpus-christi', metroName: 'Corpus Christi', states: ['TX'] },
+  { id: 'plano', metroName: 'Plano', states: ['TX'] },
+  { id: 'lubbock', metroName: 'Lubbock', states: ['TX'] },
 ]
 
 export interface RotationPick {

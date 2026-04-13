@@ -88,6 +88,13 @@ export async function deleteCampaign(id: string): Promise<void> {
   await request('DELETE', `/campaigns/${id}`)
 }
 
+export async function patchCampaign(
+  id: string,
+  data: Record<string, unknown>
+): Promise<InstantlyCampaign> {
+  return request<InstantlyCampaign>('PATCH', `/campaigns/${id}`, data)
+}
+
 export async function getCampaignAnalytics(params?: {
   campaign_id?: string
 }): Promise<unknown> {

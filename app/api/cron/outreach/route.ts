@@ -81,9 +81,8 @@ export async function GET(req: NextRequest) {
     // 4. Create Instantly campaign with schedule + sequences
     const steps = pick.niche.sequence.map((step) => ({
       type: 'email',
-      subject: step.subject,
-      body: step.body,
       delay: step.delayDays,
+      variants: [{ subject: step.subject, body: step.body }],
     }))
 
     const instantlyCampaign = await createCampaign({

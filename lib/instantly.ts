@@ -6,7 +6,7 @@
 const BASE_URL = 'https://api.instantly.ai/api/v2'
 
 function getHeaders(): Record<string, string> {
-  const apiKey = process.env.INSTANTLY_API_KEY
+  const apiKey = process.env.INSTANTLY_API_KEY?.trim()
   if (!apiKey) throw new Error('INSTANTLY_API_KEY environment variable is not set')
   return {
     Authorization: `Bearer ${apiKey}`,

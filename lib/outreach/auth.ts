@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
  * Returns null if authorized, or a NextResponse error if not.
  */
 export function verifyOutreachAuth(req: NextRequest): NextResponse | null {
-  const expectedToken = process.env.OUTREACH_API_TOKEN
+  const expectedToken = process.env.OUTREACH_API_TOKEN?.trim()
   if (!expectedToken) {
     console.error('OUTREACH_API_TOKEN is not configured')
     return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 })

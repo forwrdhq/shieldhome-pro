@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
+import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
 
 function formatPhone(value: string): string {
   let digits = value.replace(/\D/g, '')
@@ -108,12 +109,14 @@ export default function GetQuoteForm({ className }: GetQuoteFormProps) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
-      // Fire conversion events
+      // Fire conversion events with deduplication event IDs
+      const leadEventId = genEventId()
+      const crEventId = genEventId()
+      firePixelEvent('Lead', leadEventId, { content_name: 'get_quote', value: 900, currency: 'USD' })
+      firePixelEvent('CompleteRegistration', crEventId)
+      fireCapi('Lead', leadEventId, { email, phone: phoneDigits, firstName, zipCode }, { content_name: 'get_quote', value: 900, currency: 'USD' })
+      fireCapi('CompleteRegistration', crEventId, { email, phone: phoneDigits, firstName, zipCode })
       const w = window as any
-      if (w.fbq) {
-        w.fbq('track', 'Lead', { content_name: 'get_quote', value: 900, currency: 'USD' })
-        w.fbq('track', 'CompleteRegistration')
-      }
       if (w.gtag) {
         w.gtag('event', 'conversion', { send_to: 'AW-18032237621/PeImCJX0lI0cELW4uJZD' })
       }

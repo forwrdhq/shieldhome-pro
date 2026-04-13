@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
+import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
 
 function formatPhone(value: string): string {
   let digits = value.replace(/\D/g, '')
@@ -126,10 +127,12 @@ export default function SwitchForm({ className }: SwitchFormProps) {
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
       if (typeof window !== 'undefined') {
-        if ((window as any).fbq) {
-          (window as any).fbq('track', 'Lead', { content_name: 'contract_buyout', value: 900, currency: 'USD' })
-          ;(window as any).fbq('track', 'CompleteRegistration')
-        }
+        const leadEventId = genEventId()
+        const crEventId = genEventId()
+        firePixelEvent('Lead', leadEventId, { content_name: 'contract_buyout', value: 900, currency: 'USD' })
+        firePixelEvent('CompleteRegistration', crEventId)
+        fireCapi('Lead', leadEventId, { email, phone: phoneDigits, firstName, zipCode }, { content_name: 'contract_buyout', value: 900, currency: 'USD' })
+        fireCapi('CompleteRegistration', crEventId, { email, phone: phoneDigits, firstName, zipCode })
         if ((window as any).dataLayer) {
           (window as any).dataLayer.push({ event: 'lead_submitted', lead_value: 900, segment: 'switch', provider: currentProvider })
         }

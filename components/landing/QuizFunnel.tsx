@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
+import { genEventId, firePixelEvent, firePixelCustomEvent, fireCapi } from '@/lib/meta-pixel'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 
@@ -101,6 +102,7 @@ export function getRiskLevel(entryPoints: string, concerns: string[]): { level: 
 
 export default function QuizFunnel({ className, isModal = false, onClose }: QuizFunnelProps) {
   const router = useRouter()
+  const [sessionEventId] = useState(() => genEventId())
   const [step, setStep] = useState(1)
   const [quiz, setQuiz] = useState<QuizState>({
     propertyType: '',
@@ -145,23 +147,17 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
   // Track quiz start on first advance
   useEffect(() => {
     if (step === 2 && typeof window !== 'undefined') {
-      if ((window as any).fbq) {
-        (window as any).fbq('track', 'InitiateCheckout', { content_name: 'quiz_started' })
-      }
+      firePixelEvent('InitiateCheckout', `${sessionEventId}_ic`, { content_name: 'quiz_started' })
       if ((window as any).dataLayer) {
         (window as any).dataLayer.push({ event: 'quiz_start', quiz_step: 1 })
       }
     }
-  }, [step])
+  }, [step, sessionEventId])
 
   function trackStep(stepNum: number, answer: string) {
-    if (typeof window !== 'undefined') {
-      if ((window as any).fbq) {
-        (window as any).fbq('trackCustom', 'QuizStep', { step: stepNum, answer })
-      }
-      if ((window as any).dataLayer) {
-        (window as any).dataLayer.push({ event: 'quiz_step', quiz_step: stepNum, answer })
-      }
+    firePixelCustomEvent('QuizStep', genEventId(), { step: stepNum, answer })
+    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      (window as any).dataLayer.push({ event: 'quiz_step', quiz_step: stepNum, answer })
     }
   }
 
@@ -248,11 +244,14 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
+      const leadEventId = `${sessionEventId}_lead`
+      const crEventId = `${sessionEventId}_cr`
+      firePixelEvent('Lead', leadEventId, { content_name: 'security_quote', value: 900, currency: 'USD' })
+      firePixelEvent('CompleteRegistration', crEventId)
+      fireCapi('Lead', leadEventId, { email: contact.email, phone: contact.phone, firstName: contact.firstName, zipCode: contact.zipCode }, { content_name: 'security_quote', value: 900, currency: 'USD' })
+      fireCapi('CompleteRegistration', crEventId, { email: contact.email, phone: contact.phone, firstName: contact.firstName, zipCode: contact.zipCode })
+
       if (typeof window !== 'undefined') {
-        if ((window as any).fbq) {
-          (window as any).fbq('track', 'Lead', { content_name: 'security_quote', value: 900, currency: 'USD' })
-          ;(window as any).fbq('track', 'CompleteRegistration')
-        }
         if ((window as any).dataLayer) {
           (window as any).dataLayer.push({
             event: 'lead_submitted',

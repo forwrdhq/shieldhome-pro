@@ -7,13 +7,14 @@ import { verifyOutreachAuth } from '@/lib/outreach/auth'
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authError = verifyOutreachAuth(req)
   if (authError) return authError
 
+  const { id } = await params
   const campaign = await prisma.outreachCampaign.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       dma: { select: { metroName: true, states: true } },
       _count: { select: { prospects: true } },
@@ -38,11 +39,12 @@ export async function GET(
  */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authError = verifyOutreachAuth(req)
   if (authError) return authError
 
+  const { id } = await params
   try {
     const body = await req.json()
     const {
@@ -82,7 +84,7 @@ export async function PATCH(
     }
 
     const campaign = await prisma.outreachCampaign.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
     })
 

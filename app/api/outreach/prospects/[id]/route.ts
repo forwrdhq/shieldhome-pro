@@ -7,13 +7,14 @@ import { verifyOutreachAuth } from '@/lib/outreach/auth'
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authError = verifyOutreachAuth(req)
   if (authError) return authError
 
+  const { id } = await params
   const prospect = await prisma.outreachProspect.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       campaign: { select: { name: true, status: true, instantlyCampaignId: true } },
       dma: { select: { metroName: true } },
@@ -32,17 +33,18 @@ export async function GET(
  *
  * Supported fields:
  *   - status: QUEUED | SENT | OPENED | CLICKED | REPLIED | INTERESTED |
- *             CONVERTED | BOUNCED | UNSUBSCRIBED | SUPPRESSED
+ *             NOT_INTERESTED | CONVERTED | BOUNCED | UNSUBSCRIBED
  *   - campaignId: string
  *   - instantlyLeadId: string
  */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authError = verifyOutreachAuth(req)
   if (authError) return authError
 
+  const { id } = await params
   try {
     const body = await req.json()
     const { status, campaignId, instantlyLeadId } = body
@@ -68,7 +70,7 @@ export async function PATCH(
     }
 
     const prospect = await prisma.outreachProspect.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
     })
 

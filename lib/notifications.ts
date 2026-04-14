@@ -436,3 +436,42 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
     console.error('Slack webhook error:', err)
   }
 }
+
+export async function sendCallinglyWebhook(lead: LeadNotificationData) {
+  const url = process.env.CALLINGLY_WEBHOOK_URL
+  if (!url) return
+
+  const isSwitch = lead.segment === 'switch' || lead.segment === 'switch-business'
+  const isBusiness = lead.segment === 'business' || lead.segment === 'switch-business'
+
+  const category = isBusiness ? 'Business' : isSwitch ? 'Switch/Buyout' : 'New Install'
+  const source = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
+  const comments = [
+    `Score: ${lead.leadScore}/100 (${lead.priority})`,
+    lead.propertyType ? `Property: ${PROPERTY_TYPE_LABELS[lead.propertyType] || lead.propertyType}` : null,
+    lead.timeline ? `Timeline: ${TIMELINE_LABELS[lead.timeline] || lead.timeline}` : null,
+    lead.currentProvider ? `Current provider: ${lead.currentProvider}` : null,
+    lead.zipCode ? `ZIP: ${lead.zipCode}` : null,
+  ].filter(Boolean).join(' | ')
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        first_name: lead.firstName,
+        last_name: lead.lastName || '',
+        phone: lead.phone,
+        email: lead.email || '',
+        category,
+        source,
+        comments,
+      }),
+    })
+    if (!res.ok) {
+      console.error(`Callingly webhook failed (${res.status}):`, await res.text())
+    }
+  } catch (err) {
+    console.error('Callingly webhook error:', err)
+  }
+}

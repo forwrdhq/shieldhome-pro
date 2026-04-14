@@ -4,7 +4,9 @@ import { useState, useEffect, useRef } from 'react'
 import { fireMetaEvent } from './MetaPixelEvents'
 
 function formatPhone(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 10)
+  let digits = value.replace(/\D/g, '')
+  if (digits.length === 11 && digits.startsWith('1')) digits = digits.slice(1)
+  digits = digits.slice(0, 10)
   if (digits.length === 0) return ''
   if (digits.length <= 3) return `(${digits}`
   if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`

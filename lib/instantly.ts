@@ -161,8 +161,16 @@ export async function listLeads(filters?: {
   limit?: number
   starting_after?: string
 }): Promise<{ items: InstantlyLead[] }> {
+  // Instantly v2: campaign-scoped leads use GET /campaigns/{id}/leads
+  // The generic GET /leads endpoint does not support campaign_id filtering
+  if (filters?.campaign_id) {
+    const params = new URLSearchParams()
+    if (filters.limit) params.set('limit', String(filters.limit))
+    if (filters.starting_after) params.set('starting_after', filters.starting_after)
+    const query = params.toString() ? `?${params.toString()}` : ''
+    return request('GET', `/campaigns/${filters.campaign_id}/leads${query}`)
+  }
   const params = new URLSearchParams()
-  if (filters?.campaign_id) params.set('campaign_id', filters.campaign_id)
   if (filters?.list_id) params.set('list_id', filters.list_id)
   if (filters?.limit) params.set('limit', String(filters.limit))
   if (filters?.starting_after) params.set('starting_after', filters.starting_after)

@@ -389,6 +389,25 @@ export async function getWarmupAnalytics(data: {
   return request('POST', '/accounts/warmup-analytics', data)
 }
 
+export interface InstantlyAccount {
+  email: string
+  status?: number | string
+  warmup_status?: number | string
+  organization?: string
+  [key: string]: unknown
+}
+
+export async function listAccounts(params?: {
+  limit?: number
+  starting_after?: string
+}): Promise<{ items: InstantlyAccount[] }> {
+  const query = new URLSearchParams()
+  if (params?.limit) query.set('limit', String(params.limit))
+  if (params?.starting_after) query.set('starting_after', params.starting_after)
+  const qs = query.toString() ? `?${query.toString()}` : ''
+  return request<{ items: InstantlyAccount[] }>('GET', `/accounts${qs}`)
+}
+
 export async function getAccountAnalyticsDaily(params?: {
   start_date?: string
   end_date?: string

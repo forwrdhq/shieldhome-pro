@@ -7,6 +7,7 @@ import {
   activateCampaign,
   waitForEnrichment,
   listLeads,
+  listAccounts,
   getSendingAccounts,
 } from '@/lib/instantly'
 import { prisma } from '@/lib/db'
@@ -84,7 +85,7 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    // 4. Preflight: verify sending accounts are configured
+    // 4. Preflight: verify sending accounts are configured AND exist in Instantly workspace
     const sendingAccounts = getSendingAccounts()
     if (sendingAccounts.length === 0) {
       console.error('[outreach-cron] No sending accounts configured (INSTANTLY_SENDING_EMAILS is empty)')
@@ -93,7 +94,29 @@ export async function GET(req: NextRequest) {
         error: 'No sending accounts configured. Set INSTANTLY_SENDING_EMAILS env var.',
       }, { status: 500 })
     }
-    console.log(`[outreach-cron] Sending accounts: ${sendingAccounts.join(', ')}`)
+    console.log(`[outreach-cron] Configured sending accounts: ${sendingAccounts.join(', ')}`)
+
+    // Verify accounts actually exist in the Instantly workspace the API key has access to
+    let workspaceAccountEmails: string[] = []
+    try {
+      const accountsResult = await listAccounts({ limit: 100 })
+      workspaceAccountEmails = (accountsResult.items ?? []).map((a) => a.email.toLowerCase())
+      console.log(`[outreach-cron] Instantly workspace has ${workspaceAccountEmails.length} account(s): ${workspaceAccountEmails.join(', ')}`)
+    } catch (err) {
+      console.error('[outreach-cron] Failed to list Instantly accounts:', err)
+    }
+
+    const missingAccounts = sendingAccounts.filter(
+      (e) => !workspaceAccountEmails.includes(e.toLowerCase())
+    )
+    if (workspaceAccountEmails.length > 0 && missingAccounts.length > 0) {
+      return NextResponse.json({
+        success: false,
+        error: `Sending accounts not found in Instantly workspace: ${missingAccounts.join(', ')}. The INSTANTLY_API_KEY may be scoped to a different workspace than where these accounts are connected.`,
+        workspaceAccounts: workspaceAccountEmails,
+        configuredAccounts: sendingAccounts,
+      }, { status: 500 })
+    }
 
     // 5. Create Instantly campaign with schedule + sequences
     const steps = pick.niche.sequence.map((step) => ({

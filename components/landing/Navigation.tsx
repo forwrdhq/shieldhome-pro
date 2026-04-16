@@ -58,8 +58,12 @@ export default function Navigation({ onQuizOpen }: NavigationProps) {
       >
         <div className="max-w-7xl mx-auto h-full px-6 md:px-12 lg:px-16 flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="font-heading font-bold text-white text-xl tracking-tight drop-shadow-sm">
-            Shield<span className="text-emerald-400">Home</span>
+          <a href="/" className="flex items-center gap-2 font-heading font-extrabold text-white text-2xl tracking-tight">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
+              <path d="M16 2L4 8v8c0 7.73 5.12 14.95 12 16.73C22.88 30.95 28 23.73 28 16V8L16 2z" fill="#10B981"/>
+              <path d="M14 17.5l-3-3-1.5 1.5L14 20.5l8.5-8.5L21 10.5l-7 7z" fill="white"/>
+            </svg>
+            <span>Shield<span className="text-emerald-400">Home</span></span>
           </a>
 
           {/* Nav items */}

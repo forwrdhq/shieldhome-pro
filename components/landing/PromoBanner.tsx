@@ -91,8 +91,7 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
             <span className="font-bold" style={{ color: '#D4A843' }}>Spring Flash Sale — </span>
             <span className="text-black">Buy 2 Cameras, Get 1 FREE*</span>
             <span className="text-gray-400 mx-2">|</span>
-            <span className="text-black">Use code: </span>
-            <span className="text-black font-bold">SHIELD26</span>
+            <span className="text-black">Mention offer when you call</span>
           </div>
           <p className="text-[11px] text-gray-500">
             *With qualifying system purchase &middot; ShieldHome partner exclusive
@@ -157,7 +156,7 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
             <span className="text-black">Buy 2 Cameras, Get 1 FREE*</span>
           </div>
           <p className="text-[10px] text-gray-500 text-center">
-            Code: <strong>SHIELD26</strong> &middot; ShieldHome exclusive
+            *With qualifying system purchase &middot; Mention offer when you call
           </p>
 
           {!expired && (

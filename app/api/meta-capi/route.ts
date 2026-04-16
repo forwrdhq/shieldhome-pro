@@ -35,6 +35,11 @@ export async function POST(req: NextRequest) {
   try {
     const body: CAPIEventData = await req.json()
 
+    // Extract real client IP from request headers (server-side only)
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+      || req.headers.get('x-real-ip')
+      || body.userData.clientIpAddress
+
     const userData: Record<string, string> = {}
 
     // Hash PII fields per Meta's requirements
@@ -57,7 +62,7 @@ export async function POST(req: NextRequest) {
     // Non-hashed fields
     if (body.userData.fbp) userData.fbp = body.userData.fbp
     if (body.userData.fbc) userData.fbc = body.userData.fbc
-    if (body.userData.clientIpAddress) userData.client_ip_address = body.userData.clientIpAddress
+    if (clientIp) userData.client_ip_address = clientIp
     if (body.userData.clientUserAgent) userData.client_user_agent = body.userData.clientUserAgent
 
     const event = {

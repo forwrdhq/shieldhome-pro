@@ -77,7 +77,17 @@ export async function listCampaigns(): Promise<InstantlyCampaign[]> {
 }
 
 export async function activateCampaign(id: string): Promise<void> {
-  await request('POST', `/campaigns/${id}/activate`)
+  // Activate endpoint rejects Content-Type header when body is empty
+  const apiKey = process.env.INSTANTLY_API_KEY?.trim()
+  if (!apiKey) throw new Error('INSTANTLY_API_KEY environment variable is not set')
+  const res = await fetch(`${BASE_URL}/campaigns/${id}/activate`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}` },
+  })
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Instantly API POST /campaigns/${id}/activate failed (${res.status}): ${text}`)
+  }
 }
 
 export async function pauseCampaign(id: string): Promise<void> {
@@ -151,8 +161,16 @@ export async function listLeads(filters?: {
   limit?: number
   starting_after?: string
 }): Promise<{ items: InstantlyLead[] }> {
+  // Instantly v2: campaign-scoped leads use GET /campaigns/{id}/leads
+  // The generic GET /leads endpoint does not support campaign_id filtering
+  if (filters?.campaign_id) {
+    const params = new URLSearchParams()
+    if (filters.limit) params.set('limit', String(filters.limit))
+    if (filters.starting_after) params.set('starting_after', filters.starting_after)
+    const query = params.toString() ? `?${params.toString()}` : ''
+    return request('GET', `/campaigns/${filters.campaign_id}/leads${query}`)
+  }
   const params = new URLSearchParams()
-  if (filters?.campaign_id) params.set('campaign_id', filters.campaign_id)
   if (filters?.list_id) params.set('list_id', filters.list_id)
   if (filters?.limit) params.set('limit', String(filters.limit))
   if (filters?.starting_after) params.set('starting_after', filters.starting_after)

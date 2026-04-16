@@ -3,7 +3,6 @@ import { pickDailyRotation, logRotation } from '@/lib/outreach/rotation'
 import { buildSearchFilters } from '@/lib/outreach/industry-map'
 import {
   createCampaign,
-  patchCampaign,
   enrichFromSuperSearch,
   activateCampaign,
 } from '@/lib/instantly'
@@ -79,30 +78,28 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    // 4. Create Instantly campaign
-    const instantlyCampaign = await createCampaign({ name: campaignName })
-    const campaignId = instantlyCampaign.id
-    console.log(`[outreach-cron] Created campaign: ${campaignId}`)
-
-    // 5. Patch sequences + sending schedule
+    // 4. Create Instantly campaign with schedule + sequences
     const steps = pick.niche.sequence.map((step) => ({
       type: 'email',
-      subject: step.subject,
-      body: step.body,
       delay: step.delayDays,
+      variants: [{ subject: step.subject, body: step.body }],
     }))
 
-    await patchCampaign(campaignId, {
-      sequences: [{ steps }],
+    const instantlyCampaign = await createCampaign({
+      name: campaignName,
       daily_limit: 25,
-      schedule: {
-        timezone: 'America/Chicago',
-        days: { '0': false, '1': true, '2': true, '3': true, '4': true, '5': true, '6': false },
-        start_hour: 8,
-        end_hour: 18,
+      campaign_schedule: {
+        schedules: [{
+          name: 'Default',
+          timing: { from: '08:00', to: '18:00' },
+          days: { '0': false, '1': true, '2': true, '3': true, '4': true, '5': true, '6': false },
+          timezone: 'America/Chicago',
+        }],
       },
+      sequences: [{ steps }],
     })
-    console.log(`[outreach-cron] Sequences + schedule patched`)
+    const campaignId = instantlyCampaign.id
+    console.log(`[outreach-cron] Created campaign: ${campaignId}`)
 
     // 6. Trigger SuperSearch enrichment directly into campaign
     const enrichResult = await enrichFromSuperSearch({

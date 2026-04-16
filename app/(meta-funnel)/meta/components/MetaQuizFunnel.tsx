@@ -54,20 +54,18 @@ export default function MetaQuizFunnel() {
 
   const handleStart = () => {
     setStage('questions')
-    fireMetaCustomEvent('QuizStart', {
-      traffic_source: 'meta_ads',
-    })
+    fireMetaCustomEvent('QuizStart', { traffic_source: 'meta_ads' }, `${eventId}_start`)
   }
 
   const handleQuestionAnswer = (value: string | string[]) => {
     const questionId = QUIZ_QUESTIONS[currentQuestion].id
     setAnswers(prev => ({ ...prev, [String(questionId)]: value }))
 
-    // Fire progress event
+    // Fire progress event with per-question event ID for deduplication
     fireMetaCustomEvent('QuizProgress', {
       question_number: questionId,
       answer_value: Array.isArray(value) ? value.join(',') : value,
-    })
+    }, `${eventId}_q${questionId}`)
 
     // Advance to next question or capture gate
     if (currentQuestion < TOTAL_QUESTIONS - 1) {
@@ -77,8 +75,8 @@ export default function MetaQuizFunnel() {
       fireMetaCustomEvent('QuizComplete', {
         quiz_type: 'home_security_assessment',
         property_type: answers['1'],
-        urgency: value, // last question is timeline
-      })
+        urgency: value,
+      }, `${eventId}_complete`)
       setStage('capture')
     }
   }

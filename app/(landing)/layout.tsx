@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Free Home Security Quote | Vivint Authorized Dealer | ShieldHome Pro',
-  description: 'Get a free custom home security quote in 60 seconds. $0 down, free expert setup, free doorbell camera. Vivint\'s #1-rated smart home security. Call (877) 555-0199.',
+  description: 'Get a free custom home security quote in 60 seconds. $0 down, free expert setup, free doorbell camera. Vivint\'s #1-rated smart home security. Call (801) 348-6050.',
   robots: 'index, follow',
   openGraph: {
     title: 'Is Your Home Protected? Free Security Assessment',
@@ -27,7 +27,7 @@ const localBusinessSchema = {
   '@type': 'LocalBusiness',
   name: 'ShieldHome Pro',
   description: 'Authorized Vivint Smart Home Dealer providing free home security quotes and expert setup.',
-  telephone: '+18775550199',
+  telephone: '+18013486050',
   url: 'https://shieldhome.pro',
   priceRange: '$0 - $200/mo',
   address: {

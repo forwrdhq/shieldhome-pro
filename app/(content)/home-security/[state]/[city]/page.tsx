@@ -63,7 +63,7 @@ export default async function CityPage({ params }: Props) {
     '@type': 'LocalBusiness',
     name: `ShieldHome Pro — ${city.name}, ${state.abbreviation}`,
     description: `Vivint Authorized Dealer serving ${city.name}, ${state.abbreviation}. Free home security installation and 24/7 monitoring.`,
-    telephone: '+18775550199',
+    telephone: '+18013486050',
     url: `https://shieldhome.pro/home-security/${state.slug}/${city.slug}`,
     areaServed: {
       '@type': 'City',

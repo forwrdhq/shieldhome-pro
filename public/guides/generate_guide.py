@@ -398,7 +398,7 @@ pdf.ln(2)
 pdf.set_x(30)
 pdf.set_font('Helvetica', 'B', 14)
 pdf.set_text_color(*DARK_SLATE)
-pdf.cell(150, 8, 'Or call us: (801) 616-6301', 0, 1, 'C')
+pdf.cell(150, 8, 'Or call us: (801) 348-6050', 0, 1, 'C')
 
 pdf.ln(20)
 pdf.set_font('Helvetica', 'B', 12)

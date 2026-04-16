@@ -14,13 +14,13 @@ export default function BusinessNav() {
         </Link>
 
         <a
-          href="tel:+18016166301"
+          href="tel:+18013486050"
           onClick={() => pushDataLayer('phone_call_click', { location: 'business_nav' })}
           className="flex items-center gap-2 font-heading font-bold text-[15px] md:text-[17px]"
           style={{ color: '#00C853' }}
         >
           <Phone className="w-4 h-4 md:w-5 md:h-5" />
-          <span className="hidden sm:inline">(801) 616-6301</span>
+          <span className="hidden sm:inline">(801) 348-6050</span>
           <span className="sm:hidden">Call Now</span>
         </a>
       </div>

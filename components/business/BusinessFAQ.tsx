@@ -56,7 +56,7 @@ const faqs: FAQItem[] = [
   },
   {
     question: "I'm already a Vivint customer. Can I upgrade?",
-    answer: 'Yes — and this is often the fastest path. If you have Vivint residential, adding a business account or upgrading existing equipment is streamlined. Call us at (801) 616-6301 and ask about the business upgrade path.',
+    answer: 'Yes — and this is often the fastest path. If you have Vivint residential, adding a business account or upgrading existing equipment is streamlined. Call us at (801) 348-6050 and ask about the business upgrade path.',
   },
 ]
 

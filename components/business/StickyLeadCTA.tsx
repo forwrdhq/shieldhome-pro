@@ -52,7 +52,7 @@ export default function StickyLeadCTA() {
           Claim Free Business Audit
         </button>
         <a
-          href="tel:+18016166301"
+          href="tel:+18013486050"
           onClick={() => trackPhoneClick('sticky_bar')}
           className="flex items-center justify-center gap-1.5 px-4 py-3 border border-slate-300 text-slate-700 font-heading font-medium text-[13px] rounded-lg transition-colors duration-200 hover:border-slate-400"
         >

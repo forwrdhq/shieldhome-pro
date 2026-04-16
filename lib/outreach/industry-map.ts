@@ -94,12 +94,6 @@ export const NICHE_INDUSTRY_MAP: Record<string, NicheIndustryMapping> = {
     titleKeywords: ['owner', 'founder', 'ceo', 'president', 'general manager', 'manager', 'director'],
     companyKeywords: ['restaurant', 'grill', 'cafe', 'diner', 'eatery', 'bistro', 'pizzeria', 'taqueria'],
   },
-  hotel: {
-    industries: ['Travel Recreation and Leisure'],
-    subIndustries: ['Hospitality'],
-    titleKeywords: ['owner', 'founder', 'ceo', 'president', 'general manager', 'manager', 'director', 'gm'],
-    companyKeywords: ['hotel', 'motel', 'inn', 'lodge', 'suites', 'resort'],
-  },
   gym: {
     industries: ['Travel Recreation and Leisure'],
     subIndustries: ['Recreational Facilities and Services', 'Sporting Goods', 'Sports'],
@@ -196,10 +190,20 @@ export function buildSearchFilters(
   const mapping = NICHE_INDUSTRY_MAP[nicheSlug]
   if (!mapping) return null
 
-  // Minimal filter strategy: location + keyword_filter (single term).
-  // Instantly's keyword_filter is a plain-text substring match (NOT boolean).
-  // Industry taxonomy and title filter both proved too narrow for small
-  // businesses that don't have rich profile data.
+  // Filter strategy: location + company_name (company-field substring match).
+  //
+  // We previously used `keyword_filter`, which does a broad text match across
+  // name/title/description/company and pulled in massive noise — e.g. "gun"
+  // matched "Top Gun Ventures" / "Axon" employees, "pawn" matched random
+  // software engineers at Ezcorp, "daycare" matched Gordon Food Service reps.
+  // Texas+gun returned 2,717 mostly-irrelevant profiles and campaigns enriched
+  // with 0 targetable leads.
+  //
+  // `company_name` restricts the substring match to the company-name field
+  // only, which drops irrelevant counts 3-10x and returns real targets
+  // (e.g. "Central Texas Gun Works", "Cash America Pawn", "Cannavine
+  // Dispensary Group"). Industry taxonomy filter has been observed to have
+  // no effect on counts, so we rely on location + company_name alone.
   const filters: Record<string, unknown> = {
     locations: {
       include: states.map((state) => ({
@@ -210,8 +214,9 @@ export function buildSearchFilters(
   }
 
   if (mapping.companyKeywords?.length) {
-    // Use the first (most specific) company keyword — e.g. "pawn" for pawn_shop
-    filters.keyword_filter = { include: mapping.companyKeywords[0] }
+    // Use the first (most specific) company keyword — e.g. "pawn" for pawn_shop.
+    // Substring match against company name only.
+    filters.company_name = { include: mapping.companyKeywords[0] }
   }
 
   return filters

@@ -229,7 +229,7 @@ export async function sendWelcomeEmail(lead: LeadNotificationData) {
 }
 
 export async function sendSlackNotification(lead: LeadNotificationData) {
-  const webhookUrl = process.env.SLACK_WEBHOOK_URL
+  const webhookUrl = process.env.SLACK_WEBHOOK_URL?.trim()
   if (!webhookUrl) return
 
   const priorityEmoji: Record<string, string> = {
@@ -438,7 +438,7 @@ export async function sendSlackNotification(lead: LeadNotificationData) {
 }
 
 export async function sendCallinglyWebhook(lead: LeadNotificationData) {
-  const url = process.env.CALLINGLY_WEBHOOK_URL
+  const url = process.env.CALLINGLY_WEBHOOK_URL?.trim()
   if (!url) return
 
   const isSwitch = lead.segment === 'switch' || lead.segment === 'switch-business'

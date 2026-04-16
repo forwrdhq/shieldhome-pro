@@ -162,21 +162,15 @@ export async function listLeads(filters?: {
   limit?: number
   starting_after?: string
 }): Promise<{ items: InstantlyLead[] }> {
-  // Instantly v2: campaign-scoped leads use GET /campaigns/{id}/leads
-  // The generic GET /leads endpoint does not support campaign_id filtering
-  if (filters?.campaign_id) {
-    const params = new URLSearchParams()
-    if (filters.limit) params.set('limit', String(filters.limit))
-    if (filters.starting_after) params.set('starting_after', filters.starting_after)
-    const query = params.toString() ? `?${params.toString()}` : ''
-    return request('GET', `/campaigns/${filters.campaign_id}/leads${query}`)
-  }
-  const params = new URLSearchParams()
-  if (filters?.list_id) params.set('list_id', filters.list_id)
-  if (filters?.limit) params.set('limit', String(filters.limit))
-  if (filters?.starting_after) params.set('starting_after', filters.starting_after)
-  const query = params.toString() ? `?${params.toString()}` : ''
-  return request('GET', `/leads${query}`)
+  // Instantly v2: use POST /leads/list.
+  // GET /campaigns/{id}/leads was tried but returns 404 — it does not exist.
+  // The list endpoint uses `campaign` (not `campaign_id`) as the filter key.
+  const body: Record<string, unknown> = {}
+  if (filters?.campaign_id) body.campaign = filters.campaign_id
+  if (filters?.list_id) body.list = filters.list_id
+  if (filters?.limit) body.limit = filters.limit
+  if (filters?.starting_after) body.starting_after = filters.starting_after
+  return request('POST', '/leads/list', body)
 }
 
 export async function updateInterestStatus(data: {
@@ -248,12 +242,14 @@ export async function countSuperSearchLeads(
 }
 
 export async function previewSuperSearchLeads(
-  filters: Record<string, unknown>
+  filters: Record<string, unknown>,
+  limit = 10
 ): Promise<unknown> {
+  // Preview endpoint requires the same `search_filters` wrapping as count.
   return request(
     'POST',
     '/supersearch-enrichment/preview-leads-from-supersearch',
-    filters
+    { search_filters: filters, limit }
   )
 }
 

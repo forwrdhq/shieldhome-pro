@@ -10,6 +10,9 @@ import {
   listAccounts,
   getSendingAccounts,
   countSuperSearchLeads,
+  deleteCampaign,
+  addLeads,
+  type InstantlyLead,
 } from '@/lib/instantly'
 import { prisma } from '@/lib/db'
 
@@ -163,10 +166,14 @@ export async function GET(req: NextRequest) {
     const campaignId = instantlyCampaign.id
     console.log(`[outreach-cron] Created campaign: ${campaignId}`)
 
-    // 6. Trigger SuperSearch enrichment directly into campaign
+    // 6. Trigger SuperSearch enrichment. IMPORTANT: do NOT pass campaign_id
+    // here — despite accepting the param, enrichment ignores it and leads
+    // land in a Supersearch Lead List (resource_id === list_id), never in
+    // the campaign. We attach leads to the campaign explicitly below via
+    // /leads/add, which mirrors what the Instantly UI does (leads in the
+    // hotel campaign that worked were all upload_method=api).
     const enrichResult = await enrichFromSuperSearch({
       search_filters: searchFilters,
-      campaign_id: campaignId,
       show_one_lead_per_company: true,
       skip_owned_leads: false,
       work_email_enrichment: true,
@@ -176,12 +183,12 @@ export async function GET(req: NextRequest) {
     const resourceId = (enrichResult.id ?? enrichResult.resource_id ?? null) as string | null
     console.log(`[outreach-cron] SuperSearch enrichment triggered: ${resourceId}`)
 
-    // 7. Wait for enrichment to complete before activating
+    // 7. Wait for enrichment to complete
     let hasNoLeads = false
     if (resourceId) {
       try {
         const finalStatus = await waitForEnrichment(resourceId, {
-          maxWaitMs: 120_000,
+          maxWaitMs: 180_000,
           intervalMs: 5_000,
         })
         hasNoLeads = finalStatus.has_no_leads === true
@@ -191,27 +198,76 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // 8. Verify leads exist in campaign before activating
-    let leadCount = 0
-    try {
-      const leadsResult = await listLeads({ campaign_id: campaignId, limit: 100 })
-      leadCount = leadsResult.items?.length ?? 0
-      console.log(`[outreach-cron] Campaign ${campaignId} has ${leadCount} leads attached`)
-    } catch (err) {
-      console.warn('[outreach-cron] Failed to list campaign leads:', err)
+    // 8. Pull enriched leads out of the Supersearch list the enrichment
+    // created, then explicitly add them to the campaign. Skip leads that
+    // didn't get an email back from enrichment — they're not reachable.
+    let enrichedLeadCount = 0
+    const leadsToAdd: InstantlyLead[] = []
+    if (resourceId) {
+      try {
+        const listResult = await listLeads({ list_id: resourceId, limit: 200 })
+        const listItems = (listResult.items ?? []) as Array<Record<string, unknown>>
+        enrichedLeadCount = listItems.length
+        for (const item of listItems) {
+          const email = (item.email as string | undefined) || ''
+          if (!email) continue
+          const payload = (item.payload as Record<string, unknown> | undefined) ?? {}
+          leadsToAdd.push({
+            email,
+            first_name: (item.first_name as string) || (payload.firstName as string) || '',
+            last_name: (item.last_name as string) || (payload.lastName as string) || '',
+            company_name: (item.company_name as string) || (payload.companyName as string) || '',
+          })
+        }
+        console.log(`[outreach-cron] Enrichment list ${resourceId}: ${enrichedLeadCount} total, ${leadsToAdd.length} with emails`)
+      } catch (err) {
+        console.warn('[outreach-cron] Failed to fetch enriched list:', err)
+      }
     }
 
-    if (leadCount === 0 && hasNoLeads) {
-      console.warn(`[outreach-cron] Enrichment found no leads. Skipping activation.`)
+    // 9. Push the emailable leads into the campaign via /leads/add.
+    let leadCount = 0
+    if (leadsToAdd.length > 0) {
+      try {
+        const addResult = (await addLeads({
+          campaign_id: campaignId,
+          leads: leadsToAdd,
+          skip_if_in_workspace: false,
+        })) as { leads_uploaded?: number; total_sent?: number }
+        leadCount = addResult.leads_uploaded ?? addResult.total_sent ?? leadsToAdd.length
+        console.log(`[outreach-cron] Added ${leadCount} leads to campaign ${campaignId}`)
+      } catch (addErr) {
+        console.error('[outreach-cron] /leads/add failed:', addErr)
+      }
+    }
+
+    if (leadCount === 0) {
+      // Tear down the empty campaign so it doesn't clutter the Instantly
+      // dashboard as a "Completed 100%" with 0 sends.
+      try {
+        await deleteCampaign(campaignId)
+        console.warn(`[outreach-cron] Deleted empty campaign ${campaignId}`)
+      } catch (delErr) {
+        console.warn(`[outreach-cron] Failed to delete empty campaign:`, delErr)
+      }
+
+      const reason = hasNoLeads
+        ? 'SuperSearch reported has_no_leads=true. Check filter — keyword may not match any real businesses.'
+        : enrichedLeadCount === 0
+        ? `SuperSearch reported ${availableLeadCount} preview matches but enriched 0 leads into the list. Check Lead Finder plan credits or widen the filter.`
+        : `Enriched ${enrichedLeadCount} leads but none had a valid email after work-email enrichment. Try a niche with more corporate targets.`
+
+      console.error(`[outreach-cron] ${reason}`)
       return NextResponse.json({
         success: false,
-        action: 'skip',
-        reason: 'Enrichment completed but has_no_leads=true. Check filters.',
-        campaignId,
+        action: 'abort',
+        reason,
         campaignName,
         searchFilters,
         availableLeadCount,
-      })
+        hasNoLeads,
+        enrichmentResourceId: resourceId,
+      }, { status: 200 })
     }
 
     // 9. Activate campaign

@@ -1008,22 +1008,6 @@ const MANUFACTURING: NicheDefinition = {
 // TIER C — Volume Fillers (Score < 7.0)
 // ============================================
 
-const HOTEL: NicheDefinition = {
-  slug: 'hotel',
-  name: 'Hotel & Motel',
-  tier: 'C',
-  score: 6.95,
-  decisionMaker: 'GM / Owner',
-  avgDealRange: '$10k–$50k',
-  complianceAngle: 'Guest safety liability + insurance requirements',
-  legalStatesOnly: null,
-  sequence: [
-    { subject: '{{company_name}} — guest safety camera coverage', delayDays: 0, body: `Hi {{first_name}},\n\nGuest safety incidents at hotels and motels create significant liability exposure. Modern camera systems covering lobbies, hallways, parking areas, and entrances protect both guests and the property from claims.\n\nI work with hotel operators to upgrade surveillance systems that meet current insurance requirements and improve guest confidence.${PRICING_HOOK}\n\n${ctaLink('Worth a brief conversation?')}${UNSUB_LINE}` },
-    { subject: 'Re: {{company_name}} — hotel security', delayDays: 4, body: `Hi {{first_name}},\n\nFollowing up — one hotel operator I work with saw a measurable improvement in online review scores after installing visible modern cameras in common areas. Guests mentioned feeling safer, which translated to higher ratings and more bookings.\n\nSecurity as a revenue driver, not just a cost.\n${PRICING_BLURB}\n\n${ctaLink('If that\'s interesting for your property:')}${UNSUB_LINE}` },
-    { subject: '{{company_name}} — last note', delayDays: 5, body: `Hi {{first_name}},\n\nFinal message — if your property's security is current and your insurance is satisfied, great. If not, I'm here.\n${PRICING_REMINDER}\n\n${ctaLink('Open invitation:')}${UNSUB_LINE}` },
-  ],
-}
-
 const RESTAURANT: NicheDefinition = {
   slug: 'restaurant',
   name: 'Restaurant (Multi-Location)',
@@ -1115,7 +1099,6 @@ export const NICHES: NicheDefinition[] = [
   CONSTRUCTION,
   VET_CLINIC,
   // Tier C
-  HOTEL,
   RESTAURANT,
   DAYCARE,
   CAR_WASH,

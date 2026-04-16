@@ -12,6 +12,25 @@
  * Wholesale & Distribution
  */
 
+// Map US state codes to full names — Instantly SuperSearch expects "Texas" not "TX"
+const STATE_CODE_TO_NAME: Record<string, string> = {
+  AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
+  CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', FL: 'Florida', GA: 'Georgia',
+  HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa',
+  KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland',
+  MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri',
+  MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey',
+  NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio',
+  OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina',
+  SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont',
+  VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming',
+  DC: 'District of Columbia',
+}
+
+function stateCodeToName(code: string): string {
+  return STATE_CODE_TO_NAME[code.toUpperCase()] ?? code
+}
+
 export interface NicheIndustryMapping {
   industries: string[]
   subIndustries?: string[]
@@ -177,19 +196,22 @@ export function buildSearchFilters(
   const mapping = NICHE_INDUSTRY_MAP[nicheSlug]
   if (!mapping) return null
 
-  // Strategy: keyword_filter (OR'd business-type terms) + location + title
-  // does the real work. Industry/subIndustry classification in Instantly's DB
-  // is sparse for small businesses, so including them narrows to near-zero.
+  // Minimal filter strategy: location + keyword_filter (single term).
+  // Instantly's keyword_filter is a plain-text substring match (NOT boolean).
+  // Industry taxonomy and title filter both proved too narrow for small
+  // businesses that don't have rich profile data.
   const filters: Record<string, unknown> = {
     locations: {
-      include: states.map((state) => ({ state, country: 'United States' })),
+      include: states.map((state) => ({
+        state: stateCodeToName(state),
+        country: 'United States',
+      })),
     },
-    title: { include: mapping.titleKeywords },
   }
 
   if (mapping.companyKeywords?.length) {
-    // keyword_filter.include is a single string with OR for any-of matching
-    filters.keyword_filter = { include: mapping.companyKeywords.join(' OR ') }
+    // Use the first (most specific) company keyword — e.g. "pawn" for pawn_shop
+    filters.keyword_filter = { include: mapping.companyKeywords[0] }
   }
 
   return filters

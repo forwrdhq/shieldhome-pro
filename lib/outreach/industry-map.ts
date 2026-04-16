@@ -177,22 +177,18 @@ export function buildSearchFilters(
   const mapping = NICHE_INDUSTRY_MAP[nicheSlug]
   if (!mapping) return null
 
+  // Strategy: keyword_filter (OR'd business-type terms) + location + title
+  // does the real work. Industry/subIndustry classification in Instantly's DB
+  // is sparse for small businesses, so including them narrows to near-zero.
   const filters: Record<string, unknown> = {
     locations: {
       include: states.map((state) => ({ state, country: 'United States' })),
     },
-    industry: { include: mapping.industries },
     title: { include: mapping.titleKeywords },
   }
 
-  if (mapping.subIndustries?.length) {
-    filters.subIndustry = { include: mapping.subIndustries }
-  }
-
   if (mapping.companyKeywords?.length) {
-    // Instantly v2 SuperSearch: keyword_filter.include is a single string
-    // that does a full-text search across the lead profile (company, bio, etc.)
-    // Join with OR so any of our business-type terms matches.
+    // keyword_filter.include is a single string with OR for any-of matching
     filters.keyword_filter = { include: mapping.companyKeywords.join(' OR ') }
   }
 

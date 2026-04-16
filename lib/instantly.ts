@@ -52,7 +52,8 @@ export interface InstantlyCampaign {
 export function getSendingAccounts(): string[] {
   const raw = process.env.INSTANTLY_SENDING_EMAILS?.trim()
   if (!raw) return []
-  return raw.split(',').map((e) => e.trim()).filter(Boolean)
+  // Accept comma, newline, or semicolon separators (Vercel textareas produce newlines)
+  return raw.split(/[,\n;]/).map((e) => e.trim()).filter(Boolean)
 }
 
 export async function createCampaign(data: {

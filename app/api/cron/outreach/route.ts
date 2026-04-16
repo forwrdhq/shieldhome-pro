@@ -5,8 +5,14 @@ import {
   createCampaign,
   enrichFromSuperSearch,
   activateCampaign,
+  waitForEnrichment,
+  listLeads,
+  getSendingAccounts,
 } from '@/lib/instantly'
 import { prisma } from '@/lib/db'
+
+// Allow up to 5 minutes — enrichment polling can take 1-2 minutes
+export const maxDuration = 300
 
 /**
  * GET /api/cron/outreach — Daily outreach pipeline
@@ -78,7 +84,18 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    // 4. Create Instantly campaign with schedule + sequences
+    // 4. Preflight: verify sending accounts are configured
+    const sendingAccounts = getSendingAccounts()
+    if (sendingAccounts.length === 0) {
+      console.error('[outreach-cron] No sending accounts configured (INSTANTLY_SENDING_EMAILS is empty)')
+      return NextResponse.json({
+        success: false,
+        error: 'No sending accounts configured. Set INSTANTLY_SENDING_EMAILS env var.',
+      }, { status: 500 })
+    }
+    console.log(`[outreach-cron] Sending accounts: ${sendingAccounts.join(', ')}`)
+
+    // 5. Create Instantly campaign with schedule + sequences
     const steps = pick.niche.sequence.map((step) => ({
       type: 'email',
       delay: step.delayDays,
@@ -106,20 +123,49 @@ export async function GET(req: NextRequest) {
       search_filters: searchFilters,
       campaign_id: campaignId,
       show_one_lead_per_company: true,
-      skip_owned_leads: false, // include leads already in workspace (avoids skipped_count: 50)
+      skip_owned_leads: false,
       work_email_enrichment: true,
       limit: 50,
     }) as Record<string, unknown>
 
-    const resourceId = enrichResult.id ?? enrichResult.resource_id ?? null
+    const resourceId = (enrichResult.id ?? enrichResult.resource_id ?? null) as string | null
     console.log(`[outreach-cron] SuperSearch enrichment triggered: ${resourceId}`)
 
-    // 7. Activate campaign
-    await activateCampaign(campaignId)
-    console.log(`[outreach-cron] Campaign activated`)
+    // 7. Wait for enrichment to complete before activating
+    let enrichedCount = 0
+    if (resourceId) {
+      try {
+        const finalStatus = await waitForEnrichment(resourceId, {
+          maxWaitMs: 90_000,  // 90s — generous for Vercel function timeout
+          intervalMs: 5_000,
+        })
+        enrichedCount = finalStatus.enriched_count ?? finalStatus.total_count ?? 0
+        console.log(`[outreach-cron] Enrichment complete: ${enrichedCount} leads enriched, ${finalStatus.skipped_count ?? 0} skipped`)
+      } catch (pollErr) {
+        console.error(`[outreach-cron] Enrichment polling failed:`, pollErr)
+        // Still try to activate — leads may trickle in async
+      }
+    }
 
-    // 8. Log rotation + save to DB
-    await logRotation(pick.dmaId, pick.niche.slug, campaignId, 50)
+    // 8. Verify leads exist in campaign before activating
+    let leadCount = 0
+    try {
+      const leadsResult = await listLeads({ campaign_id: campaignId, limit: 1 })
+      leadCount = leadsResult.items?.length ?? 0
+    } catch {
+      // Non-fatal — proceed with activation attempt
+    }
+
+    if (leadCount === 0 && enrichedCount === 0) {
+      console.warn(`[outreach-cron] WARNING: Campaign ${campaignId} has 0 leads after enrichment. Activating anyway — leads may still be processing.`)
+    }
+
+    // 9. Activate campaign
+    await activateCampaign(campaignId)
+    console.log(`[outreach-cron] Campaign activated (${enrichedCount} leads enriched)`)
+
+    // 10. Log rotation + save to DB
+    await logRotation(pick.dmaId, pick.niche.slug, campaignId, enrichedCount)
 
     await prisma.outreachCampaign.create({
       data: {
@@ -139,6 +185,8 @@ export async function GET(req: NextRequest) {
       niche: pick.niche.name,
       dma: pick.dmaName,
       enrichmentResourceId: resourceId,
+      enrichedCount,
+      leadCount,
     })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'

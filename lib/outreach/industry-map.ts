@@ -190,9 +190,10 @@ export function buildSearchFilters(
   }
 
   if (mapping.companyKeywords?.length) {
-    // Instantly v2 SuperSearch: company_name.include is an array of substrings
-    // to match in company names (e.g. ["gun", "firearm"] → companies with those terms)
-    filters.company_name = { include: mapping.companyKeywords }
+    // Instantly v2 SuperSearch: keyword_filter.include is a single string
+    // that does a full-text search across the lead profile (company, bio, etc.)
+    // Join with OR so any of our business-type terms matches.
+    filters.keyword_filter = { include: mapping.companyKeywords.join(' OR ') }
   }
 
   return filters

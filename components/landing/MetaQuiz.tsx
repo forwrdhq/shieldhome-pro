@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
+import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 
 function formatPhone(value: string): string {
@@ -223,12 +224,15 @@ export default function MetaQuiz() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Something went wrong.')
 
-      // Fire conversion events
+      // Fire conversion events with dedup
+      const leadEventId = genEventId()
+      const crEventId = genEventId()
+      firePixelEvent('Lead', leadEventId, { content_name: 'meta_quiz', value: 900, currency: 'USD' })
+      firePixelEvent('CompleteRegistration', crEventId)
+      fireCapi('Lead', leadEventId, { email: contact.email, phone: phoneDigits, firstName: contact.firstName, zipCode: contact.zipCode }, { content_name: 'meta_quiz', value: 900, currency: 'USD' })
+      fireCapi('CompleteRegistration', crEventId, { email: contact.email, phone: phoneDigits, firstName: contact.firstName, zipCode: contact.zipCode })
+
       if (typeof window !== 'undefined') {
-        if ((window as any).fbq) {
-          (window as any).fbq('track', 'Lead', { content_name: 'meta_quiz', value: 900, currency: 'USD' })
-          ;(window as any).fbq('track', 'CompleteRegistration')
-        }
         if ((window as any).dataLayer) {
           (window as any).dataLayer.push({
             event: 'lead_submitted',

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ChevronRight, Lock, Award, CheckCircle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
+import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
 
 function formatPhone(value: string): string {
   let digits = value.replace(/\D/g, '')
@@ -66,11 +67,14 @@ export default function UpgradeForm({ className }: UpgradeFormProps) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Something went wrong.')
 
+      const leadEventId = genEventId()
+      const crEventId = genEventId()
+      firePixelEvent('Lead', leadEventId, { content_name: 'vivint_upgrade', value: 600, currency: 'USD' })
+      firePixelEvent('CompleteRegistration', crEventId)
+      fireCapi('Lead', leadEventId, { email, phone: phoneDigits, firstName }, { content_name: 'vivint_upgrade', value: 600, currency: 'USD' })
+      fireCapi('CompleteRegistration', crEventId, { email, phone: phoneDigits, firstName })
+
       if (typeof window !== 'undefined') {
-        if ((window as any).fbq) {
-          (window as any).fbq('track', 'Lead', { content_name: 'vivint_upgrade', value: 600, currency: 'USD' })
-          ;(window as any).fbq('track', 'CompleteRegistration')
-        }
         if ((window as any).dataLayer) {
           (window as any).dataLayer.push({ event: 'lead_submitted', lead_value: 600, segment: 'upgrade' })
         }

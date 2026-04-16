@@ -276,8 +276,46 @@ export async function enrichFromSuperSearch(data: {
   )
 }
 
-export async function getEnrichmentStatus(resourceId: string): Promise<unknown> {
-  return request('GET', `/supersearch-enrichment/${resourceId}`)
+export interface EnrichmentStatus {
+  id: string
+  status: string // 'pending' | 'in_progress' | 'completed' | 'failed'
+  total_count?: number
+  enriched_count?: number
+  skipped_count?: number
+  [key: string]: unknown
+}
+
+export async function getEnrichmentStatus(resourceId: string): Promise<EnrichmentStatus> {
+  return request<EnrichmentStatus>('GET', `/supersearch-enrichment/${resourceId}`)
+}
+
+/**
+ * Poll SuperSearch enrichment until it completes or fails.
+ * Returns the final status. Throws if timeout or failure.
+ */
+export async function waitForEnrichment(
+  resourceId: string,
+  opts?: { maxWaitMs?: number; intervalMs?: number }
+): Promise<EnrichmentStatus> {
+  const maxWait = opts?.maxWaitMs ?? 120_000 // 2 minutes
+  const interval = opts?.intervalMs ?? 5_000 // 5 seconds
+  const deadline = Date.now() + maxWait
+
+  while (Date.now() < deadline) {
+    const status = await getEnrichmentStatus(resourceId)
+    const state = (status.status || '').toLowerCase()
+
+    if (state === 'completed' || state === 'complete' || state === 'done') {
+      return status
+    }
+    if (state === 'failed' || state === 'error') {
+      throw new Error(`SuperSearch enrichment failed: ${JSON.stringify(status)}`)
+    }
+
+    await new Promise((r) => setTimeout(r, interval))
+  }
+
+  throw new Error(`SuperSearch enrichment timed out after ${maxWait}ms for resource ${resourceId}`)
 }
 
 // ============================================

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { prisma } from '@/lib/db'
 import { sendEmail } from '@/lib/sendgrid'
 
-const META_PHONE = process.env.NEXT_PUBLIC_META_PHONE || '(801) 616-6301'
+const META_PHONE = process.env.NEXT_PUBLIC_META_PHONE || '(801) 348-6050'
 
 const patchSchema = z.object({
   email: z.string().email().optional(),
@@ -96,14 +96,14 @@ async function sendMetaEnrichmentEmail(lead: MetaLeadForEmail) {
       </div>
 
       <div style="text-align: center; margin: 32px 0;">
-        <a href="tel:+18016166301" style="display: inline-block; background: #10B981; color: white; font-weight: bold; font-size: 16px; padding: 14px 32px; border-radius: 8px; text-decoration: none;">
+        <a href="tel:+18013486050" style="display: inline-block; background: #10B981; color: white; font-weight: bold; font-size: 16px; padding: 14px 32px; border-radius: 8px; text-decoration: none;">
           Book My Free Home Assessment
         </a>
         <p style="color: #94A3B8; font-size: 12px; margin-top: 8px;">Free \u2022 No obligation \u2022 Takes 15 minutes</p>
       </div>
 
       <p style="color: #64748B; font-size: 14px; line-height: 1.6;">
-        Or call us directly: <a href="tel:+18016166301" style="color: #10B981; font-weight: bold;">${META_PHONE}</a>
+        Or call us directly: <a href="tel:+18013486050" style="color: #10B981; font-weight: bold;">${META_PHONE}</a>
       </p>
 
       <hr style="border: none; border-top: 1px solid #E2E8F0; margin: 32px 0;" />

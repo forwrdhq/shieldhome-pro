@@ -142,8 +142,8 @@ export default function BusinessLeadForm({ kw }: BusinessLeadFormProps) {
             </p>
             <p className="text-[13px] font-body text-slate-500">
               Have questions right now? Call{' '}
-              <a href="tel:+18016166301" className="text-emerald-600 hover:text-emerald-700 font-medium">
-                (801) 616-6301
+              <a href="tel:+18013486050" className="text-emerald-600 hover:text-emerald-700 font-medium">
+                (801) 348-6050
               </a>
             </p>
           </div>

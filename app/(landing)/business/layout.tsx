@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Business Security Systems | No Commercial Markup | ShieldHome Pro',
   description:
-    'Professional business security systems with zero commercial markup. Same Vivint AI hardware. Free installation. Up to $1,000 contract buyout. Call (801) 616-6301.',
+    'Professional business security systems with zero commercial markup. Same Vivint AI hardware. Free installation. Up to $1,000 contract buyout. Call (801) 348-6050.',
   keywords:
     'business security system, commercial security system, small business security cameras, business security monitoring, Vivint business security, ADT business alternative',
   openGraph: {
@@ -30,7 +30,7 @@ const businessSchema = {
   name: 'ShieldHome Pro — Commercial Security',
   description:
     'Authorized Vivint dealer providing commercial and business security systems with no commercial markup. AI cameras, smart locks, 8-second monitoring response.',
-  telephone: '+18016166301',
+  telephone: '+18013486050',
   url: 'https://shieldhome.pro/business',
   priceRange: '$39.99 - $200/mo',
   areaServed: { '@type': 'Country', name: 'US' },

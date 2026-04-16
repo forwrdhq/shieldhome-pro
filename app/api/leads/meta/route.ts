@@ -5,7 +5,7 @@ import { sendSms, formatPhone } from '@/lib/twilio'
 import { sendEmail } from '@/lib/sendgrid'
 import { APP_URL } from '@/lib/constants'
 
-const META_PHONE = process.env.NEXT_PUBLIC_META_PHONE || '(801) 616-6301'
+const META_PHONE = process.env.NEXT_PUBLIC_META_PHONE || '(801) 348-6050'
 
 const metaLeadSchema = z.object({
   // Contact (phone-first: email + zip are optional, captured in Step B)
@@ -342,7 +342,7 @@ async function sendMetaSlackNotification(lead: MetaLeadData) {
 async function sendMetaLeadEmail(lead: MetaLeadData) {
   if (!lead.email) return
 
-  const bookingUrl = `tel:+18016166301`
+  const bookingUrl = `tel:+18013486050`
   const riskColor = lead.riskLevel === 'high' ? '#EF4444' : lead.riskLevel === 'medium' ? '#F59E0B' : '#10B981'
 
   const subject = `Your Home Security Score: ${lead.securityScore}/100 \u2014 Here's Your Plan`
@@ -385,7 +385,7 @@ async function sendMetaLeadEmail(lead: MetaLeadData) {
       </div>
 
       <p style="color: #64748B; font-size: 14px; line-height: 1.6;">
-        Or call us directly: <a href="tel:+18016166301" style="color: #10B981; font-weight: bold;">${META_PHONE}</a>
+        Or call us directly: <a href="tel:+18013486050" style="color: #10B981; font-weight: bold;">${META_PHONE}</a>
       </p>
 
       <hr style="border: none; border-top: 1px solid #E2E8F0; margin: 32px 0;" />

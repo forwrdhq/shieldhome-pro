@@ -37,7 +37,7 @@ const organizationSchema = {
   name: 'ShieldHome Pro',
   description:
     'Top-performing Vivint authorized partner — exclusive package deals, free professional installation, and bonus equipment nationwide.',
-  telephone: '+18016166301',
+  telephone: '+18013486050',
   url: 'https://shieldhome.pro',
   priceRange: '$0 - $200/mo',
   areaServed: { '@type': 'Country', name: 'US' },

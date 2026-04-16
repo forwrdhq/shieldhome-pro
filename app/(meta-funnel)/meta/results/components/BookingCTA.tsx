@@ -3,8 +3,8 @@
 import { Phone, FileDown } from 'lucide-react'
 import { fireMetaEvent } from '../../components/MetaPixelEvents'
 
-const META_PHONE = process.env.NEXT_PUBLIC_META_PHONE || '(801) 616-6301'
-const META_PHONE_RAW = process.env.NEXT_PUBLIC_META_PHONE_RAW || '+18016166301'
+const META_PHONE = process.env.NEXT_PUBLIC_META_PHONE || '(801) 348-6050'
+const META_PHONE_RAW = process.env.NEXT_PUBLIC_META_PHONE_RAW || '+18013486050'
 
 interface BookingCTAProps {
   eventId: string

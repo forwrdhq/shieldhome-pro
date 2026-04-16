@@ -234,12 +234,12 @@ export default function BusinessHero({ h1, subhead, kw }: BusinessHeroProps) {
             {/* Phone CTA — mobile */}
             <div className="md:hidden mt-4 text-center">
               <a
-                href="tel:+18016166301"
+                href="tel:+18013486050"
                 onClick={() => pushDataLayer('phone_call_click', { location: 'hero_mobile' })}
                 className="inline-flex items-center gap-2 text-slate-400 hover:text-slate-300 text-[13px] font-body transition-colors"
               >
                 <Phone size={14} />
-                Or call (801) 616-6301
+                Or call (801) 348-6050
               </a>
             </div>
           </div>
@@ -265,7 +265,7 @@ export default function BusinessHero({ h1, subhead, kw }: BusinessHeroProps) {
                   </p>
                   <p className="text-[13px] font-body text-slate-500">
                     Questions right now? Call{' '}
-                    <a href="tel:+18016166301" className="text-emerald-600 font-medium">(801) 616-6301</a>
+                    <a href="tel:+18013486050" className="text-emerald-600 font-medium">(801) 348-6050</a>
                   </p>
                 </div>
 
@@ -398,12 +398,12 @@ export default function BusinessHero({ h1, subhead, kw }: BusinessHeroProps) {
             {/* Phone CTA — desktop */}
             <div className="hidden md:flex items-center justify-center gap-2 mt-4">
               <a
-                href="tel:+18016166301"
+                href="tel:+18013486050"
                 onClick={() => pushDataLayer('phone_call_click', { location: 'hero_desktop' })}
                 className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-300 text-[13px] font-body transition-colors"
               >
                 <Phone size={14} />
-                Or call us directly: (801) 616-6301
+                Or call us directly: (801) 348-6050
               </a>
             </div>
           </div>

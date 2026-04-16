@@ -160,13 +160,19 @@ export async function POST(req: NextRequest) {
       creditScoreRange: lead.creditScoreRange,
     }
 
-    await Promise.allSettled([
+    const notifications = [
       sendLeadConfirmationSms(notifData),
       sendRepAlertSms(notifData),
       sendWelcomeEmail(notifData),
       sendSlackNotification(notifData),
-      sendCallinglyWebhook(notifData),
-    ])
+    ]
+
+    // Only trigger speed-to-lead call for leads with 650+ or unknown credit score
+    if (lead.creditScoreRange !== 'BELOW_650') {
+      notifications.push(sendCallinglyWebhook(notifData))
+    }
+
+    await Promise.allSettled(notifications)
 
     return NextResponse.json({ success: true, leadId: lead.id, message: 'Quote request received' })
   } catch (err: any) {

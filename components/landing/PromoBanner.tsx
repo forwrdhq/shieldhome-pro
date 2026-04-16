@@ -70,8 +70,7 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
 
   return (
     <div
-      className={`w-full relative z-40 transition-all duration-300 ${mounted ? 'opacity-100 max-h-[200px]' : 'opacity-0 max-h-0 overflow-hidden'}`}
-      style={{ backgroundColor: 'rgba(253, 255, 231, 0.95)' }}
+      className={`w-full relative z-40 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 transition-all duration-300 ${mounted ? 'opacity-100 max-h-[200px]' : 'opacity-0 max-h-0 overflow-hidden'}`}
     >
       {/* Desktop */}
       <div className="hidden md:flex items-center justify-between max-w-7xl mx-auto px-6 py-3">
@@ -88,31 +87,31 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
         {/* Center Content */}
         <div className="flex-1 flex flex-col items-center gap-1.5 px-4">
           <div className="text-[14px] text-center">
-            <span className="font-bold" style={{ color: '#D4A843' }}>Spring Flash Sale — </span>
-            <span className="text-black">Buy 2 Cameras, Get 1 FREE*</span>
-            <span className="text-gray-400 mx-2">|</span>
-            <span className="text-black">Mention offer when you call</span>
+            <span className="font-bold text-emerald-400">Spring Flash Sale — </span>
+            <span className="text-white">Buy 2 Cameras, Get 1 FREE*</span>
+            <span className="text-slate-600 mx-2">|</span>
+            <span className="text-slate-300">Mention offer when you call</span>
           </div>
-          <p className="text-[11px] text-gray-500">
+          <p className="text-[11px] text-slate-500">
             *With qualifying system purchase &middot; ShieldHome partner exclusive
           </p>
 
           {/* Countdown */}
           <div className="flex items-center gap-3">
-            <span className="text-black font-bold text-[14px]">Hurry!</span>
+            <span className="text-white font-bold text-[14px]">Hurry!</span>
             {expired ? (
-              <span className="text-red-600 font-bold text-[14px]">Offer Expired</span>
+              <span className="text-red-400 font-bold text-[14px]">Offer Expired</span>
             ) : (
               <div className="flex gap-2">
                 {timerBoxes.map(({ value, label }) => (
                   <div
                     key={label}
-                    className="bg-white rounded-[5px] w-[52px] h-[38px] flex flex-col items-center justify-center shadow-sm"
+                    className="bg-slate-800 rounded-[5px] w-[52px] h-[38px] flex flex-col items-center justify-center"
                   >
-                    <span className="text-black text-[22px] leading-none font-normal tabular-nums">
+                    <span className="text-white text-[22px] leading-none font-normal tabular-nums">
                       {String(value).padStart(2, '0')}
                     </span>
-                    <span className="text-black text-[10px] leading-none">{label}</span>
+                    <span className="text-slate-400 text-[10px] leading-none">{label}</span>
                   </div>
                 ))}
               </div>
@@ -125,14 +124,13 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
           <a
             href={`tel:${PHONE_NUMBER_RAW}`}
             onClick={trackPhoneClick}
-            className="text-[14px] font-semibold underline"
-            style={{ color: '#D4A843' }}
+            className="text-[14px] font-semibold text-emerald-400 hover:text-emerald-300 underline transition-colors"
           >
             {PHONE_NUMBER}
           </a>
           <button
             onClick={handleDismiss}
-            className="text-black/40 hover:text-black text-xl leading-none transition-colors duration-200"
+            className="text-slate-500 hover:text-white text-xl leading-none transition-colors duration-200"
             aria-label="Dismiss promotion banner"
           >
             &times;
@@ -144,7 +142,7 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
       <div className="md:hidden relative px-4 py-3">
         <button
           onClick={handleDismiss}
-          className="absolute top-2 right-3 text-black/40 hover:text-black text-lg leading-none z-10"
+          className="absolute top-2 right-3 text-slate-500 hover:text-white text-lg leading-none z-10"
           aria-label="Dismiss promotion banner"
         >
           &times;
@@ -152,10 +150,10 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
 
         <div className="flex flex-col items-center gap-2 pr-5">
           <div className="text-[13px] text-center">
-            <span className="font-bold" style={{ color: '#D4A843' }}>Spring Flash Sale — </span>
-            <span className="text-black">Buy 2 Cameras, Get 1 FREE*</span>
+            <span className="font-bold text-emerald-400">Spring Flash Sale — </span>
+            <span className="text-white">Buy 2 Cameras, Get 1 FREE*</span>
           </div>
-          <p className="text-[10px] text-gray-500 text-center">
+          <p className="text-[10px] text-slate-500 text-center">
             *With qualifying system purchase &middot; Mention offer when you call
           </p>
 
@@ -164,12 +162,12 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
               {timerBoxes.map(({ value, label }) => (
                 <div
                   key={label}
-                  className="bg-white rounded-[4px] w-[42px] h-[32px] flex flex-col items-center justify-center shadow-sm"
+                  className="bg-slate-800 rounded-[4px] w-[42px] h-[32px] flex flex-col items-center justify-center"
                 >
-                  <span className="text-black text-[16px] leading-none font-normal tabular-nums">
+                  <span className="text-white text-[16px] leading-none font-normal tabular-nums">
                     {String(value).padStart(2, '0')}
                   </span>
-                  <span className="text-black text-[9px] leading-none">{label}</span>
+                  <span className="text-slate-400 text-[9px] leading-none">{label}</span>
                 </div>
               ))}
             </div>
@@ -178,8 +176,7 @@ export default function PromoBanner({ onQuizOpen }: PromoBannerProps) {
           <a
             href={`tel:${PHONE_NUMBER_RAW}`}
             onClick={trackPhoneClick}
-            className="text-[12px] font-semibold underline"
-            style={{ color: '#D4A843' }}
+            className="text-[12px] font-semibold text-emerald-400 underline"
           >
             Call {PHONE_NUMBER}
           </a>

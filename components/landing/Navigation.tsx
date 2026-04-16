@@ -63,7 +63,7 @@ export default function Navigation({ onQuizOpen }: NavigationProps) {
               <path d="M16 2L4 8v8c0 7.73 5.12 14.95 12 16.73C22.88 30.95 28 23.73 28 16V8L16 2z" fill="#10B981"/>
               <path d="M14 17.5l-3-3-1.5 1.5L14 20.5l8.5-8.5L21 10.5l-7 7z" fill="white"/>
             </svg>
-            <span>Shield<span className="text-emerald-400">Home</span></span>
+            <span className="text-white">Shield<span className="text-emerald-400">Home</span></span>
           </a>
 
           {/* Nav items */}

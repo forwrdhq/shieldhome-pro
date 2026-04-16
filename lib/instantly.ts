@@ -238,11 +238,12 @@ export async function moveLeadToSubsequence(data: {
 
 export async function countSuperSearchLeads(
   filters: Record<string, unknown>
-): Promise<{ count: number }> {
-  return request<{ count: number }>(
+): Promise<{ number_of_leads: number }> {
+  // Instantly expects search_filters wrapper around the filters object
+  return request<{ number_of_leads: number }>(
     'POST',
     '/supersearch-enrichment/count-leads-from-supersearch',
-    filters
+    { search_filters: filters }
   )
 }
 
@@ -278,11 +279,11 @@ export async function enrichFromSuperSearch(data: {
 }
 
 export interface EnrichmentStatus {
-  id: string
-  status: string // 'pending' | 'in_progress' | 'completed' | 'failed'
-  total_count?: number
-  enriched_count?: number
-  skipped_count?: number
+  resource_id: string
+  in_progress: boolean
+  has_no_leads: boolean
+  exists: boolean
+  enrichment_payload?: Record<string, unknown>
   [key: string]: unknown
 }
 
@@ -291,28 +292,22 @@ export async function getEnrichmentStatus(resourceId: string): Promise<Enrichmen
 }
 
 /**
- * Poll SuperSearch enrichment until it completes or fails.
- * Returns the final status. Throws if timeout or failure.
+ * Poll SuperSearch enrichment until in_progress=false or timeout.
+ * Returns the final status. Throws on timeout.
  */
 export async function waitForEnrichment(
   resourceId: string,
   opts?: { maxWaitMs?: number; intervalMs?: number }
 ): Promise<EnrichmentStatus> {
-  const maxWait = opts?.maxWaitMs ?? 120_000 // 2 minutes
-  const interval = opts?.intervalMs ?? 5_000 // 5 seconds
+  const maxWait = opts?.maxWaitMs ?? 120_000
+  const interval = opts?.intervalMs ?? 5_000
   const deadline = Date.now() + maxWait
 
   while (Date.now() < deadline) {
     const status = await getEnrichmentStatus(resourceId)
-    const state = (status.status || '').toLowerCase()
-
-    if (state === 'completed' || state === 'complete' || state === 'done') {
+    if (status.in_progress === false) {
       return status
     }
-    if (state === 'failed' || state === 'error') {
-      throw new Error(`SuperSearch enrichment failed: ${JSON.stringify(status)}`)
-    }
-
     await new Promise((r) => setTimeout(r, interval))
   }
 

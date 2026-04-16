@@ -10,6 +10,7 @@ import {
   listAccounts,
   getSendingAccounts,
   countSuperSearchLeads,
+  deleteCampaign,
 } from '@/lib/instantly'
 import { prisma } from '@/lib/db'
 
@@ -191,7 +192,12 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // 8. Verify leads exist in campaign before activating
+    // 8. Verify leads actually landed in the campaign before activating.
+    // SuperSearch regularly returns has_no_leads=false and in_progress=false
+    // while silently adding zero leads — typically because the Lead Finder
+    // plan quota is exhausted (pid_free has a monthly cap). Without this
+    // check, we'd end up with "Completed 100%" zombie campaigns that never
+    // sent an email.
     let leadCount = 0
     try {
       const leadsResult = await listLeads({ campaign_id: campaignId, limit: 100 })
@@ -201,17 +207,31 @@ export async function GET(req: NextRequest) {
       console.warn('[outreach-cron] Failed to list campaign leads:', err)
     }
 
-    if (leadCount === 0 && hasNoLeads) {
-      console.warn(`[outreach-cron] Enrichment found no leads. Skipping activation.`)
+    if (leadCount === 0) {
+      // Tear down the empty campaign so it doesn't clutter the Instantly
+      // dashboard as a "Completed 100%" with 0 sends.
+      try {
+        await deleteCampaign(campaignId)
+        console.warn(`[outreach-cron] Deleted empty campaign ${campaignId}`)
+      } catch (delErr) {
+        console.warn(`[outreach-cron] Failed to delete empty campaign:`, delErr)
+      }
+
+      const reason = hasNoLeads
+        ? 'SuperSearch reported has_no_leads=true. Check filter — keyword may not match any real businesses.'
+        : `SuperSearch reported ${availableLeadCount} preview matches but enriched 0 leads into the campaign. Most commonly this means the Instantly Lead Finder plan is exhausted (current plan: pid_free). Upgrade the Lead Finder plan or wait for monthly quota reset.`
+
+      console.error(`[outreach-cron] ${reason}`)
       return NextResponse.json({
         success: false,
-        action: 'skip',
-        reason: 'Enrichment completed but has_no_leads=true. Check filters.',
-        campaignId,
+        action: 'abort',
+        reason,
         campaignName,
         searchFilters,
         availableLeadCount,
-      })
+        hasNoLeads,
+        enrichmentResourceId: resourceId,
+      }, { status: 200 })
     }
 
     // 9. Activate campaign

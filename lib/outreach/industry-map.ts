@@ -190,7 +190,9 @@ export function buildSearchFilters(
   }
 
   if (mapping.companyKeywords?.length) {
-    filters.keyword = { include: mapping.companyKeywords }
+    // Instantly v2 SuperSearch: company_name.include is an array of substrings
+    // to match in company names (e.g. ["gun", "firearm"] → companies with those terms)
+    filters.company_name = { include: mapping.companyKeywords }
   }
 
   return filters

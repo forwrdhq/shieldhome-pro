@@ -89,8 +89,8 @@ export async function GET(req: NextRequest) {
     // 3a. Preflight count — don't create a campaign if the filter finds nothing
     let availableLeadCount = -1
     try {
-      const countResult = await countSuperSearchLeads(searchFilters) as Record<string, unknown>
-      availableLeadCount = typeof countResult.count === 'number' ? countResult.count : -1
+      const countResult = await countSuperSearchLeads(searchFilters)
+      availableLeadCount = typeof countResult.number_of_leads === 'number' ? countResult.number_of_leads : -1
       console.log(`[outreach-cron] SuperSearch preflight count: ${availableLeadCount} leads available`)
     } catch (err) {
       console.warn('[outreach-cron] Preflight count failed (proceeding anyway):', err)
@@ -177,40 +177,49 @@ export async function GET(req: NextRequest) {
     console.log(`[outreach-cron] SuperSearch enrichment triggered: ${resourceId}`)
 
     // 7. Wait for enrichment to complete before activating
-    let enrichedCount = 0
+    let hasNoLeads = false
     if (resourceId) {
       try {
         const finalStatus = await waitForEnrichment(resourceId, {
-          maxWaitMs: 90_000,  // 90s — generous for Vercel function timeout
+          maxWaitMs: 120_000,
           intervalMs: 5_000,
         })
-        enrichedCount = finalStatus.enriched_count ?? finalStatus.total_count ?? 0
-        console.log(`[outreach-cron] Enrichment complete: ${enrichedCount} leads enriched, ${finalStatus.skipped_count ?? 0} skipped`)
+        hasNoLeads = finalStatus.has_no_leads === true
+        console.log(`[outreach-cron] Enrichment complete. has_no_leads=${hasNoLeads}, in_progress=${finalStatus.in_progress}`)
       } catch (pollErr) {
         console.error(`[outreach-cron] Enrichment polling failed:`, pollErr)
-        // Still try to activate — leads may trickle in async
       }
     }
 
     // 8. Verify leads exist in campaign before activating
     let leadCount = 0
     try {
-      const leadsResult = await listLeads({ campaign_id: campaignId, limit: 1 })
+      const leadsResult = await listLeads({ campaign_id: campaignId, limit: 100 })
       leadCount = leadsResult.items?.length ?? 0
-    } catch {
-      // Non-fatal — proceed with activation attempt
+      console.log(`[outreach-cron] Campaign ${campaignId} has ${leadCount} leads attached`)
+    } catch (err) {
+      console.warn('[outreach-cron] Failed to list campaign leads:', err)
     }
 
-    if (leadCount === 0 && enrichedCount === 0) {
-      console.warn(`[outreach-cron] WARNING: Campaign ${campaignId} has 0 leads after enrichment. Activating anyway — leads may still be processing.`)
+    if (leadCount === 0 && hasNoLeads) {
+      console.warn(`[outreach-cron] Enrichment found no leads. Skipping activation.`)
+      return NextResponse.json({
+        success: false,
+        action: 'skip',
+        reason: 'Enrichment completed but has_no_leads=true. Check filters.',
+        campaignId,
+        campaignName,
+        searchFilters,
+        availableLeadCount,
+      })
     }
 
     // 9. Activate campaign
     await activateCampaign(campaignId)
-    console.log(`[outreach-cron] Campaign activated (${enrichedCount} leads enriched)`)
+    console.log(`[outreach-cron] Campaign activated with ${leadCount} leads`)
 
     // 10. Log rotation + save to DB
-    await logRotation(pick.dmaId, pick.niche.slug, campaignId, enrichedCount)
+    await logRotation(pick.dmaId, pick.niche.slug, campaignId, leadCount)
 
     await prisma.outreachCampaign.create({
       data: {
@@ -230,8 +239,9 @@ export async function GET(req: NextRequest) {
       niche: pick.niche.name,
       dma: pick.dmaName,
       enrichmentResourceId: resourceId,
-      enrichedCount,
+      availableLeadCount,
       leadCount,
+      hasNoLeads,
     })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'

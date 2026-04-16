@@ -9,6 +9,7 @@ import {
   listLeads,
   listAccounts,
   getSendingAccounts,
+  countSuperSearchLeads,
 } from '@/lib/instantly'
 import { prisma } from '@/lib/db'
 
@@ -82,6 +83,27 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({
         success: false,
         error: `No industry mapping for niche: ${pick.niche.slug}`,
+      })
+    }
+
+    // 3a. Preflight count — don't create a campaign if the filter finds nothing
+    let availableLeadCount = -1
+    try {
+      const countResult = await countSuperSearchLeads(searchFilters) as Record<string, unknown>
+      availableLeadCount = typeof countResult.count === 'number' ? countResult.count : -1
+      console.log(`[outreach-cron] SuperSearch preflight count: ${availableLeadCount} leads available`)
+    } catch (err) {
+      console.warn('[outreach-cron] Preflight count failed (proceeding anyway):', err)
+    }
+
+    if (availableLeadCount === 0) {
+      return NextResponse.json({
+        success: false,
+        action: 'skip',
+        reason: 'SuperSearch returned 0 matching leads for filter',
+        niche: pick.niche.slug,
+        dma: pick.dmaId,
+        searchFilters,
       })
     }
 

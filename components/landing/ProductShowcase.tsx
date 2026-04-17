@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
 
@@ -37,57 +37,6 @@ const products = [
   },
 ]
 
-function PlayIcon() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center z-10">
-      <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all duration-300 group-hover:bg-white group-hover:scale-110">
-        <svg width="16" height="18" viewBox="0 0 16 18" fill="none" className="ml-0.5">
-          <path d="M15 9L1 17.5V0.5L15 9Z" fill="#1B2838" />
-        </svg>
-      </div>
-    </div>
-  )
-}
-
-function VideoModal({ youtubeId, title, onClose }: { youtubeId: string; title: string; onClose: () => void }) {
-  useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    const handleEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', handleEsc)
-    return () => {
-      document.body.style.overflow = ''
-      window.removeEventListener('keydown', handleEsc)
-    }
-  }, [onClose])
-
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/80 animate-fadeIn" />
-      <div
-        className="relative w-full max-w-[800px] aspect-video rounded-xl overflow-hidden shadow-2xl animate-scaleIn"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <iframe
-          src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`}
-          title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full"
-        />
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors z-10"
-          aria-label="Close video"
-        >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M1 1L13 13M13 1L1 13" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  )
-}
-
 function ProductCard({ product, onClick }: { product: typeof products[0]; onClick: (p: typeof products[0]) => void }) {
   return (
     <button
@@ -102,7 +51,6 @@ function ProductCard({ product, onClick }: { product: typeof products[0]; onClic
           className="object-cover transition-transform duration-700 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        {product.youtubeId && <PlayIcon />}
       </div>
       <div className="p-4">
         <h3 className="font-heading font-bold text-[15px] md:text-[16px] text-slate-900 tracking-[-0.01em]">
@@ -117,20 +65,12 @@ function ProductCard({ product, onClick }: { product: typeof products[0]; onClic
 }
 
 export default function ProductShowcase() {
-  const [activeVideo, setActiveVideo] = useState<{ youtubeId: string; title: string } | null>(null)
   const [showAll, setShowAll] = useState(false)
   const headingRef = useScrollReveal<HTMLDivElement>()
   const gridRef = useStaggerReveal<HTMLDivElement>(80)
 
-  const handleCardClick = useCallback((product: typeof products[0]) => {
-    if (product.youtubeId) {
-      setActiveVideo({ youtubeId: product.youtubeId, title: product.title })
-      if ((window as any).dataLayer) {
-        (window as any).dataLayer.push({ event: 'product_video_play', product: product.title })
-      }
-    } else {
-      document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth' })
-    }
+  const handleCardClick = useCallback((_product: typeof products[0]) => {
+    document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
   const visibleProducts = showAll ? products : products.slice(0, 3)
@@ -186,14 +126,6 @@ export default function ProductShowcase() {
           </div>
         </div>
       </section>
-
-      {activeVideo && (
-        <VideoModal
-          youtubeId={activeVideo.youtubeId}
-          title={activeVideo.title}
-          onClose={() => setActiveVideo(null)}
-        />
-      )}
 
       <style jsx global>{`
         @keyframes fadeIn {

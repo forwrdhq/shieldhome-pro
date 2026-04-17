@@ -40,7 +40,8 @@ interface QuizFunnelProps {
   onClose?: () => void
 }
 
-const TOTAL_STEPS = 7
+const TOTAL_STEPS_FULL = 7
+const TOTAL_STEPS_PREFILLED = 6
 
 function formatPhone(value: string): string {
   let digits = value.replace(/\D/g, '')
@@ -119,17 +120,40 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
   const [phoneDisplay, setPhoneDisplay] = useState('')
   const [tcpaConsent, setTcpaConsent] = useState(true)
   const [showRenterNote, setShowRenterNote] = useState(false)
+  const [heroPrefill, setHeroPrefill] = useState<{ firstName: string; phone: string; zipCode: string } | null>(null)
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
   })
 
+  const TOTAL_STEPS = heroPrefill ? TOTAL_STEPS_PREFILLED : TOTAL_STEPS_FULL
   const progress = ((step - 1) / (TOTAL_STEPS - 1)) * 100
 
-  // Auto-detect zip code via geolocation
+  // Detect hero handoff on mount — if hero already collected name/phone/zip,
+  // shorten the quiz by 1 step and submit on credit-score click.
   useEffect(() => {
-    if (step === 7 && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
+    if (typeof window === 'undefined') return
+    try {
+      const raw = sessionStorage.getItem('shieldhome_hero_prefill')
+      if (!raw) return
+      const data = JSON.parse(raw) as { firstName?: string; phone?: string; zipCode?: string }
+      if (data.firstName && data.phone && data.zipCode) {
+        setHeroPrefill({ firstName: data.firstName, phone: data.phone, zipCode: data.zipCode })
+        setValue('firstName', data.firstName)
+        setValue('phone', data.phone)
+        setValue('zipCode', data.zipCode)
+        setPhoneDisplay(formatPhone(data.phone))
+      }
+    } catch {
+      // Ignore parse errors
+    }
+  }, [setValue])
+
+  // Auto-detect zip code via geolocation (only when not prefilled and on contact step)
+  useEffect(() => {
+    if (heroPrefill || step !== 7 || typeof navigator === 'undefined' || !navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
         try {
           const { latitude, longitude } = position.coords
           const response = await fetch(
@@ -142,9 +166,11 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
         } catch {
           // Silently fail — user can enter manually
         }
-      }, () => {}, { timeout: 5000 })
-    }
-  }, [step, setValue])
+      },
+      () => {},
+      { timeout: 5000 }
+    )
+  }, [heroPrefill, step, setValue])
 
   // Track quiz start on first advance
   useEffect(() => {
@@ -210,10 +236,80 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
     setStep(6)
   }
 
-  function selectCreditScore(value: string) {
+  async function selectCreditScore(value: string) {
     setQuiz(q => ({ ...q, creditScoreRange: value }))
     trackStep(6, value)
+
+    // Hero handoff: contact info already collected — submit directly, skip step 7.
+    if (heroPrefill) {
+      await submitWithPrefill(value)
+      return
+    }
     setStep(7)
+  }
+
+  async function submitWithPrefill(creditScoreRange: string) {
+    if (!heroPrefill) return
+    setSubmitting(true)
+    setError('')
+    try {
+      const tracking = getTracking()
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: heroPrefill.firstName,
+          phone: heroPrefill.phone,
+          zipCode: heroPrefill.zipCode,
+          propertyType: quiz.propertyType,
+          homeownership: quiz.homeownership === 'BUYING' ? 'OWN' : quiz.homeownership,
+          productsInterested: quiz.securityConcerns,
+          timeline: quiz.timeline,
+          entryPoints: quiz.entryPoints,
+          creditScoreRange,
+          tcpaConsent: true,
+          ...tracking,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
+
+      const leadEventId = `${sessionEventId}_lead`
+      const crEventId = `${sessionEventId}_cr`
+      firePixelEvent('Lead', leadEventId, { content_name: 'security_quote', value: 900, currency: 'USD' })
+      firePixelEvent('CompleteRegistration', crEventId)
+      fireCapi(
+        'Lead',
+        leadEventId,
+        { phone: heroPrefill.phone, firstName: heroPrefill.firstName, zipCode: heroPrefill.zipCode },
+        { content_name: 'security_quote', value: 900, currency: 'USD' }
+      )
+      fireCapi('CompleteRegistration', crEventId, {
+        phone: heroPrefill.phone,
+        firstName: heroPrefill.firstName,
+        zipCode: heroPrefill.zipCode,
+      })
+
+      if (typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          event: 'lead_submitted',
+          lead_value: 900,
+          property_type: quiz.propertyType,
+          ownership: quiz.homeownership,
+          timeline: quiz.timeline,
+          zip_code: heroPrefill.zipCode,
+          source: 'deals_hero_prefill',
+        })
+      }
+
+      router.push(
+        `/thank-you?ep=${quiz.entryPoints}&concerns=${quiz.securityConcerns.join(',')}&timeline=${quiz.timeline}&property=${quiz.propertyType}`
+      )
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -308,13 +404,19 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
     { value: 'JUST_RESEARCHING', label: 'Just researching', icon: <Search size={24} /> },
   ]
 
-  const creditScoreOptions = [
-    { value: 'EXCELLENT', label: 'Excellent (750+)' },
-    { value: 'GOOD', label: 'Good (700–749)' },
-    { value: 'FAIR', label: 'Fair (650–699)' },
-    { value: 'BELOW_650', label: 'Below 650' },
-    { value: 'NOT_SURE', label: "I'm not sure" },
-  ]
+  const creditScoreOptions = heroPrefill
+    ? [
+        { value: 'ABOVE_650', label: 'Above 650' },
+        { value: 'BELOW_650', label: 'Below 650' },
+        { value: 'NOT_SURE', label: "I'm not sure" },
+      ]
+    : [
+        { value: 'EXCELLENT', label: 'Excellent (750+)' },
+        { value: 'GOOD', label: 'Good (700–749)' },
+        { value: 'FAIR', label: 'Fair (650–699)' },
+        { value: 'BELOW_650', label: 'Below 650' },
+        { value: 'NOT_SURE', label: "I'm not sure" },
+      ]
 
   const qualification = getQualificationMessage(quiz)
 
@@ -543,14 +645,24 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                 What&apos;s your estimated credit score?
               </h2>
               <p className="text-gray-500 mb-6 text-sm">
-                Vivint offers $0-down financing for qualifying credit. This helps us find the best plan for you.
+                {heroPrefill
+                  ? 'Final step — pick a range and we\'ll match you to every offer you qualify for.'
+                  : 'Vivint offers $0-down financing for qualifying credit. This helps us find the best plan for you.'}
               </p>
+
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                  {error}
+                </div>
+              )}
+
               <div className="flex flex-col gap-3">
                 {creditScoreOptions.map(opt => (
                   <button
                     key={opt.value}
                     onClick={() => selectCreditScore(opt.value)}
-                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-200 text-left group min-h-[56px]"
+                    disabled={submitting}
+                    className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-200 text-left group min-h-[56px] disabled:opacity-60 disabled:cursor-not-allowed"
                     aria-label={`Select ${opt.label}`}
                   >
                     <span className="text-gray-500 group-hover:text-emerald-500 transition-colors">
@@ -560,6 +672,14 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                   </button>
                 ))}
               </div>
+
+              {heroPrefill && (
+                <p className="mt-5 text-[11px] text-gray-500 leading-relaxed text-center">
+                  By selecting an option above, I agree to receive calls, texts, and emails from
+                  ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer.
+                  Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.
+                </p>
+              )}
             </div>
           )}
 

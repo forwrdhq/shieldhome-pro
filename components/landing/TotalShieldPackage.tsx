@@ -66,7 +66,6 @@ export default function TotalShieldPackage({ onQuizOpen }: TotalShieldPackagePro
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            if ((window as any).fbq) (window as any).fbq('trackCustom', 'TotalShieldPackageViewed')
             if ((window as any).dataLayer) {
               (window as any).dataLayer.push({ event: 'total_shield_viewed' })
             }
@@ -82,7 +81,6 @@ export default function TotalShieldPackage({ onQuizOpen }: TotalShieldPackagePro
 
   function trackPhoneClick() {
     if (typeof window !== 'undefined') {
-      if ((window as any).fbq) (window as any).fbq('track', 'Contact', { content_name: 'phone_call' })
       if ((window as any).dataLayer) (window as any).dataLayer.push({ event: 'phone_click' })
     }
   }

@@ -5,6 +5,14 @@ import { leadSchema } from '@/lib/validation'
 import { calculateLeadScore } from '@/lib/lead-scoring'
 import { sendLeadConfirmationSms, sendRepAlertSms, sendWelcomeEmail, sendSlackNotification, sendCallinglyWebhook } from '@/lib/notifications'
 
+// Callingly only dials when the lead has confirmed 650+ credit. Unknown,
+// below-650, or missing values are held back so reps aren't cold-called on
+// likely non-qualifiers.
+const CALLINGLY_OK_CREDIT = new Set(['ABOVE_650', 'EXCELLENT', 'GOOD', 'FAIR'])
+function shouldTriggerCallingly(creditScoreRange: string | null | undefined) {
+  return !!creditScoreRange && CALLINGLY_OK_CREDIT.has(creditScoreRange)
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -31,45 +39,98 @@ export async function POST(req: NextRequest) {
       }
     })
     if (existing) {
-      // Update the existing lead rather than reject
-      await prisma.lead.update({
-        where: { id: existing.id },
-        data: { notes: (existing.notes || '') + '\n[Duplicate submission]' }
-      })
-
-      // Still fire notifications for duplicates so reps are alerted
-      const dupNotifData = {
-        id: existing.id,
-        firstName: existing.firstName,
-        lastName: existing.lastName,
-        fullName: existing.fullName,
-        phone: existing.phone,
-        email: existing.email,
-        zipCode: existing.zipCode,
-        propertyType: existing.propertyType,
-        homeownership: existing.homeownership,
-        doorsWindows: existing.doorsWindows,
-        timeline: existing.timeline,
-        leadScore: existing.leadScore,
-        priority: existing.priority,
-        source: existing.source,
-        medium: existing.medium,
-        campaign: existing.campaign,
-        productsInterested: existing.productsInterested,
-        segment: existing.segment,
-        landingPage: existing.landingPage,
-        currentProvider: existing.currentProvider,
-        contractMonthsRemaining: existing.contractMonthsRemaining,
-        currentMonthlyPayment: existing.currentMonthlyPayment,
-        creditScoreRange: existing.creditScoreRange,
+      // Merge incoming fields into the existing lead — the hero form creates a
+      // partial record, and the full quiz submission is where the real data
+      // (segment, credit score, property type, etc.) finally shows up. Without
+      // this merge, reps see a stale notification with "Not provided" fields.
+      const merged = {
+        firstName: data.firstName || existing.firstName,
+        lastName: data.lastName || existing.lastName,
+        email: data.email ?? existing.email,
+        zipCode: data.zipCode || existing.zipCode,
+        fullName: [data.firstName || existing.firstName, data.lastName || existing.lastName].filter(Boolean).join(' '),
+        propertyType: (data.propertyType as any) ?? existing.propertyType,
+        homeownership: (data.homeownership as any) ?? existing.homeownership,
+        productsInterested: data.productsInterested?.length ? data.productsInterested : existing.productsInterested,
+        timeline: (data.timeline as any) ?? existing.timeline,
+        doorsWindows: data.entryPoints ?? existing.doorsWindows,
+        segment: data.segment ?? existing.segment,
+        currentProvider: data.currentProvider ?? existing.currentProvider,
+        contractMonthsRemaining: data.contractMonthsRemaining ?? existing.contractMonthsRemaining,
+        currentMonthlyPayment: data.currentMonthlyPayment ?? existing.currentMonthlyPayment,
+        creditScoreRange: data.creditScoreRange ?? existing.creditScoreRange,
+        source: data.source ?? existing.source,
+        medium: data.medium ?? existing.medium,
+        campaign: data.campaign ?? existing.campaign,
+        adSet: data.adSet ?? existing.adSet,
+        adId: data.adId ?? existing.adId,
+        keyword: data.keyword ?? existing.keyword,
+        utmContent: data.utmContent ?? existing.utmContent,
+        gclid: data.gclid ?? existing.gclid,
+        fbclid: data.fbclid ?? existing.fbclid,
+        kwParam: data.kwParam ?? existing.kwParam,
+        landingPage: data.landingPage ?? existing.landingPage,
+        referrer: data.referrer ?? existing.referrer,
+        tcpaConsent: existing.tcpaConsent || (data.tcpaConsent ?? false),
+        tcpaConsentAt: existing.tcpaConsentAt ?? (data.tcpaConsent ? new Date() : null),
       }
 
-      await Promise.allSettled([
+      const { score, priority } = calculateLeadScore({
+        homeownership: merged.homeownership || 'OWN',
+        propertyType: merged.propertyType || 'HOUSE',
+        timeline: merged.timeline || 'ASAP',
+        productsInterested: merged.productsInterested?.length ? merged.productsInterested : ['FULL_SYSTEM'],
+        source: merged.source || undefined,
+        deviceType: existing.deviceType || undefined,
+        segment: merged.segment || undefined,
+      })
+
+      const updated = await prisma.lead.update({
+        where: { id: existing.id },
+        data: {
+          ...merged,
+          leadScore: score,
+          priority: priority as any,
+          notes: (existing.notes || '') + '\n[Duplicate submission — merged]',
+        }
+      })
+
+      const dupNotifData = {
+        id: updated.id,
+        firstName: updated.firstName,
+        lastName: updated.lastName,
+        fullName: updated.fullName,
+        phone: updated.phone,
+        email: updated.email,
+        zipCode: updated.zipCode,
+        propertyType: updated.propertyType,
+        homeownership: updated.homeownership,
+        doorsWindows: updated.doorsWindows,
+        timeline: updated.timeline,
+        leadScore: updated.leadScore,
+        priority: updated.priority,
+        source: updated.source,
+        medium: updated.medium,
+        campaign: updated.campaign,
+        productsInterested: updated.productsInterested,
+        segment: updated.segment,
+        landingPage: updated.landingPage,
+        currentProvider: updated.currentProvider,
+        contractMonthsRemaining: updated.contractMonthsRemaining,
+        currentMonthlyPayment: updated.currentMonthlyPayment,
+        creditScoreRange: updated.creditScoreRange,
+      }
+
+      const dupNotifications: Promise<unknown>[] = [
         sendSlackNotification(dupNotifData),
         sendRepAlertSms(dupNotifData),
-      ])
+      ]
+      if (shouldTriggerCallingly(updated.creditScoreRange)) {
+        dupNotifications.push(sendCallinglyWebhook(dupNotifData))
+      }
+      await Promise.allSettled(dupNotifications)
 
-      return NextResponse.json({ success: true, leadId: existing.id, message: 'Quote request received' })
+      return NextResponse.json({ success: true, leadId: updated.id, message: 'Quote request received' })
     }
 
     // Score the lead — provide defaults for switch leads (high-intent buyout leads)
@@ -167,8 +228,7 @@ export async function POST(req: NextRequest) {
       sendSlackNotification(notifData),
     ]
 
-    // Only trigger speed-to-lead call for leads with 650+ or unknown credit score
-    if (lead.creditScoreRange !== 'BELOW_650') {
+    if (shouldTriggerCallingly(lead.creditScoreRange)) {
       notifications.push(sendCallinglyWebhook(notifData))
     }
 

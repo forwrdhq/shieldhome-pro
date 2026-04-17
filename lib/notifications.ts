@@ -9,6 +9,7 @@ const CREDIT_SCORE_LABELS: Record<string, string> = {
   EXCELLENT: 'Excellent (750+)',
   GOOD: 'Good (700–749)',
   FAIR: 'Fair (650–699)',
+  ABOVE_650: 'Above 650',
   BELOW_650: 'Below 650',
   NOT_SURE: 'Not sure',
 }

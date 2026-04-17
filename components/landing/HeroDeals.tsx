@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -10,8 +10,6 @@ import { Lock, Phone, ShieldCheck } from 'lucide-react'
 import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 import { getHeadlineVariant } from '@/lib/headlineVariants'
 import { cn } from '@/lib/utils'
-import { getTracking } from '@/lib/utm'
-import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
 
 const heroSchema = z.object({
   firstName: z.string().min(1, 'Name required'),
@@ -41,15 +39,12 @@ export default function HeroDeals({ onQuizOpen }: HeroDealsProps) {
 
   const [phoneDisplay, setPhoneDisplay] = useState('')
   const [formStarted, setFormStarted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState('')
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<HeroForm>({
     resolver: zodResolver(heroSchema),
   })
 
   function trackPhoneClick() {
     if (typeof window !== 'undefined') {
-      if ((window as any).fbq) (window as any).fbq('track', 'Contact', { content_name: 'phone_call' })
       if ((window as any).dataLayer) (window as any).dataLayer.push({ event: 'phone_click' })
     }
   }
@@ -58,7 +53,6 @@ export default function HeroDeals({ onQuizOpen }: HeroDealsProps) {
     if (formStarted) return
     setFormStarted(true)
     if (typeof window !== 'undefined') {
-      if ((window as any).fbq) (window as any).fbq('trackCustom', 'HeroFormStarted')
       if ((window as any).dataLayer) (window as any).dataLayer.push({ event: 'hero_form_started' })
     }
   }
@@ -70,10 +64,7 @@ export default function HeroDeals({ onQuizOpen }: HeroDealsProps) {
     setValue('phone', digits, { shouldValidate: digits.length >= 10 })
   }
 
-  async function onSubmit(data: HeroForm) {
-    setSubmitting(true)
-    setSubmitError('')
-
+  function onSubmit(data: HeroForm) {
     if (typeof window !== 'undefined') {
       try {
         sessionStorage.setItem(
@@ -83,70 +74,18 @@ export default function HeroDeals({ onQuizOpen }: HeroDealsProps) {
       } catch {
         // Ignore quota errors
       }
+
+      if ((window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          event: 'hero_form_started_quiz',
+          zip: data.zipCode,
+        })
+      }
     }
 
-    // Fire Lead pixel + CAPI immediately (so Meta's algo can optimize on hero submits)
-    const eventId = genEventId()
-    firePixelEvent('Lead', eventId, {
-      content_name: 'hero_form_lead',
-      value: 50,
-      currency: 'USD',
-    })
-    fireCapi(
-      'Lead',
-      eventId,
-      { phone: data.phone, firstName: data.firstName, zipCode: data.zipCode },
-      { content_name: 'hero_form_lead', value: 50, currency: 'USD' }
-    )
-
-    if (typeof window !== 'undefined' && (window as any).dataLayer) {
-      (window as any).dataLayer.push({
-        event: 'hero_form_submitted',
-        zip: data.zipCode,
-        lead_value: 50,
-      })
-    }
-
-    // Submit partial lead — API dedupes by phone (30 days) and updates the
-    // existing record when the full quiz finishes, so no double-counting.
-    try {
-      const tracking = getTracking()
-      await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: data.firstName,
-          phone: data.phone,
-          zipCode: data.zipCode,
-          source: tracking.source || 'meta',
-          medium: tracking.medium || 'paid_social',
-          campaign: tracking.campaign,
-          adSet: tracking.adSet,
-          adId: tracking.adId,
-          fbclid: tracking.fbclid,
-          utmContent: tracking.utmContent,
-          landingPage: tracking.landingPage || '/deals',
-          referrer: tracking.referrer,
-          deviceType: tracking.deviceType,
-          browser: tracking.browser,
-          segment: 'deals_hero',
-          tcpaConsent: true,
-        }),
-      })
-    } catch {
-      // Lead notification failures shouldn't block UX — keep going.
-    }
-
-    setSubmitting(false)
+    // Lead is NOT submitted here — only after the full quiz completes.
     onQuizOpen()
   }
-
-  // Track ViewContent on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'ViewContent', { content_name: 'deals_landing' })
-    }
-  }, [])
 
   const FormCard = (
     <form
@@ -222,16 +161,11 @@ export default function HeroDeals({ onQuizOpen }: HeroDealsProps) {
 
         <button
           type="submit"
-          disabled={submitting}
-          className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-heading font-bold rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-heading font-bold rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
           style={{ fontSize: '17px', height: '56px' }}
         >
-          {submitting ? 'Submitting…' : 'See If I Qualify →'}
+          See If I Qualify →
         </button>
-
-        {submitError && (
-          <p className="text-[12px] text-red-600 text-center">{submitError}</p>
-        )}
 
         <div className="flex items-center justify-center gap-1.5 text-slate-500">
           <Lock size={12} className="text-emerald-500" />

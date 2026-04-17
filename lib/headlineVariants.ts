@@ -8,8 +8,8 @@ export type HeadlineVariant = {
 export const headlineVariants: Record<string, HeadlineVariant> = {
   default: {
     preHeadline: 'Authorized Vivint Dealer · Homeowner Pricing Program',
-    h1Mobile: 'Get a $2,847 Vivint Smart Security System for $0 Down',
-    h1Desktop: 'Get a $2,847 Vivint Smart Security System for $0 Down',
+    h1Mobile: 'Get a Vivint Smart Security System for $0 Down',
+    h1Desktop: 'Get a Vivint Smart Security System for $0 Down',
     subheadline:
       'Free professional installation. Installed this week. See if you qualify in 60 seconds.',
   },

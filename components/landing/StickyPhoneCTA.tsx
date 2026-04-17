@@ -21,7 +21,6 @@ export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
 
   function trackPhoneClick() {
     if (typeof window !== 'undefined') {
-      if ((window as any).fbq) (window as any).fbq('track', 'Contact', { content_name: 'phone_call' })
       if ((window as any).dataLayer) (window as any).dataLayer.push({ event: 'phone_click' })
     }
   }

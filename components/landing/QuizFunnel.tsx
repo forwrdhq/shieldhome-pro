@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
-import { genEventId, firePixelEvent, firePixelCustomEvent, fireCapi } from '@/lib/meta-pixel'
+import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 
@@ -175,15 +175,13 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
   // Track quiz start on first advance
   useEffect(() => {
     if (step === 2 && typeof window !== 'undefined') {
-      firePixelEvent('InitiateCheckout', `${sessionEventId}_ic`, { content_name: 'quiz_started' })
       if ((window as any).dataLayer) {
         (window as any).dataLayer.push({ event: 'quiz_start', quiz_step: 1 })
       }
     }
-  }, [step, sessionEventId])
+  }, [step])
 
   function trackStep(stepNum: number, answer: string) {
-    firePixelCustomEvent('QuizStep', genEventId(), { step: stepNum, answer })
     if (typeof window !== 'undefined' && (window as any).dataLayer) {
       (window as any).dataLayer.push({ event: 'quiz_step', quiz_step: stepNum, answer })
     }
@@ -275,25 +273,16 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
       const leadEventId = `${sessionEventId}_lead`
-      const crEventId = `${sessionEventId}_cr`
-      firePixelEvent('Lead', leadEventId, { content_name: 'security_quote', value: 900, currency: 'USD' })
-      firePixelEvent('CompleteRegistration', crEventId)
+      firePixelEvent('Lead', leadEventId)
       fireCapi(
         'Lead',
         leadEventId,
-        { phone: heroPrefill.phone, firstName: heroPrefill.firstName, zipCode: heroPrefill.zipCode },
-        { content_name: 'security_quote', value: 900, currency: 'USD' }
+        { phone: heroPrefill.phone, firstName: heroPrefill.firstName, zipCode: heroPrefill.zipCode }
       )
-      fireCapi('CompleteRegistration', crEventId, {
-        phone: heroPrefill.phone,
-        firstName: heroPrefill.firstName,
-        zipCode: heroPrefill.zipCode,
-      })
 
       if (typeof window !== 'undefined' && (window as any).dataLayer) {
         (window as any).dataLayer.push({
           event: 'lead_submitted',
-          lead_value: 900,
           property_type: quiz.propertyType,
           ownership: quiz.homeownership,
           timeline: quiz.timeline,
@@ -343,17 +332,13 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
       const leadEventId = `${sessionEventId}_lead`
-      const crEventId = `${sessionEventId}_cr`
-      firePixelEvent('Lead', leadEventId, { content_name: 'security_quote', value: 900, currency: 'USD' })
-      firePixelEvent('CompleteRegistration', crEventId)
-      fireCapi('Lead', leadEventId, { email: contact.email, phone: contact.phone, firstName: contact.firstName, zipCode: contact.zipCode }, { content_name: 'security_quote', value: 900, currency: 'USD' })
-      fireCapi('CompleteRegistration', crEventId, { email: contact.email, phone: contact.phone, firstName: contact.firstName, zipCode: contact.zipCode })
+      firePixelEvent('Lead', leadEventId)
+      fireCapi('Lead', leadEventId, { email: contact.email, phone: contact.phone, firstName: contact.firstName, zipCode: contact.zipCode })
 
       if (typeof window !== 'undefined') {
         if ((window as any).dataLayer) {
           (window as any).dataLayer.push({
             event: 'lead_submitted',
-            lead_value: 900,
             property_type: quiz.propertyType,
             ownership: quiz.homeownership,
             timeline: quiz.timeline,

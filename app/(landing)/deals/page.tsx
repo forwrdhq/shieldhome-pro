@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect, Suspense } from 'react'
+import { useState, useCallback, Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import { Phone, BadgeDollarSign } from 'lucide-react'
 import Navigation from '@/components/landing/Navigation'
@@ -29,12 +29,6 @@ function DealsPageInner() {
 
   const openQuiz = useCallback(() => setQuizModalOpen(true), [])
   const closeQuiz = useCallback(() => setQuizModalOpen(false), [])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'ViewContent', { content_name: 'deals_landing' })
-    }
-  }, [])
 
   return (
     <div className="min-h-screen bg-white">

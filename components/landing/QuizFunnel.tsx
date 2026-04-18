@@ -149,29 +149,6 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
     }
   }, [setValue])
 
-  // Auto-detect zip code via geolocation (only when not prefilled and on contact step)
-  useEffect(() => {
-    if (heroPrefill || step !== 7 || typeof navigator === 'undefined' || !navigator.geolocation) return
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords
-          const response = await fetch(
-            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`
-          )
-          const data = await response.json()
-          if (data.postcode) {
-            setValue('zipCode', data.postcode)
-          }
-        } catch {
-          // Silently fail — user can enter manually
-        }
-      },
-      () => {},
-      { timeout: 5000 }
-    )
-  }, [heroPrefill, step, setValue])
-
   // Track quiz start on first advance
   useEffect(() => {
     if (step === 2 && typeof window !== 'undefined') {

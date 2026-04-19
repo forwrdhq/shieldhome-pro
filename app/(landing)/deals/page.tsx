@@ -19,7 +19,7 @@ const TestimonialCarousel = dynamic(() => import('@/components/landing/Testimoni
 const ComparisonTable = dynamic(() => import('@/components/landing/ComparisonTable'))
 const WhyVivintSection = dynamic(() => import('@/components/landing/WhyVivintSection'))
 const EnhancedGuarantee = dynamic(() => import('@/components/landing/EnhancedGuarantee'))
-const QuizFunnel = dynamic(() => import('@/components/landing/QuizFunnel'))
+const InlineLeadConfigurator = dynamic(() => import('@/components/landing/InlineLeadConfigurator'))
 const FAQSection = dynamic(() => import('@/components/landing/FAQSection'))
 const Footer = dynamic(() => import('@/components/landing/Footer'))
 const StickyPhoneCTA = dynamic(() => import('@/components/landing/StickyPhoneCTA'))
@@ -42,7 +42,7 @@ function DealsPageInner() {
 
       <main id="main-content">
         {/* Hero — $2,847 / $0 down with form Step 1 above the fold */}
-        <HeroDeals onQuizOpen={openQuiz} />
+        <HeroDeals />
 
         {/* NEW: Total Shield Package Value Stack */}
         <TotalShieldPackage onQuizOpen={openQuiz} />
@@ -120,7 +120,9 @@ function DealsPageInner() {
                 Takes 60 seconds. $0 down. Install this week.
               </p>
             </div>
-            <QuizFunnel />
+            <div className="max-w-2xl mx-auto">
+              <InlineLeadConfigurator />
+            </div>
           </div>
         </section>
 
@@ -171,7 +173,7 @@ function DealsPageInner() {
       <StickyPhoneCTA onQuizOpen={openQuiz} />
 
       {/* Quiz Modal */}
-      {quizModalOpen && <QuizFunnel isModal onClose={closeQuiz} />}
+      {quizModalOpen && <InlineLeadConfigurator isModal onClose={closeQuiz} />}
     </div>
   )
 }

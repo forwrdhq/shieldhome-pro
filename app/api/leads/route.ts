@@ -5,12 +5,20 @@ import { leadSchema } from '@/lib/validation'
 import { calculateLeadScore } from '@/lib/lead-scoring'
 import { sendLeadConfirmationSms, sendRepAlertSms, sendWelcomeEmail, sendSlackNotification, sendCallinglyWebhook } from '@/lib/notifications'
 
-// Callingly only dials when the lead has confirmed 650+ credit. Unknown,
-// below-650, or missing values are held back so reps aren't cold-called on
-// likely non-qualifiers.
-const CALLINGLY_OK_CREDIT = new Set(['ABOVE_650', 'EXCELLENT', 'GOOD', 'FAIR'])
+// Callingly dials for confirmed 650+ and for unknowns (NOT_SURE / missing) —
+// a sizeable share of real buyers don't know their score off the top of their
+// head. Only confirmed below-650 is held back.
+const CALLINGLY_SKIP_CREDIT = new Set(['BELOW_650'])
 function shouldTriggerCallingly(creditScoreRange: string | null | undefined) {
-  return !!creditScoreRange && CALLINGLY_OK_CREDIT.has(creditScoreRange)
+  return !creditScoreRange || !CALLINGLY_SKIP_CREDIT.has(creditScoreRange)
+}
+
+// Rep-facing alerts (Slack + SMS to Gunnar) are suppressed for confirmed
+// below-650 leads — they still save to the DB and get the customer-facing
+// confirmation email, reps just don't get pinged.
+const REP_ALERT_SKIP_CREDIT = new Set(['BELOW_650'])
+function shouldAlertRep(creditScoreRange: string | null | undefined) {
+  return !creditScoreRange || !REP_ALERT_SKIP_CREDIT.has(creditScoreRange)
 }
 
 export async function POST(req: NextRequest) {
@@ -121,10 +129,11 @@ export async function POST(req: NextRequest) {
         creditScoreRange: updated.creditScoreRange,
       }
 
-      const dupNotifications: Promise<unknown>[] = [
-        sendSlackNotification(dupNotifData),
-        sendRepAlertSms(dupNotifData),
-      ]
+      const dupNotifications: Promise<unknown>[] = []
+      if (shouldAlertRep(updated.creditScoreRange)) {
+        dupNotifications.push(sendSlackNotification(dupNotifData))
+        dupNotifications.push(sendRepAlertSms(dupNotifData))
+      }
       if (shouldTriggerCallingly(updated.creditScoreRange)) {
         dupNotifications.push(sendCallinglyWebhook(dupNotifData))
       }
@@ -221,13 +230,14 @@ export async function POST(req: NextRequest) {
       creditScoreRange: lead.creditScoreRange,
     }
 
-    const notifications = [
+    const notifications: Promise<unknown>[] = [
       sendLeadConfirmationSms(notifData),
-      sendRepAlertSms(notifData),
       sendWelcomeEmail(notifData),
-      sendSlackNotification(notifData),
     ]
-
+    if (shouldAlertRep(lead.creditScoreRange)) {
+      notifications.push(sendRepAlertSms(notifData))
+      notifications.push(sendSlackNotification(notifData))
+    }
     if (shouldTriggerCallingly(lead.creditScoreRange)) {
       notifications.push(sendCallinglyWebhook(notifData))
     }

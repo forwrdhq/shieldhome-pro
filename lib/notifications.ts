@@ -16,7 +16,7 @@ const CREDIT_SCORE_LABELS: Record<string, string> = {
 
 const LANDING_PAGE_LABELS: Record<string, string> = {
   '/': 'Homepage Quiz',
-  '/deals': 'Deals Page ($2,847 / $0 Down)',
+  '/deals': 'Deals Page ($0 Down)',
   '/google': 'Google Ads',
   '/get-quote': 'Cost/Pricing (homeshield.pro)',
   '/switch': 'ADT Switch/Buyout',

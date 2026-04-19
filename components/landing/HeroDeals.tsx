@@ -61,7 +61,10 @@ export default function HeroDeals() {
           </p>
 
           {/* Form Step 1 */}
-          <InlineLeadConfigurator />
+          <InlineLeadConfigurator
+            headline="See which offers you qualify for"
+            ctaLabel="See What I Qualify For"
+          />
 
           {/* Trust strip */}
           <div className="flex items-center justify-center gap-3 text-[10px] text-slate-500 font-body tracking-[0.04em] uppercase mt-4">
@@ -100,9 +103,10 @@ export default function HeroDeals() {
 
               <ul className="space-y-2.5 mb-6">
                 {[
-                  '$0 Down with Qualifying Purchase',
-                  'Free Professional Install (Usually Same-Week)',
-                  '60-Day Money-Back Guarantee',
+                  '$0 down. Free professional install.',
+                  'AI cameras that spotlight and deter intruders.',
+                  'Most homes protected within 48 hours.',
+                  '60-day money-back guarantee.',
                 ].map((bullet) => (
                   <li key={bullet} className="flex items-start gap-2.5 text-[15px] text-slate-200 font-body">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>
@@ -124,7 +128,10 @@ export default function HeroDeals() {
             </div>
 
             {/* Right column: form card */}
-            <div className="lg:pl-6"><InlineLeadConfigurator /></div>
+            <div className="lg:pl-6"><InlineLeadConfigurator
+            headline="See which offers you qualify for"
+            ctaLabel="Show My Deal"
+          /></div>
           </div>
         </div>
       </div>

@@ -441,7 +441,7 @@ export default function InlineLeadConfigurator({
           )}
 
           <Button type="submit" variant="primary" size="xl" className="w-full" loading={submitting}>
-            Get My Free Security Plan
+            Get My Best Deal
             <ArrowRight size={18} className="ml-2" />
           </Button>
 
@@ -451,7 +451,7 @@ export default function InlineLeadConfigurator({
           </div>
 
           <p className={cn('text-[10px] leading-[1.5] text-center px-1', subtleColor)}>
-            By clicking &ldquo;Get My Free Security Plan,&rdquo; I agree to receive calls, texts, and emails from
+            By clicking &ldquo;Get My Best Deal,&rdquo; I agree to receive calls, texts, and emails from
             ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer.
             Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.
           </p>
@@ -490,7 +490,7 @@ export default function InlineLeadConfigurator({
           <div className="flex items-center justify-between px-5 py-3 bg-slate-900">
             <div className="flex items-center gap-2">
               <Shield size={18} className="text-emerald-500" />
-              <span className="text-white font-heading font-bold text-[14px]">Free Security Plan</span>
+              <span className="text-white font-heading font-bold text-[14px]">Find Your Best Deal</span>
             </div>
             <button
               onClick={onClose}

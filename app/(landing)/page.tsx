@@ -93,8 +93,8 @@ export default function HomePage() {
             </div>
             <div className="max-w-2xl mx-auto">
               <InlineLeadConfigurator
-                headline="Get your custom plan in 30 seconds"
-                ctaLabel="Get My Plan"
+                headline="Find your best home security deal in 30 seconds"
+                ctaLabel="Find My Best Deal"
               />
             </div>
           </div>

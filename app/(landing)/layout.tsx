@@ -130,8 +130,8 @@ const howToSchema = {
     {
       '@type': 'HowToStep',
       position: 2,
-      name: 'Get your custom plan',
-      text: 'A Vivint Smart Home Pro will call you with a personalized security package and pricing — no obligation.',
+      name: 'Get your best deal',
+      text: 'A Vivint Smart Home Pro will call you with pricing on the package that fits your home — no obligation.',
     },
     {
       '@type': 'HowToStep',

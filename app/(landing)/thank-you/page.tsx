@@ -165,7 +165,7 @@ function ThankYouContent() {
             {
               icon: <Clock className="text-emerald-500" size={24} />,
               title: '1. Expect a Call Within 2 Minutes',
-              desc: 'A Vivint Smart Home Pro will call you shortly to go over your custom security plan.',
+              desc: 'A Vivint Smart Home Pro will call you shortly with pricing and the best deal for your home.',
             },
             {
               icon: <MessageSquare className="text-emerald-500" size={24} />,

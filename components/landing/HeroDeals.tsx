@@ -101,19 +101,25 @@ export default function HeroDeals() {
                 {variant.subheadline}
               </p>
 
-              <ul className="space-y-2.5 mb-6">
+              <ul className="space-y-2.5 mb-3">
                 {[
-                  '$0 down. Free professional install.',
-                  'AI cameras that spotlight and deter intruders.',
-                  'Most homes protected within 48 hours.',
-                  '60-day money-back guarantee.',
+                  { text: '$0 down. Free professional install.', asterisk: true },
+                  { text: 'AI cameras that spotlight and deter intruders.', asterisk: false },
+                  { text: 'Most homes protected within 48 hours.', asterisk: false },
+                  { text: '60-day money-back guarantee.', asterisk: false },
                 ].map((bullet) => (
-                  <li key={bullet} className="flex items-start gap-2.5 text-[15px] text-slate-200 font-body">
+                  <li key={bullet.text} className="flex items-start gap-2.5 text-[15px] text-slate-200 font-body">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                    {bullet}
+                    <span>
+                      {bullet.text}
+                      {bullet.asterisk && <span className="text-slate-400">*</span>}
+                    </span>
                   </li>
                 ))}
               </ul>
+              <p className="text-[11px] text-slate-500 font-body mb-6 max-w-[520px]">
+                *$0 down and free professional installation require a qualifying purchase and execution of a Vivint monitoring services agreement.
+              </p>
 
               <div className="flex items-center gap-4 text-[12px] text-slate-400 font-body tracking-[0.04em] uppercase">
                 <span className="flex items-center gap-1">

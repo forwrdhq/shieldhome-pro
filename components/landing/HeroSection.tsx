@@ -92,8 +92,11 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
             </h1>
 
             {/* Subheadline */}
-            <p className="text-slate-400 text-[13px] leading-[1.5] mb-5 font-body max-w-[320px]">
-              Vivint&apos;s AI-powered cameras don&apos;t just record — they deter intruders with spotlights, sirens, and live audio. $0 down + free installation nationwide.
+            <p className="text-slate-400 text-[13px] leading-[1.5] mb-2 font-body max-w-[320px]">
+              Vivint&apos;s AI-powered cameras don&apos;t just record — they deter intruders with spotlights, sirens, and live audio. $0 down + free installation nationwide.*
+            </p>
+            <p className="text-[10px] text-slate-500 leading-[1.5] mb-5 font-body max-w-[320px]">
+              *Requires qualifying purchase and Vivint monitoring services agreement.
             </p>
 
             {/* CTA */}
@@ -174,8 +177,11 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
               </h1>
 
               {/* Subheadline */}
-              <p className="text-slate-400 text-[15px] leading-[1.6] mb-6 font-body">
-                Vivint&apos;s AI-powered cameras don&apos;t just record — they deter intruders with spotlights, sirens, and live 2-way audio. As a top Vivint partner, we get you exclusive deals on the most advanced system available. Free professional installation nationwide.
+              <p className="text-slate-400 text-[15px] leading-[1.6] mb-2 font-body">
+                Vivint&apos;s AI-powered cameras don&apos;t just record — they deter intruders with spotlights, sirens, and live 2-way audio. As a top Vivint partner, we get you exclusive deals on the most advanced system available. Free professional installation nationwide.*
+              </p>
+              <p className="text-[11px] text-slate-500 leading-[1.5] mb-6 font-body max-w-[480px]">
+                *Free installation requires a qualifying purchase and Vivint monitoring services agreement.
               </p>
 
               {/* Trust strip */}

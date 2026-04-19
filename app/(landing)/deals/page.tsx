@@ -121,7 +121,10 @@ function DealsPageInner() {
               </p>
             </div>
             <div className="max-w-2xl mx-auto">
-              <InlineLeadConfigurator />
+              <InlineLeadConfigurator
+                headline="See which offers you qualify for"
+                ctaLabel="Show My Deal"
+              />
             </div>
           </div>
         </section>

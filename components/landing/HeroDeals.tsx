@@ -61,7 +61,10 @@ export default function HeroDeals() {
           </p>
 
           {/* Form Step 1 */}
-          <InlineLeadConfigurator />
+          <InlineLeadConfigurator
+            headline="See which offers you qualify for"
+            ctaLabel="Show My Deal"
+          />
 
           {/* Trust strip */}
           <div className="flex items-center justify-center gap-3 text-[10px] text-slate-500 font-body tracking-[0.04em] uppercase mt-4">
@@ -124,7 +127,10 @@ export default function HeroDeals() {
             </div>
 
             {/* Right column: form card */}
-            <div className="lg:pl-6"><InlineLeadConfigurator /></div>
+            <div className="lg:pl-6"><InlineLeadConfigurator
+            headline="See which offers you qualify for"
+            ctaLabel="Show My Deal"
+          /></div>
           </div>
         </div>
       </div>

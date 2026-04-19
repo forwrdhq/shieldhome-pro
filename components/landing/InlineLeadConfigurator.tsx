@@ -12,7 +12,7 @@ import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
 import Button from '@/components/ui/Button'
 
 type HomeTypeValue = 'SINGLE_FAMILY' | 'TOWNHOME' | 'CONDO' | 'APARTMENT' | 'OTHER'
-type CreditTierValue = '650_PLUS' | 'UNDER_650' | 'NOT_SURE'
+type CreditTierValue = '650_PLUS' | 'NOT_SURE' | 'BUILDING'
 
 // The DB's PropertyType enum only has HOUSE / TOWNHOME / CONDO_APARTMENT / BUSINESS,
 // so Condo and Apartment collapse to the same bucket and Other maps to null. The
@@ -25,15 +25,17 @@ const HOME_TYPES: { value: HomeTypeValue; label: string; propertyType: 'HOUSE' |
   { value: 'OTHER', label: 'Other', propertyType: null },
 ]
 
+// Not Sure is placed in the middle so it's the default eye-landing option.
+// "Building credit" softens the framing of the below-650 bucket so borderline
+// buyers don't self-reject and bail.
 const CREDIT_TIERS: { value: CreditTierValue; label: string; enumValue: 'ABOVE_650' | 'BELOW_650' | 'NOT_SURE' }[] = [
   { value: '650_PLUS', label: '650+', enumValue: 'ABOVE_650' },
-  { value: 'UNDER_650', label: 'Under 650', enumValue: 'BELOW_650' },
   { value: 'NOT_SURE', label: 'Not Sure', enumValue: 'NOT_SURE' },
+  { value: 'BUILDING', label: 'Building credit', enumValue: 'BELOW_650' },
 ]
 
 const contactSchema = z.object({
   firstName: z.string().min(1, 'First name required').max(50),
-  email: z.string().email('Valid email required'),
   phone: z.string().min(10, 'Valid phone required').max(20),
 })
 type ContactForm = z.infer<typeof contactSchema>
@@ -43,6 +45,8 @@ interface InlineLeadConfiguratorProps {
   isModal?: boolean
   onClose?: () => void
   variant?: 'light' | 'dark'
+  headline?: string
+  ctaLabel?: string
 }
 
 function formatPhone(value: string): string {
@@ -60,6 +64,8 @@ export default function InlineLeadConfigurator({
   isModal = false,
   onClose,
   variant = 'light',
+  headline,
+  ctaLabel = 'See My Options',
 }: InlineLeadConfiguratorProps) {
   const router = useRouter()
   const uid = useId()
@@ -67,6 +73,8 @@ export default function InlineLeadConfigurator({
   const [screen, setScreen] = useState<1 | 2>(1)
   const [homeType, setHomeType] = useState<HomeTypeValue | ''>('')
   const [homeTypeError, setHomeTypeError] = useState('')
+  const [zipCode, setZipCode] = useState('')
+  const [zipError, setZipError] = useState('')
   const [creditTier, setCreditTier] = useState<CreditTierValue | ''>('')
   const [creditTierError, setCreditTierError] = useState('')
   const [phoneDisplay, setPhoneDisplay] = useState('')
@@ -80,14 +88,21 @@ export default function InlineLeadConfigurator({
 
   function handleScreen1Submit(e: React.FormEvent) {
     e.preventDefault()
+    let ok = true
     if (!homeType) {
       setHomeTypeError('Please select a home type')
-      return
+      ok = false
     }
+    if (!/^\d{5}$/.test(zipCode)) {
+      setZipError('5-digit ZIP required')
+      ok = false
+    }
+    if (!ok) return
     setHomeTypeError('')
+    setZipError('')
     if (typeof window !== 'undefined') {
       const dl = (window as unknown as { dataLayer?: Array<Record<string, unknown>> }).dataLayer
-      dl?.push({ event: 'configurator_step', step: 1, home_type: homeType })
+      dl?.push({ event: 'configurator_step', step: 1, home_type: homeType, zip: zipCode })
     }
     setScreen(2)
   }
@@ -107,6 +122,11 @@ export default function InlineLeadConfigurator({
   function selectCredit(value: CreditTierValue) {
     setCreditTier(value)
     setCreditTierError('')
+    // Auto-submit on pill tap: react-hook-form validates first. If name/phone
+    // aren't filled yet, validation errors appear and onSubmit doesn't run —
+    // the user sees what's missing and taps the pill again (or the submit
+    // button) once fixed.
+    void handleSubmit((contact) => submitLead(contact, value))()
   }
 
   async function onSubmit(contact: ContactForm) {
@@ -114,11 +134,15 @@ export default function InlineLeadConfigurator({
       setCreditTierError('Please select a credit range')
       return
     }
+    await submitLead(contact, creditTier)
+  }
+
+  async function submitLead(contact: ContactForm, tier: CreditTierValue) {
     setSubmitting(true)
     setSubmitError('')
 
     const homeTypeEntry = HOME_TYPES.find(h => h.value === homeType)
-    const creditEntry = CREDIT_TIERS.find(c => c.value === creditTier)
+    const creditEntry = CREDIT_TIERS.find(c => c.value === tier)
     if (!homeTypeEntry || !creditEntry) {
       setSubmitting(false)
       return
@@ -131,8 +155,8 @@ export default function InlineLeadConfigurator({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstName: contact.firstName,
-          email: contact.email,
           phone: contact.phone,
+          zipCode,
           propertyType: homeTypeEntry.propertyType,
           creditScoreRange: creditEntry.enumValue,
           segment: `configurator:${homeType.toLowerCase()}`,
@@ -146,9 +170,9 @@ export default function InlineLeadConfigurator({
       const leadEventId = `${sessionEventId}_lead`
       firePixelEvent('Lead', leadEventId)
       fireCapi('Lead', leadEventId, {
-        email: contact.email,
         phone: contact.phone,
         firstName: contact.firstName,
+        zipCode,
       })
 
       if (typeof window !== 'undefined') {
@@ -157,7 +181,7 @@ export default function InlineLeadConfigurator({
           event: 'lead_submitted',
           source: 'configurator',
           home_type: homeType,
-          credit_tier: creditTier,
+          credit_tier: tier,
         })
       }
 
@@ -214,7 +238,27 @@ export default function InlineLeadConfigurator({
   function renderScreen1() {
     return (
       <form onSubmit={handleScreen1Submit} className="p-5 md:p-6">
-        <div className="flex flex-col md:flex-row md:items-end gap-3 md:gap-3">
+        {/* Step indicator — endowed progress */}
+        <div className="flex items-center justify-between mb-3">
+          <span className={cn('text-[11px] font-heading font-semibold uppercase tracking-[0.1em]', subtleColor)}>
+            Step 1 of 2
+          </span>
+          <div className="flex items-center gap-1">
+            <div className="h-1.5 w-6 rounded-full bg-emerald-500" />
+            <div className="h-1.5 w-6 rounded-full bg-slate-200" />
+          </div>
+        </div>
+
+        {headline && (
+          <h3 className={cn(
+            'font-heading font-bold text-[17px] md:text-[19px] tracking-[-0.01em] mb-3',
+            variant === 'dark' ? 'text-white' : 'text-slate-900',
+          )}>
+            {headline}
+          </h3>
+        )}
+
+        <div className="flex flex-col md:flex-row md:items-end gap-3">
           <div className="flex-1 min-w-0">
             <label
               htmlFor={`${uid}-home-type`}
@@ -246,17 +290,46 @@ export default function InlineLeadConfigurator({
             </div>
           </div>
 
+          <div className="md:w-32 md:flex-shrink-0">
+            <label
+              htmlFor={`${uid}-zip`}
+              className={cn('block text-[12px] font-medium mb-1.5', labelColor)}
+            >
+              ZIP Code
+            </label>
+            <input
+              id={`${uid}-zip`}
+              type="text"
+              inputMode="numeric"
+              maxLength={5}
+              autoComplete="postal-code"
+              placeholder="90210"
+              value={zipCode}
+              onChange={(e) => {
+                const digits = e.target.value.replace(/\D/g, '').slice(0, 5)
+                setZipCode(digits)
+                if (zipError) setZipError('')
+              }}
+              className={cn(
+                'w-full px-4 rounded-lg border text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all',
+                zipError ? 'border-red-300 bg-red-50' : 'border-slate-300',
+              )}
+              style={{ fontSize: '16px', height: '52px' }}
+              aria-invalid={!!zipError}
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full md:w-auto md:flex-shrink-0 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-heading font-bold rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(5,150,105,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 px-7"
             style={{ fontSize: '16px', height: '52px' }}
           >
-            See My Options
+            {ctaLabel}
             <ArrowRight size={18} />
           </button>
         </div>
-        {homeTypeError && (
-          <p className="text-[12px] text-red-600 mt-2">{homeTypeError}</p>
+        {(homeTypeError || zipError) && (
+          <p className="text-[12px] text-red-600 mt-2">{homeTypeError || zipError}</p>
         )}
       </form>
     )
@@ -274,9 +347,15 @@ export default function InlineLeadConfigurator({
             <ChevronLeft size={16} />
             Back
           </button>
-          <span className={cn('text-[11px] font-heading font-semibold uppercase tracking-[0.1em]', subtleColor)}>
-            Step 2 of 2
-          </span>
+          <div className="flex items-center gap-2">
+            <span className={cn('text-[11px] font-heading font-semibold uppercase tracking-[0.1em]', subtleColor)}>
+              Step 2 of 2
+            </span>
+            <div className="flex items-center gap-1">
+              <div className="h-1.5 w-6 rounded-full bg-emerald-500" />
+              <div className="h-1.5 w-6 rounded-full bg-emerald-500" />
+            </div>
+          </div>
         </div>
 
         <div className="space-y-3">
@@ -297,25 +376,6 @@ export default function InlineLeadConfigurator({
               {...register('firstName')}
             />
             {errors.firstName && <p className="text-[11px] text-red-600 mt-1">{errors.firstName.message}</p>}
-          </div>
-
-          <div>
-            <label htmlFor={`${uid}-email`} className={cn('block text-[12px] font-medium mb-1.5', labelColor)}>
-              Email
-            </label>
-            <input
-              id={`${uid}-email`}
-              type="email"
-              autoComplete="email"
-              placeholder="jane@example.com"
-              className={cn(
-                'w-full px-4 rounded-lg border text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all',
-                errors.email ? 'border-red-300 bg-red-50' : 'border-slate-300',
-              )}
-              style={{ fontSize: '16px', height: '48px' }}
-              {...register('email')}
-            />
-            {errors.email && <p className="text-[11px] text-red-600 mt-1">{errors.email.message}</p>}
           </div>
 
           <div>
@@ -357,8 +417,9 @@ export default function InlineLeadConfigurator({
                     role="radio"
                     aria-checked={selected}
                     onClick={() => selectCredit(tier.value)}
+                    disabled={submitting}
                     className={cn(
-                      'w-full px-4 rounded-lg border-2 font-heading font-semibold text-[14px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2',
+                      'w-full px-4 rounded-lg border-2 font-heading font-semibold text-[14px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed',
                       selected
                         ? 'border-emerald-600 bg-emerald-50 text-emerald-700'
                         : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-400 hover:bg-emerald-50/40',

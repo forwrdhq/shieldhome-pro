@@ -92,7 +92,10 @@ export default function HomePage() {
               </p>
             </div>
             <div className="max-w-2xl mx-auto">
-              <InlineLeadConfigurator />
+              <InlineLeadConfigurator
+                headline="Get your custom plan in 30 seconds"
+                ctaLabel="Get My Plan"
+              />
             </div>
           </div>
         </section>

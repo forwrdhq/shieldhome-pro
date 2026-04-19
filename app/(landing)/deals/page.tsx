@@ -41,7 +41,7 @@ function DealsPageInner() {
       <PromoBannerDeals onQuizOpen={openQuiz} />
 
       <main id="main-content">
-        {/* Hero — $2,847 / $0 down with form Step 1 above the fold */}
+        {/* Hero — confidence headline + $0 down with form Step 1 above the fold */}
         <HeroDeals />
 
         {/* NEW: Total Shield Package Value Stack */}
@@ -123,7 +123,7 @@ function DealsPageInner() {
             <div className="max-w-2xl mx-auto">
               <InlineLeadConfigurator
                 headline="See which offers you qualify for"
-                ctaLabel="Show My Deal"
+                ctaLabel="See What I Qualify For"
               />
             </div>
           </div>

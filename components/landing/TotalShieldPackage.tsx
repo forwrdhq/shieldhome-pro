@@ -156,10 +156,10 @@ export default function TotalShieldPackage({ onQuizOpen }: TotalShieldPackagePro
           <div className="bg-gradient-to-b from-slate-900 to-slate-800 text-center px-5 md:px-8 py-7 md:py-9">
             <div className="mb-3">
               <p className="text-[12px] md:text-[13px] font-heading font-semibold text-slate-400 uppercase tracking-[0.12em] mb-1">
-                Total Available Savings
+                Total Package Value
               </p>
               <p className="text-[28px] md:text-[34px] font-heading font-bold text-emerald-400 leading-none">
-                Up to $2,847
+                Full Smart Security System
               </p>
             </div>
 

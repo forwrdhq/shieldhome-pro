@@ -8,10 +8,10 @@ export type HeadlineVariant = {
 export const headlineVariants: Record<string, HeadlineVariant> = {
   default: {
     preHeadline: 'Authorized Vivint Dealer · Homeowner Pricing Program',
-    h1Mobile: 'Get a Vivint Smart Security System for $0 Down',
-    h1Desktop: 'Get a Vivint Smart Security System for $0 Down',
+    h1Mobile: 'The Smartest Home Security in America. Now $0 Down.',
+    h1Desktop: 'The Smartest Home Security in America. Now $0 Down.',
     subheadline:
-      'Free professional installation. Installed this week. See if you qualify in 60 seconds.',
+      "ShieldHome is an authorized Vivint dealer — which means you get PCMag's 2026 #1-rated smart security system at dealer pricing. Installed free. Protected in 48 hours.",
   },
   social_proof: {
     preHeadline: 'Authorized Vivint Dealer · Neighborhood Pricing',
@@ -23,7 +23,7 @@ export const headlineVariants: Record<string, HeadlineVariant> = {
     preHeadline: 'Authorized Vivint Dealer · Local Homeowner Program',
     h1Mobile: 'The Vivint Deal Your Neighbors Found',
     h1Desktop: 'See Why Homeowners On Your Street Are Switching to Vivint',
-    subheadline: '$2,847 system for $0 down. See if you qualify.',
+    subheadline: 'Dealer pricing for $0 down. See if you qualify.',
   },
   comparison: {
     preHeadline: 'Authorized Vivint Dealer · Real Numbers',
@@ -35,7 +35,7 @@ export const headlineVariants: Record<string, HeadlineVariant> = {
   transparent: {
     preHeadline: 'Authorized Vivint Dealer · No Sales Pitch',
     h1Mobile: 'The Real Vivint Deal — No Sales Pitch',
-    h1Desktop: "Here's Exactly What You Get — $2,847 Package Breakdown",
+    h1Desktop: "Here's Exactly What You Get — Full Package Breakdown",
     subheadline: 'Authorized Vivint dealer. No upsell. Just the numbers.',
   },
   ring_switch: {
@@ -48,7 +48,7 @@ export const headlineVariants: Record<string, HeadlineVariant> = {
   deal: {
     preHeadline: 'Authorized Vivint Dealer · Homeowner Pricing Program',
     h1Mobile: "The Vivint Deal That Isn't On Their Site",
-    h1Desktop: 'Homeowner Pricing: $2,847 System for $0 Down',
+    h1Desktop: 'Homeowner Pricing: Full Smart System for $0 Down',
     subheadline: 'Authorized dealer program. Qualifying purchase required.',
   },
   adt: {

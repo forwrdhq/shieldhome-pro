@@ -60,6 +60,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-slate-800 pt-6 text-center space-y-3">
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+            <a href="/contact" className="text-slate-500 hover:text-slate-300 transition-colors duration-150">Contact</a>
             <a href="/privacy" className="text-slate-500 hover:text-slate-300 transition-colors duration-150">Privacy Policy</a>
             <a href="/terms" className="text-slate-500 hover:text-slate-300 transition-colors duration-150">Terms of Service</a>
             <a href="/do-not-sell" className="text-slate-500 hover:text-slate-300 transition-colors duration-150">Do Not Sell My Info</a>

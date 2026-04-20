@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/db'
 import { leadSchema } from '@/lib/validation'
 import { calculateLeadScore } from '@/lib/lead-scoring'
-import { sendLeadConfirmationSms, sendRepAlertSms, sendWelcomeEmail, sendSlackNotification, sendCallinglyWebhook } from '@/lib/notifications'
+import { sendLeadConfirmationSms, sendRepAlertSms, sendWelcomeEmail, sendSlackNotification, sendCallinglyWebhook, sendGoHighLevelContact } from '@/lib/notifications'
 
 // Callingly dials for confirmed 650+ and for unknowns (NOT_SURE / missing) —
 // a sizeable share of real buyers don't know their score off the top of their
@@ -137,6 +137,9 @@ export async function POST(req: NextRequest) {
       if (shouldTriggerCallingly(updated.creditScoreRange)) {
         dupNotifications.push(sendCallinglyWebhook(dupNotifData))
       }
+      // GHL mirror — additive, runs alongside everything above. No credit gating:
+      // GHL workflows decide internally what to do with below-650 leads.
+      dupNotifications.push(sendGoHighLevelContact(dupNotifData))
       await Promise.allSettled(dupNotifications)
 
       return NextResponse.json({ success: true, leadId: updated.id, message: 'Quote request received' })
@@ -241,6 +244,9 @@ export async function POST(req: NextRequest) {
     if (shouldTriggerCallingly(lead.creditScoreRange)) {
       notifications.push(sendCallinglyWebhook(notifData))
     }
+    // GHL mirror — additive, runs alongside everything above. No credit gating:
+    // GHL workflows decide internally what to do with below-650 leads.
+    notifications.push(sendGoHighLevelContact(notifData))
 
     await Promise.allSettled(notifications)
 

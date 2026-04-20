@@ -4,6 +4,7 @@ import { prisma } from './db'
 import { PHONE_NUMBER, APP_URL } from './constants'
 import { PROPERTY_TYPE_LABELS, TIMELINE_LABELS, HOMEOWNERSHIP_LABELS, CONCERN_LABELS } from './constants'
 import { buildWelcomeEmail, type EmailRecipient } from './email-templates'
+import { ghlUpsertContact, isGhlConfigured } from './gohighlevel'
 
 const CREDIT_SCORE_LABELS: Record<string, string> = {
   EXCELLENT: 'Excellent (750+)',
@@ -475,5 +476,46 @@ export async function sendCallinglyWebhook(lead: LeadNotificationData) {
     }
   } catch (err) {
     console.error('Callingly webhook error:', err)
+  }
+}
+
+// Mirror lead into GoHighLevel as a contact (additive — runs alongside
+// Callingly/Twilio/Slack/Postgres, never replaces them). Uses upsert so
+// duplicate submissions update the existing GHL contact instead of creating
+// a second one. Fails silently if GHL env vars are not set.
+export async function sendGoHighLevelContact(lead: LeadNotificationData) {
+  if (!isGhlConfigured()) return
+
+  const isSwitch = lead.segment === 'switch' || lead.segment === 'switch-business'
+  const isBusiness = lead.segment === 'business' || lead.segment === 'switch-business'
+  const isUpgrade = lead.segment === 'upgrade'
+
+  const tags: string[] = []
+  if (isBusiness) tags.push('business')
+  if (isSwitch) tags.push('switch-buyout')
+  if (isUpgrade) tags.push('upgrade')
+  if (!isBusiness && !isSwitch && !isUpgrade) tags.push('new-install')
+  if (lead.priority) tags.push(`priority-${lead.priority.toLowerCase()}`)
+  if (lead.creditScoreRange) tags.push(`credit-${lead.creditScoreRange.toLowerCase().replace(/_/g, '-')}`)
+  if (lead.landingPage) {
+    const lpSlug = LANDING_PAGE_LABELS[lead.landingPage] || lead.landingPage
+    tags.push(`lp-${lpSlug.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`)
+  }
+  if (lead.source) tags.push(`src-${lead.source.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
+
+  const sourceStr = [lead.source, lead.medium, lead.campaign].filter(Boolean).join(' / ') || 'Direct'
+
+  const result = await ghlUpsertContact({
+    firstName: lead.firstName,
+    lastName: lead.lastName || '',
+    email: lead.email || undefined,
+    phone: formatPhone(lead.phone),
+    postalCode: lead.zipCode || undefined,
+    source: sourceStr,
+    tags,
+  })
+
+  if (!result.ok) {
+    console.error(`GHL upsert failed (${result.status}):`, result.error)
   }
 }

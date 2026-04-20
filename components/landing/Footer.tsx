@@ -1,4 +1,4 @@
-import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
+import { PHONE_NUMBER, PHONE_NUMBER_RAW, COMPANY_ADDRESS } from '@/lib/constants'
 
 export default function Footer() {
   return (
@@ -19,6 +19,9 @@ export default function Footer() {
             >
               {PHONE_NUMBER}
             </a>
+            {COMPANY_ADDRESS ? (
+              <p className="text-xs text-slate-500 mt-3 leading-relaxed">{COMPANY_ADDRESS}</p>
+            ) : null}
           </div>
 
           {/* Resources */}

@@ -3,6 +3,10 @@ export const PHONE_NUMBER_RAW = process.env.NEXT_PUBLIC_PHONE_NUMBER_RAW || '+18
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://shieldhome.pro'
 export const COMPANY_NAME = 'ShieldHome Pro'
 export const COMPANY_TAGLINE = 'Authorized Vivint Smart Home Partner'
+// Required for A2P 10DLC carrier verification — must be a real, verifiable
+// physical address (street, city, state, ZIP). Override via NEXT_PUBLIC_COMPANY_ADDRESS
+// if you ever move.
+export const COMPANY_ADDRESS = process.env.NEXT_PUBLIC_COMPANY_ADDRESS || '115 N Geneva Road, Vineyard, UT 84059'
 export const FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || 'quotes@shieldhomepro.com'
 export const FROM_NAME = process.env.SENDGRID_FROM_NAME || 'ShieldHome Pro'
 

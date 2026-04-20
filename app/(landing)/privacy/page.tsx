@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Shield } from 'lucide-react'
-import { PHONE_NUMBER, APP_URL, COMPANY_NAME } from '@/lib/constants'
+import { PHONE_NUMBER, APP_URL, COMPANY_NAME, COMPANY_ADDRESS } from '@/lib/constants'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -99,6 +99,9 @@ export default function PrivacyPage() {
               <p className="mt-3">
                 <strong>We do not sell your personal information to third parties.</strong>
               </p>
+              <p className="mt-3">
+                <strong>SMS opt-in data and consent.</strong> No mobile information — including phone numbers, SMS opt-in data, or consent records — will be shared with third parties or affiliates for marketing or promotional purposes. Information sharing with subcontractors who support our internal operations (such as our SMS delivery provider Twilio or our CRM platform) is permitted, and those subcontractors are contractually prohibited from using mobile opt-in data for their own marketing. All other categories of personal information may be shared as described elsewhere in this policy, but the categories of text-messaging originator opt-in data and consent will not be shared with any third parties for marketing purposes.
+              </p>
             </section>
 
             <section>
@@ -173,6 +176,7 @@ export default function PrivacyPage() {
               <div className="bg-gray-50 rounded-xl p-6 mt-3 space-y-2">
                 <p><strong>{COMPANY_NAME}</strong></p>
                 <p>Authorized Vivint Smart Home Dealer</p>
+                {COMPANY_ADDRESS ? <p>{COMPANY_ADDRESS}</p> : null}
                 <p>Email: <a href={`mailto:${contactEmail}`} className="text-emerald-500 underline">{contactEmail}</a></p>
                 <p>Phone: <a href={`tel:${PHONE_NUMBER}`} className="text-emerald-500">{PHONE_NUMBER}</a></p>
                 <p>Website: <a href={APP_URL} className="text-emerald-500 underline">{APP_URL}</a></p>

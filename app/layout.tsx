@@ -35,6 +35,12 @@ export default function RootLayout({
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
+              // Disable Meta's automatic event detection so it doesn't auto-fire
+              // a Lead event every time a button with text like "Show My Deal" or
+              // "Get My Free Security Plan" is clicked. We fire Lead explicitly
+              // ourselves only after a successful /api/leads submission (with
+              // CAPI deduplication via eventID).
+              fbq('set', 'autoConfig', false, '726366293775744');
               fbq('init', '726366293775744');
               fbq('track', 'PageView');
             `

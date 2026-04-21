@@ -44,10 +44,7 @@ function DealsPageInner() {
         {/* Hero — confidence headline + $0 down with form Step 1 above the fold */}
         <HeroDeals />
 
-        {/* NEW: Total Shield Package Value Stack */}
-        <TotalShieldPackage onQuizOpen={openQuiz} />
-
-        {/* ADT / competitor contract buyout callout */}
+        {/* ADT / competitor contract buyout callout — moved up so switchers see it immediately */}
         <section className="bg-slate-100 py-10 md:py-14 border-y border-slate-200">
           <div className="max-w-4xl mx-auto px-4 md:px-8">
             <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
@@ -77,6 +74,9 @@ function DealsPageInner() {
             </div>
           </div>
         </section>
+
+        {/* NEW: Total Shield Package Value Stack */}
+        <TotalShieldPackage onQuizOpen={openQuiz} />
 
         {/* Social proof — placed right after value stack to validate the offer */}
         <StatsBar />

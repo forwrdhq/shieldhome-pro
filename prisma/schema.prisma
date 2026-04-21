@@ -92,6 +92,7 @@ model Lead {
   assignedRep             User?             @relation("AssignedRep", fields: [assignedRepId], references: [id])
   outreachProspect        OutreachProspect? @relation("OutreachToLead")
   smsLogs                 SmsLog[]
+  weeklyDeals             WeeklyDeal[]
 
   @@index([status])
   @@index([source])
@@ -101,6 +102,44 @@ model Lead {
   @@index([segment])
   @@index([email], map: "idx_leads_email")
   @@map("leads")
+}
+
+model WeeklyKpi {
+  id              String       @id @default(cuid())
+  weekStart       DateTime     @unique
+  weekEnd         DateTime
+  metaSpend       Float        @default(0)
+  googleSpend     Float        @default(0)
+  otherSpend      Float        @default(0)
+  metaCampaigns   Json?
+  upfrontReceived Float        @default(0)
+  backendReceived Float        @default(0)
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  deals           WeeklyDeal[]
+
+  @@index([weekStart])
+  @@map("weekly_kpis")
+}
+
+model WeeklyDeal {
+  id                String    @id @default(cuid())
+  weeklyKpiId       String
+  leadId            String?
+  customerName      String
+  vivintAccountIds  String[]
+  product           String?
+  upfrontCommission Float
+  installDate       DateTime?
+  notes             String?
+  createdAt         DateTime  @default(now())
+  weeklyKpi         WeeklyKpi @relation(fields: [weeklyKpiId], references: [id], onDelete: Cascade)
+  lead              Lead?     @relation(fields: [leadId], references: [id])
+
+  @@index([weeklyKpiId])
+  @@index([leadId])
+  @@map("weekly_deals")
 }
 
 model Activity {

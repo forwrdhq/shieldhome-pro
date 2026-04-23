@@ -12,7 +12,7 @@ import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
 import Button from '@/components/ui/Button'
 
 type HomeTypeValue = 'SINGLE_FAMILY' | 'TOWNHOME' | 'CONDO' | 'APARTMENT' | 'OTHER'
-type CreditTierValue = '650_PLUS' | 'NOT_SURE' | 'BUILDING'
+type CreditTierValue = '650_PLUS' | 'BUILDING'
 
 // The DB's PropertyType enum only has HOUSE / TOWNHOME / CONDO_APARTMENT / BUSINESS,
 // so Condo and Apartment collapse to the same bucket and Other maps to null. The
@@ -25,13 +25,9 @@ const HOME_TYPES: { value: HomeTypeValue; label: string; propertyType: 'HOUSE' |
   { value: 'OTHER', label: 'Other', propertyType: null },
 ]
 
-// Not Sure is placed in the middle so it's the default eye-landing option.
-// "Building credit" softens the framing of the below-650 bucket so borderline
-// buyers don't self-reject and bail.
-const CREDIT_TIERS: { value: CreditTierValue; label: string; enumValue: 'ABOVE_650' | 'BELOW_650' | 'NOT_SURE' }[] = [
+const CREDIT_TIERS: { value: CreditTierValue; label: string; enumValue: 'ABOVE_650' | 'BELOW_650' }[] = [
   { value: '650_PLUS', label: '650+', enumValue: 'ABOVE_650' },
-  { value: 'NOT_SURE', label: 'Not Sure', enumValue: 'NOT_SURE' },
-  { value: 'BUILDING', label: 'Building credit', enumValue: 'BELOW_650' },
+  { value: 'BUILDING', label: 'Below 650', enumValue: 'BELOW_650' },
 ]
 
 const contactSchema = z.object({

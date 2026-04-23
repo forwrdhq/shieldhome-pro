@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Phone, MessageSquare } from 'lucide-react'
 import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
 interface StickyPhoneCTAProps {
@@ -33,13 +34,22 @@ export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
         style={{ transform: visible ? 'translateY(0)' : 'translateY(100%)' }}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-center gap-4">
-          <p className="text-[13px] font-body text-slate-500">Questions? Our Smart Home Pros are standing by.</p>
+          <p className="text-[13px] font-body text-slate-500">Questions? Call or text — our Smart Home Pros are standing by.</p>
           <a
             href={`tel:${PHONE_NUMBER_RAW}`}
             onClick={trackPhoneClick}
-            className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px"
+            className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px"
           >
-            Call Now
+            <Phone size={14} />
+            Call
+          </a>
+          <a
+            href={`sms:${PHONE_NUMBER_RAW}`}
+            onClick={trackPhoneClick}
+            className="flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-5 py-2.5 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px"
+          >
+            <MessageSquare size={14} />
+            Text Us
           </a>
           <button
             onClick={onQuizOpen}
@@ -58,15 +68,24 @@ export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
         <a
           href={`tel:${PHONE_NUMBER_RAW}`}
           onClick={trackPhoneClick}
-          className="flex-1 flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-colors duration-300"
+          className="flex-1 flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-colors duration-300"
         >
-          Call Now
+          <Phone size={14} />
+          Call
+        </a>
+        <a
+          href={`sms:${PHONE_NUMBER_RAW}`}
+          onClick={trackPhoneClick}
+          className="flex-1 flex items-center justify-center gap-1.5 bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-colors duration-300"
+        >
+          <MessageSquare size={14} />
+          Text Us
         </a>
         <button
           onClick={onQuizOpen}
           className="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-colors duration-300"
         >
-          Get Free Quote
+          Get Quote
         </button>
       </div>
     </>

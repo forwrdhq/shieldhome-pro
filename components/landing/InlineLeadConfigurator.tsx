@@ -453,7 +453,11 @@ export default function InlineLeadConfigurator({
           <p className={cn('text-[10px] leading-[1.5] text-center px-1', subtleColor)}>
             By clicking &ldquo;Get My Free Security Plan,&rdquo; I agree to receive calls, texts, and emails from
             ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer.
-            Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.
+            Consent is not a condition of purchase. Msg frequency varies. Msg &amp; data rates may apply.
+            Reply STOP to unsubscribe. View our{' '}
+            <a href="/privacy" className="underline hover:opacity-80 transition-opacity">Privacy Policy</a>
+            {' '}&amp;{' '}
+            <a href="/terms" className="underline hover:opacity-80 transition-opacity">Terms of Service</a>.
           </p>
         </div>
       </form>

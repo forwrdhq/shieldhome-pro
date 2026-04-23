@@ -86,7 +86,12 @@ model Lead {
   currentMonthlyPayment   String?
   kwParam                 String?
   creditScoreRange        String?
+  callinglyLeadId         String?           @unique
+  assignedAgent           String?
+  latestCallStatus        String?
+  latestCallRecordingUrl  String?
   activities              Activity[]
+  calls                   Call[]
   commissions             Commission[]
   emailLogs               EmailLog[]
   assignedRep             User?             @relation("AssignedRep", fields: [assignedRepId], references: [id])
@@ -102,6 +107,32 @@ model Lead {
   @@index([segment])
   @@index([email], map: "idx_leads_email")
   @@map("leads")
+}
+
+model Call {
+  id           String    @id @default(cuid())
+  callinglyId  String    @unique
+  leadId       String?
+  phone        String
+  status       String?
+  duration     Int?
+  recordingUrl String?
+  agentId      String?
+  agentName    String?
+  result       String?
+  startedAt    DateTime?
+  endedAt      DateTime?
+  raw          Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  lead Lead? @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  @@index([leadId])
+  @@index([phone])
+  @@index([startedAt])
+  @@index([agentId])
+  @@map("calls")
 }
 
 model WeeklyKpi {

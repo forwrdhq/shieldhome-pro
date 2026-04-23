@@ -17,6 +17,7 @@ async function getFunnelStats(since?: Date) {
       saleDate: true,
       speedToContact: true,
       source: true,
+      utmContent: true,
       dispositionNote: true,
     },
   })
@@ -30,12 +31,23 @@ async function getFunnelStats(since?: Date) {
   const speeds = leads.map(l => l.speedToContact).filter((s): s is number => typeof s === 'number').sort((a, b) => a - b)
   const medianSpeed = speeds.length > 0 ? speeds[Math.floor(speeds.length / 2)] : 0
 
-  const bySourceMap: Record<string, { leads: number; closed: number }> = {}
+  const bySourceMap: Record<string, { leads: number; contacted: number; closed: number }> = {}
   leads.forEach(l => {
     const src = l.source || 'direct'
-    if (!bySourceMap[src]) bySourceMap[src] = { leads: 0, closed: 0 }
+    if (!bySourceMap[src]) bySourceMap[src] = { leads: 0, contacted: 0, closed: 0 }
     bySourceMap[src].leads++
+    if (l.firstContactAt) bySourceMap[src].contacted++
     if (l.saleDate || l.status === 'CLOSED_WON') bySourceMap[src].closed++
+  })
+
+  const byAdsetMap: Record<string, { leads: number; contacted: number; closed: number }> = {}
+  leads.forEach(l => {
+    if (!l.utmContent) return
+    const ad = l.utmContent
+    if (!byAdsetMap[ad]) byAdsetMap[ad] = { leads: 0, contacted: 0, closed: 0 }
+    byAdsetMap[ad].leads++
+    if (l.firstContactAt) byAdsetMap[ad].contacted++
+    if (l.saleDate || l.status === 'CLOSED_WON') byAdsetMap[ad].closed++
   })
 
   return {
@@ -48,10 +60,56 @@ async function getFunnelStats(since?: Date) {
     bySource: Object.entries(bySourceMap).map(([src, v]) => ({
       src,
       leads: v.leads,
+      contacted: v.contacted,
       closed: v.closed,
+      connectRate: v.leads > 0 ? (v.contacted / v.leads) * 100 : 0,
+      closeRate: v.leads > 0 ? (v.closed / v.leads) * 100 : 0,
+    })).sort((a, b) => b.leads - a.leads),
+    byAdset: Object.entries(byAdsetMap).map(([ad, v]) => ({
+      ad,
+      leads: v.leads,
+      contacted: v.contacted,
+      closed: v.closed,
+      connectRate: v.leads > 0 ? (v.contacted / v.leads) * 100 : 0,
       closeRate: v.leads > 0 ? (v.closed / v.leads) * 100 : 0,
     })).sort((a, b) => b.leads - a.leads),
   }
+}
+
+async function getAgentStats(since?: Date) {
+  const where = since ? { startedAt: { gte: since } } : {}
+  const calls = await prisma.call.findMany({
+    where,
+    select: {
+      agentName: true,
+      status: true,
+      duration: true,
+      lead: { select: { saleDate: true, appointmentDate: true } },
+    },
+  })
+
+  const byAgent: Record<string, { calls: number; answered: number; talkSec: number; appts: number; sales: number }> = {}
+  for (const c of calls) {
+    const name = c.agentName || 'Unassigned'
+    if (!byAgent[name]) byAgent[name] = { calls: 0, answered: 0, talkSec: 0, appts: 0, sales: 0 }
+    byAgent[name].calls++
+    const s = (c.status || '').toLowerCase()
+    const answered = s.includes('answered') || s.includes('connected') || s.includes('completed') || s.includes('talked')
+    if (answered) byAgent[name].answered++
+    if (typeof c.duration === 'number') byAgent[name].talkSec += c.duration
+    if (c.lead?.appointmentDate) byAgent[name].appts++
+    if (c.lead?.saleDate) byAgent[name].sales++
+  }
+
+  return Object.entries(byAgent).map(([name, v]) => ({
+    name,
+    calls: v.calls,
+    answered: v.answered,
+    answerRate: v.calls > 0 ? (v.answered / v.calls) * 100 : 0,
+    avgTalkSec: v.answered > 0 ? Math.round(v.talkSec / v.answered) : 0,
+    appts: v.appts,
+    sales: v.sales,
+  })).sort((a, b) => b.calls - a.calls)
 }
 
 function pct(num: number, den: number): string {
@@ -83,10 +141,11 @@ export default async function FunnelPage() {
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 86400000)
 
-  const [allTime, month, last30] = await Promise.all([
+  const [allTime, month, last30, agents30] = await Promise.all([
     getFunnelStats(),
     getFunnelStats(monthStart),
     getFunnelStats(thirtyDaysAgo),
+    getAgentStats(thirtyDaysAgo),
   ])
 
   return (
@@ -121,7 +180,7 @@ export default async function FunnelPage() {
       </div>
 
       <Card>
-        <h2 className="text-lg font-bold text-slate-900 mb-4">Close Rate by Source (All Time)</h2>
+        <h2 className="text-lg font-bold text-slate-900 mb-4">By Source (All Time)</h2>
         {allTime.bySource.length === 0 ? (
           <p className="text-sm text-gray-400">No data yet</p>
         ) : (
@@ -130,6 +189,7 @@ export default async function FunnelPage() {
               <tr className="border-b border-slate-200 text-xs uppercase text-gray-500">
                 <th className="text-left py-2 font-semibold">Source</th>
                 <th className="text-right py-2 font-semibold">Leads</th>
+                <th className="text-right py-2 font-semibold">Connect %</th>
                 <th className="text-right py-2 font-semibold">Closed</th>
                 <th className="text-right py-2 font-semibold">Close Rate</th>
               </tr>
@@ -139,8 +199,75 @@ export default async function FunnelPage() {
                 <tr key={s.src} className="border-b border-slate-100 hover:bg-slate-50">
                   <td className="py-2 font-medium text-slate-900 capitalize">{s.src}</td>
                   <td className="py-2 text-right text-slate-700">{s.leads}</td>
+                  <td className="py-2 text-right text-slate-700">{s.connectRate.toFixed(0)}%</td>
                   <td className="py-2 text-right text-slate-700">{s.closed}</td>
                   <td className="py-2 text-right font-semibold text-emerald-600">{s.closeRate.toFixed(2)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Card>
+
+      <Card className="mt-6">
+        <h2 className="text-lg font-bold text-slate-900 mb-1">Connection Rate by Adset (Last 30d)</h2>
+        <p className="text-xs text-gray-500 mb-4">Which adsets bring leads our reps actually reach</p>
+        {last30.byAdset.length === 0 ? (
+          <p className="text-sm text-gray-400">No adset data yet — UTM content tags arrive with Meta-tracked leads</p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-200 text-xs uppercase text-gray-500">
+                <th className="text-left py-2 font-semibold">Adset</th>
+                <th className="text-right py-2 font-semibold">Leads</th>
+                <th className="text-right py-2 font-semibold">Contacted</th>
+                <th className="text-right py-2 font-semibold">Connect %</th>
+                <th className="text-right py-2 font-semibold">Closed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {last30.byAdset.slice(0, 25).map(s => (
+                <tr key={s.ad} className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="py-2 font-medium text-slate-900 truncate max-w-[300px]" title={s.ad}>{s.ad}</td>
+                  <td className="py-2 text-right text-slate-700">{s.leads}</td>
+                  <td className="py-2 text-right text-slate-700">{s.contacted}</td>
+                  <td className="py-2 text-right font-semibold text-blue-600">{s.connectRate.toFixed(0)}%</td>
+                  <td className="py-2 text-right text-slate-700">{s.closed}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Card>
+
+      <Card className="mt-6">
+        <h2 className="text-lg font-bold text-slate-900 mb-1">Per-Rep Performance (Last 30d)</h2>
+        <p className="text-xs text-gray-500 mb-4">Calls from Callingly · use to compare reps before/after the second hire</p>
+        {agents30.length === 0 ? (
+          <p className="text-sm text-gray-400">No call data yet — Callingly sync runs every 15 min</p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-200 text-xs uppercase text-gray-500">
+                <th className="text-left py-2 font-semibold">Rep</th>
+                <th className="text-right py-2 font-semibold">Calls</th>
+                <th className="text-right py-2 font-semibold">Answered</th>
+                <th className="text-right py-2 font-semibold">Answer %</th>
+                <th className="text-right py-2 font-semibold">Avg Talk</th>
+                <th className="text-right py-2 font-semibold">Appts</th>
+                <th className="text-right py-2 font-semibold">Sales</th>
+              </tr>
+            </thead>
+            <tbody>
+              {agents30.map(a => (
+                <tr key={a.name} className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="py-2 font-medium text-slate-900">{a.name}</td>
+                  <td className="py-2 text-right text-slate-700">{a.calls}</td>
+                  <td className="py-2 text-right text-slate-700">{a.answered}</td>
+                  <td className="py-2 text-right text-slate-700">{a.answerRate.toFixed(0)}%</td>
+                  <td className="py-2 text-right text-slate-700">{a.avgTalkSec > 0 ? `${Math.floor(a.avgTalkSec/60)}m ${a.avgTalkSec%60}s` : '—'}</td>
+                  <td className="py-2 text-right text-slate-700">{a.appts}</td>
+                  <td className="py-2 text-right font-semibold text-emerald-600">{a.sales}</td>
                 </tr>
               ))}
             </tbody>

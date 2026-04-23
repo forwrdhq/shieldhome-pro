@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -82,6 +82,8 @@ export default function InlineLeadConfigurator({
   const [submitError, setSubmitError] = useState('')
   const [belowSuccess, setBelowSuccess] = useState(false)
 
+  const cardRef = useRef<HTMLDivElement>(null)
+
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
   })
@@ -105,6 +107,10 @@ export default function InlineLeadConfigurator({
       dl?.push({ event: 'configurator_step', step: 1, home_type: homeType, zip: zipCode })
     }
     setScreen(2)
+    // Scroll the top of the card into view so Step 2 fields aren't clipped
+    setTimeout(() => {
+      cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 50)
   }
 
   function handleBack() {
@@ -204,6 +210,7 @@ export default function InlineLeadConfigurator({
 
   const card = (
     <div
+      ref={cardRef}
       className={cn(
         'w-full rounded-2xl border shadow-[0_20px_60px_rgba(0,0,0,0.12)] overflow-hidden',
         cardBg,

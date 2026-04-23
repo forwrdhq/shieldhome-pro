@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"cd \\\"/Users/grubbussio/_PROJECTS/Vivint Build/shieldhome-pro\\\" && git add prisma/schema.prisma components/landing/InlineLeadConfigurator.tsx components/dashboard/Sidebar.tsx app/(dashboard...",
-  "error": "Exit code 1\n(eval):1: no matches found: app/(dashboard)/experiments/",
-  "timestamp": "2026-04-23T04:27:06.397Z",
+  "tool_input_preview": "{\"command\":\"cd \\\"/Users/grubbussio/_PROJECTS/Vivint Build/shieldhome-pro\\\" && DATABASE_URL=\\\"postgresql://postgres.kuktsmtspihdevspghjy:Xo1SQb9DgY6C6jMn@aws-0-us-west-2.pooler.supabase.com:5432/postgr...",
+  "error": "Exit code 1\n[eval]:22\n      'Removed Not\n      ^^^^^^^^^^^^\nExpected ',', got '<eof>'\n\nSyntaxError: Invalid or unexpected token\n    at makeContextifyScript (node:internal/vm:194:14)\n    at compileScript (node:internal/process/execution:388:10)\n    at evalTypeScript (node:internal/process/execution:260:22)\n    at node:internal/main/eval_string:71:3\n\nNode.js v25.4.0",
+  "timestamp": "2026-04-23T04:38:04.038Z",
   "retry_count": 1
 }

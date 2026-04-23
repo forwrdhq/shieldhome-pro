@@ -173,6 +173,25 @@ model WeeklyDeal {
   @@map("weekly_deals")
 }
 
+model ChangeBlock {
+  id            String    @id @default(cuid())
+  name          String
+  startDate     DateTime
+  endDate       DateTime?
+  changes       String[]
+  notes         String?
+  leadCount     Int?
+  qualLeadCount Int?
+  optInRate     Float?
+  qualRate      Float?
+  formStarts    Int?
+  generateLeads Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("change_blocks")
+}
+
 model AbTest {
   id         String       @id @default(cuid())
   name       String

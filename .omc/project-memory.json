@@ -190,8 +190,8 @@
     },
     {
       "path": "prisma/schema.prisma",
-      "accessCount": 12,
-      "lastAccessed": 1776918315097,
+      "accessCount": 13,
+      "lastAccessed": 1776919044866,
       "type": "directory"
     },
     {
@@ -214,8 +214,8 @@
     },
     {
       "path": "components/dashboard/Sidebar.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1776918419507,
+      "accessCount": 5,
+      "lastAccessed": 1776919181664,
       "type": "file"
     },
     {
@@ -361,6 +361,30 @@
       "accessCount": 1,
       "lastAccessed": 1776918705471,
       "type": "directory"
+    },
+    {
+      "path": "scripts/seed-change-blocks.js",
+      "accessCount": 1,
+      "lastAccessed": 1776919091321,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/performance/actions.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776919107794,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/performance/CloseBlockForm.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1776919131839,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/performance/page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1776919166541,
+      "type": "file"
     }
   ],
   "userDirectives": []

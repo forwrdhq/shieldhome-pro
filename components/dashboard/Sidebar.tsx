@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Users, BarChart2, DollarSign, Settings, Shield, LogOut, Megaphone, Calendar, Filter, FlaskConical } from 'lucide-react'
+import { LayoutDashboard, Users, BarChart2, DollarSign, Settings, Shield, LogOut, Megaphone, Calendar, Filter, FlaskConical, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from 'next-auth/react'
 
@@ -14,6 +14,7 @@ const nav = [
   { href: '/meta-leads', label: 'Meta Leads', icon: Megaphone },
   { href: '/analytics', label: 'Analytics', icon: BarChart2 },
   { href: '/experiments', label: 'Experiments', icon: FlaskConical },
+  { href: '/performance', label: 'Performance', icon: TrendingUp },
   { href: '/commissions', label: 'Commissions', icon: DollarSign },
   { href: '/settings', label: 'Settings', icon: Settings },
 ]

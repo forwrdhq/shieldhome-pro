@@ -177,13 +177,18 @@ export default function InlineLeadConfigurator({
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
 
+      const isQualified = creditEntry.enumValue === 'ABOVE_650' && homeTypeEntry.propertyType !== 'CONDO_APARTMENT'
       const leadEventId = `${sessionEventId}_lead`
-      firePixelEvent('Lead', leadEventId)
-      fireCapi('Lead', leadEventId, {
-        phone: contact.phone,
-        firstName: contact.firstName,
-        zipCode,
-      })
+
+      if (isQualified) {
+        // Only fire Meta Lead pixel for qualified leads — teaches Meta to find 650+ homeowners
+        firePixelEvent('Lead', leadEventId)
+        fireCapi('Lead', leadEventId, {
+          phone: contact.phone,
+          firstName: contact.firstName,
+          zipCode,
+        })
+      }
 
       if (typeof window !== 'undefined') {
         const dl = (window as unknown as { dataLayer?: Array<Record<string, unknown>> }).dataLayer
@@ -192,7 +197,11 @@ export default function InlineLeadConfigurator({
           source: 'configurator',
           home_type: homeType,
           credit_tier: tier,
+          qualified: isQualified,
         })
+        if (isQualified) {
+          dl?.push({ event: 'qualified_lead' })
+        }
       }
 
       if (creditEntry.enumValue === 'BELOW_650') {
@@ -341,6 +350,11 @@ export default function InlineLeadConfigurator({
         </div>
         {(homeTypeError || zipError) && (
           <p className="text-[12px] text-red-600 mt-2">{homeTypeError || zipError}</p>
+        )}
+        {(homeType === 'APARTMENT' || homeType === 'CONDO') && !homeTypeError && (
+          <p className="text-[11px] text-amber-600 mt-2">
+            ⚠️ Apartment/condo installs require landlord approval. You may still qualify — we'll confirm on the call.
+          </p>
         )}
       </form>
     )

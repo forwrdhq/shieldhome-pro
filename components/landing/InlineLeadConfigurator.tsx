@@ -409,7 +409,7 @@ export default function InlineLeadConfigurator({
             <div
               role="radiogroup"
               aria-label="Credit score range"
-              className="grid grid-cols-1 md:grid-cols-3 gap-2"
+              className="grid grid-cols-2 gap-2"
             >
               {CREDIT_TIERS.map((tier) => {
                 const selected = creditTier === tier.value

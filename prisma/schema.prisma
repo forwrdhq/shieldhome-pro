@@ -173,6 +173,32 @@ model WeeklyDeal {
   @@map("weekly_deals")
 }
 
+model AbTest {
+  id         String       @id @default(cuid())
+  name       String
+  hypothesis String
+  variantA   String
+  variantB   String
+  metric     String
+  status     AbTestStatus @default(RUNNING)
+  winner     String?
+  result     String?
+  notes      String?
+  startDate  DateTime     @default(now())
+  endDate    DateTime?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@map("ab_tests")
+}
+
+enum AbTestStatus {
+  RUNNING
+  WINNER_A
+  WINNER_B
+  INCONCLUSIVE
+}
+
 model Activity {
   id          String       @id @default(cuid())
   leadId      String

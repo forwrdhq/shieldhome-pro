@@ -62,8 +62,8 @@ export default function HeroDeals() {
 
           {/* Form Step 1 */}
           <InlineLeadConfigurator
-            headline="See which offers you qualify for"
-            ctaLabel="See What I Qualify For"
+            headline="See your custom options"
+            ctaLabel="See My Options"
           />
 
           {/* Trust strip */}
@@ -129,7 +129,7 @@ export default function HeroDeals() {
 
             {/* Right column: form card */}
             <div className="lg:pl-6"><InlineLeadConfigurator
-            headline="See which offers you qualify for"
+            headline="See your custom options"
             ctaLabel="Show My Deal"
           /></div>
           </div>

@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react'
 import { Phone, MessageSquare } from 'lucide-react'
 import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
+// Temporary: personal number used for SMS until A2P 10DLC is approved
+const SMS_NUMBER = '+18013724754'
+
 interface StickyPhoneCTAProps {
   onQuizOpen: () => void
   darkMode?: boolean
@@ -44,8 +47,7 @@ export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
             Call
           </a>
           <a
-            href={`sms:${PHONE_NUMBER_RAW}`}
-            onClick={trackPhoneClick}
+            href={`sms:${SMS_NUMBER}`}
             className="flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-5 py-2.5 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px"
           >
             <MessageSquare size={14} />
@@ -74,8 +76,7 @@ export default function StickyPhoneCTA({ onQuizOpen }: StickyPhoneCTAProps) {
           Call
         </a>
         <a
-          href={`sms:${PHONE_NUMBER_RAW}`}
-          onClick={trackPhoneClick}
+          href={`sms:${SMS_NUMBER}`}
           className="flex-1 flex items-center justify-center gap-1.5 bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg font-heading font-semibold text-[13px] tracking-[-0.01em] transition-colors duration-300"
         >
           <MessageSquare size={14} />

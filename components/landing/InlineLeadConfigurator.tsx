@@ -284,7 +284,7 @@ export default function InlineLeadConfigurator({
                 style={{ fontSize: '16px', height: '52px' }}
                 aria-invalid={!!homeTypeError}
               >
-                <option value="">Select your home type…</option>
+                <option value="">Select</option>
                 {HOME_TYPES.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
                 ))}

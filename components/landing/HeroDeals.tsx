@@ -103,7 +103,7 @@ export default function HeroDeals() {
 
               <ul className="space-y-2.5 mb-6">
                 {[
-                  '$0 down. Free professional install.',
+                  '$0 down.* Free professional install.*',
                   'AI cameras that spotlight and deter intruders.',
                   'Most homes protected within 48 hours.',
                   '60-day money-back guarantee.',

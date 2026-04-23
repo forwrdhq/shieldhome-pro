@@ -117,7 +117,7 @@ function DealsPageInner() {
                 Find The Offers You Qualify For
               </h2>
               <p className="text-[13px] md:text-[16px] font-body text-slate-400 max-w-md mx-auto">
-                Takes 60 seconds. $0 down. Install this week.
+                Takes 60 seconds. $0 down.* Install this week.
               </p>
             </div>
             <div className="max-w-2xl mx-auto">
@@ -150,7 +150,7 @@ function DealsPageInner() {
               Ready to See Which Offers You Qualify For?
             </h2>
             <p className="text-[14px] md:text-[16px] font-body text-slate-400 mb-8 md:mb-12 max-w-md mx-auto">
-              Takes 60 seconds. $0 down. Install this week.
+              Takes 60 seconds. $0 down.* Install this week.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
@@ -170,6 +170,12 @@ function DealsPageInner() {
           </div>
         </section>
       </main>
+
+      <div className="bg-white border-t border-slate-100 px-6 py-4">
+        <p className="max-w-4xl mx-auto text-[10px] text-slate-400 leading-[1.6] font-body text-center">
+          *$0 down and free professional installation available with qualifying purchase and execution of a Vivint monitoring services agreement. Credit approval required. Monthly monitoring fees apply. Offer subject to change. ShieldHome Pro is an independent authorized Vivint dealer.
+        </p>
+      </div>
 
       <Footer />
 

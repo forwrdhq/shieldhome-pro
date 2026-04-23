@@ -9,7 +9,7 @@ import { MapPin, ChevronRight, Shield } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Home Security Systems by State & City | ShieldHome Pro',
-  description: 'Find home security systems and free installation in your area. Get local crime data and a free custom security quote from a Vivint authorized dealer.',
+  description: 'Find home security systems and free installation in your area. Get local crime data and a free custom security quote from a Vivint Smart Home partner.',
   alternates: {
     canonical: 'https://shieldhome.pro/home-security',
   },

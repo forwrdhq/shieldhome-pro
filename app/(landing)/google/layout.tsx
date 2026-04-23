@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Professional Home Security — Free Installation, $0 Down | ShieldHome Pro',
-  description: 'Get a free home security quote from a top Vivint authorized partner. Same-day installation, $0 down, 60-day money-back guarantee. Exclusive deals nationwide.',
+  description: 'Get a free home security quote from a top Vivint Smart Home marketing partner. Same-day installation, $0 down, 60-day money-back guarantee. Exclusive deals nationwide.',
   robots: 'noindex, nofollow',
   openGraph: {
     title: 'Professional Home Security — Free Installation, $0 Down',
@@ -24,7 +24,7 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
   name: 'ShieldHome Pro',
-  description: 'Top-performing Vivint authorized partner — exclusive package deals, free professional installation, and bonus equipment nationwide.',
+  description: 'Top-performing Vivint Smart Home marketing partner — exclusive package deals, free professional installation, and bonus equipment nationwide.',
   telephone: '+18013486050',
   url: 'https://shieldhome.pro',
   priceRange: '$0 - $200/mo',

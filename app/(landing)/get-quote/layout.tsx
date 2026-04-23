@@ -36,7 +36,7 @@ const organizationSchema = {
   '@type': 'ProfessionalService',
   name: 'ShieldHome Pro',
   description:
-    'Top-performing Vivint authorized partner — exclusive package deals, free professional installation, and bonus equipment nationwide.',
+    'Top-performing Vivint Smart Home marketing partner — exclusive package deals, free professional installation, and bonus equipment nationwide.',
   telephone: '+18013486050',
   url: 'https://shieldhome.pro',
   priceRange: '$0 - $200/mo',
@@ -116,7 +116,7 @@ const faqSchema = {
       name: 'Who is ShieldHome? Is this legit?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "ShieldHome is one of Vivint's top-performing authorized partners nationwide. Because of our volume and direct relationship with Vivint, we negotiate exclusive promotions, bonus equipment, and package deals that aren't available on Vivint.com or through most other dealers. Once your system is installed, you're a full Vivint customer with 24/7 monitoring, the app, and all warranties — we just get you a better deal getting there.",
+        text: "ShieldHome is a top-performing Vivint Smart Home marketing partner. Because of our volume and direct relationship with Vivint, we negotiate exclusive promotions, bonus equipment, and package deals that aren't available on Vivint.com or through most other partners. Once your system is installed, you're a full Vivint customer with 24/7 monitoring, the app, and all warranties — we just get you a better deal getting there.",
       },
     },
   ],

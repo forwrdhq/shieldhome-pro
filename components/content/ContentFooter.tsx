@@ -89,8 +89,8 @@ export default function ContentFooter() {
               &copy; {year} {COMPANY_NAME}. All rights reserved.
             </p>
             <p>
-              {COMPANY_NAME} is an authorized Vivint Smart Home dealer.
-              Individual dealer. Not affiliated with Vivint corporate.
+              {COMPANY_NAME} is a Vivint Smart Home marketing partner.
+              Not affiliated with Vivint corporate.
             </p>
           </div>
         </div>

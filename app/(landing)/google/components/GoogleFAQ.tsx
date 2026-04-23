@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: 'Who is ShieldHome? Is this legit?',
-    a: "ShieldHome is one of Vivint's top-performing authorized partners nationwide. Because of our volume and direct relationship with Vivint, we negotiate exclusive promotions, bonus equipment, and package deals that aren't available on Vivint.com or through most other dealers. Once your system is installed, you're a full Vivint customer with 24/7 monitoring, the app, and all warranties — we just get you a better deal getting there.",
+    a: "ShieldHome is a top-performing Vivint Smart Home marketing partner. Because of our volume and direct relationship with Vivint, we negotiate exclusive promotions, bonus equipment, and package deals that aren't available on Vivint.com or through most other partners. Once your system is installed, you're a full Vivint customer with 24/7 monitoring, the app, and all warranties — we just get you a better deal getting there.",
   },
 ]
 

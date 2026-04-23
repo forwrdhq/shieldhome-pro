@@ -42,7 +42,7 @@ const defaultFaqs = [
   },
   {
     q: 'Is ShieldHome Pro the same as Vivint?',
-    a: "ShieldHome Pro is an authorized dealer of Vivint Smart Home. We help homeowners get set up with Vivint's #1-rated security system. Once your system is set up, you're a full Vivint customer with 24/7 monitoring, support, the app, and all warranties.",
+    a: "ShieldHome Pro is a Vivint Smart Home marketing partner. We help homeowners get set up with Vivint's #1-rated security system. Once your system is set up, you're a full Vivint customer with 24/7 monitoring, support, the app, and all warranties.",
   },
 ]
 

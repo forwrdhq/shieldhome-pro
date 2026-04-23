@@ -98,7 +98,7 @@ function emailWrapper(body: string, preheader?: string): string {
             <tr>
               <td>
                 <span style="color:${COLORS.emerald};font-size:20px;font-weight:800;letter-spacing:-0.5px;">ShieldHome</span><span style="color:${COLORS.white};font-size:20px;font-weight:800;letter-spacing:-0.5px;"> Pro</span>
-                <p style="color:${COLORS.slate400};font-size:11px;margin:4px 0 0;letter-spacing:0.5px;text-transform:uppercase;">Authorized Vivint Smart Home Partner</p>
+                <p style="color:${COLORS.slate400};font-size:11px;margin:4px 0 0;letter-spacing:0.5px;text-transform:uppercase;">Vivint Smart Home Marketing Partner</p>
               </td>
               <td align="right" style="vertical-align:middle;">
                 <table role="presentation" cellpadding="0" cellspacing="0">
@@ -121,7 +121,7 @@ function emailWrapper(body: string, preheader?: string): string {
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
             <tr><td align="center">
               <p style="color:${COLORS.slate500};font-size:12px;margin:0 0 8px;line-height:1.5;">
-                ShieldHome Pro · Authorized Vivint Smart Home Partner<br>
+                ShieldHome Pro · Vivint Smart Home Marketing Partner<br>
                 <a href="tel:${PHONE_NUMBER}" style="color:${COLORS.emerald};text-decoration:none;font-weight:600;">${PHONE_NUMBER}</a>
               </p>
               <table role="presentation" cellpadding="0" cellspacing="0">
@@ -497,7 +497,7 @@ function nurtureVivint(step: number, lead: EmailRecipient): EmailContent {
       html: `
         ${urgencyBanner('Spring Flash Sale — limited-time pricing for your area')}
         ${heading(`${name}, this is the best Vivint deal we've seen all year.`)}
-        ${paragraph(`As one of Vivint's top authorized partners, we get access to exclusive promotions. Right now, we can offer you:`)}
+        ${paragraph(`As a top Vivint Smart Home marketing partner, we get access to exclusive promotions. Right now, we can offer you:`)}
 
         <div style="margin:24px 0;">
           <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;">

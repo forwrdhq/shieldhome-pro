@@ -37,7 +37,7 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-xl font-bold text-slate-900 mb-3">1. About This Policy</h2>
               <p>
-                ShieldHome Pro ("we," "us," or "our") is an authorized independent dealer of Vivint Smart Home products and services. This Privacy Policy describes how we collect, use, disclose, and protect your personal information when you visit our website at <a href={APP_URL} className="text-emerald-500 underline">{APP_URL}</a> or submit a quote request through our lead capture forms.
+                ShieldHome Pro ("we," "us," or "our") is a marketing partner for Vivint Smart Home products and services. This Privacy Policy describes how we collect, use, disclose, and protect your personal information when you visit our website at <a href={APP_URL} className="text-emerald-500 underline">{APP_URL}</a> or submit a quote request through our lead capture forms.
               </p>
               <p>
                 By using our website or submitting your information, you agree to the practices described in this Privacy Policy. If you do not agree, please do not use our site or submit your information.
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
               <h2 className="text-xl font-bold text-slate-900 mb-3">5. How We Share Your Information</h2>
               <p>We may share your information with:</p>
               <ul className="list-disc pl-6 space-y-1">
-                <li><strong>Vivint Smart Home:</strong> As an authorized dealer, we share lead information with Vivint and their representatives to fulfill your quote request</li>
+                <li><strong>Vivint Smart Home:</strong> As a Vivint partner, we share lead information with Vivint and their representatives to fulfill your quote request</li>
                 <li><strong>Service providers:</strong> We use SendGrid (email delivery), Twilio (SMS), and similar third-party services to communicate with you. These providers are contractually bound to use your data only to provide services to us</li>
                 <li><strong>Analytics providers:</strong> We use Meta (Facebook) Pixel and Google Analytics/Ads to measure advertising performance. These providers may use cookies and tracking technologies</li>
                 <li><strong>Legal requirements:</strong> We may disclose your information if required by law, court order, or to protect our rights</li>
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
               <p>If you have questions about this Privacy Policy or how we handle your information:</p>
               <div className="bg-gray-50 rounded-xl p-6 mt-3 space-y-2">
                 <p><strong>{COMPANY_NAME}</strong></p>
-                <p>Authorized Vivint Smart Home Dealer</p>
+                <p>Vivint Smart Home Marketing Partner</p>
                 {COMPANY_ADDRESS ? <p>{COMPANY_ADDRESS}</p> : null}
                 <p>Email: <a href={`mailto:${contactEmail}`} className="text-emerald-500 underline">{contactEmail}</a></p>
                 <p>Phone: <a href={`tel:${PHONE_NUMBER}`} className="text-emerald-500">{PHONE_NUMBER}</a></p>
@@ -188,7 +188,7 @@ export default function PrivacyPage() {
       </main>
 
       <footer className="bg-gray-900 text-gray-400 py-6 text-center text-xs">
-        <p>ShieldHome Pro — Authorized Vivint Smart Home Dealer</p>
+        <p>ShieldHome Pro — Vivint Smart Home Marketing Partner</p>
         <p className="mt-1">© {new Date().getFullYear()} ShieldHome Pro. All rights reserved.</p>
       </footer>
     </div>

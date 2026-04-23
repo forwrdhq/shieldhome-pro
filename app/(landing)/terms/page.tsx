@@ -37,7 +37,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-xl font-bold text-slate-900 mb-3">1. Acceptance of Terms</h2>
               <p>
-                These Terms of Service ("Terms") govern your access to and use of the website located at <a href={APP_URL} className="text-emerald-500 underline">{APP_URL}</a> and any related services (collectively, the "Services") provided by {COMPANY_NAME} ("we," "us," or "our"), an authorized independent dealer of Vivint Smart Home products and services.
+                These Terms of Service ("Terms") govern your access to and use of the website located at <a href={APP_URL} className="text-emerald-500 underline">{APP_URL}</a> and any related services (collectively, the "Services") provided by {COMPANY_NAME} ("we," "us," or "our"), a marketing partner for Vivint Smart Home products and services.
               </p>
               <p>
                 By accessing the Services, requesting a quote, or otherwise interacting with us, you agree to be bound by these Terms. If you do not agree, do not use the Services.
@@ -67,7 +67,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-xl font-bold text-slate-900 mb-3">4. Independent Dealer Disclosure</h2>
               <p>
-                {COMPANY_NAME} is an independently owned and operated authorized dealer of Vivint Smart Home, Inc. We are not Vivint Smart Home, Inc. and do not act as its agent for purposes of these Terms. Vivint® is a registered trademark of Vivint Smart Home, Inc. Use of the Vivint name and trademarks on this site is permitted under our authorized dealer agreement.
+                {COMPANY_NAME} is an independently owned and operated Vivint Smart Home marketing partner. We are not Vivint Smart Home, Inc. and do not act as its agent for purposes of these Terms. Vivint® is a registered trademark of Vivint Smart Home, Inc. Use of the Vivint name and trademarks on this site is permitted under our authorized dealer agreement.
               </p>
               <p>
                 Any monitoring services, equipment warranties, or installation services purchased are provided directly by Vivint Smart Home, Inc. or its affiliates pursuant to separate agreements between you and Vivint. Those agreements — and not these Terms — govern the equipment and monitoring services themselves.
@@ -144,7 +144,7 @@ export default function TermsPage() {
               <p>If you have questions about these Terms:</p>
               <div className="bg-gray-50 rounded-xl p-6 mt-3 space-y-2">
                 <p><strong>{COMPANY_NAME}</strong></p>
-                <p>Authorized Vivint Smart Home Dealer</p>
+                <p>Vivint Smart Home Marketing Partner</p>
                 {COMPANY_ADDRESS ? <p>{COMPANY_ADDRESS}</p> : null}
                 <p>Email: <a href={`mailto:${contactEmail}`} className="text-emerald-500 underline">{contactEmail}</a></p>
                 <p>Phone: <a href={`tel:${PHONE_NUMBER}`} className="text-emerald-500">{PHONE_NUMBER}</a></p>
@@ -157,7 +157,7 @@ export default function TermsPage() {
       </main>
 
       <footer className="bg-gray-900 text-gray-400 py-6 text-center text-xs">
-        <p>ShieldHome Pro — Authorized Vivint Smart Home Dealer</p>
+        <p>ShieldHome Pro — Vivint Smart Home Marketing Partner</p>
         <p className="mt-1">© {new Date().getFullYear()} ShieldHome Pro. All rights reserved.</p>
       </footer>
     </div>

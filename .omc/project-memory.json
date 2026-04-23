@@ -189,6 +189,12 @@
       "type": "file"
     },
     {
+      "path": "lib/blog-data.ts",
+      "accessCount": 15,
+      "lastAccessed": 1776919639508,
+      "type": "file"
+    },
+    {
       "path": "prisma/schema.prisma",
       "accessCount": 13,
       "lastAccessed": 1776919044866,
@@ -196,9 +202,15 @@
     },
     {
       "path": "",
-      "accessCount": 9,
-      "lastAccessed": 1776918733848,
+      "accessCount": 13,
+      "lastAccessed": 1776919646925,
       "type": "directory"
+    },
+    {
+      "path": "lib/headlineVariants.ts",
+      "accessCount": 8,
+      "lastAccessed": 1776919557905,
+      "type": "file"
     },
     {
       "path": "components/landing/StickyPhoneCTA.tsx",
@@ -213,9 +225,69 @@
       "type": "file"
     },
     {
+      "path": "app/(landing)/terms/page.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1776919544918,
+      "type": "file"
+    },
+    {
+      "path": "app/(landing)/privacy/page.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1776919540475,
+      "type": "file"
+    },
+    {
       "path": "app/(dashboard)/funnel/page.tsx",
       "accessCount": 5,
       "lastAccessed": 1776742781312,
+      "type": "file"
+    },
+    {
+      "path": "app/(landing)/get-quote/layout.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1776919491198,
+      "type": "file"
+    },
+    {
+      "path": "app/(landing)/layout.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1776919499991,
+      "type": "file"
+    },
+    {
+      "path": "lib/email-templates.ts",
+      "accessCount": 5,
+      "lastAccessed": 1776919571442,
+      "type": "file"
+    },
+    {
+      "path": "lib/notifications.ts",
+      "accessCount": 5,
+      "lastAccessed": 1776919581560,
+      "type": "directory"
+    },
+    {
+      "path": "app/(landing)/get-quote/components/CostFAQ.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1776919506748,
+      "type": "file"
+    },
+    {
+      "path": "app/(landing)/google/components/GoogleFAQ.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1776919508805,
+      "type": "file"
+    },
+    {
+      "path": "lib/comparison-data.ts",
+      "accessCount": 3,
+      "lastAccessed": 1776919591483,
+      "type": "file"
+    },
+    {
+      "path": "app/(landing)/google/layout.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1776919638431,
       "type": "file"
     },
     {
@@ -223,12 +295,6 @@
       "accessCount": 2,
       "lastAccessed": 1776742111531,
       "type": "file"
-    },
-    {
-      "path": "lib/notifications.ts",
-      "accessCount": 2,
-      "lastAccessed": 1776742318093,
-      "type": "directory"
     },
     {
       "path": "app/api/cron/stale-leads/route.ts",
@@ -282,6 +348,24 @@
       "path": "app/(landing)/contact/page.tsx",
       "accessCount": 2,
       "lastAccessed": 1776918751206,
+      "type": "file"
+    },
+    {
+      "path": "components/content/ContentFooter.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776919443282,
+      "type": "file"
+    },
+    {
+      "path": "components/landing/FAQSection.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776919450624,
+      "type": "file"
+    },
+    {
+      "path": "app/(content)/home-security/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776919457108,
       "type": "file"
     },
     {
@@ -385,6 +469,12 @@
       "accessCount": 1,
       "lastAccessed": 1776919166541,
       "type": "file"
+    },
+    {
+      "path": "lib",
+      "accessCount": 1,
+      "lastAccessed": 1776919628199,
+      "type": "directory"
     }
   ],
   "userDirectives": []

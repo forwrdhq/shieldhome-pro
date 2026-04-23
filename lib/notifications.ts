@@ -66,7 +66,7 @@ export async function sendLeadConfirmationSms(lead: LeadNotificationData) {
   } else if (isUpgrade) {
     body = `Hi ${lead.firstName}! This is ShieldHome Pro. We received your upgrade request! A Smart Home Pro will call you shortly to discuss your camera and equipment upgrade options. Questions? Call/text us: ${PHONE_NUMBER}`
   } else {
-    body = `Hi ${lead.firstName}! This is ShieldHome Pro, your authorized Vivint dealer. We received your free quote request! A Smart Home Pro will call you shortly at this number. Questions? Call/text us: ${PHONE_NUMBER}`
+    body = `Hi ${lead.firstName}! This is your ShieldHome Pro team. We received your free quote request! A Smart Home Pro will call you shortly at this number. Questions? Call/text us: ${PHONE_NUMBER}`
   }
   const sid = await sendSms(formatPhone(lead.phone), body)
   if (sid) {

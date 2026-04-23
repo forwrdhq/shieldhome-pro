@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Free Home Security Quote | Vivint Authorized Dealer | ShieldHome Pro',
+  title: 'Free Home Security Quote | Vivint Smart Home Partner | ShieldHome Pro',
   description: 'Get a free custom home security quote in 60 seconds. $0 down, free expert setup, free doorbell camera. Vivint\'s #1-rated smart home security. Call (801) 348-6050.',
   robots: 'index, follow',
   openGraph: {
@@ -26,7 +26,7 @@ const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: 'ShieldHome Pro',
-  description: 'Authorized Vivint Smart Home Dealer providing free home security quotes and expert setup.',
+  description: 'Vivint Smart Home marketing partner providing free home security quotes and expert setup.',
   telephone: '+18013486050',
   url: 'https://shieldhome.pro',
   priceRange: '$0 - $200/mo',
@@ -108,7 +108,7 @@ const faqSchema = {
       name: 'Is ShieldHome Pro the same as Vivint?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "ShieldHome Pro is an authorized dealer of Vivint Smart Home. We help homeowners get set up with Vivint's #1-rated security system. Once your system is set up, you're a full Vivint customer with 24/7 monitoring, support, the app, and all warranties.",
+        text: "ShieldHome Pro is a Vivint Smart Home marketing partner. We help homeowners get set up with Vivint's #1-rated security system. Once your system is set up, you're a full Vivint customer with 24/7 monitoring, support, the app, and all warranties.",
       },
     },
   ],

@@ -21,6 +21,12 @@ function shouldAlertRep(creditScoreRange: string | null | undefined) {
   return !creditScoreRange || !REP_ALERT_SKIP_CREDIT.has(creditScoreRange)
 }
 
+// Apartment leads are saved to the DB but suppressed from Slack, rep SMS,
+// and Callingly — they almost always have bad credit and low close rates.
+function isApartmentLead(propertyType: string | null | undefined) {
+  return propertyType === 'CONDO_APARTMENT'
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -130,11 +136,11 @@ export async function POST(req: NextRequest) {
       }
 
       const dupNotifications: Promise<unknown>[] = []
-      if (shouldAlertRep(updated.creditScoreRange)) {
+      if (shouldAlertRep(updated.creditScoreRange) && !isApartmentLead(updated.propertyType)) {
         dupNotifications.push(sendSlackNotification(dupNotifData))
         dupNotifications.push(sendRepAlertSms(dupNotifData))
       }
-      if (shouldTriggerCallingly(updated.creditScoreRange)) {
+      if (shouldTriggerCallingly(updated.creditScoreRange) && !isApartmentLead(updated.propertyType)) {
         dupNotifications.push(sendCallinglyWebhook(dupNotifData))
       }
       // GHL mirror — additive, runs alongside everything above. No credit gating:
@@ -237,11 +243,11 @@ export async function POST(req: NextRequest) {
       sendLeadConfirmationSms(notifData),
       sendWelcomeEmail(notifData),
     ]
-    if (shouldAlertRep(lead.creditScoreRange)) {
+    if (shouldAlertRep(lead.creditScoreRange) && !isApartmentLead(lead.propertyType)) {
       notifications.push(sendRepAlertSms(notifData))
       notifications.push(sendSlackNotification(notifData))
     }
-    if (shouldTriggerCallingly(lead.creditScoreRange)) {
+    if (shouldTriggerCallingly(lead.creditScoreRange) && !isApartmentLead(lead.propertyType)) {
       notifications.push(sendCallinglyWebhook(notifData))
     }
     // GHL mirror — additive, runs alongside everything above. No credit gating:

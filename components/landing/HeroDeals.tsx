@@ -130,7 +130,7 @@ export default function HeroDeals() {
             {/* Right column: form card */}
             <div className="lg:pl-6"><InlineLeadConfigurator
             headline="See your custom options"
-            ctaLabel="Show My Deal"
+            ctaLabel="Get My Quote"
           /></div>
           </div>
         </div>

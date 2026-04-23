@@ -50,6 +50,9 @@ export default function Sidebar() {
             >
               <Icon size={18} />
               {label}
+              {href === '/performance' && !active && (
+                <span className="ml-auto w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Log your changes" />
+              )}
             </Link>
           )
         })}

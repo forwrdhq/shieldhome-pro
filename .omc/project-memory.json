@@ -207,15 +207,15 @@
       "type": "file"
     },
     {
-      "path": "app/(dashboard)/funnel/page.tsx",
-      "accessCount": 5,
-      "lastAccessed": 1776742781312,
+      "path": "components/dashboard/Sidebar.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1776919295318,
       "type": "file"
     },
     {
-      "path": "components/dashboard/Sidebar.tsx",
+      "path": "app/(dashboard)/funnel/page.tsx",
       "accessCount": 5,
-      "lastAccessed": 1776919181664,
+      "lastAccessed": 1776742781312,
       "type": "file"
     },
     {

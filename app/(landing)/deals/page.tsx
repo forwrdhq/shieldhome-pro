@@ -164,7 +164,7 @@ function DealsPageInner() {
                 className="flex items-center gap-2 text-slate-400 hover:text-slate-200 transition-colors duration-300 text-[14px] font-body"
               >
                 <Phone size={14} />
-                <span>Or call {PHONE_NUMBER}</span>
+                <span>Call or text {PHONE_NUMBER}</span>
               </a>
             </div>
           </div>

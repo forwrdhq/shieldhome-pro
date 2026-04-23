@@ -406,6 +406,9 @@ export default function InlineLeadConfigurator({
             <label className={cn('block text-[12px] font-medium mb-1.5', labelColor)}>
               Credit Score
             </label>
+            <p className={cn('text-[10px] mb-2', subtleColor)}>
+              Selecting a credit range submits your info and consent to be contacted per the terms below.
+            </p>
             <div
               role="radiogroup"
               aria-label="Credit score range"

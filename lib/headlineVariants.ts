@@ -11,7 +11,7 @@ export const headlineVariants: Record<string, HeadlineVariant> = {
     h1Mobile: 'The Smartest Home Security in America. Now $0 Down.',
     h1Desktop: 'The Smartest Home Security in America. Now $0 Down.',
     subheadline:
-      "ShieldHome is a Vivint Smart Home partner — which means you get PCMag's 2026 #1-rated smart security system at partner pricing. Installed free. Protected in 48 hours.",
+      "ShieldHome is a Vivint Smart Home partner — which means you get PCMag's 2026 #1-rated smart security system at partner pricing. Installed free.* Protected in 48 hours.",
   },
   social_proof: {
     preHeadline: 'Vivint Smart Home Partner · Neighborhood Pricing',

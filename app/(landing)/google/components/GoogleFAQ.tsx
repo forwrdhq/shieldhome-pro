@@ -22,10 +22,6 @@ const faqs = [
     a: 'Most installations happen within 24-48 hours. In many cases, same-day. Your certified technician handles everything — placement, wiring, app setup, and training. Your only job is to answer the door.',
   },
   {
-    q: "What if I don't like it?",
-    a: "Our 60-day Protected Home Promise means you try the full system risk-free. If you're not completely satisfied for any reason, we remove everything and refund your money.",
-  },
-  {
     q: 'Who is ShieldHome? Is this legit?',
     a: "ShieldHome is a top-performing Vivint Smart Home marketing partner. Because of our volume and direct relationship with Vivint, we negotiate exclusive promotions, bonus equipment, and package deals that aren't available on Vivint.com or through most other partners. Once your system is installed, you're a full Vivint customer with 24/7 monitoring, the app, and all warranties — we just get you a better deal getting there.",
   },

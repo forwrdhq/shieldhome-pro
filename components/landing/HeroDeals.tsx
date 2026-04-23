@@ -106,7 +106,6 @@ export default function HeroDeals() {
                   '$0 down. Free professional install.',
                   'AI cameras that spotlight and deter intruders.',
                   'Most homes protected within 48 hours.',
-                  '60-day money-back guarantee.',
                 ].map((bullet) => (
                   <li key={bullet} className="flex items-start gap-2.5 text-[15px] text-slate-200 font-body">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>

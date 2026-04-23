@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Professional Home Security — Free Installation, $0 Down | ShieldHome Pro',
-  description: 'Get a free home security quote from a top Vivint Smart Home marketing partner. Same-day installation, $0 down, 60-day money-back guarantee. Exclusive deals nationwide.',
+  description: 'Get a free home security quote from a top Vivint Smart Home marketing partner. Same-day installation, $0 down. Exclusive deals nationwide.',
   robots: 'noindex, nofollow',
   openGraph: {
     title: 'Professional Home Security — Free Installation, $0 Down',
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     title: 'Professional Home Security — Free Installation, $0 Down | ShieldHome Pro',
-    description: 'Exclusive Vivint deals with free professional installation nationwide. $0 down, 60-day money-back guarantee.',
+    description: 'Exclusive Vivint deals with free professional installation nationwide. $0 down.',
   },
   alternates: {
     canonical: 'https://shieldhome.pro/google',

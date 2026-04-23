@@ -10,7 +10,7 @@ const features = [
   { feature: 'Contract Buyout (up to $1,000)', shieldhome: true, adt: false, simplisafe: false, ring: false },
   { feature: 'Same/Next-Day Install', shieldhome: true, adt: 'Scheduled', simplisafe: 'DIY', ring: 'DIY' },
   { feature: 'Visa Gift Card Bonus', shieldhome: 'Up to $200', adt: '$100', simplisafe: false, ring: false },
-  { feature: 'Money-Back Guarantee', shieldhome: '60 Days', adt: '6 Months', simplisafe: false, ring: '30 Days' },
+  { feature: 'Price Lock Guarantee', shieldhome: true, adt: false, simplisafe: false, ring: false },
 ]
 
 /* Custom check — 2px stroke, rounded, emerald */

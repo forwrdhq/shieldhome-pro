@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { Phone, MessageSquare } from 'lucide-react'
 import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
-// Temporary: personal number used for SMS until A2P 10DLC is approved
-const SMS_NUMBER = '+18013724754'
+// Gunnar's direct number for SMS
+const SMS_NUMBER = '+18016166301'
 
 interface StickyPhoneCTAProps {
   onQuizOpen: () => void

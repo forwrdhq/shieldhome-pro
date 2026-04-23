@@ -232,7 +232,7 @@ export default function SwitchForm({ className }: SwitchFormProps) {
         <div className="bg-slate-50 rounded-xl p-5 mb-6 text-left border border-slate-100">
           <p className="text-[13px] font-heading font-semibold text-slate-900 mb-3">Your buyout package includes:</p>
           <ul className="text-[13px] font-body text-slate-600 space-y-2">
-            {[`Up to $1,000 contract buyout`, 'Free professional installation', '60-day money-back guarantee'].map((item) => (
+            {[`Up to $1,000 contract buyout`, 'Free professional installation'].map((item) => (
               <li key={item} className="flex items-center gap-2.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
                 {item}

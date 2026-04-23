@@ -105,14 +105,6 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: "What if I don't like it?",
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Our 60-day Protected Home Promise means you try the full system risk-free. If you're not completely satisfied for any reason, we remove everything and refund your money.",
-      },
-    },
-    {
-      '@type': 'Question',
       name: 'Who is ShieldHome? Is this legit?',
       acceptedAnswer: {
         '@type': 'Answer',

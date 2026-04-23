@@ -10,8 +10,8 @@ interface EnhancedGuaranteeProps {
 const guarantees = [
   {
     icon: ShieldCheck,
-    title: '60-Day Unconditional Guarantee',
-    body: 'Not satisfied? We remove the system and refund every penny. No questions asked.',
+    title: 'Price Lock Guarantee',
+    body: 'Your monthly monitoring rate is locked for the life of your contract. No surprise rate hikes.',
   },
   {
     icon: BadgeDollarSign,

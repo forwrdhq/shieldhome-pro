@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'The Smartest Home Security in America — Now $0 Down | ShieldHome Pro',
   description:
-    "Authorized Vivint Dealer — PCMag's 2026 #1-rated smart security system at dealer pricing. $0 down, free professional installation, 60-day money-back guarantee. Most homes protected within 48 hours.",
+    "Authorized Vivint Dealer — PCMag's 2026 #1-rated smart security system at dealer pricing. $0 down, free professional installation. Most homes protected within 48 hours.",
   // noindex: this is a paid-traffic / A/B variant of the homepage; avoid duplicate content.
   robots: 'noindex, nofollow',
   openGraph: {

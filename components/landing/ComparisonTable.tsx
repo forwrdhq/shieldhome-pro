@@ -11,7 +11,7 @@ const features = [
   { feature: 'Contract Buyout (up to $1,000)', vivint: true, adt: false, simplisafe: false, ring: false },
   { feature: 'Same/Next-Day Install', vivint: true, adt: 'Scheduled', simplisafe: 'DIY', ring: 'DIY' },
   { feature: 'Visa Gift Card Bonus', vivint: 'Up to $200', adt: '$100', simplisafe: false, ring: false },
-  { feature: 'Money-Back Guarantee', vivint: '60 Days', adt: '6 Months', simplisafe: false, ring: '30 Days' },
+  { feature: 'Price Lock Guarantee', vivint: true, adt: false, simplisafe: false, ring: false },
   { feature: 'Google/Alexa Built In', vivint: true, adt: true, simplisafe: true, ring: true },
 ]
 

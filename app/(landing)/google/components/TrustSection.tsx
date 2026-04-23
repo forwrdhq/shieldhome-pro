@@ -174,10 +174,10 @@ export default function TrustSection() {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700/40 hover:border-slate-600/40 transition-all duration-500">
               <h3 className="text-white font-heading font-semibold text-[17px] tracking-[-0.015em] mb-3">
-                60-Day Unconditional Guarantee
+                Price Lock Guarantee
               </h3>
               <p className="text-[15px] font-body text-slate-400 leading-[1.7]">
-                Not satisfied? We remove the system and refund every penny. No questions asked, no fees, no hassle.
+                Your monthly monitoring rate is locked for the life of your contract. No surprise rate hikes, ever.
               </p>
             </div>
             <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700/40 hover:border-slate-600/40 transition-all duration-500">

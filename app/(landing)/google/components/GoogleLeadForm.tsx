@@ -267,7 +267,7 @@ export default function GoogleLeadForm({ className, compact }: GoogleLeadFormPro
         <div className="bg-slate-50 rounded-xl p-5 mb-6 text-left border border-slate-100">
           <p className="text-[13px] font-heading font-semibold text-slate-900 mb-3 tracking-[-0.01em]">Your custom quote is reserved:</p>
           <ul className="text-[13px] font-body text-slate-600 space-y-2">
-            {['$0 down', 'Free professional installation', '60-day money-back guarantee'].map((item) => (
+            {['$0 down', 'Free professional installation'].map((item) => (
               <li key={item} className="flex items-center gap-2.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
                 {item}

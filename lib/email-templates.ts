@@ -282,7 +282,6 @@ function welcomeSwitch(lead: EmailRecipient): string {
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ Free professional installation</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ Free doorbell camera</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ 90 days free monitoring ($150 value)</td></tr>
-        <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ 60-day money-back guarantee</td></tr>
       </table>
     </div>
 
@@ -375,7 +374,6 @@ function welcomeStandard(lead: EmailRecipient): string {
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ Professional installation ($199 value)</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ Free doorbell camera ($249 value)</td></tr>
         <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ $0 down equipment financing</td></tr>
-        <tr><td style="padding:4px 0;color:${COLORS.slate700};font-size:13px;">✅ 60-day money-back guarantee</td></tr>
       </table>
     </div>
 
@@ -505,7 +503,6 @@ function nurtureVivint(step: number, lead: EmailRecipient): EmailContent {
             ${featureRow('🔧', 'Free Professional Installation', 'Certified tech handles everything in ~2 hours')}
             ${featureRow('📺', '90 Days Free Monitoring', '$150 value — on the house')}
             ${featureRow('🔧', 'Free Professional Installation', 'Certified tech handles everything in ~2 hours')}
-            ${featureRow('🛡️', '60-Day Money-Back Guarantee', 'Try the full system risk-free')}
           </table>
         </div>
 
@@ -700,7 +697,7 @@ function nurtureSwitch(step: number, lead: EmailRecipient): EmailContent {
           </tr>
         </table>
 
-        ${paragraph(`<strong>Plus:</strong> Free doorbell camera, free professional installation, 90 days free monitoring, and a 60-day money-back guarantee if you're not completely satisfied.`)}
+        ${paragraph(`<strong>Plus:</strong> Free doorbell camera, free professional installation, and 90 days free monitoring.`)}
         ${paragraph(`One call. That's all it takes to stop paying ${provider} and start protecting your home with the #1 rated system.`)}
         ${cta(`Claim My Buyout Offer`)}
         ${signoff()}`
@@ -743,7 +740,7 @@ function nurtureSwitch(step: number, lead: EmailRecipient): EmailContent {
 
         <div style="background:${COLORS.green50};border:2px solid ${COLORS.emerald};border-radius:12px;padding:24px;margin:24px 0;text-align:center;">
           <p style="color:${COLORS.slate900};font-weight:700;font-size:16px;margin:0 0 8px;">If you're still thinking about switching</p>
-          <p style="color:${COLORS.slate700};font-size:14px;margin:0 0 4px;">Up to $1,000 buyout · Free installation · 60-day guarantee</p>
+          <p style="color:${COLORS.slate700};font-size:14px;margin:0 0 4px;">Up to $1,000 buyout · Free installation</p>
           <p style="color:${COLORS.slate500};font-size:13px;margin:0 0 20px;">One call. We handle everything from there.</p>
           ${cta(`📞 Call Now: ${PHONE_NUMBER}`)}
         </div>
@@ -807,7 +804,7 @@ function nurtureCost(step: number, lead: EmailRecipient): EmailContent {
             ${featureRow('📹', 'Camera cloud storage ($3–$10/mo per camera)', 'Ring and others charge per camera for cloud playback. With Vivint: included in your plan.')}
             ${featureRow('🔧', 'Installation fees ($99–$300)', 'ADT charges up to $199 just to show up. With ShieldHome: always free.')}
             ${featureRow('📈', 'Annual rate increases', 'Many providers hike your rate after year one. ShieldHome: locked-in pricing.')}
-            ${featureRow('💀', 'Early termination fees ($500–$1,400)', 'ADT charges up to $1,400 if you cancel early. With ShieldHome: flexible terms + 60-day guarantee.')}
+            ${featureRow('💀', 'Early termination fees ($500–$1,400)', 'ADT charges up to $1,400 if you cancel early. With ShieldHome: flexible terms.')}
           </table>
         </div>
 
@@ -879,7 +876,6 @@ function nurtureCost(step: number, lead: EmailRecipient): EmailContent {
               <tr><td style="padding:8px 0;color:${COLORS.slate700};font-size:13px;">🔧 Professional installation</td><td align="right" style="color:${COLORS.emeraldDark};font-size:13px;font-weight:600;">FREE ($199 value)</td></tr>
               <tr><td style="padding:8px 0;color:${COLORS.slate700};font-size:13px;">📺 First 90 days monitoring</td><td align="right" style="color:${COLORS.emeraldDark};font-size:13px;font-weight:600;">FREE ($150 value)</td></tr>
               <tr><td style="padding:8px 0;color:${COLORS.slate700};font-size:13px;">💳 Visa gift card bonus</td><td align="right" style="color:${COLORS.emeraldDark};font-size:13px;font-weight:600;">Up to $200</td></tr>
-              <tr><td style="padding:8px 0;color:${COLORS.slate700};font-size:13px;">🛡️ 60-day money-back guarantee</td><td align="right" style="color:${COLORS.emeraldDark};font-size:13px;font-weight:600;">Risk-free</td></tr>
               <tr><td colspan="2" style="padding:16px 0 0;border-top:2px solid ${COLORS.slate200};">
                 <table role="presentation" width="100%"><tr>
                   <td style="font-weight:800;color:${COLORS.slate900};font-size:15px;">Total cost:</td>
@@ -936,7 +932,7 @@ function nurtureCost(step: number, lead: EmailRecipient): EmailContent {
 
         <div style="background:${COLORS.green50};border:2px solid ${COLORS.emerald};border-radius:12px;padding:24px;margin:24px 0;text-align:center;">
           <p style="color:${COLORS.slate900};font-weight:700;font-size:16px;margin:0 0 8px;">Still comparing prices?</p>
-          <p style="color:${COLORS.slate700};font-size:14px;margin:0 0 4px;">$0 down · Free installation · From $24.99/mo · 60-day guarantee</p>
+          <p style="color:${COLORS.slate700};font-size:14px;margin:0 0 4px;">$0 down · Free installation · From $24.99/mo</p>
           <p style="color:${COLORS.slate500};font-size:13px;margin:0 0 20px;">One quick call for your exact pricing. No pressure.</p>
           ${cta(`📞 Call Now: ${PHONE_NUMBER}`)}
         </div>

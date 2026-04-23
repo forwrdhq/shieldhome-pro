@@ -473,11 +473,8 @@ export default function QuizStartScreen({ onStart }: QuizStartScreenProps) {
             <h3 className="text-white font-heading font-semibold text-[16px] mb-2">
               The Protected Home Promise
             </h3>
-            <p className="text-slate-400 text-[13px] font-body leading-[1.6] mb-3">
-              Try your system for 60 days. If you don&apos;t feel noticeably safer, we remove everything at our expense and refund every penny. No questions. No hassle. You risk nothing.
-            </p>
             <p className="text-slate-500 text-[11px] font-body leading-[1.5]">
-              And once your equipment is paid off, monitoring is month-to-month with no service contract. You stay because you want to, not because you&apos;re trapped.
+              Once your equipment is paid off, monitoring is month-to-month with no service contract. You stay because you want to, not because you&apos;re trapped.
             </p>
           </div>
         </div>
@@ -517,7 +514,7 @@ export default function QuizStartScreen({ onStart }: QuizStartScreenProps) {
         <div className="max-w-md mx-auto text-center">
           <p className="text-emerald-400 font-heading font-bold text-[14px] mb-3">P.S.</p>
           <p className="text-slate-300 text-[13px] font-body leading-[1.7] mb-8">
-            This 90-second assessment is free, completely confidential, and shows you your home&apos;s exact Security Score. You&apos;ll see where you&apos;re vulnerable, what protection actually costs (most families pay less than $2/day), and what you qualify for through our Total Shield Package &mdash; including up to $1,200 off equipment, free professional installation, and 3 months of free monitoring. We only have 15 installation slots this month and they fill fast. There&apos;s zero obligation and zero risk &mdash; our 60-day guarantee means you can try the full Vivint system and get a complete refund if you&apos;re not satisfied. Take the quiz now.
+            This 90-second assessment is free, completely confidential, and shows you your home&apos;s exact Security Score. You&apos;ll see where you&apos;re vulnerable, what protection actually costs (most families pay less than $2/day), and what you qualify for through our Total Shield Package &mdash; including up to $1,200 off equipment, free professional installation, and 3 months of free monitoring. We only have 15 installation slots this month and they fill fast. There&apos;s zero obligation. Take the quiz now.
           </p>
 
           <button

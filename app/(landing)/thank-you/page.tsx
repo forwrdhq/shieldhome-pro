@@ -125,6 +125,20 @@ function ThankYouContent() {
           </div>
         )}
 
+        {/* Text Us Now CTA — high-intent moment, strike while hot */}
+        <div className="bg-emerald-600 rounded-2xl p-6 mb-8 text-center">
+          <MessageSquare size={28} className="text-white mx-auto mb-3" />
+          <h2 className="text-white font-bold text-xl mb-1">Prefer to text?</h2>
+          <p className="text-emerald-100 text-sm mb-4">Skip the wait — text us now and a Smart Home Pro will reply immediately.</p>
+          <a
+            href="sms:+18016166301?body=Hi%2C%20I%20just%20submitted%20a%20quote%20request%20on%20ShieldHome.pro%20and%20wanted%20to%20connect!"
+            className="inline-flex items-center gap-2 bg-white text-emerald-700 hover:bg-emerald-50 px-8 py-3 rounded-xl font-bold text-lg transition-colors"
+          >
+            <MessageSquare size={20} />
+            Text Us Now → (801) 616-6301
+          </a>
+        </div>
+
         {/* What Happens Next */}
         <h2 className="text-xl font-bold text-slate-900 mb-4">Here&apos;s what happens next:</h2>
 
@@ -229,7 +243,7 @@ function ThankYouContent() {
       </div>
 
       <footer className="bg-gray-900 text-gray-400 py-6 text-center text-xs">
-        <p>ShieldHome Pro — Authorized Vivint Smart Home Dealer</p>
+        <p>ShieldHome Pro — Vivint Smart Home Partner</p>
         <p className="mt-1">© {new Date().getFullYear()} ShieldHome Pro. All rights reserved.</p>
       </footer>
     </div>

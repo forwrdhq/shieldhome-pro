@@ -52,7 +52,7 @@ const lineItems = [
   },
   {
     title: 'The Protected Home Promise',
-    description: '60-day money-back guarantee + price lock for life of contract',
+    description: 'Price lock for life of contract',
     value: 'Priceless',
   },
 ]

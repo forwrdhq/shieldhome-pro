@@ -66,7 +66,7 @@ export default function Footer() {
             <a href="/do-not-sell" className="text-slate-500 hover:text-slate-300 transition-colors duration-150">Do Not Sell My Info</a>
           </div>
           <p className="text-xs text-slate-600 max-w-2xl mx-auto">
-            ShieldHome Pro is an independently operated authorized dealer of Vivint Smart Home products and services.
+            ShieldHome Pro connects customers with Vivint Smart Home professionals.
             Vivint® is a registered trademark of Vivint Smart Home, Inc.
           </p>
           <p className="text-xs text-slate-600">© {new Date().getFullYear()} ShieldHome Pro. All rights reserved.</p>

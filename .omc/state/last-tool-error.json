@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd \\\"/Users/grubbussio/_PROJECTS/Vivint Build/shieldhome-pro\\\" && git add prisma/schema.prisma components/landing/InlineLeadConfigurator.tsx components/dashboard/Sidebar.tsx app/(dashboard...",
+  "error": "Exit code 1\n(eval):1: no matches found: app/(dashboard)/experiments/",
+  "timestamp": "2026-04-23T04:27:06.397Z",
+  "retry_count": 1
+}

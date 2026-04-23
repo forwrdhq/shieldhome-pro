@@ -109,7 +109,7 @@ const faqSchema = {
       name: 'How is ShieldHome different from calling Vivint directly?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "ShieldHome Pro is an authorized Vivint dealer with exclusive promotions — like the current free AI camera upgrade — that aren't always available direct. You're still a full Vivint customer with all warranties, monitoring, and support. We just get you better entry deals.",
+        text: "ShieldHome Pro works directly with Vivint Smart Home professionals to bring you exclusive promotions — like the current free AI camera upgrade — that aren't always available direct. You're still a full Vivint customer with all warranties, monitoring, and support. We just get you better entry deals.",
       },
     },
     {

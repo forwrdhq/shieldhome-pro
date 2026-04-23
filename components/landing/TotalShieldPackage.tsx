@@ -114,7 +114,7 @@ export default function TotalShieldPackage({ onQuizOpen }: TotalShieldPackagePro
             Our Special Offers Available
           </h2>
           <p className="text-[14px] md:text-[16px] font-body text-slate-500 max-w-lg mx-auto">
-            Stack the offers that fit your home — authorized Vivint dealer pricing.
+            Stack the offers that fit your home — exclusive Vivint Smart Home pricing.
           </p>
         </div>
 

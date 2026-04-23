@@ -1,0 +1,367 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1776912375871,
+  "projectRoot": "/Users/grubbussio/_PROJECTS/Vivint Build/shieldhome-pro",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "16.1.6",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "19.2.3",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.3",
+        "category": "frontend"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "next dev",
+      "build": "prisma generate && next build",
+      "postinstall": "prisma generate",
+      "start": "next start",
+      "lint": "eslint",
+      "seed": "prisma db seed",
+      "seed:outreach": "ts-node -r tsconfig-paths/register --compiler-options {\"module\":\"CommonJS\"} paperclip/seed.ts"
+    }
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "app",
+      "components",
+      "lib",
+      "public",
+      "scripts"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "app": {
+      "path": "app",
+      "purpose": "Application code",
+      "fileCount": 6,
+      "lastAccessed": 1776912375860,
+      "keyFiles": [
+        "globals.css",
+        "icon.svg",
+        "layout.tsx",
+        "robots.ts",
+        "sitemap.ts"
+      ]
+    },
+    "components": {
+      "path": "components",
+      "purpose": "UI components",
+      "fileCount": 1,
+      "lastAccessed": 1776912375861,
+      "keyFiles": [
+        "SessionProvider.tsx"
+      ]
+    },
+    "hooks": {
+      "path": "hooks",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776912375862,
+      "keyFiles": [
+        "useScrollReveal.ts"
+      ]
+    },
+    "lib": {
+      "path": "lib",
+      "purpose": "Library code",
+      "fileCount": 22,
+      "lastAccessed": 1776912375863,
+      "keyFiles": [
+        "analytics.ts",
+        "blog-data.ts",
+        "callingly.ts",
+        "city-data.ts",
+        "comparison-data.ts"
+      ]
+    },
+    "paperclip": {
+      "path": "paperclip",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776912375863,
+      "keyFiles": [
+        "seed.ts"
+      ]
+    },
+    "prisma": {
+      "path": "prisma",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776912375863,
+      "keyFiles": [
+        "schema.prisma"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 5,
+      "lastAccessed": 1776912375863,
+      "keyFiles": [
+        "file.svg",
+        "globe.svg",
+        "next.svg",
+        "vercel.svg",
+        "window.svg"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 1,
+      "lastAccessed": 1776912375863,
+      "keyFiles": [
+        "seed.ts"
+      ]
+    },
+    "app/api": {
+      "path": "app/api",
+      "purpose": "API routes",
+      "fileCount": 0,
+      "lastAccessed": 1776912375863,
+      "keyFiles": []
+    },
+    "prisma/migrations": {
+      "path": "prisma/migrations",
+      "purpose": "Database migrations",
+      "fileCount": 2,
+      "lastAccessed": 1776912375864,
+      "keyFiles": [
+        "migration_lock.toml",
+        "outreach_system.sql"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "components/landing/InlineLeadConfigurator.tsx",
+      "accessCount": 15,
+      "lastAccessed": 1776918724546,
+      "type": "file"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "accessCount": 12,
+      "lastAccessed": 1776918315097,
+      "type": "directory"
+    },
+    {
+      "path": "",
+      "accessCount": 9,
+      "lastAccessed": 1776918733848,
+      "type": "directory"
+    },
+    {
+      "path": "components/landing/StickyPhoneCTA.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1776917195870,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/funnel/page.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1776742781312,
+      "type": "file"
+    },
+    {
+      "path": "components/dashboard/Sidebar.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1776918419507,
+      "type": "file"
+    },
+    {
+      "path": ".env",
+      "accessCount": 2,
+      "lastAccessed": 1776742111531,
+      "type": "file"
+    },
+    {
+      "path": "lib/notifications.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776742318093,
+      "type": "directory"
+    },
+    {
+      "path": "app/api/cron/stale-leads/route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776742568747,
+      "type": "file"
+    },
+    {
+      "path": "vercel.json",
+      "accessCount": 2,
+      "lastAccessed": 1776742596659,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/weekly/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776918301846,
+      "type": "file"
+    },
+    {
+      "path": "app/(landing)/deals/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776918714146,
+      "type": "directory"
+    },
+    {
+      "path": "components/landing/Footer.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776918744958,
+      "type": "file"
+    },
+    {
+      "path": "components/landing/TotalShieldPackage.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776918746424,
+      "type": "file"
+    },
+    {
+      "path": "components/business/BusinessFAQ.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776918748411,
+      "type": "file"
+    },
+    {
+      "path": "app/(landing)/business/layout.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776918750215,
+      "type": "file"
+    },
+    {
+      "path": "app/(landing)/contact/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1776918751206,
+      "type": "file"
+    },
+    {
+      "path": "prisma/migrations/20260421000000_add_callingly_calls/migration.sql",
+      "accessCount": 1,
+      "lastAccessed": 1776742582990,
+      "type": "file"
+    },
+    {
+      "path": "lib/callingly.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776742593718,
+      "type": "file"
+    },
+    {
+      "path": "app/api/callingly/webhook/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776742622513,
+      "type": "file"
+    },
+    {
+      "path": "app/api/cron/callingly-sync/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776742636133,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/weekly/WeekForm.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1776917517455,
+      "type": "file"
+    },
+    {
+      "path": ".env.local",
+      "accessCount": 1,
+      "lastAccessed": 1776917787150,
+      "type": "directory"
+    },
+    {
+      "path": "components/landing",
+      "accessCount": 1,
+      "lastAccessed": 1776917978954,
+      "type": "directory"
+    },
+    {
+      "path": "app/(dashboard)/experiments/actions.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776918347465,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/experiments/ExperimentForm.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1776918361784,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/experiments/ExperimentRow.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1776918384884,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/experiments/page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1776918405767,
+      "type": "file"
+    },
+    {
+      "path": "app/(dashboard)/layout.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1776918408929,
+      "type": "directory"
+    },
+    {
+      "path": "app/(landing)/deals",
+      "accessCount": 1,
+      "lastAccessed": 1776918705471,
+      "type": "directory"
+    }
+  ],
+  "userDirectives": []
+}

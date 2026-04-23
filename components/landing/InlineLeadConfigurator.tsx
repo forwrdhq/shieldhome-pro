@@ -444,7 +444,7 @@ export default function InlineLeadConfigurator({
           )}
 
           <Button type="submit" variant="primary" size="xl" className="w-full" loading={submitting}>
-            Get My Free Security Plan
+            Talk to Our Smart Home Team
             <ArrowRight size={18} className="ml-2" />
           </Button>
 
@@ -454,7 +454,7 @@ export default function InlineLeadConfigurator({
           </div>
 
           <p className={cn('text-[10px] leading-[1.5] text-center px-1', subtleColor)}>
-            By clicking &ldquo;Get My Free Security Plan,&rdquo; I agree to receive calls, texts, and emails from
+            By clicking &ldquo;Talk to Our Smart Home Team,&rdquo; I agree to receive calls, texts, and emails from
             ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer.
             Consent is not a condition of purchase. Msg frequency varies. Msg &amp; data rates may apply.
             Reply STOP to unsubscribe. View our{' '}

@@ -104,7 +104,7 @@ export default function ContactPage() {
 
           <div className="mt-10 pt-6 border-t border-gray-200 text-xs text-gray-500 leading-relaxed">
             <p>
-              <strong>{COMPANY_NAME}</strong> is an independently operated authorized dealer of Vivint Smart Home, Inc. Vivint® is a registered trademark of Vivint Smart Home, Inc.
+              <strong>{COMPANY_NAME}</strong> connects customers with Vivint Smart Home professionals. Vivint® is a registered trademark of Vivint Smart Home, Inc.
             </p>
           </div>
         </div>

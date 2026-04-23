@@ -1,0 +1,7 @@
+{
+  "tool_name": "WebFetch",
+  "tool_input_preview": "{\"url\":\"http://api.callingly.com/docs/\",\"prompt\":\"List all REST API endpoints (URL path + HTTP method + 1-line description). Especially: pull call history, call logs, lead activity, agents/users, reco...",
+  "error": "Request failed with status code 403",
+  "timestamp": "2026-04-21T03:32:07.415Z",
+  "retry_count": 1
+}

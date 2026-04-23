@@ -9,7 +9,6 @@ import { ArrowRight, CheckCircle, ChevronDown, ChevronLeft, Lock, Shield, X } fr
 import { cn } from '@/lib/utils'
 import { getTracking } from '@/lib/utm'
 import { genEventId, firePixelEvent, fireCapi } from '@/lib/meta-pixel'
-import Button from '@/components/ui/Button'
 
 type HomeTypeValue = 'SINGLE_FAMILY' | 'TOWNHOME' | 'CONDO' | 'APARTMENT' | 'OTHER'
 type CreditTierValue = '650_PLUS' | 'BUILDING'
@@ -361,6 +360,10 @@ export default function InlineLeadConfigurator({
           </div>
         </div>
 
+        <p className={cn('text-[13px] mb-4', subtleColor)}>
+          Fill in your info below — a Smart Home Pro will call or text you shortly to walk you through your options.
+        </p>
+
         <div className="space-y-3">
           <div>
             <label htmlFor={`${uid}-first-name`} className={cn('block text-[12px] font-medium mb-1.5', labelColor)}>
@@ -446,18 +449,13 @@ export default function InlineLeadConfigurator({
             </div>
           )}
 
-          <Button type="submit" variant="primary" size="xl" className="w-full" loading={submitting}>
-            Talk to Our Smart Home Team
-            <ArrowRight size={18} className="ml-2" />
-          </Button>
-
           <div className={cn('flex items-center justify-center gap-1.5 pt-1', subtleColor)}>
             <Lock size={12} className="text-emerald-500" />
             <span className="text-[11px]">Your info is secure · 256-bit SSL</span>
           </div>
 
           <p className={cn('text-[10px] leading-[1.5] text-center px-1', subtleColor)}>
-            By clicking &ldquo;Talk to Our Smart Home Team,&rdquo; I agree to receive calls, texts, and emails from
+            By selecting a credit range above, I agree to receive calls, texts, and emails from
             ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer.
             Consent is not a condition of purchase. Msg frequency varies. Msg &amp; data rates may apply.
             Reply STOP to unsubscribe. View our{' '}

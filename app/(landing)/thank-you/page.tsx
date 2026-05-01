@@ -131,11 +131,11 @@ function ThankYouContent() {
           <h2 className="text-white font-bold text-xl mb-1">Prefer to text?</h2>
           <p className="text-emerald-100 text-sm mb-4">Skip the wait — text us now and a Smart Home Pro will reply immediately.</p>
           <a
-            href="sms:+18016166301?body=Hi%2C%20I%20just%20submitted%20a%20quote%20request%20on%20ShieldHome.pro%20and%20wanted%20to%20connect!"
+            href="sms:+13854440030?body=Hi%2C%20I%20just%20submitted%20a%20quote%20request%20on%20ShieldHome.pro%20and%20wanted%20to%20connect!"
             className="inline-flex items-center gap-2 bg-white text-emerald-700 hover:bg-emerald-50 px-8 py-3 rounded-xl font-bold text-lg transition-colors"
           >
             <MessageSquare size={20} />
-            Text Us Now → (801) 616-6301
+            Text Us Now → (385) 444-0030
           </a>
         </div>
 

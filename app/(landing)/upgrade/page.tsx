@@ -125,7 +125,7 @@ function UpgradeContent() {
                 Plus save up to $500 on new equipment. Professional installation included.
               </p>
               <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-300">
-                {['Vivint Authorized Dealer', 'Professional Installation', '4.8/5 — 58,000+ Reviews'].map((s) => (
+                {['Smart Home Security Specialists', 'Professional Installation', '4.8/5 — 58,000+ Reviews'].map((s) => (
                   <span key={s} className="flex items-center gap-1.5">
                     <CheckCircle size={14} className="text-emerald-500" />
                     {s}

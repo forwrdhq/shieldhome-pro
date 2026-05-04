@@ -25,9 +25,9 @@ const headlineMap: Record<string, string> = {
   'home-security-system': 'Smarter Security That Fights Back — Installed Tomorrow, $0 Down',
   'home-security-installation': 'Smarter Security That Fights Back — Installed Tomorrow, $0 Down',
   'home-security': 'Smarter Security That Fights Back — Installed Tomorrow, $0 Down',
-  'vivint-dealer': 'Vivint Authorized Dealer — Free Installation + $0 Down',
-  'vivint-near-me': 'Vivint Authorized Dealer — Free Installation + $0 Down',
-  'vivint': 'Vivint Authorized Dealer — Free Installation + $0 Down',
+  'vivint-dealer': 'Smart Home Security Specialists — Free Installation + $0 Down',
+  'vivint-near-me': 'Smart Home Security Specialists — Free Installation + $0 Down',
+  'vivint': 'Smart Home Security Specialists — Free Installation + $0 Down',
   'best-home-security': 'The #1 Rated Smart Home Security System — Installed Tomorrow',
   'home-security-near-me': 'Top-Rated Home Security — Free Installation + $0 Down',
   'adt-alternative': 'Switch to Smarter Security — We Pay Up to $1,000 to Buy Out Your Contract',
@@ -62,7 +62,7 @@ export default async function GooglePage({ searchParams }: PageProps) {
   // Pre-headline
   const preHeadline = city
     ? `Exclusive Vivint Deals in ${city}`
-    : 'Exclusive Deals From a Top Vivint Authorized Partner'
+    : 'Exclusive Deals From a Top Smart Home Security Specialists'
 
   return (
     <div className="min-h-screen bg-white" id="hero-form">

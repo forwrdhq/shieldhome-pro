@@ -188,11 +188,11 @@ export default function ThankYouContent() {
             <span className="w-1 h-1 bg-slate-700 rounded-full" />
             <div className="flex items-center gap-1.5">
               <Shield className="w-3 h-3" />
-              <span>Vivint Authorized</span>
+              <span>Smart Home Security Specialists</span>
             </div>
           </div>
           <p className="text-[11px] text-slate-600 font-body">
-            ShieldHome Pro &mdash; Authorized Vivint Smart Home Dealer
+            ShieldHome Pro &mdash; Smart Home Security Specialists
           </p>
         </div>
       </div>

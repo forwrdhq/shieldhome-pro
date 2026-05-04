@@ -44,7 +44,7 @@ const HEADLINE_MAP: Record<string, { h1: string; subhead: string }> = {
     subhead: "Built for 1–10 location businesses. AI monitoring, smart cameras, professional installation — free. Locked in a contract? We cover up to $1,000.",
   },
   'vivint-business': {
-    h1: 'Vivint Business Security — Authorized Dealer, Exclusive Pricing',
+    h1: 'Vivint Business Security — Smart Home Partner, Exclusive Pricing',
     subhead: "Get Vivint's AI-powered commercial security at residential rates through ShieldHome Pro. Free installation. $1,000 contract buyout. No commercial surcharge.",
   },
   'warehouse-security': {

@@ -243,7 +243,7 @@ function ThankYouContent() {
       </div>
 
       <footer className="bg-gray-900 text-gray-400 py-6 text-center text-xs">
-        <p>ShieldHome Pro — Vivint Smart Home Partner</p>
+        <p>ShieldHome Pro — Smart Home Security Specialists</p>
         <p className="mt-1">© {new Date().getFullYear()} ShieldHome Pro. All rights reserved.</p>
       </footer>
     </div>

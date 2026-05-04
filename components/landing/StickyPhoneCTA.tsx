@@ -5,7 +5,7 @@ import { Phone, MessageSquare } from 'lucide-react'
 import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
 // Gunnar's direct number for SMS
-const SMS_NUMBER = '+18016166301'
+const SMS_NUMBER = '+13854440030'
 
 interface StickyPhoneCTAProps {
   onQuizOpen: () => void

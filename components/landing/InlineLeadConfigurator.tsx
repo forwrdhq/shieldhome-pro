@@ -532,11 +532,11 @@ export default function InlineLeadConfigurator({
           One of our team members will be in touch to explore your options.
         </p>
         <a
-          href="sms:+18016166301?body=Hi%2C%20I%20just%20submitted%20a%20quote%20request%20on%20ShieldHome.pro%20and%20wanted%20to%20connect!"
+          href="sms:+13854440030?body=Hi%2C%20I%20just%20submitted%20a%20quote%20request%20on%20ShieldHome.pro%20and%20wanted%20to%20connect!"
           className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-heading font-bold text-[15px] transition-colors w-full max-w-xs"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Text Us Now → (801) 616-6301
+          Text Us Now → (385) 444-0030
         </a>
         <p className={cn('text-[11px] mt-3', subtleColor)}>
           Prefer to text? We reply fast.

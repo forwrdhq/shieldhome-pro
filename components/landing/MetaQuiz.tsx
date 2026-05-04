@@ -368,7 +368,7 @@ export default function MetaQuiz() {
         <div className="text-center space-y-3">
           <div className="flex items-center justify-center gap-2">
             <Shield className="text-emerald-500" size={20} />
-            <span className="font-semibold text-slate-900">Vivint Smart Home Partner</span>
+            <span className="font-semibold text-slate-900">Smart Home Security Specialists</span>
           </div>
           <p className="text-gray-500 text-sm">Your advisor will call within 10 minutes</p>
           <a

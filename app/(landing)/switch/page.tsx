@@ -581,7 +581,7 @@ function SwitchContent() {
       <footer className="py-6 bg-slate-950">
         <div className="max-w-5xl mx-auto px-5 md:px-8 text-center">
           <p className="text-[11px] font-body text-slate-500">
-            &copy; 2026 ShieldHome.pro &middot; Vivint Smart Home Partner &middot; Serving All 50 States &middot;{' '}
+            &copy; 2026 ShieldHome.pro &middot; Smart Home Security Specialists &middot; Serving All 50 States &middot;{' '}
             <a href="/privacy" className="underline hover:text-slate-400 transition-colors">Privacy Policy</a>
           </p>
         </div>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Free Home Security Quote | Vivint Smart Home Partner | ShieldHome Pro',
+  title: 'Free Home Security Quote | Smart Home Security Specialists | ShieldHome Pro',
   description: 'Get a free custom home security quote in 60 seconds. $0 down, free expert setup, free doorbell camera. Vivint\'s #1-rated smart home security. Call (801) 348-6050.',
   robots: 'index, follow',
   openGraph: {

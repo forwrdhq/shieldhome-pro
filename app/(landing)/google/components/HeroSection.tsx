@@ -10,7 +10,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({
   headline,
-  preHeadline = "Exclusive Deals From a Top Vivint Smart Home Partner",
+  preHeadline = "Exclusive Deals From a Top Smart Home Security Specialists",
   subheadline = "Vivint's AI-powered cameras don't just record — they deter intruders with spotlights, sirens, and live 2-way audio. As a top Vivint partner, we get you exclusive deals on the most advanced system available. Free professional installation nationwide.",
 }: HeroSectionProps) {
   return (

@@ -36,7 +36,7 @@ function ctaLink(label: string): string {
 }
 
 // Physical address for CAN-SPAM compliance (must be a real postal address)
-const PHYSICAL_ADDRESS = 'ShieldHome Pro | Vivint Smart Home Partner\n4931 N 300 W, Provo, UT 84604'
+const PHYSICAL_ADDRESS = 'ShieldHome Pro | Smart Home Security Specialists\n4931 N 300 W, Provo, UT 84604'
 const UNSUB_LINE = `\n\n---\n${PHYSICAL_ADDRESS}\nNo longer interested? Reply "unsubscribe" or opt out here: https://shieldhome.pro/api/outreach/unsubscribe?email={{lead_email}}`
 
 // Pricing + buyout value prop — injected into Email 2 of every sequence

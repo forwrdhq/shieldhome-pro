@@ -62,7 +62,7 @@ export default function UrgencySection() {
       <footer className="bg-slate-950 py-8">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <p className="text-[11px] text-slate-600 font-body tracking-wide">
-            &copy; 2026 ShieldHome.pro &middot; Vivint Smart Home Partner &middot; Serving All 50 States &middot;{' '}
+            &copy; 2026 ShieldHome.pro &middot; Smart Home Security Specialists &middot; Serving All 50 States &middot;{' '}
             <a href="/privacy" className="hover:text-slate-400 transition-colors duration-300">Privacy Policy</a>
           </p>
           <p className="text-[11px] text-slate-700 mt-1.5 font-body">

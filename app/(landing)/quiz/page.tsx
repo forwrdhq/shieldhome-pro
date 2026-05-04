@@ -27,7 +27,7 @@ export default function QuizPage() {
               <Shield className="text-emerald-500" size={24} />
               <div>
                 <div className="font-bold text-slate-900 text-base leading-none">ShieldHome Pro</div>
-                <div className="text-[10px] text-gray-500">Vivint Smart Home Partner</div>
+                <div className="text-[10px] text-gray-500">Smart Home Security Specialists</div>
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@ export default function QuizPage() {
 
       {/* Minimal footer */}
       <footer className="bg-gray-900 text-gray-500 py-6 text-center text-xs space-y-1">
-        <p className="text-gray-400">ShieldHome Pro — Vivint Smart Home Partner</p>
+        <p className="text-gray-400">ShieldHome Pro — Smart Home Security Specialists</p>
         <div className="flex items-center justify-center gap-3">
           <a href="/privacy" className="hover:text-white">Privacy Policy</a>
           <a href="/terms" className="hover:text-white">Terms</a>

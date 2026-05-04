@@ -3,7 +3,7 @@ import './globals.css'
 import SessionProvider from '@/components/SessionProvider'
 
 export const metadata: Metadata = {
-  title: 'ShieldHome Pro — Vivint Smart Home Partner',
+  title: 'ShieldHome Pro — Smart Home Security Specialists',
   description: 'Smart home security systems with free expert setup.',
 }
 

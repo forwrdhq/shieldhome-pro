@@ -11,7 +11,7 @@ export default function Footer() {
               ShieldHome
             </span>
             <p className="text-body-sm text-slate-500 leading-relaxed max-w-xs">
-              Vivint Smart Home Partner. Free quotes, $0 down, expert setup.
+              Smart Home Security Specialists. Free quotes, $0 down, expert setup.
             </p>
             <a
               href={`tel:${PHONE_NUMBER_RAW}`}

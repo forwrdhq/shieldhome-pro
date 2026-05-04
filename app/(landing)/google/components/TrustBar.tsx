@@ -4,7 +4,7 @@ export default function TrustBar() {
       {/* Mobile — single strongest proof point */}
       <p className="md:hidden text-[11px] font-body text-slate-400 text-center tracking-[0.03em]">
         <span className="text-amber-400">&#9733;</span>{' '}
-        4.8/5 from 58,000+ Reviews &middot; Vivint Smart Home Partner
+        4.8/5 from 58,000+ Reviews &middot; Smart Home Security Specialists
       </p>
 
       {/* Desktop — varied proof points, not repeated elsewhere verbatim */}
@@ -14,7 +14,7 @@ export default function TrustBar() {
           4.8/5 &middot; 58,000+ Verified Reviews
         </span>
         <span className="mx-3 text-slate-700/60">|</span>
-        <span>Vivint Smart Home Partner</span>
+        <span>Smart Home Security Specialists</span>
         <span className="mx-3 text-slate-700/60">|</span>
         <span>BBB A+ Rated</span>
         <span className="mx-3 text-slate-700/60">|</span>

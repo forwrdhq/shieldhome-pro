@@ -225,7 +225,7 @@ export default function QuizContactCapture({
             <div className="flex items-center gap-2 text-[11px] text-slate-400 font-body">
               <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
               {/* TODO: Once we have 30+ days of real quiz data, replace with real-time count from DB */}
-              <span>Trusted by 2M+ American families | Vivint Smart Home Partner</span>
+              <span>Trusted by 2M+ American families | Smart Home Security Specialists</span>
             </div>
             <div className="flex items-center gap-2 text-[11px] text-slate-400 font-body">
               <Lock className="w-3.5 h-3.5 text-slate-400" />

@@ -5,8 +5,8 @@ import { PHONE_NUMBER, PHONE_NUMBER_RAW, COMPANY_NAME, COMPANY_ADDRESS } from '@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Contact ShieldHome Pro | Vivint Smart Home Partner',
-  description: 'Get in touch with ShieldHome Pro by phone, email, or live chat. Vivint Smart Home Partner serving customers nationwide.',
+  title: 'Contact ShieldHome Pro | Smart Home Security Specialists',
+  description: 'Get in touch with ShieldHome Pro by phone, email, or live chat. Smart Home Security Specialists serving customers nationwide.',
   robots: { index: true },
 }
 
@@ -111,7 +111,7 @@ export default function ContactPage() {
       </main>
 
       <footer className="bg-gray-900 text-gray-400 py-6 text-center text-xs">
-        <p>{COMPANY_NAME} — Vivint Smart Home Partner</p>
+        <p>{COMPANY_NAME} — Smart Home Security Specialists</p>
         <p className="mt-1">© {new Date().getFullYear()} {COMPANY_NAME}. All rights reserved.</p>
       </footer>
 

@@ -140,7 +140,7 @@ export default function QuizStartScreen({ onStart }: QuizStartScreenProps) {
         >
           <span>BBB A+ Rated</span>
           <span className="w-1 h-1 bg-slate-700 rounded-full" />
-          <span>Vivint Smart Home Partner</span>
+          <span>Smart Home Security Specialists</span>
           <span className="w-1 h-1 bg-slate-700 rounded-full" />
           <div className="flex items-center gap-1.5">
             <Lock className="w-3 h-3" />
@@ -310,7 +310,7 @@ export default function QuizStartScreen({ onStart }: QuizStartScreenProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
               <Award className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
-              <p className="text-white text-[13px] font-semibold font-heading">Vivint Smart Home Partner</p>
+              <p className="text-white text-[13px] font-semibold font-heading">Smart Home Security Specialists</p>
               <p className="text-slate-500 text-[11px] font-body mt-1">Official partner of America&apos;s #1 smart home security provider</p>
             </div>
             <div>
@@ -528,7 +528,7 @@ export default function QuizStartScreen({ onStart }: QuizStartScreenProps) {
           <div className="flex items-center justify-center gap-5 mt-6 text-[10px] text-slate-600 uppercase tracking-[0.1em] font-heading">
             <span>BBB A+ Rated</span>
             <span className="w-1 h-1 bg-slate-700 rounded-full" />
-            <span>Vivint Smart Home Partner</span>
+            <span>Smart Home Security Specialists</span>
             <span className="w-1 h-1 bg-slate-700 rounded-full" />
             <div className="flex items-center gap-1.5">
               <Lock className="w-3 h-3" />

@@ -100,7 +100,7 @@ export function generateLocalBusinessSchema() {
     '@id': `${BASE_URL}/#organization`,
     name: COMPANY_NAME,
     description:
-      'Vivint Smart Home Partner providing professional home security system installation, smart home automation, and 24/7 professional monitoring services.',
+      'Smart Home Security Specialists providing professional home security system installation, smart home automation, and 24/7 professional monitoring services.',
     url: BASE_URL,
     telephone: PHONE_NUMBER,
     logo: `${BASE_URL}/images/logo.png`,

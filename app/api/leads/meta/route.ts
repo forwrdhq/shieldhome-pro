@@ -391,7 +391,7 @@ async function sendMetaLeadEmail(lead: MetaLeadData) {
       <hr style="border: none; border-top: 1px solid #E2E8F0; margin: 32px 0;" />
 
       <p style="color: #94A3B8; font-size: 12px; text-align: center;">
-        ShieldHome Pro \u2014 Authorized Vivint Smart Home Dealer<br/>
+        ShieldHome Pro \u2014 Vivint Smart Home Partner<br/>
         You received this email because you completed a Home Security Assessment at shieldhomepro.com.
       </p>
     </div>

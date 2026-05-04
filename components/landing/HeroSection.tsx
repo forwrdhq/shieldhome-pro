@@ -83,7 +83,7 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
           <div className="pt-8 pb-3 px-5">
             {/* Pre-headline */}
             <p className="text-[9px] font-heading font-semibold uppercase tracking-[0.18em] mb-2" style={{ color: 'var(--color-brass-300)' }}>
-              Exclusive Vivint Deals — Authorized Partner
+              Exclusive Vivint Deals — Smart Home Partner
             </p>
 
             {/* Headline */}
@@ -165,7 +165,7 @@ export default function HeroSection({ onQuizOpen }: HeroSectionProps) {
                 className="text-[11px] font-heading font-semibold uppercase tracking-[0.16em] mb-4"
                 style={{ color: 'var(--color-brass-300)' }}
               >
-                Exclusive Vivint Deals — Authorized Partner
+                Exclusive Vivint Deals — Smart Home Partner
               </p>
 
               {/* Headline */}

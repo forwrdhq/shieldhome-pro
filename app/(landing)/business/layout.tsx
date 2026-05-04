@@ -29,7 +29,7 @@ const businessSchema = {
   '@type': 'ProfessionalService',
   name: 'ShieldHome Pro — Commercial Security',
   description:
-    'Authorized Vivint dealer providing commercial and business security systems with no commercial markup. AI cameras, smart locks, 8-second monitoring response.',
+    'Vivint Smart Home Partner providing commercial and business security systems with no commercial markup. AI cameras, smart locks, 8-second monitoring response.',
   telephone: '+18013486050',
   url: 'https://shieldhome.pro/business',
   priceRange: '$39.99 - $200/mo',

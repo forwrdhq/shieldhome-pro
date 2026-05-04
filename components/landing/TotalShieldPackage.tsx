@@ -205,7 +205,7 @@ export default function TotalShieldPackage({ onQuizOpen }: TotalShieldPackagePro
 
         <p className="text-[11px] md:text-[12px] text-slate-400 text-center mt-5 max-w-2xl mx-auto leading-[1.5] font-body">
           *$0 down offer requires qualifying purchase minimum and execution of Vivint monitoring services agreement.
-          Monthly service fees vary by plan. Authorized Vivint Dealer — independent pricing.
+          Monthly service fees vary by plan. Vivint Smart Home Partner — independent pricing.
         </p>
       </div>
     </section>

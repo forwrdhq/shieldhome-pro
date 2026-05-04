@@ -192,7 +192,7 @@ export default function MetaResultsPage() {
           <span className="w-1 h-1 bg-slate-700 rounded-full" />
           <span>4.8&#9733; Google</span>
           <span className="w-1 h-1 bg-slate-700 rounded-full" />
-          <span>Vivint Authorized</span>
+          <span>Vivint Smart Home Partner</span>
           <span className="w-1 h-1 bg-slate-700 rounded-full" />
           <span>2M+ Homes</span>
         </div>
@@ -231,10 +231,10 @@ export default function MetaResultsPage() {
             <span>256-bit Encrypted</span>
           </div>
           <span className="w-1 h-1 bg-slate-700 rounded-full" />
-          <span>Vivint Authorized</span>
+          <span>Vivint Smart Home Partner</span>
         </div>
         <p className="text-[11px] text-slate-600 font-body">
-          ShieldHome Pro &mdash; Authorized Vivint Smart Home Dealer
+          ShieldHome Pro &mdash; Vivint Smart Home Partner
         </p>
       </div>
     </div>

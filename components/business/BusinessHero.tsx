@@ -186,7 +186,7 @@ export default function BusinessHero({ h1, subhead, kw }: BusinessHeroProps) {
           <div className="pt-2 md:pt-4">
             {/* Eyebrow */}
             <span className="inline-block text-[10px] md:text-[11px] font-heading font-semibold uppercase tracking-[0.14em] px-3.5 py-1.5 rounded-full border mb-4 md:mb-5" style={{ color: 'var(--color-brass-300)', borderColor: 'rgba(232,203,167,0.25)', backgroundColor: 'rgba(232,203,167,0.06)' }}>
-              Commercial &amp; Business Security — Vivint Authorized Partner
+              Commercial &amp; Business Security — Vivint Smart Home Partner
             </span>
 
             {/* Trust strip */}
@@ -198,7 +198,7 @@ export default function BusinessHero({ h1, subhead, kw }: BusinessHeroProps) {
               <span className="text-slate-700">|</span>
               <span>BBB A+</span>
               <span className="text-slate-700">|</span>
-              <span>Vivint Authorized Partner</span>
+              <span>Vivint Smart Home Partner</span>
             </div>
 
             {/* H1 — dynamic */}

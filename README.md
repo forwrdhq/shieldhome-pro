@@ -1,6 +1,6 @@
-# ShieldHome Pro — Vivint Authorized Dealer Lead Generation Platform
+# ShieldHome Pro — Vivint Smart Home Partner Lead Generation Platform
 
-Full-stack lead generation and CRM system for an authorized Vivint Smart Home dealer.
+Full-stack lead generation and CRM system for an Vivint Smart Home partner.
 
 ## Tech Stack
 

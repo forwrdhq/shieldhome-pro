@@ -2,7 +2,7 @@ export const PHONE_NUMBER = process.env.NEXT_PUBLIC_PHONE_NUMBER || '(801) 348-6
 export const PHONE_NUMBER_RAW = process.env.NEXT_PUBLIC_PHONE_NUMBER_RAW || '+18013486050'
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://shieldhome.pro'
 export const COMPANY_NAME = 'ShieldHome Pro'
-export const COMPANY_TAGLINE = 'Authorized Vivint Smart Home Partner'
+export const COMPANY_TAGLINE = 'Vivint Smart Home Partner'
 // Required for A2P 10DLC carrier verification — must be a real, verifiable
 // physical address (street, city, state, ZIP). Override via NEXT_PUBLIC_COMPANY_ADDRESS
 // if you ever move.

@@ -67,7 +67,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-xl font-bold text-slate-900 mb-3">4. Independent Dealer Disclosure</h2>
               <p>
-                {COMPANY_NAME} is an independently owned and operated Vivint Smart Home marketing partner. We are not Vivint Smart Home, Inc. and do not act as its agent for purposes of these Terms. Vivint® is a registered trademark of Vivint Smart Home, Inc. Use of the Vivint name and trademarks on this site is permitted under our authorized dealer agreement.
+                {COMPANY_NAME} is an independently owned and operated Vivint Smart Home marketing partner. We are not Vivint Smart Home, Inc. and do not act as its agent for purposes of these Terms. Vivint® is a registered trademark of Vivint Smart Home, Inc. Use of the Vivint name and trademarks on this site is permitted under our marketing partner agreement.
               </p>
               <p>
                 Any monitoring services, equipment warranties, or installation services purchased are provided directly by Vivint Smart Home, Inc. or its affiliates pursuant to separate agreements between you and Vivint. Those agreements — and not these Terms — govern the equipment and monitoring services themselves.

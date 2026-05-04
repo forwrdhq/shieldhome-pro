@@ -66,7 +66,7 @@ export default function PrivacyPage() {
               <p>We use the information we collect to:</p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>Contact you via phone, SMS text message, and email to follow up on your quote request</li>
-                <li>Connect you with an authorized Vivint Smart Home representative in your area</li>
+                <li>Connect you with an Vivint Smart Home representative in your area</li>
                 <li>Send automated follow-up messages and educational content about home security</li>
                 <li>Measure the effectiveness of our advertising campaigns and website performance</li>
                 <li>Prevent fraud, spam, and abuse of our contact form</li>
